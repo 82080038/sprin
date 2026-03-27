@@ -1,0 +1,445 @@
+{
+    "pimpinan": [
+        {
+            "nama": "RINA SRY NIRWANA TARIGAN, S.I.K., M,H.",
+            "nrp": "",
+            "pangkat": "AKBP",
+            "jabatan": "KAPOLRES",
+            "ket": "KAOPSRES"
+        },
+        {
+            "nama": "BRISTON AGUS MUNTECARLO, S.T., S.I.K.",
+            "nrp": "",
+            "pangkat": "KOMPOL",
+            "jabatan": "WAKA POLRES",
+            "ket": "WAKA OPSRES"
+        }
+    ],
+    "bagian": [
+        {
+            "nama_bagian": "STRONG POINT",
+            "personil": [
+                {
+                    "nama": "EDUAR, S.H.",
+                    "nrp": "",
+                    "pangkat": "KOMPOL",
+                    "jabatan": "KABAG OPS",
+                    "ket": "KARENDAL OPSRES"
+                },
+                {
+                    "nama": "ALVIUS KRISTIAN GINTING, S.H.",
+                    "nrp": "",
+                    "pangkat": "IPDA",
+                    "jabatan": "KBO SAT RESNARKOBA",
+                    "ket": "PADAL"
+                },
+                {
+                    "nama": "JEFRI KHADAFI SIREGAR, S.H.",
+                    "nrp": "",
+                    "pangkat": "BRIPKA",
+                    "jabatan": "PS. KANIT KAMSEL SAT LANTAS",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "RIZKI AFRIZAL SIMANJUNTAK",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT RESKRIM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "TEDDI PARNASIPAN TOGATOROP",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT RESNARKOBA",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "IRVAN SYAPUTRA MALAU",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT RESKRIM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "HERIANTO TURNIP",
+                    "nrp": "",
+                    "pangkat": "BRIPKA",
+                    "jabatan": "BA SAT LANTAS",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "BAGUS DWI PRAKOSO, S.H.",
+                    "nrp": "",
+                    "pangkat": "BRIGADIR",
+                    "jabatan": "BA SAT LANTAS",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "RAFFLES SIJABAT",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT RESKRIM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "SUHADIYANTO, S.H.",
+                    "nrp": "",
+                    "pangkat": "IPDA",
+                    "jabatan": "KANIT I SAT RESKRIM",
+                    "ket": "PADAL"
+                },
+                {
+                    "nama": "MANGATUR TUA TINDAON",
+                    "nrp": "",
+                    "pangkat": "AIPDA",
+                    "jabatan": "PS. KANIT BINMAS POLSEK PANGURURAN",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "HERBINTUPA SITANGGANG",
+                    "nrp": "",
+                    "pangkat": "BRIGADIR",
+                    "jabatan": "BA POLSEK PANGURURAN",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "RENO HOTMARULI TUA MANIK, S.H.",
+                    "nrp": "",
+                    "pangkat": "BRIPKA",
+                    "jabatan": "PS. KANIT SAMAPTA POLSEK PANGURURAN",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "IBRAHIM TARIGAN",
+                    "nrp": "",
+                    "pangkat": "BRIGADIR",
+                    "jabatan": "BA POLSEK PANGURURAN",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "SURUNG SAGALA",
+                    "nrp": "",
+                    "pangkat": "IPDA",
+                    "jabatan": "PAUR SUBBAGPROGAR",
+                    "ket": "PADAL"
+                },
+                {
+                    "nama": "ARGIO SIMBOLON",
+                    "nrp": "",
+                    "pangkat": "BRIGADIR",
+                    "jabatan": "BA SAT RESKRIM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "M. RONALD FAHROZI HARAHAP, S.H.",
+                    "nrp": "",
+                    "pangkat": "BRIPTU",
+                    "jabatan": "BA SAT RESNARKOBA",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "JUNEDI SAGALA",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT INTELKAM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "GABRIEL VERY JUNIOR SITOHANG",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT LANTAS",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "ROY GRIMSLAY, S.H.",
+                    "nrp": "",
+                    "pangkat": "BRIGADIR",
+                    "jabatan": "BA SAT LANTAS",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "GIDEON AFRIADI LUMBAN RAJA",
+                    "nrp": "",
+                    "pangkat": "BRIPTU",
+                    "jabatan": "BA SAT RESKRIM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "KRISMAN JULU GULTOM",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA POLSEK PANGURURAN",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "AWALUDDIN",
+                    "nrp": "",
+                    "pangkat": "IPDA",
+                    "jabatan": "PS. KASUBBAG BEKPAL",
+                    "ket": "PADAL"
+                },
+                {
+                    "nama": "ARON PERANGIN-ANGIN",
+                    "nrp": "",
+                    "pangkat": "AIPDA",
+                    "jabatan": "PS. KANIT GAKKUM SAT LANTAS",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "DANI INDRA PERMANA SINAGA",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT LANTAS",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "ANDREAS D. S. SITANGGANG",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SI TIK",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "RAYMONTIUS HAROMUNTE",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT INTELKAM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "DARMONO SAMOSIR, S.H.",
+                    "nrp": "",
+                    "pangkat": "IPDA",
+                    "jabatan": "KANIT III SAT RESKRIM",
+                    "ket": "PADAL"
+                },
+                {
+                    "nama": "HERIANTA TARIGAN",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT RESKRIM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "RIO F. T ERENST PANJAITAN",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT INTELKAM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "MIDUK YUDIANTO SINAGA",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT RESKRIM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "BONARIS TSUYOKO DITASANI SINAGA",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT LANTAS",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "CHARLY H. ARITONANG",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT PAM OBVIT",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "MARUBA NAINGGOLAN",
+                    "nrp": "",
+                    "pangkat": "IPDA",
+                    "jabatan": "PS. KANIT PAMWASTER SAT PAM OBVIT",
+                    "ket": "PADAL"
+                },
+                {
+                    "nama": "FRAN&#039;S ALEXANDER SIANIPAR",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT RESKRIM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "REDY EZRA JONATHAN",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT PAM OBVIT",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "TRIFIKO P. NAINGGOLAN, S.H.",
+                    "nrp": "",
+                    "pangkat": "BRIPTU",
+                    "jabatan": "BA SAT INTELKAM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "RONAL PARTOGI SITUMORANG",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT BINMAS",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "BARTO ANTONIUS SIMALANGO",
+                    "nrp": "",
+                    "pangkat": "AIPDA",
+                    "jabatan": "PS. KBO SAT SAMAPTA",
+                    "ket": "PADAL"
+                },
+                {
+                    "nama": "ANDRI AFRIJAL SIMARMATA",
+                    "nrp": "",
+                    "pangkat": "BRIPTU",
+                    "jabatan": "BA SAT INTELKAM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "ONDIHON SIMBOLON",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT RESNARKOBA",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "JONATAN DWI SAPUTRA PARAPAT",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT SAMAPTA",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "RAHMAT ANDRIAN TAMBUNAN",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT SAMAPTA",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "PARIMPUNAN SIREGAR",
+                    "nrp": "",
+                    "pangkat": "IPDA",
+                    "jabatan": "KASUBSIBANKUM",
+                    "ket": "PADAL"
+                },
+                {
+                    "nama": "YOHANES EDI SUPRIATNO, S.H., M.H.",
+                    "nrp": "",
+                    "pangkat": "BRIGADIR",
+                    "jabatan": "BA SIWAS",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "DANIEL E. LUMBANTORUAN, S.H.",
+                    "nrp": "",
+                    "pangkat": "BRIGADIR",
+                    "jabatan": "BA SIKUM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "CHRIST JERICHO SAPUTRA TAMPUBOLON",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA BAG LOG",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "GRENIEL WIARTO SIHITE",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA BAG REN",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "BILMAR SITUMORANG",
+                    "nrp": "",
+                    "pangkat": "IPDA",
+                    "jabatan": "PS. KASIWAS",
+                    "ket": "PADAL"
+                },
+                {
+                    "nama": "DIKI FEBRIAN SITORUS",
+                    "nrp": "",
+                    "pangkat": "BRIGADIR",
+                    "jabatan": "BA SAT LANTAS",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "HESKIEL WANDANA MELIALA",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SIKEU",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "PRIYATAMA ABDILLAH HARAHAP",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT RESKRIM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "BENY BOY CHRISTIAN SIAHAAN",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT LANTAS",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "DANIEL RICARDO SARAGIH",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SIKEU",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "PINIEL RAJAGUKGUK",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SAT RESKRIM",
+                    "ket": "ANGGOTA"
+                },
+                {
+                    "nama": "DENNI BOYKE H. SIREGAR, S.H.",
+                    "nrp": "",
+                    "pangkat": "IPDA",
+                    "jabatan": "PS. KASI PROPAM",
+                    "ket": "WAS PERS"
+                },
+                {
+                    "nama": "BENNI ARDINAL, S.H., M.H.",
+                    "nrp": "",
+                    "pangkat": "AIPDA",
+                    "jabatan": "PS. KANIT PROVOS",
+                    "ket": "WAS PERS"
+                },
+                {
+                    "nama": "AGUSTINUS SINAGA",
+                    "nrp": "",
+                    "pangkat": "AIPDA",
+                    "jabatan": "PS. KANIT PAMINAL",
+                    "ket": "WAS PERS"
+                },
+                {
+                    "nama": "DWI HETRIANDY, S.H.",
+                    "nrp": "",
+                    "pangkat": "BRIGAIDR",
+                    "jabatan": "BA SI PROPAM",
+                    "ket": "WAS PERS"
+                },
+                {
+                    "nama": "FIRIAN JOSUA SITORUS",
+                    "nrp": "",
+                    "pangkat": "BRIPDA",
+                    "jabatan": "BA SI PROPAM",
+                    "ket": "WAS PERS"
+                }
+            ]
+        }
+    ]
+}
