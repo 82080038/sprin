@@ -1,305 +1,150 @@
 <?php
-require 'vendor/autoload.php';
+session_start();
 
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-
-// Cek apakah JSON sudah ada, jika belum generate dulu
-if (!file_exists('PERSONIL_ALL.json')) {
-    die("File PERSONIL_ALL.json belum ada. Jalankan baca_xlsx.php dulu.");
+// Check if already logged in
+if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
+    header('Location: /sprint/pages/main.php');
+    exit;
 }
 
-$json = file_get_contents('PERSONIL_ALL.json');
-$data = json_decode($json, true);
-
-// Hitung statistik
-$totalPimpinan = count($data['pimpinan']);
-$totalBagian = count($data['bagian']);
-$totalPersonil = 0;
-foreach ($data['bagian'] as $bagian) {
-    $totalPersonil += count($bagian['personil']);
-}
+// If not logged in, show welcome page with login option
+$page_title = 'Selamat Datang - Sistem Manajemen POLRES Samosir';
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Personil POLRES Samosir</title>
+    <title><?php echo $page_title; ?></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: #f5f5f5; 
-            padding: 20px;
+        body {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #ffd700 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .container { max-width: 1400px; margin: 0 auto; }
-        h1 { 
-            text-align: center; 
-            color: #1a237e; 
-            margin-bottom: 10px;
-            font-size: 24px;
+        .welcome-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            backdrop-filter: blur(10px);
         }
-        .subtitle { 
-            text-align: center; 
-            color: #666; 
+        .logo-section {
+            margin-bottom: 30px;
+        }
+        .logo-section i {
+            font-size: 4rem;
+            color: #1a237e;
             margin-bottom: 20px;
-            font-size: 14px;
         }
-        .stats { 
-            display: flex; 
-            justify-content: center; 
-            gap: 30px; 
-            margin-bottom: 25px;
-            flex-wrap: wrap;
+        .welcome-title {
+            color: #1a237e;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
         }
-        .stat-box { 
+        .welcome-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        .btn-login {
             background: linear-gradient(135deg, #1a237e, #3949ab);
             color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            text-align: center;
-            min-width: 120px;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        .stat-box h3 { font-size: 24px; margin-bottom: 5px; }
-        .stat-box p { font-size: 12px; opacity: 0.9; }
-        
-        /* Pimpinan Section */
-        .pimpinan-section {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            color: white;
+            text-decoration: none;
         }
-        .pimpinan-section h2 {
-            color: #1a237e;
-            margin-bottom: 15px;
-            font-size: 18px;
-            border-bottom: 2px solid #1a237e;
-            padding-bottom: 10px;
-        }
-        .pimpinan-cards {
-            display: flex;
-            justify-content: center;
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            flex-wrap: wrap;
+            margin-top: 40px;
         }
-        .pimpinan-card {
-            background: linear-gradient(135deg, #ffd700, #ffed4a);
-            padding: 20px 30px;
-            border-radius: 10px;
+        .feature-item {
             text-align: center;
-            border: 2px solid #b8860b;
+            padding: 20px;
+            background: rgba(26, 35, 126, 0.05);
+            border-radius: 10px;
+            transition: all 0.3s ease;
         }
-        .pimpinan-card .nama {
+        .feature-item:hover {
+            transform: translateY(-5px);
+            background: rgba(26, 35, 126, 0.1);
+        }
+        .feature-item i {
+            font-size: 2rem;
+            color: #1a237e;
+            margin-bottom: 10px;
+        }
+        .feature-title {
             font-weight: bold;
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 8px;
-        }
-        .pimpinan-card .pangkat {
-            color: #666;
-            font-size: 14px;
+            color: #1a237e;
             margin-bottom: 5px;
         }
-        .pimpinan-card .jabatan {
-            color: #1a237e;
-            font-weight: bold;
-            font-size: 13px;
-        }
-        
-        /* Bagian Section */
-        .bagian-section {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .bagian-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            cursor: pointer;
-            padding: 15px;
-            background: #1a237e;
-            color: white;
-            border-radius: 8px;
-        }
-        .bagian-header:hover { background: #283593; }
-        .bagian-header h2 {
-            font-size: 16px;
-            margin: 0;
-        }
-        .bagian-count {
-            background: rgba(255,255,255,0.2);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-        }
-        .personil-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-        .personil-table th {
-            background: #3949ab;
-            color: white;
-            padding: 12px 10px;
-            text-align: left;
-            font-weight: 600;
-        }
-        .personil-table td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        .personil-table tr:hover { background: #f5f5f5; }
-        .personil-table tr:nth-child(even) { background: #fafafa; }
-        .no-col { width: 40px; text-align: center; }
-        .nrp-col { width: 90px; }
-        .pangkat-col { width: 80px; }
-        .ket-col { width: 60px; text-align: center; }
-        .ket-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        .ket-a { background: #e3f2fd; color: #1565c0; }
-        .ket-b { background: #f3e5f5; color: #7b1fa2; }
-        .ket-c { background: #e8f5e9; color: #2e7d32; }
-        .ket-other { background: #fff3e0; color: #e65100; }
-        
-        .toggle-icon { font-size: 12px; transition: transform 0.3s; }
-        .collapsed .toggle-icon { transform: rotate(-90deg); }
-        .personil-content { overflow: hidden; transition: max-height 0.3s; }
-        
-        @media print {
-            .bagian-header { cursor: default; }
-            .personil-content { max-height: none !important; display: block !important; }
-        }
-        
-        @media (max-width: 768px) {
-            .personil-table { font-size: 12px; }
-            .personil-table th, .personil-table td { padding: 8px 5px; }
-            .pangkat-col, .ket-col { display: none; }
+        .feature-desc {
+            color: #666;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>DATA PERSONIL POLRES SAMOSIR</h1>
-        <p class="subtitle">Daftar Personil Periode Februari 2026</p>
+    <div class="welcome-container">
+        <div class="logo-section">
+            <i class="fas fa-shield-alt"></i>
+            <h1 class="welcome-title">POLRES SAMOSIR</h1>
+            <p class="welcome-subtitle">Sistem Manajemen Personil & Jadwal</p>
+        </div>
         
-        <div class="stats">
-            <div class="stat-box">
-                <h3><?php echo $totalPimpinan; ?></h3>
-                <p>PIMPINAN</p>
+        <div class="features">
+            <div class="feature-item">
+                <i class="fas fa-users"></i>
+                <div class="feature-title">Manajemen Personil</div>
+                <div class="feature-desc">Data personil real-time</div>
             </div>
-            <div class="stat-box">
-                <h3><?php echo $totalBagian; ?></h3>
-                <p>SATUAN/BAGIAN/POLSEK</p>
+            <div class="feature-item">
+                <i class="fas fa-calendar-alt"></i>
+                <div class="feature-title">Jadwal Piket</div>
+                <div class="feature-desc">Penjadwalan otomatis</div>
             </div>
-            <div class="stat-box">
-                <h3><?php echo $totalPersonil; ?></h3>
-                <p>TOTAL PERSONIL</p>
+            <div class="feature-item">
+                <i class="fas fa-chart-line"></i>
+                <div class="feature-title">Dashboard</div>
+                <div class="feature-desc">Statistik lengkap</div>
             </div>
         </div>
         
-        <!-- Pimpinan -->
-        <div class="pimpinan-section">
-            <h2>PIMPINAN</h2>
-            <div class="pimpinan-cards">
-                <?php foreach ($data['pimpinan'] as $p): ?>
-                <div class="pimpinan-card">
-                    <div class="nama"><?php echo htmlspecialchars($p['nama']); ?></div>
-                    <div class="pangkat"><?php echo htmlspecialchars($p['pangkat']); ?> (<?php echo htmlspecialchars($p['nrp']); ?>)</div>
-                    <div class="jabatan"><?php echo htmlspecialchars($p['jabatan']); ?></div>
-                </div>
-                <?php endforeach; ?>
-            </div>
+        <div style="margin-top: 40px;">
+            <a href="login.php" class="btn-login">
+                <i class="fas fa-sign-in-alt"></i> Masuk ke Sistem
+            </a>
         </div>
         
-        <!-- Bagian/Polsek -->
-        <?php $no = 1; foreach ($data['bagian'] as $bagian): ?>
-        <div class="bagian-section" id="bagian-<?php echo $no; ?>">
-            <div class="bagian-header" onclick="toggleBagian(<?php echo $no; ?>)">
-                <h2><?php echo htmlspecialchars($bagian['nama_bagian']); ?></h2>
-                <div>
-                    <span class="bagian-count"><?php echo count($bagian['personil']); ?> personil</span>
-                    <span class="toggle-icon" id="icon-<?php echo $no; ?>">▼</span>
-                </div>
-            </div>
-            <div class="personil-content" id="content-<?php echo $no; ?>">
-                <table class="personil-table">
-                    <thead>
-                        <tr>
-                            <th class="no-col">NO</th>
-                            <th>NAMA</th>
-                            <th class="nrp-col">NRP</th>
-                            <th class="pangkat-col">PANGKAT</th>
-                            <th>JABATAN</th>
-                            <th class="ket-col">KET</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $pno = 1; foreach ($bagian['personil'] as $personil): 
-                            $ketClass = '';
-                            if (!empty($personil['ket'])) {
-                                $ket = strtoupper($personil['ket']);
-                                if ($ket === 'A') $ketClass = 'ket-a';
-                                elseif ($ket === 'B') $ketClass = 'ket-b';
-                                elseif ($ket === 'C') $ketClass = 'ket-c';
-                                else $ketClass = 'ket-other';
-                            }
-                        ?>
-                        <tr>
-                            <td class="no-col"><?php echo $pno++; ?></td>
-                            <td><?php echo htmlspecialchars($personil['nama']); ?></td>
-                            <td class="nrp-col"><?php echo htmlspecialchars($personil['nrp']); ?></td>
-                            <td class="pangkat-col"><?php echo htmlspecialchars($personil['pangkat']); ?></td>
-                            <td><?php echo htmlspecialchars($personil['jabatan']); ?></td>
-                            <td class="ket-col">
-                                <?php if (!empty($personil['ket'])): ?>
-                                <span class="ket-badge <?php echo $ketClass; ?>"><?php echo htmlspecialchars($personil['ket']); ?></span>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+        <div style="margin-top: 20px;">
+            <small style="color: #666;">
+                <i class="fas fa-lock"></i> Sistem terjamin keamanannya
+            </small>
         </div>
-        <?php $no++; endforeach; ?>
     </div>
-    
-    <script>
-        function toggleBagian(id) {
-            const content = document.getElementById('content-' + id);
-            const section = document.getElementById('bagian-' + id);
-            const icon = document.getElementById('icon-' + id);
-            
-            if (content.style.maxHeight && content.style.maxHeight !== 'none') {
-                content.style.maxHeight = null;
-                section.classList.add('collapsed');
-            } else {
-                content.style.maxHeight = content.scrollHeight + 'px';
-                section.classList.remove('collapsed');
-            }
-        }
-        
-        // Collapse all by default
-        document.querySelectorAll('.personil-content').forEach((el, i) => {
-            if (i > 0) { // Keep first one open
-                el.style.maxHeight = '0px';
-                el.parentElement.classList.add('collapsed');
-            } else {
-                el.style.maxHeight = el.scrollHeight + 'px';
-            }
-        });
-    </script>
 </body>
 </html>

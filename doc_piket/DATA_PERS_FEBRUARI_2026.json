@@ -1,0 +1,2297 @@
+{
+  "metadata": {
+    "source": "DATA PERS FEBRUARI 2026 NEW.xlsx",
+    "total_records": 285,
+    "export_date": "2026-03-29T00:54:31.009616",
+    "columns": [
+      "PIMPINAN",
+      "Unnamed: 1",
+      "Unnamed: 2",
+      "Unnamed: 3",
+      "Unnamed: 4",
+      "Unnamed: 5"
+    ]
+  },
+  "data": [
+    {
+      "PIMPINAN": 1,
+      "Unnamed: 1": "RINA SRY NIRWANA TARIGAN, S.I.K., M.H.",
+      "Unnamed: 2": "AKBP",
+      "Unnamed: 3": 84031648,
+      "Unnamed: 4": "KAPOLRES SAMOSIR ",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 2,
+      "Unnamed: 1": "BRISTON AGUS MUNTECARLO, S.T., S.I.K.",
+      "Unnamed: 2": "KOMPOL",
+      "Unnamed: 3": 83081648,
+      "Unnamed: 4": "WAKAPOLRES",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "BAG OPS",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 3,
+      "Unnamed: 1": "EDUAR, S.H.",
+      "Unnamed: 2": "KOMPOL",
+      "Unnamed: 3": 68100259,
+      "Unnamed: 4": "KABAG OPS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 4,
+      "Unnamed: 1": "PATRI SIHALOHO",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 82080038,
+      "Unnamed: 4": "PS. PAUR SUBBAGBINOPS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 5,
+      "Unnamed: 1": "AGUNG NUGRAHA NADAP-DAP",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02120141",
+      "Unnamed: 4": "BA MIN BAG OPS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 6,
+      "Unnamed: 1": "ALDI PRANATA GINTING",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03010386",
+      "Unnamed: 4": "BA MIN BAG OPS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 7,
+      "Unnamed: 1": "HENDRIKSON SILALAHI",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02040489",
+      "Unnamed: 4": "BA MIN BAG OPS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 8,
+      "Unnamed: 1": "TOHONAN SITOHANG",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02071119",
+      "Unnamed: 4": "BA MIN BAG OPS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 9,
+      "Unnamed: 1": "GILANG SUTOYO",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03101364",
+      "Unnamed: 4": "BA MIN BAG OPS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 10,
+      "Unnamed: 1": "FERNANDO SILALAHI, A.Md.",
+      "Unnamed: 2": "-",
+      "Unnamed: 3": "198112262024211002",
+      "Unnamed: 4": "ASN BAG OPS",
+      "Unnamed: 5": "P3K/ BKO POLDA"
+    },
+    {
+      "PIMPINAN": "SPKT",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 11,
+      "Unnamed: 1": "HENDRI SIAGIAN, S.H.",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 76030248,
+      "Unnamed: 4": "KA SPKT",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 12,
+      "Unnamed: 1": "DENI MUSTIKA SUKMANA, S.E.",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 87070134,
+      "Unnamed: 4": "PAMAPTA 1",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 13,
+      "Unnamed: 1": "JAMIL MUNTHE, S.H., M.H.",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 85081770,
+      "Unnamed: 4": "PAMAPTA 2",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 14,
+      "Unnamed: 1": "BULET MARS SWANTO LBN. BATU, S.H.",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 87030020,
+      "Unnamed: 4": "PAMAPTA 3",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 15,
+      "Unnamed: 1": "RAMADHAN PUTRA, S.H.",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 96010872,
+      "Unnamed: 4": "BAMIN PAMAPTA 2",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 16,
+      "Unnamed: 1": "ABEDNEGO TARIGAN",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 98090415,
+      "Unnamed: 4": "BAMIN PAMAPTA 3",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 17,
+      "Unnamed: 1": "EDY SUSANTO PARDEDE",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": "00010166",
+      "Unnamed: 4": "BAMIN PAMAPTA 1",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 18,
+      "Unnamed: 1": "BOBBY ANGGARA PUTRA SIREGAR",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": 98010470,
+      "Unnamed: 4": "BAMIN PAMAPTA 1",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 19,
+      "Unnamed: 1": "GABRIEL PAULIMA NADEAK",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "01070820",
+      "Unnamed: 4": "BAMIN PAMAPTA 1",
+      "Unnamed: 5": "OP CALL CENTRE"
+    },
+    {
+      "PIMPINAN": 20,
+      "Unnamed: 1": "ANDRE OWEN PURBA",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02091526",
+      "Unnamed: 4": "BAMIN PAMAPTA 2",
+      "Unnamed: 5": "OP CALL CENTRE"
+    },
+    {
+      "PIMPINAN": 21,
+      "Unnamed: 1": "EDWARD FERDINAND SIDABUTAR",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04070159",
+      "Unnamed: 4": "BAMIN PAMAPTA 2",
+      "Unnamed: 5": "OP CALL CENTRE"
+    },
+    {
+      "PIMPINAN": 22,
+      "Unnamed: 1": "BIMA SANTO HUTAGAOL",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03060873",
+      "Unnamed: 4": "BAMIN PAMAPTA 3",
+      "Unnamed: 5": "OP CALL CENTRE"
+    },
+    {
+      "PIMPINAN": 23,
+      "Unnamed: 1": "KRISTIAN M. H. NABABAN",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03121291",
+      "Unnamed: 4": "BAMIN PAMAPTA 3",
+      "Unnamed: 5": "OP CALL CENTRE"
+    },
+    {
+      "PIMPINAN": "BAG REN",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 24,
+      "Unnamed: 1": "SURUNG SAGALA",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 72100484,
+      "Unnamed: 4": "PAURSUBBAGPROGAR",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 25,
+      "Unnamed: 1": "ZAKHARIA S. I. SIMANJUNTAK, S.H.  ",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 96090857,
+      "Unnamed: 4": "BA MIN BAG REN",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 26,
+      "Unnamed: 1": "GRENIEL WIARTO SIHITE",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03080202",
+      "Unnamed: 4": "BA MIN BAG REN",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "BAG SDM",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 27,
+      "Unnamed: 1": "TARMIZI LUBIS, S.H.",
+      "Unnamed: 2": "AKP",
+      "Unnamed: 3": 73010107,
+      "Unnamed: 4": "PS. KABAG SDM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 28,
+      "Unnamed: 1": "REYMESTA AMBARITA, S.Kom.",
+      "Unnamed: 2": "PENDA",
+      "Unnamed: 3": "`198111252014122004",
+      "Unnamed: 4": "PAURSUBBAGBINKAR",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 29,
+      "Unnamed: 1": "LAMTIO SINAGA, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 97090248,
+      "Unnamed: 4": "BA MIN BAG SDM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 30,
+      "Unnamed: 1": "DODI KURNIADI",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 97120490,
+      "Unnamed: 4": "BA MIN BAG SDM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 31,
+      "Unnamed: 1": "EFRANTA SAPUTRA SITEPU",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "05070285",
+      "Unnamed: 4": "BA MIN BAG SDM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 32,
+      "Unnamed: 1": "RADOS. S. TOGATOROP,S.H.",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 86070985,
+      "Unnamed: 4": "BA POLRES SAMOSIR",
+      "Unnamed: 5": "DIK SIP"
+    },
+    {
+      "PIMPINAN": 33,
+      "Unnamed: 1": "REYSON YOHANNES SIMBOLON",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "00080579",
+      "Unnamed: 4": "ADC KAPOLRES",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 34,
+      "Unnamed: 1": "ANDRE TARUNA SIMBOLON",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02090891",
+      "Unnamed: 4": "BINTARA SATLANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 35,
+      "Unnamed: 1": "YOLANDA NAULIVIA ARITONANG",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03081525",
+      "Unnamed: 4": "ADC KAPOLRES",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "BKO",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 36,
+      "Unnamed: 1": "SYAUQI LUTFI LUBIS, S.H., M.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 95080918,
+      "Unnamed: 4": "BA POLRES SAMOSIR",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 37,
+      "Unnamed: 1": "DANIEL BRANDO SIDABUKKE",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 97050575,
+      "Unnamed: 4": "BA POLRES SAMOSIR",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 38,
+      "Unnamed: 1": "SUTRISNO BUTAR-BUTAR, S.H.",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 98010119,
+      "Unnamed: 4": "BA POLRES SAMOSIR",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "PERS MUTASI",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 39,
+      "Unnamed: 1": "LEONARDO SINAGA",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 81110363,
+      "Unnamed: 4": "BA POLRES SAMOSIR",
+      "Unnamed: 5": "BELUM MENGHADAP"
+    },
+    {
+      "PIMPINAN": "BAG LOG",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 40,
+      "Unnamed: 1": "AWALUDDIN",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 76040221,
+      "Unnamed: 4": "Plt. KASUBBAGBEKPAL",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 41,
+      "Unnamed: 1": "EFRON SARWEDY SINAGA, S.H.",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 97050588,
+      "Unnamed: 4": "BA MIN BAG LOG",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 42,
+      "Unnamed: 1": "PRIADI MAROJAHAN HUTABARAT",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": "00010095",
+      "Unnamed: 4": "BA MIN BAG LOG",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 43,
+      "Unnamed: 1": "CHRIST JERICHO SAPUTRA TAMPUBOLON ",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03070263",
+      "Unnamed: 4": "BA MIN BAG LOG",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SIUM",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 44,
+      "Unnamed: 1": "EFRI PANDI",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 86100287,
+      "Unnamed: 4": "PS. KASIUM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 45,
+      "Unnamed: 1": "YOGI ADE PRATAMA SITOHANG",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04010804",
+      "Unnamed: 4": "BINTARA SIUM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SIKEU",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 46,
+      "Unnamed: 1": "PENGEJAPEN, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 93100676,
+      "Unnamed: 4": "PS. KASIKEU",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 47,
+      "Unnamed: 1": "MUHARRAM SYAHRI, S.H.",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 97050876,
+      "Unnamed: 4": "BINTARA SIKEU",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 48,
+      "Unnamed: 1": "M.FATHUR RAHMAN, S.H.",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 97100685,
+      "Unnamed: 4": "BINTARA SIKEU",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 49,
+      "Unnamed: 1": "HESKIEL WANDANA MELIALA",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03070010",
+      "Unnamed: 4": "BINTARA SIKEU",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 50,
+      "Unnamed: 1": "DANIEL RICARDO SARAGIH",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03040138",
+      "Unnamed: 4": "BINTARA SIKEU",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SIDOKKES",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 51,
+      "Unnamed: 1": "NENENG GUSNIARTI",
+      "Unnamed: 2": "PENATA",
+      "Unnamed: 3": "197008291993032002",
+      "Unnamed: 4": "KASIDOKKES",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 52,
+      "Unnamed: 1": "EDDY SURANTA SARAGIH",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 84040532,
+      "Unnamed: 4": "BA SIDOKKES",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SIWAS",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 53,
+      "Unnamed: 1": "BILMAR SITUMORANG",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 75060617,
+      "Unnamed: 4": "Plt. KASIWAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 54,
+      "Unnamed: 1": "YOHANES EDI SUPRIATNO, S.H., M.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 94080815,
+      "Unnamed: 4": "BINTARA SIWAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 55,
+      "Unnamed: 1": "AGUSTIAWAN SINAGA",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 94080892,
+      "Unnamed: 4": "BINTARA SIWAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SITIK",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 56,
+      "Unnamed: 1": "LISTER BROUN SITORUS",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 93060444,
+      "Unnamed: 4": "BINTARA SITIK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 57,
+      "Unnamed: 1": "ANDREAS D. S. SITANGGANG",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "00070791",
+      "Unnamed: 4": "BINTARA SITIK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 58,
+      "Unnamed: 1": "JACKSON SIDABUTAR",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "01101139",
+      "Unnamed: 4": "BINTARA SITIK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SIKUM",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 59,
+      "Unnamed: 1": "PARIMPUNAN SIREGAR",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 73050261,
+      "Unnamed: 4": "KASUBSIBANKUM ",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 60,
+      "Unnamed: 1": "DANIEL E. LUMBANTORUAN, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 95030599,
+      "Unnamed: 4": "BINTARA SIKUM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SIPROPAM",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 61,
+      "Unnamed: 1": "DENNI BOYKE H. SIREGAR, S.H.",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 76120670,
+      "Unnamed: 4": "PS. KASIPROPAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 62,
+      "Unnamed: 1": "BENNI ARDINAL, S.H., M.H.",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 81010202,
+      "Unnamed: 4": "PS. KANIT PROPOS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 63,
+      "Unnamed: 1": "AGUSTINUS SINAGA",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 85081088,
+      "Unnamed: 4": "PS. KANIT PAMINAL",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 64,
+      "Unnamed: 1": "RAMBO CISLER NADEAK",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 86081359,
+      "Unnamed: 4": "BINTARA SIPROPAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 65,
+      "Unnamed: 1": "PERY RAPEN YONES PARDOSI, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 95030796,
+      "Unnamed: 4": "BINTARA SIPROPAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 66,
+      "Unnamed: 1": "DWI HETRIANDY, S.H. ",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 97070014,
+      "Unnamed: 4": "BINTARA SIPROPAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 67,
+      "Unnamed: 1": "TRY WIBOWO",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 97120554,
+      "Unnamed: 4": "BINTARA SIPROPAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 68,
+      "Unnamed: 1": "SIMON TIGRIS SIAGIAN",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": "00080343",
+      "Unnamed: 4": "BINTARA SIPROPAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 69,
+      "Unnamed: 1": "FIRIAN JOSUA SITORUS",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "01080575",
+      "Unnamed: 4": "BINTARA SIPROPAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SIHUMAS",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 70,
+      "Unnamed: 1": "GUNAWAN SITUMORANG",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 93030551,
+      "Unnamed: 4": "BINTARA SIHUMAS ",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 71,
+      "Unnamed: 1": "DANIEL BAHTERA SINAGA",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 98091488,
+      "Unnamed: 4": "BINTARA SIHUMAS ",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SAT BINMAS",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 72,
+      "Unnamed: 1": "HORAS LARIUS SITUMORANG",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 75120560,
+      "Unnamed: 4": "KAURBINOPS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 73,
+      "Unnamed: 1": "JEFTA OCTAVIANUS NICO SIANTURI",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 95090650,
+      "Unnamed: 4": "BINTARA SAT BINMAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 74,
+      "Unnamed: 1": "SAHAT MARULI TUA SINAGA, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 94091146,
+      "Unnamed: 4": "BINTARA SAT BINMAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 75,
+      "Unnamed: 1": "RONAL PARTOGI SITUMORANG",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04020118",
+      "Unnamed: 4": "BINTARA SAT BINMAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SAT INTELKAM",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 76,
+      "Unnamed: 1": "DONAL P. SITANGGANG, S.H., M.H.",
+      "Unnamed: 2": "IPTU",
+      "Unnamed: 3": 82070670,
+      "Unnamed: 4": "PS. KASAT INTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 77,
+      "Unnamed: 1": "MUHAMMAD YUNUS LUBIS, S.H.",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 85050489,
+      "Unnamed: 4": "KAURBINOPS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 78,
+      "Unnamed: 1": "MARBETA S. SIANIPAR, S.H.",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 80070348,
+      "Unnamed: 4": "PS. KAURMINTU",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 79,
+      "Unnamed: 1": "SITARDA AKABRI SIBUEA",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 87080112,
+      "Unnamed: 4": "PS. KANIT 3",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 80,
+      "Unnamed: 1": "CINTER ROKHY SINAGA",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 87051430,
+      "Unnamed: 4": "PS. KANIT 1",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 81,
+      "Unnamed: 1": "VANDU P. MARPAUNG",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 90080088,
+      "Unnamed: 4": "PS. KANIT 2",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 82,
+      "Unnamed: 1": "ALFONSIUS GULTOM, S.H. ",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 93080556,
+      "Unnamed: 4": "BINTARA SAT INTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 83,
+      "Unnamed: 1": "TRIFIKO P. NAINGGOLAN, S.H.",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 97040848,
+      "Unnamed: 4": "BINTARA SATINTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 84,
+      "Unnamed: 1": "ANDRI AFRIJAL SIMARMATA",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 98110618,
+      "Unnamed: 4": "BINTARA SATINTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 85,
+      "Unnamed: 1": "DIEN VAROSCY I. SITUMORANG",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02030032",
+      "Unnamed: 4": "BINTARA SATINTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 86,
+      "Unnamed: 1": "ARDY TRIANO MALAU",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02120339",
+      "Unnamed: 4": "BINTARA SATINTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 87,
+      "Unnamed: 1": "JUNEDI SAGALA",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02040459",
+      "Unnamed: 4": "BINTARA SATINTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 88,
+      "Unnamed: 1": "GABRIEL SEBASTIAN SIREGAR",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02101010",
+      "Unnamed: 4": "BINTARA SATINTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 89,
+      "Unnamed: 1": "RIO F. T ERENST PANJAITAN",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04020209",
+      "Unnamed: 4": "BINTARA SATINTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 90,
+      "Unnamed: 1": "AGHEO HARMANA JOUSTRA SINURAYA",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04080118",
+      "Unnamed: 4": "BINTARA SAT INTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 91,
+      "Unnamed: 1": "SAMUEL RINALDI PAKPAHAN",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04010932",
+      "Unnamed: 4": "BINTARA SAT INTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 92,
+      "Unnamed: 1": "RAYMONTIUS HAROMUNTE",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04040520",
+      "Unnamed: 4": "BINTARA SAT INTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SAT RESKRIM",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 93,
+      "Unnamed: 1": "EDWARD SIDAURUK, S.E., M.M.",
+      "Unnamed: 2": "AKP",
+      "Unnamed: 3": 79120994,
+      "Unnamed: 4": "KASAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 94,
+      "Unnamed: 1": "DARMONO SAMOSIR, S.H. ",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 76020196,
+      "Unnamed: 4": "KANITIDIK 3",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 95,
+      "Unnamed: 1": "ROYANTO PURBA, S.H.",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 83010825,
+      "Unnamed: 4": "KANITIDIK 4",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 96,
+      "Unnamed: 1": "SUHADIYANTO, S.H.",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 83120602,
+      "Unnamed: 4": "KANITIDIK 1",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 97,
+      "Unnamed: 1": "KUICAN SIMANJUNTAK",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 88060535,
+      "Unnamed: 4": "KANITIDIK 5",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 98,
+      "Unnamed: 1": "MARTIN HABENSONY ARITONANG",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 79030434,
+      "Unnamed: 4": "PS. KANITIDIK 2",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 99,
+      "Unnamed: 1": "HENRY SIPAKKAR",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 83060084,
+      "Unnamed: 4": "PS. KANIT IDENTIFIKASI",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 100,
+      "Unnamed: 1": "CHANDRA HUTAPEA",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 87011165,
+      "Unnamed: 4": "PS. KAURMINTU",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 101,
+      "Unnamed: 1": "CHANDRA BARIMBING",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 89030401,
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 102,
+      "Unnamed: 1": "DEDY SAOLOAN SIGALINGGING",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 87041596,
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 103,
+      "Unnamed: 1": "ISWAN LUKITO",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 82050798,
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 104,
+      "Unnamed: 1": "RONI HANSVERI BANJARNAHOR",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 95030238,
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 105,
+      "Unnamed: 1": "RODEN SUANDI TURNIP",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 94020506,
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 106,
+      "Unnamed: 1": "SAPUTRA, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 94121145,
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 107,
+      "Unnamed: 1": "DIAN LESTARI GULTOM, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 95100554,
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 108,
+      "Unnamed: 1": "ARGIO SIMBOLON",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 95110886,
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 109,
+      "Unnamed: 1": "EKO DAHANA PARDEDE, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 97070616,
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 110,
+      "Unnamed: 1": "GIDEON AFRIADI LUMBAN RAJA",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 97040728,
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 111,
+      "Unnamed: 1": "FACHRUL REZA SILALAHI",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 98090397,
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 112,
+      "Unnamed: 1": "RIDHOTUA F. SITANGGANG",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": "00030346",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 113,
+      "Unnamed: 1": "NICHO FERNANDO SARAGIH",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": "00110362",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 114,
+      "Unnamed: 1": "ADI P.S. MARBUN",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": "00090499",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 115,
+      "Unnamed: 1": "PRIYATAMA ABDILLAH HARAHAP",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "01120358",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 116,
+      "Unnamed: 1": "RIZKI AFRIZAL SIMANJUNTAK",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "01070839",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 117,
+      "Unnamed: 1": "MIDUK YUDIANTO SINAGA",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "01060553",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 118,
+      "Unnamed: 1": "FRAN'S ALEXANDER SIANIPAR ",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02110342",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 119,
+      "Unnamed: 1": "RAFFLES SIJABAT",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "01110817",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 120,
+      "Unnamed: 1": "HERIANTA TARIGAN",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "01091201",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 121,
+      "Unnamed: 1": "RICKY AGATHA GINTING",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03030809",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 122,
+      "Unnamed: 1": "CHRISTIAN PROSPEROUS SIMANUNGKALIT",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03020368",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 123,
+      "Unnamed: 1": "PINIEL RAJAGUKGUK",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04020196",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 124,
+      "Unnamed: 1": "REZA SIREGAR",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03090568",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 125,
+      "Unnamed: 1": "RAYMOND VAN HEZEKIEL SIAHAAN",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04031206",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 126,
+      "Unnamed: 1": "M. ALAMSYAH PRAYOGA TAMBUNAN",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "05080602",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 127,
+      "Unnamed: 1": "IRVAN SYAPUTRA MALAU",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04090567",
+      "Unnamed: 4": "BINTARA SAT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SAT RESNARKOBA",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 128,
+      "Unnamed: 1": "FERRY ARIANDY, S.H., M.H",
+      "Unnamed: 2": "AKP",
+      "Unnamed: 3": 79060034,
+      "Unnamed: 4": "KASATRESNARKOBA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 129,
+      "Unnamed: 1": "ALVIUS KRISTIAN GINTING, S.H.",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 88100591,
+      "Unnamed: 4": "KAURBINOPS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 130,
+      "Unnamed: 1": "BENNY SITUMORANG, S.H. ",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 89010155,
+      "Unnamed: 4": "PS.KANIT IDIK 1",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 131,
+      "Unnamed: 1": "EKO PUTRA DAMANIK, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 93050797,
+      "Unnamed: 4": "BINTARA SATRESNARKOBA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 132,
+      "Unnamed: 1": "MAY FRANSISCO SIAGIAN, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 91050361,
+      "Unnamed: 4": "BINTARA SATRESNARKOBA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 133,
+      "Unnamed: 1": "ROBERTO MANALU",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 94090839,
+      "Unnamed: 4": "BINTARA SATRESNARKOBA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 134,
+      "Unnamed: 1": "M. RONALD FAHROZI HARAHAP, S.H.",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 98110378,
+      "Unnamed: 4": "BINTARA SATRESNARKOBA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 135,
+      "Unnamed: 1": "HERIANTO EFENDI, S.H.",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 97020694,
+      "Unnamed: 4": "BINTARA SATRESNARKOBA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 136,
+      "Unnamed: 1": "TEDDI PARNASIPAN TOGATOROP",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02120224",
+      "Unnamed: 4": "BINTARA SATRESNARKOBA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 137,
+      "Unnamed: 1": "ONDIHON SIMBOLON",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02090838",
+      "Unnamed: 4": "BINTARA SATRESNARKOBA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 138,
+      "Unnamed: 1": "IVAN SIGOP SIHOMBING",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "05080131",
+      "Unnamed: 4": "BINTARA SATRESNARKOBA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SAT SAMAPTA",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 139,
+      "Unnamed: 1": "NANDI BUTAR-BUTAR, S.H.",
+      "Unnamed: 2": "AKP",
+      "Unnamed: 3": 80080676,
+      "Unnamed: 4": "KASAT SAMAPTA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 140,
+      "Unnamed: 1": "BARTO ANTONIUS SIMALANGO",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 80050867,
+      "Unnamed: 4": "PS. KAURBINOPS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 141,
+      "Unnamed: 1": "HASUDUNGAN SILITONGA",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 73040390,
+      "Unnamed: 4": "PS. KANIT DALMAS 2",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 142,
+      "Unnamed: 1": "JHONNY LEONARDO SILALAHI",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 85090954,
+      "Unnamed: 4": "PS. KANIT TURJAWALI",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 143,
+      "Unnamed: 1": "ASRIL",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 83081051,
+      "Unnamed: 4": "BINTARA SAT SAMAPTA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 144,
+      "Unnamed: 1": "INDIRWAN FRIDERICK, S.H. ",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 94110350,
+      "Unnamed: 4": "BINTARA SAT SAMAPTA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 145,
+      "Unnamed: 1": "EGIDIUM BRAUN SILITONGA",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 93100793,
+      "Unnamed: 4": "BINTARA SAT SAMAPTA",
+      "Unnamed: 5": "A"
+    },
+    {
+      "PIMPINAN": 146,
+      "Unnamed: 1": "DINAMIKA JAYA NEGARA SITANGGANG",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": 97100701,
+      "Unnamed: 4": "BINTARA SAT SAMAPTA",
+      "Unnamed: 5": "B"
+    },
+    {
+      "PIMPINAN": 147,
+      "Unnamed: 1": "WIRA HARZITA",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "05051087",
+      "Unnamed: 4": "BINTARA SAT SAMAPTA",
+      "Unnamed: 5": "C"
+    },
+    {
+      "PIMPINAN": 148,
+      "Unnamed: 1": "RAHMAT ANDRIAN TAMBUNAN",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "06100189",
+      "Unnamed: 4": "BINTARA SAT SAMAPTA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 149,
+      "Unnamed: 1": "JONATAN DWI SAPUTRA PARAPAT",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "07080045",
+      "Unnamed: 4": "BINTARA SAT SAMAPTA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 150,
+      "Unnamed: 1": "PERDANA NIKOLA SEMBIRING",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04051595",
+      "Unnamed: 4": "BINTARA SAT SAMAPTA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 151,
+      "Unnamed: 1": "PETRUS SURIA HUGALUNG",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04081205",
+      "Unnamed: 4": "BINTARA SAT SAMAPTA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 152,
+      "Unnamed: 1": "RAFAEL ARSANLILO SINULINGGA",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "06010414",
+      "Unnamed: 4": "BINTARA SAT SAMAPTA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 153,
+      "Unnamed: 1": "RAJASPER SIRINGORINGO",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "06090021",
+      "Unnamed: 4": "BINTARA SAT SAMAPTA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SAT PAMOBVIT",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 154,
+      "Unnamed: 1": "TANGIO HAOJAHAN SITANGGANG, S.H.",
+      "Unnamed: 2": "IPTU",
+      "Unnamed: 3": 72100604,
+      "Unnamed: 4": "KASAT PAMOBVIT",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 155,
+      "Unnamed: 1": "MARUBA NAINGGOLAN",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 80100836,
+      "Unnamed: 4": "PS. KANITPAMWASTER",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 156,
+      "Unnamed: 1": "ROY HARIS ST. SIMAREMARE",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 85030645,
+      "Unnamed: 4": "PS. KANITPAMWISATA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 157,
+      "Unnamed: 1": "M. DENY WAHYU",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 80050898,
+      "Unnamed: 4": "PS. PANIT PAMWASTER",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 158,
+      "Unnamed: 1": "HENRI F. SIANIPAR",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 83050202,
+      "Unnamed: 4": "BINTARA SAT PAMOBVIT",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 159,
+      "Unnamed: 1": "BUYUNG ANDRYANTO",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 85121325,
+      "Unnamed: 4": "PS. KAURMINTU",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 160,
+      "Unnamed: 1": "RIANTO SITANGGANG",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 91110130,
+      "Unnamed: 4": "BINTARA SAT PAMOBVIT",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 161,
+      "Unnamed: 1": "ROY NANDA SEMBIRING KEMBAREN",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 94090948,
+      "Unnamed: 4": "BINTARA SAT PAMOBVIT",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 162,
+      "Unnamed: 1": "CANDRA SILALAHI, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 96031057,
+      "Unnamed: 4": "BINTARA SAT PAMOBVIT",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 163,
+      "Unnamed: 1": "YUNUS SAMDIO SIDABUTAR ",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02100599",
+      "Unnamed: 4": "BINTARA SAT PAMOBVIT",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 164,
+      "Unnamed: 1": "RAINHEART SITANGGANG ",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03010565",
+      "Unnamed: 4": "BINTARA SAT PAMOBVIT",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 165,
+      "Unnamed: 1": "BONIFASIUS NAINGGOLAN",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02011312",
+      "Unnamed: 4": "BINTARA SAT PAMOBVIT",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 166,
+      "Unnamed: 1": "RAY YONDO SIAHAAN ",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "00080816",
+      "Unnamed: 4": "BINTARA SAT PAMOBVIT",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 167,
+      "Unnamed: 1": "REDY EZRA JONATHAN",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03040947",
+      "Unnamed: 4": "BINTARA SAT PAMOBVIT",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 168,
+      "Unnamed: 1": "CHARLY H. ARITONANG",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04100485",
+      "Unnamed: 4": "BINTARA SAT PAMOBVIT",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SAT LANTAS",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 169,
+      "Unnamed: 1": "NATANAIL SURBAKTI, S.H",
+      "Unnamed: 2": "AKP",
+      "Unnamed: 3": 79120800,
+      "Unnamed: 4": "KASAT LANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 170,
+      "Unnamed: 1": "JUSUP KETAREN",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 75080942,
+      "Unnamed: 4": "KANITREGIDENT LANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 171,
+      "Unnamed: 1": "ARON PERANGIN-ANGIN",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 80070492,
+      "Unnamed: 4": "PS. KANITGAKKUM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 172,
+      "Unnamed: 1": "HERON GINTING",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 79060704,
+      "Unnamed: 4": "PS. KANITTURJAWALI",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 173,
+      "Unnamed: 1": "JEFRI KHADAFI SIREGAR, S.H.",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 86030733,
+      "Unnamed: 4": "PS. KANITKAMSEL ",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 174,
+      "Unnamed: 1": "HERIANTO TURNIP",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 89070031,
+      "Unnamed: 4": "BINTARA SAT LANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 175,
+      "Unnamed: 1": "DION MAR'YANSEN SILITONGA",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 87030647,
+      "Unnamed: 4": "BINTARA SAT LANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 176,
+      "Unnamed: 1": "ROY GRIMSLAY, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 93020749,
+      "Unnamed: 4": "BINTARA SAT LANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 177,
+      "Unnamed: 1": "BAGUS DWI PRAKOSO, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 93090673,
+      "Unnamed: 4": "BINTARA SAT LANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 178,
+      "Unnamed: 1": "ICASANDRI MONANZA BR GINTING",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 97040353,
+      "Unnamed: 4": "BINTARA SAT LANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 179,
+      "Unnamed: 1": "DIKI FEBRIAN SITORUS",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 95021078,
+      "Unnamed: 4": "BINTARA SAT LANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 180,
+      "Unnamed: 1": "MARCHLANDA SITOHANG",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 96031061,
+      "Unnamed: 4": "BINTARA SAT LANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 181,
+      "Unnamed: 1": "JULIVER SIDABUTAR",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": "01080438",
+      "Unnamed: 4": "BINTARA SAT LANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 182,
+      "Unnamed: 1": "FATHURROZI TINDAON",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "01120281",
+      "Unnamed: 4": "BINTARA SAT LANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 183,
+      "Unnamed: 1": "BENY BOY CHRISTIAN SIAHAAN",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02111012",
+      "Unnamed: 4": "BINTARA SATLANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 184,
+      "Unnamed: 1": "RADOT NOVALDO PANDAPOTAN PURBA",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02111051",
+      "Unnamed: 4": "BINTARA SATLANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 185,
+      "Unnamed: 1": "MUHAMMAD ZIDHAN RIFALDI",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "05030251",
+      "Unnamed: 4": "BINTARA SATLANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 186,
+      "Unnamed: 1": "DANI INDRA PERMANA SINAGA",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04050615",
+      "Unnamed: 4": "BINTARA SATLANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 187,
+      "Unnamed: 1": "HEZKIEL CAPRI SITINDAON",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "05010048",
+      "Unnamed: 4": "BINTARA SATLANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 188,
+      "Unnamed: 1": "BONARIS TSUYOKO DITASANI SINAGA",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04030824",
+      "Unnamed: 4": "BINTARA SATLANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 189,
+      "Unnamed: 1": "ARY ANJAS SARAGIH",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "05010014",
+      "Unnamed: 4": "BINTARA SATLANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 190,
+      "Unnamed: 1": "GABRIEL VERY JUNIOR SITOHANG",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04030805",
+      "Unnamed: 4": "BINTARA SATLANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 191,
+      "Unnamed: 1": "FIRMAN BAHTERA",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02121477",
+      "Unnamed: 4": "BINTARA SATLANTAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SAT POLAIRUD",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 192,
+      "Unnamed: 1": "SULAIMAN PANGARIBUAN, S.H",
+      "Unnamed: 2": "AKP",
+      "Unnamed: 3": 68120522,
+      "Unnamed: 4": "KASAT POLAIRUD",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 193,
+      "Unnamed: 1": "EFENDI M.  SIREGAR",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 83080822,
+      "Unnamed: 4": "PS. KANITPATROLI",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 194,
+      "Unnamed: 1": "ROMEL LINDUNG SIAHAAN",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 73120275,
+      "Unnamed: 4": "PS. KAURMINTU",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 195,
+      "Unnamed: 1": "FRANS HOTMAN MANURUNG, S.H.",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 90060273,
+      "Unnamed: 4": "BINTARA SATPOLAIRUD",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 196,
+      "Unnamed: 1": "ANTONIUS SIPAYUNG",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 77070919,
+      "Unnamed: 4": "BINTARA SATPOLAIRUD",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "SAT TAHTI",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 197,
+      "Unnamed: 1": "SAUT H. SIAHAAN",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 82051018,
+      "Unnamed: 4": "PS. KASAT TAHTI",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 198,
+      "Unnamed: 1": "FERNANDO SIMBOLON",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 98050496,
+      "Unnamed: 4": "BINTARA SAT TAHTI",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 199,
+      "Unnamed: 1": "KURNIA PERMANA",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 98030531,
+      "Unnamed: 4": "BINTARA SAT TAHTI",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 200,
+      "Unnamed: 1": "STEVEN IMANUEL SITUMEANG",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "05090232",
+      "Unnamed: 4": "BINTARA SAT TAHTI",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "POLSEK HARIAN BOHO",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 201,
+      "Unnamed: 1": "RAHMAT KURNIAWAN",
+      "Unnamed: 2": "IPTU",
+      "Unnamed: 3": 69090552,
+      "Unnamed: 4": "PS. KAPOLSEK HARIAN BOHO",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 202,
+      "Unnamed: 1": "MARUKKIL J.M. PASARIBU ",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 79090296,
+      "Unnamed: 4": "PS. KANIT INTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 203,
+      "Unnamed: 1": "LANTRO LANDELINUS SAGALA",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 82070930,
+      "Unnamed: 4": "PS. KANIT BINMAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 204,
+      "Unnamed: 1": "ANDY DEDY SIHOMBING, S.H.",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 87120701,
+      "Unnamed: 4": "PS. KANIT RESKRIM",
+      "Unnamed: 5": "A"
+    },
+    {
+      "PIMPINAN": 205,
+      "Unnamed: 1": "RANGGA HATTA",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 86021428,
+      "Unnamed: 4": "PS.KANIT SAMAPTA",
+      "Unnamed: 5": "B"
+    },
+    {
+      "PIMPINAN": 206,
+      "Unnamed: 1": "ARDIANSYAH BUTAR-BUTAR",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 80120573,
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": "C"
+    },
+    {
+      "PIMPINAN": 207,
+      "Unnamed: 1": "ADRYANTO SINAGA, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 96120123,
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 208,
+      "Unnamed: 1": "BROLIN ADFRIALDI HALOHO",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 94040538,
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 209,
+      "Unnamed: 1": "SUGIANTO ERIK SIBORO",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 95110806,
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 210,
+      "Unnamed: 1": "RISKO SIMBOLON",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "01020739",
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "POLSEK PALIPI",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 211,
+      "Unnamed: 1": "MAXON NAINGGOLAN",
+      "Unnamed: 2": "AKP",
+      "Unnamed: 3": 70050412,
+      "Unnamed: 4": "KAPOLSEK PALIPI",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 212,
+      "Unnamed: 1": "H. SWANDI SINAGA",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 78040213,
+      "Unnamed: 4": "PS. KA SPKT 1 ",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 213,
+      "Unnamed: 1": "HARATUA GULTOM",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 77030463,
+      "Unnamed: 4": "PS. KASIUM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 214,
+      "Unnamed: 1": "ASA MELKI HUTABARAT",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 76120606,
+      "Unnamed: 4": "PS. KANIT SAMAPTA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 215,
+      "Unnamed: 1": "JARIAHMAN SARAGIH",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 78100741,
+      "Unnamed: 4": "PS. KANIT BINMAS",
+      "Unnamed: 5": "A"
+    },
+    {
+      "PIMPINAN": 216,
+      "Unnamed: 1": "MUHAMMAD SYAFEI RAMADHAN",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 87041134,
+      "Unnamed: 4": "PS. KANIT RESKRIM",
+      "Unnamed: 5": "B"
+    },
+    {
+      "PIMPINAN": 217,
+      "Unnamed: 1": "RIJALUL FIKRI SINAGA",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 86121371,
+      "Unnamed: 4": "PS. KANIT INTELKAM",
+      "Unnamed: 5": "C"
+    },
+    {
+      "PIMPINAN": 218,
+      "Unnamed: 1": "TEGUH SYAHPUTRA",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 85071450,
+      "Unnamed: 4": "PS. KA SPKT 2",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 219,
+      "Unnamed: 1": "RUDYANTO LUMBANRAJA",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 85041500,
+      "Unnamed: 4": "BINTARA  POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 220,
+      "Unnamed: 1": "ZULPAN SYAHPUTRA DAMANIK",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 96031075,
+      "Unnamed: 4": "BINTARA  POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "POLSEK SIMANINDO",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 221,
+      "Unnamed: 1": "RAMADAN SIREGAR, S.H.",
+      "Unnamed: 2": "IPTU",
+      "Unnamed: 3": 83061022,
+      "Unnamed: 4": "PS. KAPOLSEK SIMANINDO",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 222,
+      "Unnamed: 1": "WIDODO KABAN, S.H.",
+      "Unnamed: 2": "IPDA",
+      "Unnamed: 3": 86071792,
+      "Unnamed: 4": "KANIT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 223,
+      "Unnamed: 1": "GUNTAR TAMBUNAN",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 75120864,
+      "Unnamed: 4": "PS. KA SPKT 1 ",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 224,
+      "Unnamed: 1": "JEFRI RICARDO SAMOSIR",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 82040124,
+      "Unnamed: 4": "PS. KANITPROPAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 225,
+      "Unnamed: 1": "JUITO SUPANOTO PERANGIN-ANGIN",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 84020306,
+      "Unnamed: 4": "PS. KANIT BINMAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 226,
+      "Unnamed: 1": "YOPPHY RHODEAR MUNTHE ",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 83080042,
+      "Unnamed: 4": "PS. KA SPKT 3",
+      "Unnamed: 5": "A"
+    },
+    {
+      "PIMPINAN": 227,
+      "Unnamed: 1": "TUMBUR SITOHANG",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 86010311,
+      "Unnamed: 4": "PS. KANIT INTELKAM",
+      "Unnamed: 5": "B"
+    },
+    {
+      "PIMPINAN": 228,
+      "Unnamed: 1": "DONI SURIANTO PURBA, S.H.",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 84110202,
+      "Unnamed: 4": "PS. KASIUM",
+      "Unnamed: 5": "C"
+    },
+    {
+      "PIMPINAN": 229,
+      "Unnamed: 1": "PATAR F. ANRI SIAHAAN",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 89020409,
+      "Unnamed: 4": "PS. KANIT SAMAPTA",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 230,
+      "Unnamed: 1": "KURNIAWAN, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 94090490,
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 231,
+      "Unnamed: 1": "ASHARI BUTAR-BUTAR, S.H.",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 95060432,
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 232,
+      "Unnamed: 1": "DIDI HOT BAGAS SITORUS",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": 96061331,
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 233,
+      "Unnamed: 1": "HORAS J.M. ARITONANG ",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "01060884",
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 234,
+      "Unnamed: 1": "ANDRE YEHEZKIEL HUTABARAT",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04060050",
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 235,
+      "Unnamed: 1": "CLAUDIUS HARIS PARDEDE",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 89080105,
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 236,
+      "Unnamed: 1": "ZULKIFLI NASUTION",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "02051553",
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "POLSEK ONANRUNGGU",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 237,
+      "Unnamed: 1": "RADIAMAN SIMARMATA",
+      "Unnamed: 2": "AKP",
+      "Unnamed: 3": 70010290,
+      "Unnamed: 4": "KASIHUMAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 238,
+      "Unnamed: 1": "HERMAWADI ",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 82050839,
+      "Unnamed: 4": "PS. KANIT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 239,
+      "Unnamed: 1": "BISSAR LUMBANTUNGKUP",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 84091124,
+      "Unnamed: 4": "PS. KANIT BINMAS",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 240,
+      "Unnamed: 1": "BONAR JUBEL SIBARANI",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 70090340,
+      "Unnamed: 4": "PS. KANIT SAMAPTA",
+      "Unnamed: 5": "A"
+    },
+    {
+      "PIMPINAN": 241,
+      "Unnamed: 1": "RAMLES SITANGGANG",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 77020642,
+      "Unnamed: 4": "PS. KANIT INTELKAM",
+      "Unnamed: 5": "B"
+    },
+    {
+      "PIMPINAN": 242,
+      "Unnamed: 1": "LUHUT SIRINGO-RINGO",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 83031377,
+      "Unnamed: 4": "BINTARA POLSEK ",
+      "Unnamed: 5": "C"
+    },
+    {
+      "PIMPINAN": 243,
+      "Unnamed: 1": "ANRIAN SIGALINGGING",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03100001",
+      "Unnamed: 4": "BINTARA POLSEK ",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 244,
+      "Unnamed: 1": "BONATUA LUMBANTUNGKUP",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": 99110755,
+      "Unnamed: 4": "BINTARA POLSEK ",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 245,
+      "Unnamed: 1": "ANDRE SUGIARTO MARPAUNG",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "03050116",
+      "Unnamed: 4": "BINTARA POLSEK ",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 246,
+      "Unnamed: 1": "ERWIN KEVIN GULTOM",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "04030125",
+      "Unnamed: 4": "BINTARA POLSEK ",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": "POLSEK PANGURURAN",
+      "Unnamed: 1": "",
+      "Unnamed: 2": "",
+      "Unnamed: 3": "",
+      "Unnamed: 4": "",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 247,
+      "Unnamed: 1": "BANGUN TUA DALIMUNTHE",
+      "Unnamed: 2": "AKP",
+      "Unnamed: 3": 70020298,
+      "Unnamed: 4": "KAPOLSEK PANGURURAN",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 248,
+      "Unnamed: 1": "LANCASTER ARIANTO CANDY PASARIBU, S.H.",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 81050713,
+      "Unnamed: 4": "PS. KANIT RESKRIM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 249,
+      "Unnamed: 1": "RUDY SETYAWAN",
+      "Unnamed: 2": "AIPTU",
+      "Unnamed: 3": 80090905,
+      "Unnamed: 4": "PS. KANIT INTELKAM",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 250,
+      "Unnamed: 1": "MANGATUR TUA TINDAON",
+      "Unnamed: 2": "AIPDA",
+      "Unnamed: 3": 80080892,
+      "Unnamed: 4": "PS. KANIT BINMAS",
+      "Unnamed: 5": "A"
+    },
+    {
+      "PIMPINAN": 251,
+      "Unnamed: 1": "RENO HOTMARULI TUA MANIK, S.H.",
+      "Unnamed: 2": "BRIPKA",
+      "Unnamed: 3": 87110154,
+      "Unnamed: 4": "PS. KANIT SAMAPTA",
+      "Unnamed: 5": "B"
+    },
+    {
+      "PIMPINAN": 252,
+      "Unnamed: 1": "HERBINTUPA SITANGGANG ",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 79020443,
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": "C"
+    },
+    {
+      "PIMPINAN": 253,
+      "Unnamed: 1": "IBRAHIM TARIGAN",
+      "Unnamed: 2": "BRIGPOL",
+      "Unnamed: 3": 85121751,
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 254,
+      "Unnamed: 1": "AGUNG NUGRAHA HARIANJA, S.H. ",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 98090406,
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 255,
+      "Unnamed: 1": "DANI PUTRA RUMAHORBO",
+      "Unnamed: 2": "BRIPTU",
+      "Unnamed: 3": 98091274,
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    },
+    {
+      "PIMPINAN": 256,
+      "Unnamed: 1": "KRISMAN JULU GULTOM",
+      "Unnamed: 2": "BRIPDA",
+      "Unnamed: 3": "01060198",
+      "Unnamed: 4": "BINTARA POLSEK",
+      "Unnamed: 5": ""
+    }
+  ]
+}
