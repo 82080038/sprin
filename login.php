@@ -1,24 +1,21 @@
 <?php
 session_start();
+require_once __DIR__ . '/core/config.php';
+require_once __DIR__ . '/core/auth_helper.php';
 
 // Check if already logged in
-if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    header('Location: /sprint/pages/main.php');
+if (AuthHelper::validateSession()) {
+    header('Location: ' . url('pages/main.php'));
     exit;
 }
 
 // Handle login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? '';
+    $username = AuthHelper::sanitizeInput($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
     
-    // Simple authentication (in production, use proper password hashing)
-    if ($username === 'bagops' && $password === 'admin123') {
-        $_SESSION['logged_in'] = true;
-        $_SESSION['username'] = $username;
-        $_SESSION['login_time'] = date('Y-m-d H:i:s');
-        
-        header('Location: /sprint/pages/main.php');
+    if (AuthHelper::login($username, $password)) {
+        header('Location: ' . url('pages/main.php'));
         exit;
     } else {
         $error = 'Username atau password salah!';
@@ -32,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistem Manajemen POLRES Samosir</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
         :root {

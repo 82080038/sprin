@@ -36,19 +36,21 @@ define('SESSION_LIFETIME', 3600); // 1 hour
 define('API_RATE_LIMIT', 100); // requests per hour
 define('API_TIMEOUT', 30); // seconds
 
-// Debug Configuration
-if (ENVIRONMENT === 'development') {
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-    define('DEBUG_MODE', true);
-} else {
-    // Production: Show only fatal errors, log everything
-    error_reporting(E_ERROR | E_PARSE | E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_COMPILE_WARNING);
-    ini_set('display_errors', 0);
+// Debug Configuration - ALWAYS ON for error reporting
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+define('DEBUG_MODE', true);
+
+// Environment-based logging (optional)
+if (ENVIRONMENT !== 'development') {
     ini_set('log_errors', 1);
     ini_set('error_log', __DIR__ . '/logs/php_error.log');
-    define('DEBUG_MODE', false);
 }
+
+// Initialize Error Handler
+require_once __DIR__ . '/error_handler.php';
+ErrorHandler::init();
 
 // Custom Error Handler for Production
 if (ENVIRONMENT !== 'development') {

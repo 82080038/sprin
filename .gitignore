@@ -1,6 +1,7 @@
 # Dependencies
 vendor/
 composer.lock
+node_modules/
 
 # Large data files (keep examples only)
 *.pdf

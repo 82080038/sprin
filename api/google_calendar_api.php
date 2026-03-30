@@ -1,5 +1,5 @@
 <?php
-require 'calendar_config.php';
+require_once __DIR__ . '/../core/calendar_config.php';
 
 class GoogleCalendarAPI {
     private $client;

@@ -4,7 +4,12 @@ if (ob_get_level() === 0) {
     ob_start();
 }
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include config first
+require_once __DIR__ . '/../core/config.php';
 
 // Handle AJAX operations FIRST (before any includes)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -23,8 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         // Include required files for AJAX
-        require_once '../core/config.php';
-        require_once '../core/calendar_config.php';
+        require_once __DIR__ . '/../core/calendar_config.php';
         
         // Connect to database
         try {

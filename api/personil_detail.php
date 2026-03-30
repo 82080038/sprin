@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/../core/config.php';
 
 // Check authentication
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
@@ -12,9 +13,9 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 header("Content-Type: application/json; charset=UTF-8");
 
 try {
-    // Database connection
-    $dsn = "mysql:host=localhost;dbname=bagops;unix_socket=/opt/lampp/var/mysql/mysql.sock";
-    $pdo = new PDO($dsn, 'root', 'root');
+    // Database connection using config constants
+    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";unix_socket=/opt/lampp/var/mysql/mysql.sock";
+    $pdo = new PDO($dsn, DB_USER, DB_PASS);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     // Get ID from parameter

@@ -1,4 +1,9 @@
 <?php
+// Include config if not already included
+if (!defined('BASE_URL')) {
+    require_once __DIR__ . '/../../core/config.php';
+}
+
 // Get current page for active state
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
@@ -11,11 +16,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'>
+    <!-- Font Awesome 6 - Latest stable version -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="<?php echo asset_url('css/responsive.css'); ?>">
     
     <style>
-        :root {
-            --primary-color: #1a237e;
             --secondary-color: #3949ab;
             --accent-color: #ffd700;
         }
@@ -246,36 +252,33 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-    // Check if jQuery is loaded
-    if (typeof jQuery === 'undefined') {
-        console.error('jQuery not loaded!');
-    } else {
-        console.log('jQuery version:', jQuery.fn.jquery);
-    }
+    // Global error handling
+    window.onerror = function(message, source, lineno, colno, error) {
+        if (typeof console !== 'undefined' && console.error) {
+            console.error('Error caught:', message);
+        }
+        return false;
+    };
     
-    // Check if Bootstrap is loaded
-    if (typeof bootstrap === 'undefined') {
-        console.error('Bootstrap not loaded!');
-    } else {
-        console.log('Bootstrap loaded successfully');
-    }
+    // Suppress Font Awesome console warnings
+    const originalConsoleWarn = console.warn;
+    console.warn = function(...args) {
+        if (args[0] && typeof args[0] === 'string' && 
+            (args[0].includes('downloadable font') || 
+             args[0].includes('Font Awesome'))) {
+            return;
+        }
+        originalConsoleWarn.apply(console, args);
+    };
     
-    // Initialize Bootstrap 5 components
+    // Initialize Bootstrap components
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize all Bootstrap dropdowns
-        var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
-        var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-            return new bootstrap.Dropdown(dropdownToggleEl);
-        });
-        
-        console.log('Bootstrap dropdowns initialized:', dropdownList.length);
-        
-        // Test dropdown functionality
-        dropdownElementList.forEach(function(toggle, index) {
-            toggle.addEventListener('click', function() {
-                console.log('Dropdown clicked:', index, toggle.textContent.trim());
+        if (typeof bootstrap !== 'undefined') {
+            const dropdownElements = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+            dropdownElements.forEach(function(element) {
+                new bootstrap.Dropdown(element);
             });
-        });
+        }
     });
     </script>
 </head>
@@ -283,7 +286,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="main.php">
-                <i class="fas fa-shield-alt me-2"></i>
+                <i class="fa-solid fa-shield-halved me-2"></i>
                 POLRES SAMOSIR
             </a>
             
@@ -294,52 +297,55 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link <?php echo $current_page == 'main.php' ? 'active' : ''; ?>" href="/sprint/main.php">
-                            <i class="fas fa-home me-1"></i> Dashboard
+                        <a class="nav-link <?php echo $current_page == 'main.php' ? 'active' : ''; ?>" href="<?php echo url('pages/main.php'); ?>">
+                            <i class="fa-solid fa-gauge-high me-1"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php echo $current_page == 'personil.php' ? 'active' : ''; ?>" href="/sprint/personil.php">
-                            <i class="fas fa-users me-1"></i> Data Personil
+                        <a class="nav-link <?php echo $current_page == 'personil.php' ? 'active' : ''; ?>" href="<?php echo url('pages/personil.php'); ?>">
+                            <i class="fa-solid fa-users me-1"></i> Data Personil
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php echo $current_page == 'calendar_dashboard.php' ? 'active' : ''; ?>" href="/sprint/calendar_dashboard.php">
-                            <i class="fas fa-calendar-alt me-1"></i> Schedule
+                        <a class="nav-link <?php echo $current_page == 'calendar_dashboard.php' ? 'active' : ''; ?>" href="<?php echo url('pages/calendar_dashboard.php'); ?>">
+                            <i class="fa-solid fa-calendar-days me-1"></i> Schedule
                         </a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-building me-1"></i> Bagian
+                            <i class="fa-solid fa-building me-1"></i> Bagian
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/sprint/unsur.php">
-                                <i class="fas fa-sitemap"></i> Manajemen Unsur
+                            <li><a class="dropdown-item" href="<?php echo url('pages/unsur.php'); ?>">
+                                <i class="fa-solid fa-sitemap"></i> Manajemen Unsur
                             </a></li>
-                            <li><a class="dropdown-item" href="/sprint/bagian.php">
-                                <i class="fas fa-cog"></i> Manajemen Bagian
+                            <li><a class="dropdown-item" href="<?php echo url('pages/bagian.php'); ?>">
+                                <i class="fa-solid fa-gear"></i> Manajemen Bagian
+                            </a></li>
+                            <li><a class="dropdown-item" href="<?php echo url('pages/jabatan.php'); ?>">
+                                <i class="fa-solid fa-user-tie"></i> Manajemen Jabatan
                             </a></li>
                             <li><a class="dropdown-item" href="#" onclick="showStructure()">
-                                <i class="fas fa-sitemap"></i> Struktur Organisasi
+                                <i class="fa-solid fa-sitemap"></i> Struktur Organisasi
                             </a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-chart-bar me-1"></i> Laporan
+                            <i class="fa-solid fa-chart-bar me-1"></i> Laporan
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#" onclick="generatePDF()">
-                                <i class="fas fa-file-pdf"></i> Export PDF
+                                <i class="fa-solid fa-file-pdf"></i> Export PDF
                             </a></li>
                             <li><a class="dropdown-item" href="#" onclick="generateExcel()">
-                                <i class="fas fa-file-excel"></i> Export Excel
+                                <i class="fa-solid fa-file-excel"></i> Export Excel
                             </a></li>
                             <li><a class="dropdown-item" href="#" onclick="printReport()">
-                                <i class="fas fa-print"></i> Cetak Laporan
+                                <i class="fa-solid fa-print"></i> Cetak Laporan
                             </a></li>
                             <li><a class="dropdown-item" href="#" onclick="showStatistics()">
-                                <i class="fas fa-chart-pie"></i> Statistik
+                                <i class="fa-solid fa-chart-pie"></i> Statistik
                             </a></li>
                         </ul>
                     </li>
@@ -347,11 +353,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 
                 <div class="user-menu">
                     <div class="user-info">
-                        <i class="fas fa-user"></i>
+                        <i class="fa-solid fa-user"></i>
                         <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
                     </div>
-                    <a href="/sprint/core/logout.php" class="nav-link logout-btn">
-                        <i class="fas fa-sign-out-alt me-1"></i> Logout
+                    <a href="<?php echo url('core/logout.php'); ?>" class="nav-link logout-btn">
+                        <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
                     </a>
                 </div>
             </div>
@@ -384,30 +390,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
             event.preventDefault();
             alert('Struktur Organisasi akan segera tersedia');
         }
-        
-        // Generate unique IDs for elements
-        function generateId(prefix = 'id') {
-            return prefix + '_' + Math.random().toString(36).substr(2, 9);
-        }
-        
-        // Initialize unique IDs when DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add unique IDs to all interactive elements
-            const interactiveElements = document.querySelectorAll('button, a, input, select, textarea, .modal, .dropdown');
-            interactiveElements.forEach((element, index) => {
-                if (!element.id) {
-                    element.id = generateId('elem');
-                }
-            });
-            
-            // Add unique IDs to modals
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach((modal, index) => {
-                if (!modal.id) {
-                    modal.id = generateId('modal');
-                }
-            });
-        });
     </script>
 
 </body>

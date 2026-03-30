@@ -2,56 +2,74 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+require_once __DIR__ . '/../core/config.php';
 
 // Check authentication
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header('Location: /sprint/login.php');
+    header('Location: ' . url('login.php'));
     exit;
 }
 
 $page_title = 'Schedule Management - BAGOPS POLRES Samosir';
-include '../includes/components/header.php';
+include __DIR__ . '/../includes/components/header.php';
 
-require '../core/schedule_manager.php';
-require '../api/google_calendar_api.php';
+require __DIR__ . '/../core/schedule_manager.php';
+require __DIR__ . '/../api/google_calendar_api.php';
 
 $scheduleManager = new ScheduleManager();
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Clean output buffer to prevent any HTML/whitespace before JSON
+    if (ob_get_level()) {
+        ob_clean();
+    }
+    
     header('Content-Type: application/json');
     
     if (isset($_POST['action'])) {
-        switch ($_POST['action']) {
-            case 'create_schedule':
-                $result = $scheduleManager->createSchedule($_POST);
-                echo json_encode($result);
-                exit;
-                
-            case 'update_schedule':
-                $result = $scheduleManager->updateSchedule($_POST['schedule_id'], $_POST);
-                echo json_encode($result);
-                exit;
-                
-            case 'delete_schedule':
-                $result = $scheduleManager->deleteSchedule($_POST['schedule_id']);
-                echo json_encode($result);
-                exit;
-                
-            case 'get_schedules':
-                $result = $scheduleManager->getSchedules($_POST);
-                echo json_encode($result);
-                exit;
-                
-            case 'sync_to_google':
-                // Handle Google Calendar sync
-                echo json_encode(['success' => false, 'error' => 'Google Calendar not configured yet']);
-                exit;
+        try {
+            switch ($_POST['action']) {
+                case 'create_schedule':
+                    $result = $scheduleManager->createSchedule($_POST);
+                    echo safe_json_encode($result);
+                    exit;
+                    
+                case 'update_schedule':
+                    $result = $scheduleManager->updateSchedule($_POST['schedule_id'], $_POST);
+                    echo safe_json_encode($result);
+                    exit;
+                    
+                case 'delete_schedule':
+                    $result = $scheduleManager->deleteSchedule($_POST['schedule_id']);
+                    echo safe_json_encode($result);
+                    exit;
+                    
+                case 'get_schedules':
+                    $result = $scheduleManager->getSchedules($_POST);
+                    echo safe_json_encode($result);
+                    exit;
+                    
+                case 'sync_to_google':
+                    // Handle Google Calendar sync
+                    echo safe_json_encode(['success' => false, 'error' => 'Google Calendar not configured yet']);
+                    exit;
+                    
+                default:
+                    echo safe_json_encode(['success' => false, 'error' => 'Unknown action']);
+                    exit;
+            }
+        } catch (Exception $e) {
+            echo safe_json_encode(['success' => false, 'error' => 'Server error: ' . $e->getMessage()]);
+            exit;
         }
+    } else {
+        echo safe_json_encode(['success' => false, 'error' => 'No action specified']);
+        exit;
     }
 }
 
-// Get data for dashboard
+// Get data for dashboard with error handling
 $personilData = $scheduleManager->getPersonilFromAPI();
 $bagianData = $scheduleManager->getBagianList();
 $upcomingSchedules = $scheduleManager->getSchedules([
@@ -66,6 +84,20 @@ $dataSource = [
     'total_personil' => $personilData['total'] ?? count($personilData['personil'] ?? []),
     'total_bagian' => $bagianData['total'] ?? count($bagianData['bagian'] ?? [])
 ];
+
+// Safe JSON encoding function
+function safe_json_encode($data) {
+    $json = json_encode($data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+    if ($json === false) {
+        // Fallback if JSON encoding fails
+        return json_encode([
+            'success' => false,
+            'error' => 'JSON encoding failed: ' . json_last_error_msg(),
+            'data' => []
+        ]);
+    }
+    return $json;
+}
 ?>
 
 <!DOCTYPE html>
@@ -82,7 +114,7 @@ $dataSource = [
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     
     <!-- Font Awesome -->
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
         :root {
@@ -232,7 +264,7 @@ $dataSource = [
         }
     </style>
 </head>
-<body?>
+<body>
 <div class="container-fluid mt-4">
     <!-- Statistics Cards -->
     <div class="row mb-4">
@@ -409,14 +441,35 @@ $dataSource = [
 
     <!-- Scripts -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
-    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
     
     <script>
-        // Global variables
+        // Global variables with safe JSON parsing
         let calendar;
-        let personilData = <?php echo json_encode($personilData); ?>;
-        let upcomingData = <?php echo json_encode($upcomingSchedules); ?>;
+        let personilData;
+        let upcomingData;
+        let bagianData;
+        
+        try {
+            personilData = <?php echo safe_json_encode($personilData); ?>;
+        } catch(e) {
+            console.error('Error parsing personilData:', e);
+            personilData = {success: false, personil: []};
+        }
+        
+        try {
+            upcomingData = <?php echo safe_json_encode($upcomingSchedules); ?>;
+        } catch(e) {
+            console.error('Error parsing upcomingData:', e);
+            upcomingData = {success: false, schedules: []};
+        }
+        
+        try {
+            bagianData = <?php echo safe_json_encode($bagianData); ?>;
+        } catch(e) {
+            console.error('Error parsing bagianData:', e);
+            bagianData = {success: false, bagian: []};
+        }
         
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
@@ -428,20 +481,19 @@ $dataSource = [
         });
         
         function initializeStats() {
-            if (personilData.success) {
-                document.getElementById('totalPersonil').textContent = personilData.personil.length;
+            if (personilData && personilData.success) {
+                document.getElementById('totalPersonil').textContent = personilData.personil ? personilData.personil.length : 0;
             }
             
-            const bagianData = <?php echo json_encode($bagianData); ?>;
-            if (bagianData.success) {
-                document.getElementById('totalBagian').textContent = bagianData.bagian.length;
+            if (bagianData && bagianData.success) {
+                document.getElementById('totalBagian').textContent = bagianData.bagian ? bagianData.bagian.length : 0;
             }
             
-            if (upcomingData.success) {
+            if (upcomingData && upcomingData.success) {
                 const today = new Date().toISOString().split('T')[0];
-                const todaySchedules = upcomingData.schedules.filter(s => s.shift_date === today);
+                const todaySchedules = upcomingData.schedules ? upcomingData.schedules.filter(s => s.shift_date === today) : [];
                 document.getElementById('schedulesToday').textContent = todaySchedules.length;
-                document.getElementById('schedulesWeek').textContent = upcomingData.schedules.length;
+                document.getElementById('schedulesWeek').textContent = upcomingData.schedules ? upcomingData.schedules.length : 0;
             }
         }
         
@@ -468,23 +520,30 @@ $dataSource = [
                             date_to: fetchInfo.endStr
                         })
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        // Check if response is actually JSON
+                        const contentType = response.headers.get('content-type');
+                        if (!contentType || !contentType.includes('application/json')) {
+                            throw new Error('Invalid response format');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
-                        if (data.success) {
-                            const events = data.schedules.map(schedule => {
-                                const startDateTime = schedule.shift_date + 'T' + schedule.start_time;
-                                let endDateTime = schedule.shift_date + 'T' + schedule.end_time;
+                        if (data && data.success) {
+                            const events = (data.schedules || []).map(schedule => {
+                                const startDateTime = (schedule.shift_date || '') + 'T' + (schedule.start_time || '00:00');
+                                let endDateTime = (schedule.shift_date || '') + 'T' + (schedule.end_time || '23:59');
                                 
                                 // Handle overnight shifts
-                                if (schedule.end_time < schedule.start_time) {
-                                    const endDate = new Date(schedule.shift_date);
+                                if ((schedule.end_time || '23:59') < (schedule.start_time || '00:00')) {
+                                    const endDate = new Date(schedule.shift_date || new Date());
                                     endDate.setDate(endDate.getDate() + 1);
-                                    endDateTime = endDate.toISOString().split('T')[0] + 'T' + schedule.end_time;
+                                    endDateTime = endDate.toISOString().split('T')[0] + 'T' + (schedule.end_time || '23:59');
                                 }
                                 
                                 return {
-                                    id: schedule.id,
-                                    title: schedule.personil_name + ' - ' + schedule.shift_type,
+                                    id: schedule.id || Date.now(),
+                                    title: (schedule.personil_name || 'Unknown') + ' - ' + (schedule.shift_type || 'Unknown'),
                                     start: startDateTime,
                                     end: endDateTime,
                                     backgroundColor: getShiftColor(schedule.shift_type),
@@ -499,11 +558,12 @@ $dataSource = [
                             });
                             successCallback(events);
                         } else {
-                            failureCallback(data.error);
+                            failureCallback(data?.error || 'Unknown error occurred');
                         }
                     })
                     .catch(error => {
-                        failureCallback(error);
+                        console.error('Calendar fetch error:', error);
+                        failureCallback(error.message || 'Failed to load calendar data');
                     });
                 },
                 eventClick: function(info) {
@@ -530,14 +590,14 @@ $dataSource = [
         }
         
         function populatePersonilSelect() {
-            if (personilData.success) {
+            if (personilData && personilData.success && personilData.personil) {
                 const select = document.getElementById('personilSelect');
                 personilData.personil.forEach(personil => {
                     const option = document.createElement('option');
                     option.value = personil.id;
-                    option.textContent = `${personil.name} - ${personil.pangkat} (${personil.bagian})`;
-                    option.dataset.name = personil.name;
-                    option.dataset.bagian = personil.bagian;
+                    option.textContent = `${personil.name || 'Unknown'} - ${personil.pangkat || 'N/A'} (${personil.bagian || 'N/A'})`;
+                    option.dataset.name = personil.name || 'Unknown';
+                    option.dataset.bagian = personil.bagian || 'N/A';
                     select.appendChild(option);
                 });
             }
@@ -546,7 +606,7 @@ $dataSource = [
         function loadUpcomingSchedules() {
             const container = document.getElementById('upcomingSchedules');
             
-            if (!upcomingData.success || upcomingData.schedules.length === 0) {
+            if (!upcomingData || !upcomingData.success || !upcomingData.schedules || upcomingData.schedules.length === 0) {
                 container.innerHTML = '<p class="text-muted">Tidak ada jadwal mendatang</p>';
                 return;
             }
@@ -559,11 +619,11 @@ $dataSource = [
                 html += `
                     <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
                         <div>
-                            <div class="fw-bold">${schedule.personil_name}</div>
-                            <small class="text-muted">${dateStr} - ${schedule.shift_type}</small>
+                            <div class="fw-bold">${schedule.personil_name || 'Unknown'}</div>
+                            <small class="text-muted">${dateStr} - ${schedule.shift_type || 'Unknown'}</small>
                         </div>
                         <span class="badge" style="background-color: ${getShiftColor(schedule.shift_type)}">
-                            ${schedule.shift_type}
+                            ${schedule.shift_type || 'Unknown'}
                         </span>
                     </div>
                 `;
@@ -575,13 +635,14 @@ $dataSource = [
         function initializeShiftChart() {
             const ctx = document.getElementById('shiftChart').getContext('2d');
             
-            if (!upcomingData.success) {
+            if (!upcomingData || !upcomingData.success || !upcomingData.schedules) {
                 return;
             }
             
             const shiftCounts = {};
             upcomingData.schedules.forEach(schedule => {
-                shiftCounts[schedule.shift_type] = (shiftCounts[schedule.shift_type] || 0) + 1;
+                const shiftType = schedule.shift_type || 'Unknown';
+                shiftCounts[shiftType] = (shiftCounts[shiftType] || 0) + 1;
             });
             
             new Chart(ctx, {

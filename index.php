@@ -1,9 +1,10 @@
 <?php
 session_start();
+require_once __DIR__ . '/core/config.php';
 
 // Check if already logged in
 if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
-    header('Location: /sprint/pages/main.php');
+    header('Location: ' . url('pages/main.php'));
     exit;
 }
 
@@ -17,7 +18,7 @@ $page_title = 'Selamat Datang - Sistem Manajemen POLRES Samosir';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $page_title; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
             background: linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #ffd700 100%);
@@ -135,7 +136,7 @@ $page_title = 'Selamat Datang - Sistem Manajemen POLRES Samosir';
         </div>
         
         <div style="margin-top: 40px;">
-            <a href="login.php" class="btn-login">
+            <a href="<?php echo url('login.php'); ?>" class="btn-login">
                 <i class="fas fa-sign-in-alt"></i> Masuk ke Sistem
             </a>
         </div>

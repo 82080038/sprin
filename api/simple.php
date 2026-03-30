@@ -3,11 +3,13 @@
 header('Content-Type: application/json');
 
 // Include configuration
-require_once '../core/config.php';
-require_once '../core/calendar_config.php';
+require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/calendar_config.php';
 
 // Start session for authentication
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Check authentication (optional for API)
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {

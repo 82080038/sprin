@@ -5,15 +5,17 @@ if (ob_get_level() === 0) {
 }
 
 session_start();
+require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/auth_helper.php';
 
-// Check authentication
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header('Location: /sprint/login.php');
+// Check authentication using AuthHelper
+if (!AuthHelper::validateSession()) {
+    header('Location: ' . url('login.php'));
     exit;
 }
 
 $page_title = 'Dashboard - Sistem Manajemen POLRES Samosir';
-include '../includes/components/header.php';
+include __DIR__ . '/../includes/components/header.php';
 ?>
 <div class="container">
     <div class="hero-section">

@@ -1,17 +1,18 @@
 <?php
 session_start();
+require_once __DIR__ . '/../core/config.php';
 
 // Check authentication
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header('Location: ../login.php');
+    header('Location: ' . url('login.php'));
     exit;
 }
 
 $page_title = 'Data Personil - POLRES Samosir';
-include '../includes/components/header.php';
+include __DIR__ . '/../includes/components/header.php';
 
 // Include JavaScript configuration
-include '../public/../public/assets/js/config.php';
+include __DIR__ . '/../public/assets/js/config.php';
 
 /**
  * Convert ket text to button

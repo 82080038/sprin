@@ -1,6 +1,6 @@
 <?php
-require '../core/calendar_config.php';
-require '../core/config.php'; // Add this for API_BASE_URL
+require_once __DIR__ . '/calendar_config.php';
+require_once __DIR__ . '/config.php'; // Add this for API_BASE_URL
 
 class ScheduleManager {
     private $pdo;
@@ -354,8 +354,8 @@ class ScheduleManager {
             
             foreach ($bagianData as $bagian) {
                 $bagianList[] = [
-                    'id' => $bagian['id'],
-                    'name' => $bagian['nama_bagian'],
+                    'id' => $bagian['id'] ?? null,
+                    'name' => $bagian['nama_bagian'] ?? 'Unknown Bagian',
                     'type' => $bagian['type'] ?? 'BAG/SAT/SIE',
                     'personil_count' => $bagian['personil_count'] ?? 0
                 ];
@@ -391,9 +391,9 @@ class ScheduleManager {
         foreach ($data['bagian'] as $bagian) {
             $bagianList[] = [
                 'id' => $bagian['id'] ?? count($bagianList) + 1,
-                'name' => $bagian['nama_bagian'],
+                'name' => $bagian['nama_bagian'] ?? 'Unknown Bagian',
                 'type' => $bagian['type'] ?? 'BAG/SAT/SIE',
-                'personil_count' => count($bagian['personil'])
+                'personil_count' => count($bagian['personil'] ?? [])
             ];
         }
         
@@ -415,26 +415,26 @@ class ScheduleManager {
         
         $events = [];
         foreach ($schedules['schedules'] as $schedule) {
-            $startDateTime = $schedule['shift_date'] . ' ' . $schedule['start_time'];
-            $endDateTime = $schedule['shift_date'] . ' ' . $schedule['end_time'];
+            $startDateTime = ($schedule['shift_date'] ?? '') . ' ' . ($schedule['start_time'] ?? '');
+            $endDateTime = ($schedule['shift_date'] ?? '') . ' ' . ($schedule['end_time'] ?? '');
             
             // Handle overnight shifts
-            if ($schedule['end_time'] < $schedule['start_time']) {
-                $endDateTime = date('Y-m-d H:i:s', strtotime($schedule['shift_date'] . ' ' . $schedule['end_time'] . ' +1 day'));
+            if (($schedule['end_time'] ?? '') < ($schedule['start_time'] ?? '')) {
+                $endDateTime = date('Y-m-d H:i:s', strtotime(($schedule['shift_date'] ?? '') . ' ' . ($schedule['end_time'] ?? '') . ' +1 day'));
             }
             
             $events[] = [
-                'title' => $schedule['personil_name'] . ' - ' . $schedule['shift_type'],
+                'title' => ($schedule['personil_name'] ?? 'Unknown') . ' - ' . ($schedule['shift_type'] ?? 'Unknown'),
                 'start' => $startDateTime,
                 'end' => $endDateTime,
-                'color' => EVENT_COLORS[$schedule['shift_type']] ?? '#4285F4',
+                'color' => EVENT_COLORS[$schedule['shift_type'] ?? ''] ?? '#4285F4',
                 'extendedProps' => [
-                    'personil_id' => $schedule['personil_id'],
-                    'bagian' => $schedule['bagian'],
-                    'location' => $schedule['location'],
-                    'description' => $schedule['description'],
-                    'schedule_id' => $schedule['id'],
-                    'google_event_id' => $schedule['google_event_id']
+                    'personil_id' => $schedule['personil_id'] ?? null,
+                    'bagian' => $schedule['bagian'] ?? 'Unknown',
+                    'location' => $schedule['location'] ?? '',
+                    'description' => $schedule['description'] ?? '',
+                    'schedule_id' => $schedule['id'] ?? null,
+                    'google_event_id' => $schedule['google_event_id'] ?? null
                 ]
             ];
         }

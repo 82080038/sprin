@@ -1,18 +1,16 @@
 <?php
 /**
- * Personil Simple API - Updated for New Database Structure
+ * Personil Simple API - Standardized Version
  */
 
-// Enable error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Set headers
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Origin: *");
-
-// Include calendar config
+require_once __DIR__ . '/../core/api_response.php';
 require_once __DIR__ . '/../core/calendar_config.php';
+
+// Disable error display in production
+if (ENVIRONMENT !== 'development') {
+    error_reporting(0);
+    ini_set('display_errors', 0);
+}
 
 try {
     // Database connection with socket
@@ -148,34 +146,24 @@ try {
         $unsur_stats[$row['kode_unsur']] = $row['total_personil'];
     }
     
-    // Return JSON response
-    echo json_encode([
-        'success' => true,
-        'timestamp' => date('c'),
-        'data' => [
-            'personil' => $enhancedPersonil,
-            'statistics' => [
-                'total_personil' => (int)$total_personil,
-                'polri_count' => (int)$polri_count,
-                'asn_count' => (int)$asn_count,
-                'p3k_count' => (int)$p3k_count,
-                'aktif_count' => (int)$aktif_count,
-                'unsur_distribution' => $unsur_stats
-            ]
-        ],
-        'message' => "Retrieved " . count($enhancedPersonil) . " personil records"
-    ], JSON_PRETTY_PRINT);
+    $response_data = [
+        'personil' => $enhancedPersonil,
+        'statistics' => [
+            'total_personil' => (int)$total_personil,
+            'polri_count' => (int)$polri_count,
+            'asn_count' => (int)$asn_count,
+            'p3k_count' => (int)$p3k_count,
+            'aktif_count' => (int)$aktif_count,
+            'unsur_distribution' => $unsur_stats
+        ]
+    ];
+    
+    ApiResponse::success($response_data, "Retrieved " . count($enhancedPersonil) . " personil records");
     
 } catch(Exception $e) {
-    echo json_encode([
-        'success' => false,
-        'timestamp' => date('c'),
-        'error' => [
-            'message' => $e->getMessage(),
-            'code' => 500,
-            'hint' => 'Check database connection and table structure'
-        ]
-    ], JSON_PRETTY_PRINT);
+    if (ENVIRONMENT === 'development') {
+        ApiResponse::error('Database error: ' . $e->getMessage(), 500);
+    } else {
+        ApiResponse::serverError('Failed to retrieve personil data');
+    }
 }
-
-?>

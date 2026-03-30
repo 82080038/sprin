@@ -1,18 +1,16 @@
 <?php
 /**
- * Unsur Statistics API - Updated for New Database Structure
+ * Unsur Statistics API - Standardized Version
  */
 
-// Enable error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Set headers
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Origin: *");
-
-// Include calendar config
+require_once __DIR__ . '/../core/api_response.php';
 require_once __DIR__ . '/../core/calendar_config.php';
+
+// Disable error display in production
+if (ENVIRONMENT !== 'development') {
+    error_reporting(0);
+    ini_set('display_errors', 0);
+}
 
 try {
     // Database connection with socket
