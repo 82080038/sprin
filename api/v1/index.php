@@ -18,9 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-// Debug logging
-error_log("API Request: " . $_SERVER['REQUEST_METHOD'] . " " . $_SERVER['REQUEST_URI']);
-
 // Include dependencies
 require_once dirname(__DIR__, 2) . '/core/config.php';
 require_once dirname(__DIR__, 2) . '/core/auth_check.php';
@@ -162,10 +159,6 @@ if ($path_parts[0] === 'api' && isset($path_parts[1]) && $path_parts[1] === 'v1'
 
 $endpoint = implode('/', $path_parts);
 $query_string = $_SERVER['QUERY_STRING'];
-
-// Debug
-error_log("Final endpoint: $endpoint");
-error_log("Query string: $query_string");
 
 // Route the request
 switch ($endpoint) {

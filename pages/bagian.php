@@ -175,11 +175,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = 1;
     }
     
-    // Debug for AJAX
-    if (isset($_GET['debug'])) {
-        error_log("Processing action: " . $action);
-    }
-    
     // Clear any output buffers for AJAX requests
     if (in_array($action, ['get_bagian_list', 'get_bagian_detail', 'create_bagian', 'update_bagian', 'delete_bagian'])) {
         while (ob_get_level() > 0) {
@@ -189,9 +184,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // AJAX operations
     if ($action === 'get_bagian_list') {
-        if (isset($_GET['debug'])) {
-            error_log("Returning bagian data: " . count($bagianData) . " items");
-        }
         header('Content-Type: application/json');
         echo json_encode(['success' => true, 'data' => $bagianData]);
         exit;

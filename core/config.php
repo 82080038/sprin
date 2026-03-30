@@ -26,7 +26,7 @@ define('DB_PASS', 'root');
 // Application Configuration
 define('APP_NAME', 'POLRES Samosir Management System');
 define('APP_VERSION', '1.0.0');
-define('ENVIRONMENT', 'development');
+define('ENVIRONMENT', 'production');
 
 // Security Configuration
 define('JWT_SECRET', 'your-secret-key-here');
@@ -36,11 +36,17 @@ define('SESSION_LIFETIME', 3600); // 1 hour
 define('API_RATE_LIMIT', 100); // requests per hour
 define('API_TIMEOUT', 30); // seconds
 
-// Debug Configuration - ALWAYS ON for error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-define('DEBUG_MODE', true);
+// Debug Configuration - OFF for production
+define('DEBUG_MODE', false);
+if (DEBUG_MODE) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+} else {
+    error_reporting(0);
+    ini_set('display_errors', 0);
+    ini_set('display_startup_errors', 0);
+}
 
 // Environment-based logging (optional)
 if (ENVIRONMENT !== 'development') {
