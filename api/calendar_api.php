@@ -3,23 +3,23 @@
  * Calendar API - Simple Schedule Statistics
  */
 
-// Enable error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/Database.php';
 
 // Set headers
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 
-// Include calendar config
-require_once __DIR__ . '/../core/calendar_config.php';
+// Disable error display in production
+if (ENVIRONMENT !== 'development') {
+    error_reporting(0);
+    ini_set('display_errors', 0);
+}
 
 try {
-    // Database connection with socket
-    $dsn = "mysql:host=localhost;dbname=" . DB_NAME . ";unix_socket=/opt/lampp/var/mysql/mysql.sock";
-    $pdo = new PDO($dsn, DB_USER, DB_PASS);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    // Use Database singleton
+    $db = Database::getInstance();
+    $pdo = $db->getConnection();
     
     // Get action parameter
     $action = isset($_GET['action']) ? $_GET['action'] : 'getStats';

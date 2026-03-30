@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistem Manajemen POLRES Samosir</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
         :root {
@@ -300,39 +300,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Masuk...';
             btn.disabled = true;
             
-            // Simulate quick login process
-            setTimeout(() => {
-                // Auto-fill credentials and submit
-                fetch('', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        username: 'bagops',
-                        password: 'admin123'
-                    })
-                })
-                .then(response => response.text())
-                .then(html => {
-                    // Check if login successful by checking for redirect
-                    if (html.includes('main.php') || !html.includes('alert-danger')) {
-                        // Success - redirect to main dashboard
-                        window.location.href = 'main.php';
-                    } else {
-                        // Failed - show error
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                        alert('Quick login gagal. Silakan coba login manual.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Quick login error:', error);
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                    alert('Terjadi kesalahan. Silakan coba login manual.');
-                });
-            }, 1000);
+            // Auto-fill credentials
+            document.getElementById('username').value = 'bagops';
+            document.getElementById('password').value = 'admin123';
+            
+            // Submit the form
+            document.querySelector('form').submit();
         }
         
         // Auto-focus on username field

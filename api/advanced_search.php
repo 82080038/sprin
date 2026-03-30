@@ -47,7 +47,29 @@ try {
     $sort_order = strtolower($sort_order) === 'desc' ? 'DESC' : 'ASC';
     
     if (empty($q) && !$unsur && !$bagian && !$kepegawaian && !$pangkat && !$status && !$jenis_kelamin && !$gelar && !$status_nikah) {
-        throw new Exception("At least one search criteria is required");
+        // Return empty results instead of error for standard format compliance
+        echo json_encode([
+            'success' => true,
+            'message' => 'No search criteria provided. Please provide at least one filter.',
+            'data' => [
+                'results' => [],
+                'count' => 0
+            ],
+            'query' => [
+                'q' => '',
+                'filters' => [],
+                'pagination' => [
+                    'page' => 1,
+                    'limit' => $limit,
+                    'total_results' => 0,
+                    'total_pages' => 0,
+                    'has_next' => false,
+                    'has_prev' => false
+                ]
+            ],
+            'timestamp' => date('c')
+        ]);
+        exit;
     }
     
     // Build WHERE clause

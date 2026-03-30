@@ -3,8 +3,8 @@
  * Personil Simple API - Standardized Version
  */
 
-require_once __DIR__ . '/../core/api_response.php';
-require_once __DIR__ . '/../core/calendar_config.php';
+require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/Database.php';
 
 // Disable error display in production
 if (ENVIRONMENT !== 'development') {
@@ -13,11 +13,9 @@ if (ENVIRONMENT !== 'development') {
 }
 
 try {
-    // Database connection with socket
-    $dsn = "mysql:host=localhost;dbname=" . DB_NAME . ";unix_socket=/opt/lampp/var/mysql/mysql.sock";
-    $pdo = new PDO($dsn, DB_USER, DB_PASS);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    // Use Database singleton
+    $db = Database::getInstance();
+    $pdo = $db->getConnection();
     
     // Get limit parameter
     $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 1000;
@@ -158,12 +156,28 @@ try {
         ]
     ];
     
-    ApiResponse::success($response_data, "Retrieved " . count($enhancedPersonil) . " personil records");
+    // Send JSON response
+    header('Content-Type: application/json; charset=UTF-8');
+    echo json_encode([
+        'success' => true,
+        'message' => "Retrieved " . count($enhancedPersonil) . " personil records",
+        'data' => $response_data,
+        'timestamp' => date('c')
+    ]);
     
 } catch(Exception $e) {
+    header('Content-Type: application/json; charset=UTF-8');
     if (ENVIRONMENT === 'development') {
-        ApiResponse::error('Database error: ' . $e->getMessage(), 500);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Database error: ' . $e->getMessage(),
+            'timestamp' => date('c')
+        ]);
     } else {
-        ApiResponse::serverError('Failed to retrieve personil data');
+        echo json_encode([
+            'success' => false,
+            'message' => 'Failed to retrieve personil data',
+            'timestamp' => date('c')
+        ]);
     }
 }

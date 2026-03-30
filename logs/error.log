@@ -1,0 +1,219 @@
+[2026-03-30 19:24:37] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:24:47] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:27:53] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:41:16] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:41:52] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'wrongpassword')
+#2 {main}
+[2026-03-30 19:42:05] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:42:12] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:42:47] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:43:23] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:43:59] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:44:35] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:45:11] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:45:46] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:46:22] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:46:58] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:47:34] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:48:09] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:48:45] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:49:21] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:49:57] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 14
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(69): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:50:32] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 17
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(76): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:50:34] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 17
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(76): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:51:08] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 17
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(76): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:51:44] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 17
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(76): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:52:20] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 17
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(76): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:52:56] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 17
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(76): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:53:31] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 17
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(76): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:55:57] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 17
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(76): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:59:21] [EXCEPTION] Undefined constant "PASSWORD_ARGON2ID" in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 17
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/core/auth_helper.php(76): AuthHelper::hashPassword('admin123')
+#1 /opt/lampp/htdocs/sprint/login.php(17): AuthHelper::login('bagops', 'admin123')
+#2 {main}
+[2026-03-30 19:59:54] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 20:00:04] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 20:01:20] [EXCEPTION] Class "ApiResponse" not found in /opt/lampp/htdocs/sprint/api/personil_simple.php on line 159
+Stack trace:
+#0 {main}
+[2026-03-30 20:02:40] [WARNING] Undefined variable $total_personil in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 228
+[2026-03-30 20:02:40] [WARNING] Undefined variable $bagian_stats in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 229
+[2026-03-30 20:02:40] [WARNING] Undefined variable $pangkat_stats in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 230
+[2026-03-30 20:02:48] [WARNING] Undefined variable $total_personil in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 228
+[2026-03-30 20:02:48] [WARNING] Undefined variable $bagian_stats in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 229
+[2026-03-30 20:02:48] [WARNING] Undefined variable $pangkat_stats in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 230
+[2026-03-30 20:03:08] [WARNING] Undefined variable $total_personil in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 228
+[2026-03-30 20:03:08] [WARNING] Undefined variable $bagian_stats in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 229
+[2026-03-30 20:03:08] [WARNING] Undefined variable $pangkat_stats in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 230
+[2026-03-30 20:03:10] [WARNING] Undefined variable $total_personil in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 228
+[2026-03-30 20:03:10] [WARNING] Undefined variable $bagian_stats in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 229
+[2026-03-30 20:03:10] [WARNING] Undefined variable $pangkat_stats in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 230
+[2026-03-30 20:03:13] [WARNING] Undefined variable $total_personil in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 228
+[2026-03-30 20:03:13] [WARNING] Undefined variable $bagian_stats in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 229
+[2026-03-30 20:03:13] [WARNING] Undefined variable $pangkat_stats in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 230
+[2026-03-30 20:04:40] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 20:09:13] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 20:19:19] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 20:22:08] [EXCEPTION] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'jenis_pegawai' in 'where clause' in /opt/lampp/htdocs/sprint/pages/unsur.php on line 148
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/pages/unsur.php(148): PDO->query('SELECT COUNT(*)...')
+#1 {main}
+[2026-03-30 20:24:13] [EXCEPTION] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status_kepegawaian' in 'where clause' in /opt/lampp/htdocs/sprint/pages/unsur.php on line 148
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/pages/unsur.php(148): PDO->query('SELECT COUNT(*)...')
+#1 {main}
+[2026-03-30 20:24:20] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 20:24:28] [EXCEPTION] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status_kepegawaian' in 'where clause' in /opt/lampp/htdocs/sprint/pages/unsur.php on line 148
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/pages/unsur.php(148): PDO->query('SELECT COUNT(*)...')
+#1 {main}
+[2026-03-30 20:34:32] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 20:34:46] [EXCEPTION] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status_kepegawaian' in 'where clause' in /opt/lampp/htdocs/sprint/pages/unsur.php on line 148
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/pages/unsur.php(148): PDO->query('SELECT COUNT(*)...')
+#1 {main}
+[2026-03-30 20:56:52] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 21:00:12] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 21:02:56] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 21:05:22] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 21:21:22] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 21:21:39] [EXCEPTION] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status_kepegawaian' in 'where clause' in /opt/lampp/htdocs/sprint/pages/unsur.php on line 148
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/pages/unsur.php(148): PDO->query('SELECT COUNT(*)...')
+#1 {main}
+[2026-03-30 21:23:09] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 21:23:26] [EXCEPTION] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status_kepegawaian' in 'where clause' in /opt/lampp/htdocs/sprint/pages/unsur.php on line 148
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/pages/unsur.php(148): PDO->query('SELECT COUNT(*)...')
+#1 {main}
+[2026-03-30 21:24:14] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 21:24:40] [EXCEPTION] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status_kepegawaian' in 'where clause' in /opt/lampp/htdocs/sprint/pages/unsur.php on line 148
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/pages/unsur.php(148): PDO->query('SELECT COUNT(*)...')
+#1 {main}
+[2026-03-30 21:26:06] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 21:26:30] [EXCEPTION] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status_kepegawaian' in 'where clause' in /opt/lampp/htdocs/sprint/pages/unsur.php on line 148
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/pages/unsur.php(148): PDO->query('SELECT COUNT(*)...')
+#1 {main}
+[2026-03-30 21:27:13] [NOTICE] session_start(): Ignoring session_start() because a session is already active in /opt/lampp/htdocs/sprint/core/auth_helper.php on line 79
+[2026-03-30 21:27:36] [EXCEPTION] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'status_kepegawaian' in 'where clause' in /opt/lampp/htdocs/sprint/pages/unsur.php on line 148
+Stack trace:
+#0 /opt/lampp/htdocs/sprint/pages/unsur.php(148): PDO->query('SELECT COUNT(*)...')
+#1 {main}
+[2026-03-31 02:43:36] [WARNING] require_once(/opt/lampp/htdocs/sprint/cron/../core/AuthHelper.php): Failed to open stream: No such file or directory in /opt/lampp/htdocs/sprint/cron/check_integration.php on line 9
+[2026-03-31 02:43:36] [EXCEPTION] Failed opening required '/opt/lampp/htdocs/sprint/cron/../core/AuthHelper.php' (include_path='.:/usr/share/php') in /opt/lampp/htdocs/sprint/cron/check_integration.php on line 9
+Stack trace:
+#0 {main}

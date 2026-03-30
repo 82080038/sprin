@@ -3,9 +3,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/auth_helper.php';
 
-// Check authentication
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+// Check authentication using AuthHelper
+if (!AuthHelper::validateSession()) {
     header('Location: ' . url('login.php'));
     exit;
 }

@@ -128,13 +128,13 @@ $unsurData = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- Statistics Cards -->
     <div class="row mb-4">
         <div class="col-md-3 col-sm-6 mb-3">
-            <div class="stats-card">
+            <div class="card stat-card">
                 <div class="number"><?php echo count($unsurData); ?></div>
                 <div class="label">Total Unsur</div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6 mb-3">
-            <div class="stats-card">
+            <div class="card stat-card">
                 <div class="number"><?php 
                     $stmt = $pdo->query("SELECT COUNT(*) FROM bagian");
                     echo $stmt->fetchColumn();
@@ -143,18 +143,20 @@ $unsurData = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
         <div class="col-md-3 col-sm-6 mb-3">
-            <div class="stats-card">
+            <div class="card stat-card">
                 <div class="number"><?php 
-                    $stmt = $pdo->query("SELECT COUNT(*) FROM personil WHERE is_deleted = FALSE AND is_active = TRUE");
+                    $stmt = $pdo->query("SELECT COUNT(*) FROM personil WHERE is_deleted = FALSE AND is_active = TRUE AND status_kepegawaian LIKE '%POLRI%'");
                     echo $stmt->fetchColumn();
                 ?></div>
-                <div class="label">Total Personil</div>
+                <div class="label">Personil POLRI</div>
             </div>
         </div>
         <div class="col-md-3 col-sm-6 mb-3">
-            <div class="stats-card">
+            <div class="card stat-card">
                 <div class="number"><?php 
-                    $avgBagian = count($unsurData) > 0 ? round($stmt->fetchColumn() / count($unsurData), 1) : 0;
+                    $stmt = $pdo->query("SELECT COUNT(*) FROM bagian");
+                    $totalBagian = $stmt->fetchColumn();
+                    $avgBagian = count($unsurData) > 0 ? round($totalBagian / count($unsurData), 1) : 0;
                     echo $avgBagian;
                 ?></div>
                 <div class="label">Rata-rata Bagian/Unsur</div>
@@ -319,121 +321,6 @@ $unsurData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <?php include '../includes/components/footer.php'; ?>
-
-<style>
-.page-header {
-    margin-bottom: 30px;
-}
-
-.page-header h1 {
-    color: var(--primary-color);
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.stats-card {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    border-left: 4px solid var(--primary-color);
-}
-
-.stats-card .number {
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--primary-color);
-}
-
-.stats-card .label {
-    color: #666;
-    font-size: 0.9rem;
-    margin-top: 5px;
-}
-
-.sortable-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sortable-item {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    padding: 15px;
-    cursor: move;
-    transition: all 0.3s ease;
-}
-
-.sortable-item:hover {
-    background: #f8f9fa;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.sortable-item.dragging {
-    opacity: 0.5;
-    transform: rotate(2deg);
-}
-
-.drag-handle {
-    color: #999;
-    font-size: 1.2rem;
-    cursor: grab;
-}
-
-.drag-handle:hover {
-    color: #666;
-}
-
-.drag-handle:active {
-    cursor: grabbing;
-}
-
-.table th {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-}
-
-.table td {
-    vertical-align: middle;
-}
-
-.btn-group .btn {
-    padding: 0.25rem 0.5rem;
-}
-
-@media (max-width: 768px) {
-    .action-buttons {
-        justify-content: center;
-    }
-    
-    .stats-card .number {
-        font-size: 1.5rem;
-    }
-    
-    .table-responsive {
-        font-size: 0.85rem;
-    }
-    
-    .sortable-item {
-        padding: 10px;
-    }
-    
-    .drag-handle {
-        font-size: 1rem;
-    }
-}
-</style>
 
 <!-- SortableJS -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>

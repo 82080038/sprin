@@ -32,6 +32,12 @@ define('ENVIRONMENT', 'development');
 define('JWT_SECRET', 'your-secret-key-here');
 define('SESSION_LIFETIME', 3600); // 1 hour
 
+// Session security settings
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 0); // Set to 1 if using HTTPS
+ini_set('session.use_strict_mode', 1);
+ini_set('session.cookie_samesite', 'Lax');
+
 // API Configuration
 define('API_RATE_LIMIT', 100); // requests per hour
 define('API_TIMEOUT', 30); // seconds
