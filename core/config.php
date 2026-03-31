@@ -44,7 +44,7 @@ define('API_TIMEOUT', 30); // seconds
 
 // Debug Configuration - ON for development
 define('DEBUG_MODE', true);
-if (DEBUG_MODE) {
+if (DEBUG_MODE && session_status() === PHP_SESSION_NONE) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
