@@ -28,6 +28,9 @@ RewriteCond %{REQUEST_FILENAME} !-d
 # Route API requests to index.php
 RewriteRule ^api/(.*)$ api/v1/index.php [L,QSA]
 
+# Public assets route
+RewriteRule ^assets/(.*)$ public/assets/$1 [L,QSA]
+
 # Set CORS headers
 <IfModule mod_headers.c>
     Header always set Access-Control-Allow-Origin "*"

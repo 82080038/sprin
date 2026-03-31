@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistem Manajemen POLRES Samosir</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
         :root {
@@ -296,35 +296,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function quickLogin() {
             // Show loading state
             const btn = event.target;
-            const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Masuk...';
             btn.disabled = true;
             
-            // Submit credentials via POST
-            fetch('', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    username: 'bagops',
-                    password: 'admin123'
-                }),
-                redirect: 'manual' // Don't follow redirects automatically
-            })
-            .then(response => {
-                // Check if we got a redirect (302) or successful response
-                if (response.status === 0 || response.ok || response.status === 302) {
-                    // Redirect to main dashboard
-                    window.location.href = 'pages/main.php';
-                } else {
-                    throw new Error('Login failed');
-                }
-            })
-            .catch(error => {
-                // For opaque responses or redirects, try navigating anyway
-                window.location.href = 'pages/main.php';
-            });
+            // Auto-fill credentials
+            document.getElementById('username').value = 'bagops';
+            document.getElementById('password').value = 'admin123';
+            
+            // Submit the form
+            document.querySelector('form').submit();
         }
         
         // Auto-focus on username field

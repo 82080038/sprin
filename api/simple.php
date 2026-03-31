@@ -1,26 +1,24 @@
 <?php
-// Simple API for bagian data
-header('Content-Type: application/json');
+/**
+ * Simple API for bagian data - Standardized Version
+ */
 
-// Include configuration
+// Set JSON content type first
+header('Content-Type: application/json; charset=UTF-8');
+
 require_once __DIR__ . '/../core/config.php';
-require_once __DIR__ . '/../core/calendar_config.php';
+require_once __DIR__ . '/../core/Database.php';
 
-// Start session for authentication
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Check authentication (optional for API)
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    // For API, we can allow access without login for now
-    // In production, you might want to require API keys
+// Disable error display in production
+if (ENVIRONMENT !== 'development') {
+    error_reporting(0);
+    ini_set('display_errors', 0);
 }
 
 try {
-    // Connect to database
-    $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Use Database singleton
+    $db = Database::getInstance();
+    $pdo = $db->getConnection();
     
     // Get bagian data with personil count
     $sql = "
@@ -78,23 +76,31 @@ try {
     }
     
     // Return success response
+    // Send JSON response
     echo json_encode([
         'success' => true,
+        'message' => "Retrieved " . count($bagianData) . " bagian records",
         'data' => [
-            'bagian' => $bagianData
+            'bagian' => $bagianData,
+            'total_bagian' => count($bagianData)
         ],
-        'message' => 'Bagian data retrieved successfully'
+        'timestamp' => date('c')
     ]);
     
-} catch (Exception $e) {
-    // Return error response
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => [
-            'message' => $e->getMessage(),
-            'code' => 500
-        ]
-    ]);
+} catch(Exception $e) {
+    header('Content-Type: application/json; charset=UTF-8');
+    if (ENVIRONMENT === 'development') {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Database error: ' . $e->getMessage(),
+            'timestamp' => date('c')
+        ]);
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Failed to retrieve bagian data',
+            'timestamp' => date('c')
+        ]);
+    }
 }
 ?>

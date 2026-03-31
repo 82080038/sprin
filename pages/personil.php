@@ -19,71 +19,28 @@ $api_base = API_BASE_URL;
 ?>
 
 <!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Bootstrap -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Toastr -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <!-- SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
-<style>
-/* Force Font Awesome 5 and suppress Font Awesome 6 */
-@font-face {
-    font-family: 'Font Awesome 5 Free';
-    font-display: block;
-    font-weight: 900;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Font Awesome 5 Brands';
-    font-display: block;
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Font Awesome 5 Free';
-    font-display: block;
-    font-weight: 400;
-    font-style: normal;
-}
-
-/* Override Font Awesome 6 */
-.fa, .fas, .far, .fab, .fal {
-    font-family: 'Font Awesome 5 Free' !important;
-    font-weight: 900 !important;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-.fab {
-    font-family: 'Font Awesome 5 Brands' !important;
-    font-weight: 400 !important;
-}
-
-.far {
-    font-weight: 400 !important;
-}
-</style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <!-- Bootstrap Datepicker -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/css/bootstrap-datepicker.min.css">
 
 <style>
-.container { max-width: 1400px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; }
-h1 { color: #2c3e50; margin-bottom: 10px; font-size: 2em; text-align: center; }
-.search-box { max-width: 500px; margin: 20px auto; }
-.search-box input { border-radius: 25px; padding: 12px 20px; border: 2px solid #007bff; }
-.stats { display: flex; gap: 20px; margin: 30px 0; justify-content: center; flex-wrap: wrap; }
-.stat-box { background: #007bff; color: white; padding: 25px; border-radius: 10px; text-align: center; min-width: 180px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-.stat-box h3 { margin: 0; font-size: 2.5em; font-weight: bold; }
-.stat-box p { margin: 8px 0 0 0; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+.container { max-width: 1400px; margin: 0 auto; padding: 15px; font-family: Arial, sans-serif; }
+.search-box { max-width: 500px; margin: 15px auto; }
+.search-box input { border-radius: 25px; padding: 10px 18px; border: 2px solid #007bff; }
+.stats { display: flex; gap: 12px; margin: 15px 0; justify-content: center; flex-wrap: wrap; }
+.stat-box { background: #007bff; color: white; padding: 1px; border-radius: 6px; text-align: center; min-width: 120px; max-width: 160px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.stat-box h3 { margin: 0; font-size: 1.8em; font-weight: bold; }
+.stat-box p { margin: 4px 0 0 0; font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.5px; }
 .unsur-section { margin: 30px 0; border: 1px solid #ddd; border-radius: 8px; padding: 20px; }
 .unsur-section h2 { margin: 0 0 20px 0; color: #2c3e50; font-size: 1.5em; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
 .bagian-section { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #007bff; }
@@ -97,27 +54,18 @@ h1 { color: #2c3e50; margin-bottom: 10px; font-size: 2em; text-align: center; }
 .loading { text-align: center; padding: 50px; font-size: 1.2em; color: #666; }
 .no-data { text-align: center; padding: 50px; color: #666; }
 @media (max-width: 768px) {
-    .container { padding: 15px; }
-    .stats { flex-direction: column; align-items: center; }
-    .stat-box { width: 100%; max-width: 300px; }
+    .container { padding: 10px; }
+    .stats { flex-direction: row; gap: 8px; justify-content: space-around; }
+    .stat-box { min-width: 90px; max-width: 110px; padding: 1px; }
+    .stat-box h3 { font-size: 1.4em; }
+    .stat-box p { font-size: 0.65em; }
+    .search-box { margin: 10px auto; }
+    .search-box input { padding: 8px 15px; }
 }
 </style>
 
 <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>DATA PERSONIL POLRES SAMOSIR</h1>
-        <div>
-            <a href="jabatan.php" class="btn btn-outline-primary btn-sm me-2">
-                <i class="fas fa-user-tie me-1"></i> Manajemen Jabatan
-            </a>
-            <a href="bagian.php" class="btn btn-outline-secondary btn-sm me-2">
-                <i class="fas fa-building me-1"></i> Manajemen Bagian
-            </a>
-            <a href="unsur.php" class="btn btn-outline-info btn-sm">
-                <i class="fas fa-sitemap me-1"></i> Manajemen Unsur
-            </a>
-        </div>
-    </div>
+    <h1>DATA PERSONIL POLRES SAMOSIR</h1>
     
     <!-- Search -->
     <div class="search-box">
@@ -148,13 +96,13 @@ h1 { color: #2c3e50; margin-bottom: 10px; font-size: 2em; text-align: center; }
     
     <!-- Status Stats -->
     <div class="stats" id="statusStatsContainer" style="margin-top: 10px; position: relative;">
-        <div class="stat-box" onclick="filterByStatus('aktif')" style="background: #28a745; cursor: pointer; min-width: 150px;" title="Klik untuk filter Aktif">
-            <h3 id="totalAktif" style="font-size: 2em;">-</h3>
-            <p style="font-size: 0.85em;">AKTIF</p>
+        <div class="stat-box" onclick="filterByStatus('aktif')" style="background: #28a745; cursor: pointer; min-width: 110px; padding: 1px;" title="Klik untuk filter Aktif">
+            <h3 style="font-size: 1.6em;">-</h3>
+            <p style="font-size: 0.7em;">AKTIF</p>
         </div>
-        <div class="stat-box" id="statNonAktif" onclick="filterByStatus('nonaktif')" style="background: #dc3545; cursor: pointer; min-width: 150px; position: relative;" title="Klik untuk filter Non-Aktif">
-            <h3 id="totalNonAktif" style="font-size: 2em;">-</h3>
-            <p style="font-size: 0.85em;">NON-AKTIF</p>
+        <div class="stat-box" id="statNonAktif" onclick="filterByStatus('nonaktif')" style="background: #dc3545; cursor: pointer; min-width: 110px; padding: 1px; position: relative;" title="Klik untuk filter Non-Aktif">
+            <h3 style="font-size: 1.6em;">-</h3>
+            <p style="font-size: 0.7em;">NON-AKTIF</p>
             
             <!-- Tooltip Alasan Nonaktif -->
             <div id="alasanNonaktifTooltip" style="position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 10px; padding: 15px; background: #f8d7da; border-radius: 8px; border: 1px solid #f5c6cb; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 250px; max-width: 350px; z-index: 1000; display: none;">
@@ -544,9 +492,9 @@ function updateStats(stats) {
         Object.entries(stats.by_pangkat).forEach(([pangkat, count]) => {
             const isActive = currentFilter.pangkat === pangkat;
             const activeClass = isActive ? 'border: 3px solid #ffd700;' : '';
-            pangkatHtml += '<div class="stat-box" onclick="filterByPangkat(\'' + pangkat.replace(/'/g, "\\'") + '\')" style="cursor: pointer; min-width: 120px; padding: 15px; ' + activeClass + '" title="Klik untuk filter ' + pangkat + '">';
-            pangkatHtml += '<h3 style="font-size: 1.8em;">' + count + '</h3>';
-            pangkatHtml += '<p style="font-size: 0.8em;">' + pangkat + '</p>';
+            pangkatHtml += '<div class="stat-box" onclick="filterByPangkat(\'' + pangkat.replace(/'/g, "\\'") + '\')" style="cursor: pointer; min-width: 90px; max-width: 120px; padding: 1px; ' + activeClass + '" title="Klik untuk filter ' + pangkat + '">';
+            pangkatHtml += '<h3 style="font-size: 1.4em;">' + count + '</h3>';
+            pangkatHtml += '<p style="font-size: 0.7em;">' + pangkat + '</p>';
             pangkatHtml += '</div>';
         });
     }

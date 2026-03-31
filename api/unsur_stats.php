@@ -3,8 +3,11 @@
  * Unsur Statistics API - Standardized Version
  */
 
-require_once __DIR__ . '/../core/api_response.php';
-require_once __DIR__ . '/../core/calendar_config.php';
+// Set JSON content type first
+header('Content-Type: application/json; charset=UTF-8');
+
+require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/Database.php';
 
 // Disable error display in production
 if (ENVIRONMENT !== 'development') {
@@ -13,11 +16,9 @@ if (ENVIRONMENT !== 'development') {
 }
 
 try {
-    // Database connection with socket
-    $dsn = "mysql:host=localhost;dbname=" . DB_NAME . ";unix_socket=/opt/lampp/var/mysql/mysql.sock";
-    $pdo = new PDO($dsn, DB_USER, DB_PASS);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    // Use Database singleton
+    $db = Database::getInstance();
+    $pdo = $db->getConnection();
     
     // Get filter parameters
     $unsur_filter = isset($_GET['unsur']) ? $_GET['unsur'] : null;
@@ -212,23 +213,24 @@ try {
             ],
             'top_gelar_distribution' => array_map(function($item) {
                 return [
-                    'gelar' => $item['gelar_pendidikan'],
-                    'count' => (int)$item['count']
+                    'gelar' => $item['gelar_pendidikan'] ?? '',
+                    'count' => (int)($item['count'] ?? 0)
                 ];
-            }, $gelar_stats)
+            }, $gelar_stats ?? [])
         ],
-        'message' => "Unsur statistics retrieved successfully"
-    ], JSON_PRETTY_PRINT);
+        'message' => "Unsur statistics retrieved successfully",
+        'timestamp' => date('c')
+    ]);
+    
+    exit;
     
 } catch(Exception $e) {
+    header('Content-Type: application/json; charset=UTF-8');
     echo json_encode([
         'success' => false,
-        'timestamp' => date('c'),
-        'error' => [
-            'message' => $e->getMessage(),
-            'code' => 500,
-            'hint' => 'Check database connection and parameters'
-        ]
-    ], JSON_PRETTY_PRINT);
+        'message' => 'Database error: ' . $e->getMessage(),
+        'timestamp' => date('c')
+    ]);
+    exit;
 }
 ?>

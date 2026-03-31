@@ -126,7 +126,7 @@ include __DIR__ . '/../includes/components/header.php';
     
     function loadStatistics() {
         // Load personil statistics from updated API
-        fetch('api/personil_simple.php')
+        fetch('../api/personil_simple.php')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -157,22 +157,39 @@ include __DIR__ . '/../includes/components/header.php';
     
     function loadDetailedStatistics() {
         // Load detailed statistics from unsur_stats API
-        fetch('api/unsur_stats.php')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const overall = data.data.overall_statistics;
-                    
-                    // Update gender statistics
-                    document.getElementById('maleCount').textContent = overall.by_jk.L || 0;
-                    document.getElementById('femaleCount').textContent = overall.by_jk.P || 0;
-                    
-                    // Update gelar statistics - FIX: read from data_completeness
-                    if (overall.data_completeness) {
-                        document.getElementById('withGelarCount').textContent = overall.data_completeness.with_gelar || 0;
+        fetch('../api/unsur_stats.php')
+            .then(response => {
+                // Check if response is valid JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('Invalid response format: ' + contentType);
+                }
+                return response.text();
+            })
+            .then(text => {
+                try {
+                    // Parse JSON manually
+                    const data = JSON.parse(text);
+                    if (data.success) {
+                        // API returns overall_statistics directly in data
+                        const overall = data.data.overall_statistics;
+                        
+                        // Update gender statistics
+                        document.getElementById('maleCount').textContent = overall.by_jk.L || 0;
+                        document.getElementById('femaleCount').textContent = overall.by_jk.P || 0;
+                        
+                        // Update gelar statistics
+                        if (overall.data_completeness) {
+                            document.getElementById('withGelarCount').textContent = overall.data_completeness.with_gelar || 0;
+                        } else {
+                            document.getElementById('withGelarCount').textContent = 0;
+                        }
                     } else {
-                        document.getElementById('withGelarCount').textContent = 0;
+                        console.error('API returned error:', data.message);
                     }
+                } catch (parseError) {
+                    console.error('JSON parsing error:', parseError, 'Response text:', text.substring(0, 200));
+                    throw parseError;
                 }
             })
             .catch(error => {
@@ -186,7 +203,7 @@ include __DIR__ . '/../includes/components/header.php';
     
     function loadScheduleStatistics() {
         // Load schedule statistics (existing functionality)
-        fetch('api/calendar_api.php?action=getStats')
+        fetch('../api/calendar_api.php?action=getStats')
             .then(response => {
                 // Check if response is HTML error
                 const contentType = response.headers.get('content-type');

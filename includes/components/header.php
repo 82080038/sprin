@@ -19,9 +19,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <!-- Font Awesome 6 - Latest stable version -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Responsive CSS -->
-    <link rel="stylesheet" href="<?php echo asset_url('css/responsive.css'); ?>">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/assets/css/responsive.css">
     
     <style>
+        :root {
+            --primary-color: #1a237e;
             --secondary-color: #3949ab;
             --accent-color: #ffd700;
         }
@@ -231,6 +233,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
         .stat-card {
             text-align: center;
             padding: 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         
         .stat-number {
@@ -250,17 +257,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-    // Global error handling
-    window.onerror = function(message, source, lineno, colno, error) {
-        if (typeof console !== 'undefined' && console.error) {
-            console.error('Error caught:', message);
-        }
-        return false;
-    };
     
-    // Suppress Font Awesome console warnings
+    <script>
+    // Suppress specific console warnings
     const originalConsoleWarn = console.warn;
     console.warn = function(...args) {
         if (args[0] && typeof args[0] === 'string' && 
@@ -273,11 +272,21 @@ $current_page = basename($_SERVER['PHP_SELF']);
     
     // Initialize Bootstrap components
     document.addEventListener('DOMContentLoaded', function() {
+        // Check if Bootstrap is loaded
         if (typeof bootstrap !== 'undefined') {
-            const dropdownElements = document.querySelectorAll('[data-bs-toggle="dropdown"]');
-            dropdownElements.forEach(function(element) {
-                new bootstrap.Dropdown(element);
+            // Initialize dropdowns
+            const dropdownTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'));
+            dropdownTriggerList.map(function (dropdownTriggerEl) {
+                return new bootstrap.Dropdown(dropdownTriggerEl);
             });
+            
+            // Initialize tooltips if any
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        } else {
+            console.warn('Bootstrap not loaded, dropdowns may not work');
         }
     });
     </script>
@@ -346,6 +355,28 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             </a></li>
                             <li><a class="dropdown-item" href="#" onclick="showStatistics()">
                                 <i class="fa-solid fa-chart-pie"></i> Statistik
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?php echo url('pages/reporting.php'); ?>">
+                            <i class="fa-solid fa-chart-bar me-1"></i> Laporan
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-cog me-1"></i> Pengaturan
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="<?php echo url('pages/user_management.php'); ?>">
+                                <i class="fa-solid fa-users-cog"></i> Manajemen User
+                            </a></li>
+                            <li><a class="dropdown-item" href="<?php echo url('pages/backup_management.php'); ?>">
+                                <i class="fa-solid fa-database"></i> Manajemen Backup
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="showSettings()">
+                                <i class="fa-solid fa-cog"></i> Pengaturan Sistem
                             </a></li>
                         </ul>
                     </li>

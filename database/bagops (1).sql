@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 30, 2026 at 08:25 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Waktu pembuatan: 30 Mar 2026 pada 21.50
+-- Versi server: 10.4.32-MariaDB
+-- Versi PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `assignments`
+-- Struktur dari tabel `assignments`
 --
 
 CREATE TABLE `assignments` (
@@ -39,7 +39,60 @@ CREATE TABLE `assignments` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bagian`
+-- Struktur dari tabel `backups`
+--
+
+CREATE TABLE `backups` (
+  `id` int(11) NOT NULL,
+  `filename` varchar(255) NOT NULL,
+  `file_path` varchar(500) NOT NULL,
+  `file_size` bigint(20) NOT NULL DEFAULT 0,
+  `backup_type` enum('full','partial','scheduled') NOT NULL DEFAULT 'full',
+  `tables_included` text DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `completed_at` datetime DEFAULT NULL,
+  `status` enum('pending','running','completed','failed') NOT NULL DEFAULT 'pending',
+  `error_message` text DEFAULT NULL,
+  `is_auto` tinyint(1) NOT NULL DEFAULT 0,
+  `checksum` varchar(64) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `backup_schedule`
+--
+
+CREATE TABLE `backup_schedule` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `frequency` enum('daily','weekly','monthly') NOT NULL DEFAULT 'daily',
+  `day_of_week` tinyint(4) DEFAULT NULL COMMENT '0=Sunday, 1=Monday, etc. For weekly backups',
+  `day_of_month` tinyint(4) DEFAULT NULL COMMENT '1-31, for monthly backups',
+  `hour` tinyint(4) NOT NULL DEFAULT 2 COMMENT 'Hour of day (0-23) to run backup',
+  `minute` tinyint(4) NOT NULL DEFAULT 0 COMMENT 'Minute (0-59) to run backup',
+  `backup_type` enum('full','partial') NOT NULL DEFAULT 'full',
+  `tables_to_backup` text DEFAULT NULL COMMENT 'Comma-separated table names for partial backup',
+  `keep_count` int(11) NOT NULL DEFAULT 7 COMMENT 'Number of backups to keep',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `last_run` datetime DEFAULT NULL,
+  `next_run` datetime DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `backup_schedule`
+--
+
+INSERT INTO `backup_schedule` (`id`, `name`, `frequency`, `day_of_week`, `day_of_month`, `hour`, `minute`, `backup_type`, `tables_to_backup`, `keep_count`, `is_active`, `last_run`, `next_run`, `created_at`, `created_by`) VALUES
+(1, 'Daily Full Backup', 'daily', NULL, NULL, 2, 0, 'full', NULL, 7, 1, NULL, '2026-04-01 02:00:00', '2026-03-30 19:41:20', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `bagian`
 --
 
 CREATE TABLE `bagian` (
@@ -54,7 +107,7 @@ CREATE TABLE `bagian` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `bagian`
+-- Dumping data untuk tabel `bagian`
 --
 
 INSERT INTO `bagian` (`id`, `kode_bagian`, `nama_bagian`, `id_unsur`, `deskripsi`, `is_active`, `created_at`, `updated_at`) VALUES
@@ -91,7 +144,7 @@ INSERT INTO `bagian` (`id`, `kode_bagian`, `nama_bagian`, `id_unsur`, `deskripsi
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bagian_pimpinan`
+-- Struktur dari tabel `bagian_pimpinan`
 --
 
 CREATE TABLE `bagian_pimpinan` (
@@ -107,7 +160,7 @@ CREATE TABLE `bagian_pimpinan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `calendar_tokens`
+-- Struktur dari tabel `calendar_tokens`
 --
 
 CREATE TABLE `calendar_tokens` (
@@ -124,7 +177,7 @@ CREATE TABLE `calendar_tokens` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jabatan`
+-- Struktur dari tabel `jabatan`
 --
 
 CREATE TABLE `jabatan` (
@@ -145,7 +198,7 @@ CREATE TABLE `jabatan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `jabatan`
+-- Dumping data untuk tabel `jabatan`
 --
 
 INSERT INTO `jabatan` (`id`, `kode_jabatan`, `nama_jabatan`, `id_unsur`, `tingkat_jabatan`, `eselon`, `golongan`, `is_pimpinan`, `is_pembantu_pimpinan`, `is_kepala_unit`, `deskripsi`, `is_active`, `created_at`, `updated_at`) VALUES
@@ -250,7 +303,7 @@ INSERT INTO `jabatan` (`id`, `kode_jabatan`, `nama_jabatan`, `id_unsur`, `tingka
 -- --------------------------------------------------------
 
 --
--- Table structure for table `master_jenis_pegawai`
+-- Struktur dari tabel `master_jenis_pegawai`
 --
 
 CREATE TABLE `master_jenis_pegawai` (
@@ -266,7 +319,7 @@ CREATE TABLE `master_jenis_pegawai` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `master_jenis_pegawai`
+-- Dumping data untuk tabel `master_jenis_pegawai`
 --
 
 INSERT INTO `master_jenis_pegawai` (`id`, `kode_jenis`, `nama_jenis`, `deskripsi`, `kategori`, `urutan`, `is_active`, `created_at`, `updated_at`) VALUES
@@ -286,7 +339,7 @@ INSERT INTO `master_jenis_pegawai` (`id`, `kode_jenis`, `nama_jenis`, `deskripsi
 -- --------------------------------------------------------
 
 --
--- Table structure for table `master_pendidikan`
+-- Struktur dari tabel `master_pendidikan`
 --
 
 CREATE TABLE `master_pendidikan` (
@@ -302,7 +355,7 @@ CREATE TABLE `master_pendidikan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `master_pendidikan`
+-- Dumping data untuk tabel `master_pendidikan`
 --
 
 INSERT INTO `master_pendidikan` (`id`, `tingkat_pendidikan`, `nama_pendidikan`, `kode_pendidikan`, `deskripsi`, `urutan`, `is_active`, `created_at`, `updated_at`) VALUES
@@ -321,7 +374,7 @@ INSERT INTO `master_pendidikan` (`id`, `tingkat_pendidikan`, `nama_pendidikan`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `operations`
+-- Struktur dari tabel `operations`
 --
 
 CREATE TABLE `operations` (
@@ -342,7 +395,7 @@ CREATE TABLE `operations` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pangkat`
+-- Struktur dari tabel `pangkat`
 --
 
 CREATE TABLE `pangkat` (
@@ -355,7 +408,7 @@ CREATE TABLE `pangkat` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `pangkat`
+-- Dumping data untuk tabel `pangkat`
 --
 
 INSERT INTO `pangkat` (`id`, `nama_pangkat`, `singkatan`, `level_pangkat`, `created_at`, `updated_at`) VALUES
@@ -405,7 +458,22 @@ INSERT INTO `pangkat` (`id`, `nama_pangkat`, `singkatan`, `level_pangkat`, `crea
 -- --------------------------------------------------------
 
 --
--- Table structure for table `personil`
+-- Struktur dari tabel `password_reset_tokens`
+--
+
+CREATE TABLE `password_reset_tokens` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `used_at` datetime DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `personil`
 --
 
 CREATE TABLE `personil` (
@@ -441,7 +509,7 @@ CREATE TABLE `personil` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `personil`
+-- Dumping data untuk tabel `personil`
 --
 
 INSERT INTO `personil` (`id`, `nrp`, `nip`, `nama`, `gelar_pendidikan`, `id_pangkat`, `id_jabatan`, `id_bagian`, `id_unsur`, `status_ket`, `alasan_status`, `id_jenis_pegawai`, `tempat_lahir`, `tanggal_lahir`, `JK`, `tanggal_masuk`, `tanggal_pensiun`, `no_karpeg`, `status_nikah`, `jabatan_struktural`, `jabatan_fungsional`, `golongan`, `eselon`, `is_active`, `is_deleted`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
@@ -706,7 +774,7 @@ INSERT INTO `personil` (`id`, `nrp`, `nip`, `nama`, `gelar_pendidikan`, `id_pang
 -- --------------------------------------------------------
 
 --
--- Table structure for table `personil_backup`
+-- Struktur dari tabel `personil_backup`
 --
 
 CREATE TABLE `personil_backup` (
@@ -740,7 +808,7 @@ CREATE TABLE `personil_backup` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `personil_backup`
+-- Dumping data untuk tabel `personil_backup`
 --
 
 INSERT INTO `personil_backup` (`id`, `nrp`, `nama`, `gelar_pendidikan`, `id_pangkat`, `id_jabatan`, `id_bagian`, `id_unsur`, `status_ket`, `id_jenis_pegawai`, `tempat_lahir`, `tanggal_lahir`, `JK`, `tanggal_masuk`, `tanggal_pensiun`, `no_karpeg`, `status_nikah`, `jabatan_struktural`, `jabatan_fungsional`, `golongan`, `eselon`, `is_active`, `is_deleted`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
@@ -1005,7 +1073,7 @@ INSERT INTO `personil_backup` (`id`, `nrp`, `nama`, `gelar_pendidikan`, `id_pang
 -- --------------------------------------------------------
 
 --
--- Table structure for table `personil_kontak`
+-- Struktur dari tabel `personil_kontak`
 --
 
 CREATE TABLE `personil_kontak` (
@@ -1022,7 +1090,7 @@ CREATE TABLE `personil_kontak` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `personil_medsos`
+-- Struktur dari tabel `personil_medsos`
 --
 
 CREATE TABLE `personil_medsos` (
@@ -1039,7 +1107,7 @@ CREATE TABLE `personil_medsos` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `personil_pendidikan`
+-- Struktur dari tabel `personil_pendidikan`
 --
 
 CREATE TABLE `personil_pendidikan` (
@@ -1058,7 +1126,7 @@ CREATE TABLE `personil_pendidikan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `schedules`
+-- Struktur dari tabel `schedules`
 --
 
 CREATE TABLE `schedules` (
@@ -1081,7 +1149,7 @@ CREATE TABLE `schedules` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `unsur`
+-- Struktur dari tabel `unsur`
 --
 
 CREATE TABLE `unsur` (
@@ -1097,7 +1165,7 @@ CREATE TABLE `unsur` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `unsur`
+-- Dumping data untuk tabel `unsur`
 --
 
 INSERT INTO `unsur` (`id`, `kode_unsur`, `nama_unsur`, `deskripsi`, `tingkat`, `urutan`, `is_active`, `created_at`, `updated_at`) VALUES
@@ -1108,12 +1176,73 @@ INSERT INTO `unsur` (`id`, `kode_unsur`, `nama_unsur`, `deskripsi`, `tingkat`, `
 (5, 'UNSUR_PENDUKUNG', 'UNSUR PENDUKUNG', 'Unit pendukung operasional dan administrasi', 'POLRES', 5, 1, '2026-03-28 18:16:57', '2026-03-28 18:16:57'),
 (6, 'UNSUR_LAINNYA', 'UNSUR LAINNYA', 'Unit khusus dan penugasan khusus', 'POLRES', 6, 1, '2026-03-28 18:16:57', '2026-03-28 18:16:57');
 
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `full_name` varchar(100) NOT NULL,
+  `role` enum('admin','operator','viewer') NOT NULL DEFAULT 'viewer',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `last_login` datetime DEFAULT NULL,
+  `login_attempts` int(11) NOT NULL DEFAULT 0,
+  `locked_until` datetime DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_by` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password_hash`, `email`, `full_name`, `role`, `is_active`, `last_login`, `login_attempts`, `locked_until`, `created_at`, `updated_at`, `created_by`) VALUES
+(1, 'bagops', '$argon2id$v=19$m=65536,t=4,p=3$ZGF0YWJhc2VzYWx0$hashplaceholder', 'admin@polressamosir.id', 'Administrator BAGOPS', 'admin', 1, NULL, 0, NULL, '2026-03-30 19:40:54', '2026-03-30 19:40:54', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `user_activity_log`
+--
+
+CREATE TABLE `user_activity_log` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `action` varchar(100) NOT NULL,
+  `details` text DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `user_sessions`
+--
+
+CREATE TABLE `user_sessions` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `session_token` varchar(255) NOT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `expires_at` datetime NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `assignments`
+-- Indeks untuk tabel `assignments`
 --
 ALTER TABLE `assignments`
   ADD PRIMARY KEY (`id`),
@@ -1121,7 +1250,24 @@ ALTER TABLE `assignments`
   ADD KEY `idx_personil` (`personil_id`);
 
 --
--- Indexes for table `bagian`
+-- Indeks untuk tabel `backups`
+--
+ALTER TABLE `backups`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `created_at` (`created_at`),
+  ADD KEY `backup_type` (`backup_type`);
+
+--
+-- Indeks untuk tabel `backup_schedule`
+--
+ALTER TABLE `backup_schedule`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `is_active` (`is_active`),
+  ADD KEY `next_run` (`next_run`);
+
+--
+-- Indeks untuk tabel `bagian`
 --
 ALTER TABLE `bagian`
   ADD PRIMARY KEY (`id`),
@@ -1129,7 +1275,7 @@ ALTER TABLE `bagian`
   ADD KEY `id_unsur` (`id_unsur`);
 
 --
--- Indexes for table `bagian_pimpinan`
+-- Indeks untuk tabel `bagian_pimpinan`
 --
 ALTER TABLE `bagian_pimpinan`
   ADD PRIMARY KEY (`id`),
@@ -1137,14 +1283,14 @@ ALTER TABLE `bagian_pimpinan`
   ADD KEY `personil_id` (`personil_id`);
 
 --
--- Indexes for table `calendar_tokens`
+-- Indeks untuk tabel `calendar_tokens`
 --
 ALTER TABLE `calendar_tokens`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `jabatan`
+-- Indeks untuk tabel `jabatan`
 --
 ALTER TABLE `jabatan`
   ADD PRIMARY KEY (`id`),
@@ -1152,7 +1298,7 @@ ALTER TABLE `jabatan`
   ADD KEY `id_unsur` (`id_unsur`);
 
 --
--- Indexes for table `master_jenis_pegawai`
+-- Indeks untuk tabel `master_jenis_pegawai`
 --
 ALTER TABLE `master_jenis_pegawai`
   ADD PRIMARY KEY (`id`),
@@ -1161,7 +1307,7 @@ ALTER TABLE `master_jenis_pegawai`
   ADD KEY `idx_kategori` (`kategori`);
 
 --
--- Indexes for table `master_pendidikan`
+-- Indeks untuk tabel `master_pendidikan`
 --
 ALTER TABLE `master_pendidikan`
   ADD PRIMARY KEY (`id`),
@@ -1170,7 +1316,7 @@ ALTER TABLE `master_pendidikan`
   ADD KEY `idx_kode` (`kode_pendidikan`);
 
 --
--- Indexes for table `operations`
+-- Indeks untuk tabel `operations`
 --
 ALTER TABLE `operations`
   ADD PRIMARY KEY (`id`),
@@ -1178,14 +1324,23 @@ ALTER TABLE `operations`
   ADD KEY `idx_status` (`status`);
 
 --
--- Indexes for table `pangkat`
+-- Indeks untuk tabel `pangkat`
 --
 ALTER TABLE `pangkat`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `nama_pangkat` (`nama_pangkat`);
 
 --
--- Indexes for table `personil`
+-- Indeks untuk tabel `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `token` (`token`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `expires_at` (`expires_at`);
+
+--
+-- Indeks untuk tabel `personil`
 --
 ALTER TABLE `personil`
   ADD PRIMARY KEY (`id`),
@@ -1202,7 +1357,7 @@ ALTER TABLE `personil`
   ADD KEY `fk_personil_jenis_pegawai` (`id_jenis_pegawai`);
 
 --
--- Indexes for table `personil_kontak`
+-- Indeks untuk tabel `personil_kontak`
 --
 ALTER TABLE `personil_kontak`
   ADD PRIMARY KEY (`id`),
@@ -1210,7 +1365,7 @@ ALTER TABLE `personil_kontak`
   ADD KEY `idx_jenis` (`jenis_kontak`);
 
 --
--- Indexes for table `personil_medsos`
+-- Indeks untuk tabel `personil_medsos`
 --
 ALTER TABLE `personil_medsos`
   ADD PRIMARY KEY (`id`),
@@ -1218,7 +1373,7 @@ ALTER TABLE `personil_medsos`
   ADD KEY `idx_platform` (`platform_medsos`);
 
 --
--- Indexes for table `personil_pendidikan`
+-- Indeks untuk tabel `personil_pendidikan`
 --
 ALTER TABLE `personil_pendidikan`
   ADD PRIMARY KEY (`id`),
@@ -1226,7 +1381,7 @@ ALTER TABLE `personil_pendidikan`
   ADD KEY `idx_pendidikan` (`id_pendidikan`);
 
 --
--- Indexes for table `schedules`
+-- Indeks untuk tabel `schedules`
 --
 ALTER TABLE `schedules`
   ADD PRIMARY KEY (`id`),
@@ -1235,131 +1390,201 @@ ALTER TABLE `schedules`
   ADD KEY `idx_bagian` (`bagian`);
 
 --
--- Indexes for table `unsur`
+-- Indeks untuk tabel `unsur`
 --
 ALTER TABLE `unsur`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `kode_unsur` (`kode_unsur`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Indeks untuk tabel `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `role` (`role`),
+  ADD KEY `is_active` (`is_active`);
+
+--
+-- Indeks untuk tabel `user_activity_log`
+--
+ALTER TABLE `user_activity_log`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `action` (`action`),
+  ADD KEY `created_at` (`created_at`);
+
+--
+-- Indeks untuk tabel `user_sessions`
+--
+ALTER TABLE `user_sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `session_token` (`session_token`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `expires_at` (`expires_at`);
+
+--
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `assignments`
+-- AUTO_INCREMENT untuk tabel `assignments`
 --
 ALTER TABLE `assignments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `bagian`
+-- AUTO_INCREMENT untuk tabel `backups`
+--
+ALTER TABLE `backups`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `backup_schedule`
+--
+ALTER TABLE `backup_schedule`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT untuk tabel `bagian`
 --
 ALTER TABLE `bagian`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
--- AUTO_INCREMENT for table `bagian_pimpinan`
+-- AUTO_INCREMENT untuk tabel `bagian_pimpinan`
 --
 ALTER TABLE `bagian_pimpinan`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `calendar_tokens`
+-- AUTO_INCREMENT untuk tabel `calendar_tokens`
 --
 ALTER TABLE `calendar_tokens`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `jabatan`
+-- AUTO_INCREMENT untuk tabel `jabatan`
 --
 ALTER TABLE `jabatan`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
--- AUTO_INCREMENT for table `master_jenis_pegawai`
+-- AUTO_INCREMENT untuk tabel `master_jenis_pegawai`
 --
 ALTER TABLE `master_jenis_pegawai`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `master_pendidikan`
+-- AUTO_INCREMENT untuk tabel `master_pendidikan`
 --
 ALTER TABLE `master_pendidikan`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `operations`
+-- AUTO_INCREMENT untuk tabel `operations`
 --
 ALTER TABLE `operations`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `pangkat`
+-- AUTO_INCREMENT untuk tabel `pangkat`
 --
 ALTER TABLE `pangkat`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
--- AUTO_INCREMENT for table `personil`
+-- AUTO_INCREMENT untuk tabel `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `personil`
 --
 ALTER TABLE `personil`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=512;
 
 --
--- AUTO_INCREMENT for table `personil_kontak`
+-- AUTO_INCREMENT untuk tabel `personil_kontak`
 --
 ALTER TABLE `personil_kontak`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `personil_medsos`
+-- AUTO_INCREMENT untuk tabel `personil_medsos`
 --
 ALTER TABLE `personil_medsos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `personil_pendidikan`
+-- AUTO_INCREMENT untuk tabel `personil_pendidikan`
 --
 ALTER TABLE `personil_pendidikan`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `schedules`
+-- AUTO_INCREMENT untuk tabel `schedules`
 --
 ALTER TABLE `schedules`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `unsur`
+-- AUTO_INCREMENT untuk tabel `unsur`
 --
 ALTER TABLE `unsur`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT untuk tabel `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT untuk tabel `user_activity_log`
+--
+ALTER TABLE `user_activity_log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `user_sessions`
+--
+ALTER TABLE `user_sessions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `bagian`
+-- Ketidakleluasaan untuk tabel `bagian`
 --
 ALTER TABLE `bagian`
   ADD CONSTRAINT `bagian_ibfk_1` FOREIGN KEY (`id_unsur`) REFERENCES `unsur` (`id`) ON DELETE SET NULL;
 
 --
--- Constraints for table `bagian_pimpinan`
+-- Ketidakleluasaan untuk tabel `bagian_pimpinan`
 --
 ALTER TABLE `bagian_pimpinan`
   ADD CONSTRAINT `bagian_pimpinan_ibfk_1` FOREIGN KEY (`bagian_id`) REFERENCES `bagian` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `bagian_pimpinan_ibfk_2` FOREIGN KEY (`personil_id`) REFERENCES `personil` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `jabatan`
+-- Ketidakleluasaan untuk tabel `jabatan`
 --
 ALTER TABLE `jabatan`
   ADD CONSTRAINT `jabatan_ibfk_1` FOREIGN KEY (`id_unsur`) REFERENCES `unsur` (`id`) ON DELETE SET NULL;
 
 --
--- Constraints for table `personil`
+-- Ketidakleluasaan untuk tabel `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD CONSTRAINT `password_reset_tokens_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `personil`
 --
 ALTER TABLE `personil`
   ADD CONSTRAINT `fk_personil_jenis_pegawai` FOREIGN KEY (`id_jenis_pegawai`) REFERENCES `master_jenis_pegawai` (`id`) ON DELETE SET NULL,
@@ -1369,23 +1594,35 @@ ALTER TABLE `personil`
   ADD CONSTRAINT `personil_ibfk_4` FOREIGN KEY (`id_unsur`) REFERENCES `unsur` (`id`) ON DELETE SET NULL;
 
 --
--- Constraints for table `personil_kontak`
+-- Ketidakleluasaan untuk tabel `personil_kontak`
 --
 ALTER TABLE `personil_kontak`
   ADD CONSTRAINT `personil_kontak_ibfk_1` FOREIGN KEY (`id_personil`) REFERENCES `personil` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `personil_medsos`
+-- Ketidakleluasaan untuk tabel `personil_medsos`
 --
 ALTER TABLE `personil_medsos`
   ADD CONSTRAINT `personil_medsos_ibfk_1` FOREIGN KEY (`id_personil`) REFERENCES `personil` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `personil_pendidikan`
+-- Ketidakleluasaan untuk tabel `personil_pendidikan`
 --
 ALTER TABLE `personil_pendidikan`
   ADD CONSTRAINT `personil_pendidikan_ibfk_1` FOREIGN KEY (`id_personil`) REFERENCES `personil` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `personil_pendidikan_ibfk_2` FOREIGN KEY (`id_pendidikan`) REFERENCES `master_pendidikan` (`id`);
+
+--
+-- Ketidakleluasaan untuk tabel `user_activity_log`
+--
+ALTER TABLE `user_activity_log`
+  ADD CONSTRAINT `user_activity_log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Ketidakleluasaan untuk tabel `user_sessions`
+--
+ALTER TABLE `user_sessions`
+  ADD CONSTRAINT `user_sessions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,0 +1,25 @@
+{
+  "name": "sprin-puppeteer-tests",
+  "version": "1.0.0",
+  "description": "Comprehensive Puppeteer testing suite for SPRIN application",
+  "scripts": {
+    "test": "node tests/puppeteer/run-all-tests.js",
+    "test:headless": "HEADLESS=true node tests/puppeteer/run-all-tests.js",
+    "test:api": "node tests/puppeteer/run-api-tests.js",
+    "test:login": "node tests/puppeteer/run-login-tests.js",
+    "test:quick": "node tests/puppeteer/run-quick-tests.js"
+  },
+  "dependencies": {
+    "puppeteer": "^24.40.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "puppeteer",
+    "testing",
+    "e2e",
+    "sprin",
+    "polres"
+  ],
+  "author": "SPRIN Development Team",
+  "license": "MIT"
+}

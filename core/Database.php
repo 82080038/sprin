@@ -11,8 +11,16 @@ class Database {
     
     private function __construct() {
         try {
+            // Try socket first (XAMPP), then fallback to TCP
             $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";unix_socket=/opt/lampp/var/mysql/mysql.sock";
-            $this->pdo = new PDO($dsn, DB_USER, DB_PASS);
+            try {
+                $this->pdo = new PDO($dsn, DB_USER, DB_PASS);
+            } catch (PDOException $e) {
+                // Fallback to TCP connection
+                $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME;
+                $this->pdo = new PDO($dsn, DB_USER, DB_PASS);
+            }
+            
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);

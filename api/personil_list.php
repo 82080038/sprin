@@ -1,32 +1,27 @@
 <?php
 /**
  * Personil List API - Returns personil data grouped by unsur and bagian
+ * Standardized Version
  */
 
-// Enable error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Set headers
+// Set headers first
 header('Content-Type: application/json; charset=UTF-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');
 
-// Include configuration
 require_once __DIR__ . '/../core/config.php';
-require_once __DIR__ . '/../core/calendar_config.php';
+require_once __DIR__ . '/../core/Database.php';
 
-// Start session if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+// Disable error display in production
+if (ENVIRONMENT !== 'development') {
+    error_reporting(0);
+    ini_set('display_errors', 0);
 }
 
 try {
-    // Connect to database
-    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";unix_socket=/opt/lampp/var/mysql/mysql.sock";
-    $pdo = new PDO($dsn, DB_USER, DB_PASS);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    // Use Database singleton
+    $db = Database::getInstance();
+    $pdo = $db->getConnection();
     
     // Get filter parameters
     $search = isset($_GET['search']) ? trim($_GET['search']) : '';
@@ -205,6 +200,7 @@ try {
     // Return success response
     echo json_encode([
         'success' => true,
+        'message' => "Retrieved " . count($personil) . " personil records",
         'data' => [
             'personil_grouped' => $grouped_data,
             'statistics' => $stats,
@@ -215,16 +211,23 @@ try {
             'unsur' => $unsur_filter,
             'bagian' => $bagian_filter,
             'status' => $status_filter
-        ]
+        ],
+        'timestamp' => date('c')
     ]);
     
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'error' => [
-            'message' => $e->getMessage(),
-            'code' => 500
-        ]
-    ]);
+} catch(Exception $e) {
+    header('Content-Type: application/json; charset=UTF-8');
+    if (ENVIRONMENT === 'development') {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Database error: ' . $e->getMessage(),
+            'timestamp' => date('c')
+        ]);
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Failed to retrieve personil data',
+            'timestamp' => date('c')
+        ]);
+    }
 }

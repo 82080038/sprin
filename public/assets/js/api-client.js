@@ -107,17 +107,23 @@ class ApiClient {
     async handleResponse(response) {
         const text = await response.text();
         
+        // Check if response is HTML (error page)
+        if (text.trim().startsWith('<!DOCTYPE') || text.includes('<html')) {
+            throw new Error('Server returned HTML error page instead of JSON');
+        }
+        
         try {
             const data = JSON.parse(text);
             
             if (!response.ok) {
-                throw new Error(data.error?.message || 'Request failed');
+                throw new Error(data.message || data.error?.message || 'Request failed');
             }
             
             return data;
         } catch (error) {
             if (error instanceof SyntaxError) {
-                throw new Error('Invalid JSON response');
+                console.error('Invalid JSON response:', text.substring(0, 200));
+                throw new Error('Invalid JSON response from server');
             }
             throw error;
         }

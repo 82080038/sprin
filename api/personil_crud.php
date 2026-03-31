@@ -1,37 +1,43 @@
 <?php
 /**
  * Personil CRUD API - Create, Read, Update, Delete operations
+ * Standardized Version
  */
 
-// Enable error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Set headers
+// Set headers first
 header('Content-Type: application/json; charset=UTF-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 
-// Include configuration
 require_once __DIR__ . '/../core/config.php';
-require_once __DIR__ . '/../core/calendar_config.php';
+require_once __DIR__ . '/../core/Database.php';
+require_once __DIR__ . '/../core/auth_helper.php';
 
-// Start session if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+// Disable error display in production
+if (ENVIRONMENT !== 'development') {
+    error_reporting(0);
+    ini_set('display_errors', 0);
 }
 
-// Check authentication
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+// Check authentication using AuthHelper
+if (!AuthHelper::validateSession()) {
     http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Unauthorized',
+        'timestamp' => date('c')
+    ]);
     exit;
 }
 
 // Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['success' => false, 'message' => 'Method not allowed']);
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Method not allowed',
+        'timestamp' => date('c')
+    ]);
     exit;
 }
 
@@ -40,14 +46,18 @@ $action = $_POST['action'] ?? '';
 $valid_actions = ['get_personil', 'create_personil', 'update_personil', 'delete_personil', 'get_dropdown_data', 'toggle_status'];
 
 if (!in_array($action, $valid_actions)) {
-    echo json_encode(['success' => false, 'message' => 'Invalid action']);
+    echo json_encode([
+        'success' => false, 
+        'message' => 'Invalid action',
+        'timestamp' => date('c')
+    ]);
     exit;
 }
 
 try {
-    // Connect to database
-    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";unix_socket=/opt/lampp/var/mysql/mysql.sock";
-    $pdo = new PDO($dsn, DB_USER, DB_PASS);
+    // Use Database singleton
+    $db = Database::getInstance();
+    $pdo = $db->getConnection();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     
@@ -198,9 +208,12 @@ try {
             echo json_encode([
                 'success' => true,
                 'message' => 'Status berhasil diubah menjadi ' . $new_status,
-                'new_status' => $new_status,
-                'alasan' => $alasan,
-                'rows_affected' => $stmt->rowCount()
+                'data' => [
+                    'new_status' => $new_status,
+                    'alasan' => $alasan,
+                    'rows_affected' => $stmt->rowCount()
+                ],
+                'timestamp' => date('c')
             ]);
             break;
             
@@ -214,21 +227,32 @@ try {
             
             echo json_encode([
                 'success' => true,
+                'message' => 'Dropdown data retrieved successfully',
                 'data' => [
                     'pangkat' => $pangkat,
                     'jabatan' => $jabatan,
                     'bagian' => $bagian,
                     'unsur' => $unsur,
                     'jenis_pegawai' => $jenis_pegawai
-                ]
+                ],
+                'timestamp' => date('c')
             ]);
             break;
     }
     
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Database error: ' . $e->getMessage()
-    ]);
+} catch(Exception $e) {
+    header('Content-Type: application/json; charset=UTF-8');
+    if (ENVIRONMENT === 'development') {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Database error: ' . $e->getMessage(),
+            'timestamp' => date('c')
+        ]);
+    } else {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Failed to process request',
+            'timestamp' => date('c')
+        ]);
+    }
 }
