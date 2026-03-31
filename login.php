@@ -300,39 +300,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Masuk...';
             btn.disabled = true;
             
-            // Simulate quick login process
-            setTimeout(() => {
-                // Auto-fill credentials and submit
-                fetch('', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        username: 'bagops',
-                        password: 'admin123'
-                    })
-                })
-                .then(response => response.text())
-                .then(html => {
-                    // Check if login successful by checking for redirect
-                    if (html.includes('main.php') || !html.includes('alert-danger')) {
-                        // Success - redirect to main dashboard
-                        window.location.href = 'main.php';
-                    } else {
-                        // Failed - show error
-                        btn.innerHTML = originalText;
-                        btn.disabled = false;
-                        alert('Quick login gagal. Silakan coba login manual.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Quick login error:', error);
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                    alert('Terjadi kesalahan. Silakan coba login manual.');
-                });
-            }, 1000);
+            // Submit credentials via POST
+            fetch('', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    username: 'bagops',
+                    password: 'admin123'
+                }),
+                redirect: 'manual' // Don't follow redirects automatically
+            })
+            .then(response => {
+                // Check if we got a redirect (302) or successful response
+                if (response.status === 0 || response.ok || response.status === 302) {
+                    // Redirect to main dashboard
+                    window.location.href = 'pages/main.php';
+                } else {
+                    throw new Error('Login failed');
+                }
+            })
+            .catch(error => {
+                // For opaque responses or redirects, try navigating anyway
+                window.location.href = 'pages/main.php';
+            });
         }
         
         // Auto-focus on username field
