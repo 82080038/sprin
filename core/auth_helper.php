@@ -38,42 +38,44 @@ class AuthHelper {
     }
     
     /**
-     * Validate session
+     * Validate user session
      */
     public static function validateSession() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        
-        if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+        if (!SessionManager::isActive()) {
             return false;
         }
         
-        // Check session lifetime
-        if (isset($_SESSION['login_time'])) {
-            $login_time = strtotime($_SESSION['login_time']);
-            $current_time = time();
-            $session_duration = $current_time - $login_time;
-            
-            if ($session_duration > SESSION_LIFETIME) {
-                self::logout();
-                return false;
-            }
+        return isset($_SESSION['logged_in']) && 
+               $_SESSION['logged_in'] === true && 
+               isset($_SESSION['username']) &&
+               isset($_SESSION['login_time']) &&
+               (time() - strtotime($_SESSION['login_time'])) < SESSION_LIFETIME;
+    }
+    
+    /**
+     * Get current user data
+     */
+    public static function getCurrentUser() {
+        if (!self::validateSession()) {
+            return null;
         }
         
-        return true;
+        return [
+            'user_id' => $_SESSION['user_id'] ?? 0,
+            'username' => $_SESSION['username'] ?? '',
+            'role' => $_SESSION['role'] ?? 'user',
+            'login_time' => $_SESSION['login_time'] ?? ''
+        ];
     }
     
     /**
      * Login user with credentials
-     * First tries database users, falls back to hardcoded credentials
+     * Simple bypass for development mode
      */
     public static function login($username, $password) {
         // Simple bypass for development
         if ($username === 'bagops' && $password === 'admin123') {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
+            SessionManager::start();
             $_SESSION['logged_in'] = true;
             $_SESSION['user_id'] = 0; // System user
             $_SESSION['username'] = $username;
@@ -95,9 +97,7 @@ class AuthHelper {
             $user = $stmt->fetch();
             
             if ($user && self::verifyPassword($password, $user['password_hash'])) {
-                if (session_status() === PHP_SESSION_NONE) {
-                    session_start();
-                }
+                SessionManager::start();
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
@@ -119,14 +119,12 @@ class AuthHelper {
         // Fallback to hardcoded credentials (backward compatibility)
         $valid_credentials = [
             'username' => 'bagops',
-            'password_hash' => '$argon2id$v=19$m=65536,t=4,p=3$YXlKeG8vWG0uU0hpdW9RbQ$WONFTV/B6ycoVzjlmxorYgDB+hqm9C3TpzHBM7dTrIA' // admin123
+            'password_hash' => '$argon2id$v=19$m=65536,t=4,p=3$Wk1TdTdGTGw3OEJzZTZUOQ$CGQbP9WVhKKsHiHx6hzzKc4OXpa/0kwAu5WqlW0E6gk' // admin123
         ];
         
         if ($username === $valid_credentials['username']) {
             if (self::verifyPassword($password, $valid_credentials['password_hash'])) {
-                if (session_status() === PHP_SESSION_NONE) {
-                    session_start();
-                }
+                SessionManager::start();
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_id'] = 0; // System user
                 $_SESSION['username'] = $username;
@@ -145,13 +143,7 @@ class AuthHelper {
      * Logout user
      */
     public static function logout() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        
-        session_unset();
-        session_destroy();
-        
+        SessionManager::destroy();
         // Clear session cookie
         if (isset($_COOKIE[session_name()])) {
             setcookie(session_name(), '', time() - 3600, '/');
