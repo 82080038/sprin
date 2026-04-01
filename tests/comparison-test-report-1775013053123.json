@@ -1,0 +1,96 @@
+{
+  "summary": {
+    "totalTests": 3,
+    "passed": 2,
+    "failed": 0,
+    "passRate": "66.67",
+    "timestamp": "2026-04-01T03:10:53.123Z",
+    "version": "Comparison Test Suite"
+  },
+  "performance": {
+    "original": {
+      "personil": {
+        "startTime": 1775013029519,
+        "domContentLoaded": null,
+        "loadComplete": null,
+        "firstPaint": 92,
+        "firstContentfulPaint": 92,
+        "resourceCount": 0,
+        "totalTransferSize": 0,
+        "totalTime": 2048
+      },
+      "calendar": {
+        "startTime": 1775013031660,
+        "domContentLoaded": null,
+        "loadComplete": null,
+        "firstPaint": 68,
+        "firstContentfulPaint": 68,
+        "resourceCount": 0,
+        "totalTransferSize": 0,
+        "totalTime": 2060
+      },
+      "dashboard": {
+        "startTime": 1775013033797,
+        "domContentLoaded": null,
+        "loadComplete": null,
+        "firstPaint": 336,
+        "firstContentfulPaint": 336,
+        "resourceCount": 9,
+        "totalTransferSize": 157410,
+        "totalTime": 880
+      }
+    },
+    "simplified": {},
+    "comparison": {}
+  },
+  "functionality": {
+    "personil": {
+      "original": {
+        "table": false,
+        "search": false,
+        "add": false
+      },
+      "simplified": {
+        "table": true,
+        "search": true,
+        "add": true
+      }
+    },
+    "calendar": {
+      "original": {
+        "calendar": false,
+        "navigation": false
+      },
+      "simplified": {
+        "calendar": true,
+        "navigation": true
+      }
+    }
+  },
+  "tests": [
+    {
+      "test": "Original Pages Performance",
+      "passed": true,
+      "details": "All original pages tested successfully",
+      "timestamp": "2026-04-01T03:10:35.046Z"
+    },
+    {
+      "test": "Simplified Pages Performance",
+      "passed": false,
+      "details": "No element found for selector: input[name=\"username\"]",
+      "timestamp": "2026-04-01T03:10:35.979Z"
+    },
+    {
+      "test": "Functionality Comparison",
+      "passed": true,
+      "details": "Functionality tests completed",
+      "timestamp": "2026-04-01T03:10:53.122Z"
+    }
+  ],
+  "environment": {
+    "baseUrl": "http://localhost/sprint",
+    "browser": "Puppeteer",
+    "viewport": "1366x768",
+    "testType": "Performance and Functionality Comparison"
+  }
+}

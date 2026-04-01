@@ -73,6 +73,15 @@ $current_page = basename($_SERVER['PHP_SELF']);
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
         
+        .dropdown-item.active {
+            background: var(--primary-color) !important;
+            color: white !important;
+        }
+        
+        .dropdown-item.active i {
+            color: white !important;
+        }
+        
         .user-menu {
             display: flex;
             align-items: center;
@@ -253,10 +262,141 @@ $current_page = basename($_SERVER['PHP_SELF']);
         }
     </style>
 
+    <!-- Global Table Styles -->
+    <style>
+    /* Table layout improvements for all tables */
+    .table {
+        table-layout: fixed;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .table th:nth-child(2), 
+    .table td:nth-child(2),
+    .table th:nth-child(3), 
+    .table td:nth-child(3) {
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+    /* Personil table specific styles */
+    .personil-table {
+        table-layout: auto !important;
+        width: 100% !important;
+    }
+
+    .personil-table th, 
+    .personil-table td {
+        vertical-align: middle !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        padding: 8px 10px !important;
+    }
+
+    /* Auto sizing with minimum widths */
+    .personil-table th:nth-child(1), .personil-table td:nth-child(1) { /* No */
+        width: auto !important;
+        min-width: 40px !important;
+        max-width: 60px !important;
+    }
+    .personil-table th:nth-child(2), .personil-table td:nth-child(2) { /* Nama */
+        width: auto !important;
+        min-width: 150px !important;
+        max-width: 300px !important;
+    }
+    .personil-table th:nth-child(3), .personil-table td:nth-child(3) { /* NRP */
+        width: auto !important;
+        min-width: 80px !important;
+        max-width: 120px !important;
+    }
+    .personil-table th:nth-child(4), .personil-table td:nth-child(4) { /* Pangkat */
+        width: auto !important;
+        min-width: 60px !important;
+        max-width: 100px !important;
+    }
+    .personil-table th:nth-child(5), .personil-table td:nth-child(5) { /* Jabatan */
+        width: auto !important;
+        min-width: 120px !important;
+        max-width: 250px !important;
+    }
+    .personil-table th:nth-child(6), .personil-table td:nth-child(6) { /* Status */
+        width: auto !important;
+        min-width: 60px !important;
+        max-width: 80px !important;
+    }
+    .personil-table th:nth-child(7), .personil-table td:nth-child(7) { /* JK */
+        width: auto !important;
+        min-width: 40px !important;
+        max-width: 50px !important;
+    }
+    .personil-table th:nth-child(8), .personil-table td:nth-child(8) { /* Aksi */
+        width: auto !important;
+        min-width: 80px !important;
+        max-width: 100px !important;
+    }
+
+    /* Action icons styling */
+    .personil-table .text-primary {
+        color: #0d6efd !important;
+        text-decoration: none !important;
+        font-size: 14px;
+        transition: color 0.2s;
+    }
+
+    .personil-table .text-primary:hover {
+        color: #0b5ed7 !important;
+    }
+
+    .personil-table .text-danger {
+        color: #dc3545 !important;
+        text-decoration: none !important;
+        font-size: 14px;
+        transition: color 0.2s;
+    }
+
+    .personil-table .text-danger:hover {
+        color: #bb2d3b !important;
+    }
+
+    .personil-table th:nth-child(2), 
+    .personil-table td:nth-child(2),
+    .personil-table th:nth-child(3), 
+    .personil-table td:nth-child(3) {
+        white-space: normal !important;
+        word-wrap: break-word !important;
+    }
+
+    /* Responsive adjustments for all tables */
+    @media (max-width: 768px) {
+        .table th:nth-child(2), 
+        .table td:nth-child(2),
+        .table th:nth-child(3), 
+        .table td:nth-child(3),
+        .personil-table th:nth-child(2), 
+        .personil-table td:nth-child(2),
+        .personil-table th:nth-child(3), 
+        .personil-table td:nth-child(3) {
+            white-space: normal !important;
+            word-wrap: break-word !important;
+            max-width: 150px !important;
+        }
+    }
+    </style>
+
     <!-- jQuery (for compatibility) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Toastr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
     
     <script>
     // Suppress specific console warnings
@@ -270,21 +410,269 @@ $current_page = basename($_SERVER['PHP_SELF']);
         originalConsoleWarn.apply(console, args);
     };
     
-    // Initialize Bootstrap components
+    // Global dropdown data - accessible from any page
+    window.globalDropdownData = {
+        pangkat: [],
+        unsur: [],
+        bagian: [],
+        jabatan: [],
+        loaded: false,
+        loading: false
+    };
+    
+    // Global function to load dropdown data
+    window.loadGlobalDropdownData = function(callback) {
+        // Return immediately if already loaded
+        if (window.globalDropdownData.loaded) {
+            if (callback) callback(window.globalDropdownData);
+            return Promise.resolve(window.globalDropdownData);
+        }
+        
+        // Return immediately if currently loading
+        if (window.globalDropdownData.loading) {
+            if (callback) {
+                // Wait for loading to complete
+                const checkLoaded = setInterval(() => {
+                    if (window.globalDropdownData.loaded) {
+                        clearInterval(checkLoaded);
+                        callback(window.globalDropdownData);
+                    }
+                }, 100);
+            }
+            return Promise.resolve(window.globalDropdownData);
+        }
+        
+        // Start loading
+        window.globalDropdownData.loading = true;
+        
+        return fetch('<?php echo API_BASE_URL; ?>/personil_crud.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'action=get_dropdown_data'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.globalDropdownData.pangkat = data.data.pangkat;
+                window.globalDropdownData.unsur = data.data.unsur;
+                window.globalDropdownData.bagian = data.data.bagian;
+                window.globalDropdownData.jabatan = data.data.jabatan;
+                window.globalDropdownData.loaded = true;
+                window.globalDropdownData.loading = false;
+                
+                if (callback) callback(window.globalDropdownData);
+                return window.globalDropdownData;
+            } else {
+                throw new Error(data.message || 'Failed to load dropdown data');
+            }
+        })
+        .catch(error => {
+            console.error('Error loading global dropdown data:', error);
+            window.globalDropdownData.loading = false;
+            throw error;
+        });
+    };
+    
+    // Global utility functions for dropdowns
+    window.populateSelect = function(selectId, data, valueField, textField) {
+        const select = document.getElementById(selectId);
+        if (!select) return;
+        
+        select.innerHTML = '<option value="">-- Pilih --</option>';
+        data.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item[valueField] || item.id;
+            option.textContent = item[textField] || item.nama || item[valueField];
+            select.appendChild(option);
+        });
+    };
+    
+    window.filterByField = function(data, field, value) {
+        return data.filter(item => item[field] == value);
+    };
+    
+    // Consolidated DOMContentLoaded initialization
     document.addEventListener('DOMContentLoaded', function() {
-        // Check if Bootstrap is loaded
+        console.log('Initializing application...');
+        
+        // 1. Initialize dropdown data if needed
+        const currentPage = window.location.pathname.split('/').pop();
+        const pagesNeedingDropdown = ['personil.php', 'bagian.php', 'jabatan.php'];
+        const hasDropdownElements = document.querySelector('[data-need-dropdown]') !== null;
+        
+        if (pagesNeedingDropdown.includes(currentPage) || hasDropdownElements) {
+            console.log('Loading dropdown data for page:', currentPage);
+            window.loadGlobalDropdownData();
+        } else {
+            console.log('Skipping dropdown data load for page:', currentPage);
+        }
+        
+        // 2. Initialize global dropdown manager
+        if (window.GlobalDropdownManager) {
+            window.GlobalDropdownManager.init();
+        }
+        
+        // 3. Initialize Bootstrap components
         if (typeof bootstrap !== 'undefined') {
-            // Initialize dropdowns
-            const dropdownTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'));
-            dropdownTriggerList.map(function (dropdownTriggerEl) {
-                return new bootstrap.Dropdown(dropdownTriggerEl);
-            });
+            console.log('Bootstrap loaded, initializing components...');
             
-            // Initialize tooltips if any
+            // Initialize tooltips
             const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
             tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
+            
+            // Initialize dropdowns automatically using Bootstrap data API
+            // No need for manual initialization - Bootstrap handles it
+        }
+        
+        // 4. Initialize page-specific functionality
+        if (typeof initializePage === 'function') {
+            initializePage();
+        }
+        
+        console.log('Application initialization complete');
+    });
+    
+    // Global dropdown menu management
+    window.GlobalDropdownManager = {
+        initialized: false,
+        
+        init: function() {
+            if (this.initialized) return;
+            
+            // Initialize all dropdowns on page
+            this.initializeAllDropdowns();
+            
+            // Setup MutationObserver for dynamic content
+            this.setupMutationObserver();
+            
+            this.initialized = true;
+            console.log('Global dropdown manager initialized');
+        },
+        
+        initializeAllDropdowns: function() {
+            // Find all dropdown toggles
+            const dropdowns = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+            
+            dropdowns.forEach(function(dropdown) {
+                // Skip if already initialized
+                if (dropdown.getAttribute('data-dropdown-initialized')) return;
+                
+                try {
+                    // Initialize Bootstrap dropdown
+                    const dropdownInstance = new bootstrap.Dropdown(dropdown);
+                    
+                    // Mark as initialized
+                    dropdown.setAttribute('data-dropdown-initialized', 'true');
+                    
+                    // Add event listeners for better UX
+                    dropdown.addEventListener('show.bs.dropdown', function() {
+                        // Add loading state if needed
+                        const menu = dropdown.nextElementSibling;
+                        if (menu && menu.classList.contains('dropdown-menu')) {
+                            menu.style.minWidth = dropdown.offsetWidth + 'px';
+                        }
+                    });
+                    
+                    dropdown.addEventListener('shown.bs.dropdown', function() {
+                        // Focus first item if needed
+                        const menu = dropdown.nextElementSibling;
+                        if (menu) {
+                            const firstItem = menu.querySelector('.dropdown-item:not(.disabled)');
+                            if (firstItem) {
+                                firstItem.focus();
+                            }
+                        }
+                    });
+                    
+                } catch (error) {
+                    console.warn('Failed to initialize dropdown:', error);
+                }
+            });
+        },
+        
+        setupMutationObserver: function() {
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList') {
+                        // Check for new dropdowns
+                        mutation.addedNodes.forEach(function(node) {
+                            if (node.nodeType === 1) { // Element node
+                                const newDropdowns = node.querySelectorAll ? 
+                                    node.querySelectorAll('[data-bs-toggle="dropdown"]') : [];
+                                
+                                if (node.hasAttribute && node.hasAttribute('data-bs-toggle="dropdown"')) {
+                                    newDropdowns = [node];
+                                }
+                                
+                                // Initialize new dropdowns
+                                newDropdowns.forEach(function(dropdown) {
+                                    if (!dropdown.getAttribute('data-dropdown-initialized')) {
+                                        try {
+                                            new bootstrap.Dropdown(dropdown);
+                                            dropdown.setAttribute('data-dropdown-initialized', 'true');
+                                        } catch (error) {
+                                            console.warn('Failed to initialize new dropdown:', error);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+            
+            // Observe entire document for changes
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        },
+        
+        refresh: function() {
+            // Re-initialize all dropdowns
+            this.initializeAllDropdowns();
+        },
+        
+        destroy: function(dropdown) {
+            if (dropdown && dropdown.getAttribute('data-dropdown-initialized')) {
+                try {
+                    const instance = bootstrap.Dropdown.getInstance(dropdown);
+                    if (instance) {
+                        instance.dispose();
+                    }
+                    dropdown.removeAttribute('data-dropdown-initialized');
+                } catch (error) {
+                    console.warn('Failed to destroy dropdown:', error);
+                }
+            }
+        }
+    };
+    
+    // Auto-initialize global dropdown manager
+    document.addEventListener('DOMContentLoaded', function() {
+        window.GlobalDropdownManager.init();
+    });
+    
+    // Initialize Bootstrap components
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if Bootstrap is loaded
+        if (typeof bootstrap !== 'undefined') {
+            console.log('Bootstrap loaded, global dropdown manager active');
+            
+            // Initialize tooltips (keep this)
+            function initializeTooltips() {
+                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            }
+            
+            initializeTooltips();
+            
         } else {
             console.warn('Bootstrap not loaded, dropdowns may not work');
         }
@@ -310,6 +698,25 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <i class="fa-solid fa-gauge-high me-1"></i> Dashboard
                         </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['unsur.php', 'bagian.php', 'jabatan.php']) ? 'active' : ''; ?>" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-building me-1"></i> Bagian
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item <?php echo $current_page == 'unsur.php' ? 'active' : ''; ?>" href="<?php echo url('pages/unsur.php'); ?>">
+                                <i class="fa-solid fa-sitemap"></i> Manajemen Unsur
+                            </a></li>
+                            <li><a class="dropdown-item <?php echo $current_page == 'bagian.php' ? 'active' : ''; ?>" href="<?php echo url('pages/bagian.php'); ?>">
+                                <i class="fa-solid fa-gear"></i> Manajemen Bagian
+                            </a></li>
+                            <li><a class="dropdown-item <?php echo $current_page == 'jabatan.php' ? 'active' : ''; ?>" href="<?php echo url('pages/jabatan.php'); ?>">
+                                <i class="fa-solid fa-user-tie"></i> Manajemen Jabatan
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showStructure()">
+                                <i class="fa-solid fa-sitemap"></i> Struktur Organisasi
+                            </a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link <?php echo $current_page == 'personil.php' ? 'active' : ''; ?>" href="<?php echo url('pages/personil.php'); ?>">
                             <i class="fa-solid fa-users me-1"></i> Data Personil
@@ -321,26 +728,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fa-solid fa-building me-1"></i> Bagian
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?php echo url('pages/unsur.php'); ?>">
-                                <i class="fa-solid fa-sitemap"></i> Manajemen Unsur
-                            </a></li>
-                            <li><a class="dropdown-item" href="<?php echo url('pages/bagian.php'); ?>">
-                                <i class="fa-solid fa-gear"></i> Manajemen Bagian
-                            </a></li>
-                            <li><a class="dropdown-item" href="<?php echo url('pages/jabatan.php'); ?>">
-                                <i class="fa-solid fa-user-tie"></i> Manajemen Jabatan
-                            </a></li>
-                            <li><a class="dropdown-item" href="#" onclick="showStructure()">
-                                <i class="fa-solid fa-sitemap"></i> Struktur Organisasi
-                            </a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['export_personil.php', 'report_api.php']) ? 'active' : ''; ?>" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fa-solid fa-chart-bar me-1"></i> Laporan
                         </a>
                         <ul class="dropdown-menu">

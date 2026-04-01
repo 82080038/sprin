@@ -8,11 +8,27 @@ header('Content-Type: application/json; charset=UTF-8');
 
 require_once __DIR__ . '/../core/config.php';
 require_once __DIR__ . '/../core/Database.php';
+require_once __DIR__ . '/../core/SessionManager.php';
+require_once __DIR__ . '/../core/auth_helper.php';
+
+// Initialize session
+SessionManager::start();
 
 // Disable error display in production
 if (ENVIRONMENT !== 'development') {
     error_reporting(0);
     ini_set('display_errors', 0);
+}
+
+// Check authentication using AuthHelper
+if (!AuthHelper::validateSession()) {
+    http_response_code(401);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Unauthorized access',
+        'timestamp' => date('c')
+    ]);
+    exit;
 }
 
 try {

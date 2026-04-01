@@ -1,0 +1,70 @@
+{
+  "summary": {
+    "total": 9,
+    "passed": 7,
+    "failed": 2,
+    "passRate": "77.78%",
+    "timestamp": "2026-04-01T03:09:13.808Z"
+  },
+  "tests": [
+    {
+      "test": "Login",
+      "passed": true,
+      "details": "Login successful",
+      "timestamp": "2026-04-01T03:08:27.560Z"
+    },
+    {
+      "test": "Dashboard",
+      "passed": true,
+      "details": "Dashboard loaded successfully",
+      "timestamp": "2026-04-01T03:08:30.103Z"
+    },
+    {
+      "test": "Personil Management",
+      "passed": false,
+      "details": "Waiting failed: 10000ms exceeded",
+      "timestamp": "2026-04-01T03:08:45.271Z"
+    },
+    {
+      "test": "Calendar Dashboard",
+      "passed": false,
+      "details": "Waiting for selector `#calendar` failed",
+      "timestamp": "2026-04-01T03:09:05.129Z"
+    },
+    {
+      "test": "Responsive Design",
+      "passed": true,
+      "details": "Responsive design tested across devices",
+      "timestamp": "2026-04-01T03:09:08.654Z"
+    },
+    {
+      "test": "Personil API",
+      "passed": true,
+      "details": "Status: 200",
+      "timestamp": "2026-04-01T03:09:10.665Z"
+    },
+    {
+      "test": "Calendar API",
+      "passed": true,
+      "details": "Status: 200",
+      "timestamp": "2026-04-01T03:09:11.712Z"
+    },
+    {
+      "test": "Stats API",
+      "passed": true,
+      "details": "Status: 200",
+      "timestamp": "2026-04-01T03:09:12.760Z"
+    },
+    {
+      "test": "Search API",
+      "passed": true,
+      "details": "Status: 200",
+      "timestamp": "2026-04-01T03:09:13.807Z"
+    }
+  ],
+  "environment": {
+    "baseUrl": "http://localhost/sprint",
+    "browser": "Puppeteer",
+    "viewport": "1366x768"
+  }
+}

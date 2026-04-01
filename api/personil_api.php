@@ -1,9 +1,14 @@
 <?php
 session_start();
 require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/SessionManager.php';
+require_once __DIR__ . '/../core/auth_helper.php';
 
-// Check authentication
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+// Initialize session
+SessionManager::start();
+
+// Check authentication using AuthHelper
+if (!AuthHelper::validateSession()) {
     header('Location: ' . url('login.php'));
     exit;
 }

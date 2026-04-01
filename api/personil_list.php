@@ -16,6 +16,7 @@ require_once __DIR__ . '/../core/Database.php';
 if (ENVIRONMENT !== 'development') {
     error_reporting(0);
     ini_set('display_errors', 0);
+    ini_set('log_errors', 0); // Disable logging to prevent permission issues
 }
 
 try {
@@ -71,6 +72,7 @@ try {
             p.tanggal_lahir,
             pg.nama_pangkat,
             pg.singkatan as pangkat_singkatan,
+            pg.level_pangkat,
             j.nama_jabatan,
             b.id as bagian_id,
             b.nama_bagian,
@@ -78,7 +80,26 @@ try {
             u.nama_unsur,
             u.kode_unsur,
             u.urutan as unsur_urutan,
-            mjp.kategori as status_kepegawaian
+            mjp.kategori as status_kepegawaian,
+            -- Determine if POLRI (based on pangkat level or specific pangkat names)
+            CASE 
+                WHEN pg.singkatan IN ('AKBP', 'KOMPOL', 'AKP', 'IPTU', 'IPDA', 'AIPTU', 'AIPDA', 'BRIPKA', 'BRIGPOL', 'BRIPTU', 'BRIPDA', 'BRPDA') 
+                OR pg.nama_pangkat LIKE '%KOMISARIS%' 
+                OR pg.nama_pangkat LIKE '%INSPEKTUR%'
+                OR pg.nama_pangkat LIKE '%AJUDAN%'
+                OR pg.nama_pangkat LIKE '%BRIGADIR%'
+                OR pg.nama_pangkat LIKE '%BHARADA%'
+                OR pg.nama_pangkat LIKE '%BRIPTU%'
+                OR pg.nama_pangkat LIKE '%BRIPDA%'
+                THEN 1
+                ELSE 0
+            END as is_polri,
+            -- NRP sorting: 1900s first (no leading 0), then 2000s (leading 0)
+            CASE 
+                WHEN p.nrp REGEXP '^[1-9]' THEN 1  -- 1900s (no leading 0)
+                WHEN p.nrp REGEXP '^0' THEN 2        -- 2000s (leading 0)
+                ELSE 3
+            END as nrp_priority
         FROM personil p
         LEFT JOIN pangkat pg ON p.id_pangkat = pg.id
         LEFT JOIN jabatan j ON p.id_jabatan = j.id
@@ -89,7 +110,15 @@ try {
         ORDER BY 
             u.urutan ASC,
             b.nama_bagian ASC,
+            -- POLRI first, then non-POLRI
+            is_polri DESC,
+            -- Within each group: by pangkat rank (lower level = higher rank)
             CASE WHEN pg.level_pangkat IS NULL THEN 999999 ELSE pg.level_pangkat END ASC,
+            -- Within same pangkat: by NRP priority (1900s first, then 2000s)
+            nrp_priority ASC,
+            -- Within same NRP priority: by actual NRP
+            p.nrp ASC,
+            -- Finally by name
             p.nama ASC
     ";
     
@@ -97,33 +126,33 @@ try {
     $stmt->execute($params);
     $personil = $stmt->fetchAll();
     
-    // Group by unsur and bagian
+    // Group by bagian and unsur (correct hierarchy: Bagian -> Unsur -> Personil)
     $grouped_data = [];
     foreach ($personil as $p) {
-        $unsur_id = $p['unsur_id'] ?? 0;
-        $unsur_name = $p['nama_unsur'] ?: 'TANPA UNSUR';
         $bagian_id = $p['bagian_id'] ?? 0;
         $bagian_name = $p['nama_bagian'] ?: 'TANPA BAGIAN';
+        $unsur_id = $p['unsur_id'] ?? 0;
+        $unsur_name = $p['nama_unsur'] ?: 'TANPA UNSUR';
         
-        if (!isset($grouped_data[$unsur_id])) {
-            $grouped_data[$unsur_id] = [
+        if (!isset($grouped_data[$bagian_id])) {
+            $grouped_data[$bagian_id] = [
+                'id' => $bagian_id,
+                'nama_bagian' => $bagian_name,
+                'unsur' => []
+            ];
+        }
+        
+        if (!isset($grouped_data[$bagian_id]['unsur'][$unsur_id])) {
+            $grouped_data[$bagian_id]['unsur'][$unsur_id] = [
                 'id' => $unsur_id,
                 'nama_unsur' => $unsur_name,
                 'kode_unsur' => $p['kode_unsur'] ?? '',
                 'urutan' => $p['unsur_urutan'] ?? 999,
-                'bagian' => []
-            ];
-        }
-        
-        if (!isset($grouped_data[$unsur_id]['bagian'][$bagian_id])) {
-            $grouped_data[$unsur_id]['bagian'][$bagian_id] = [
-                'id' => $bagian_id,
-                'nama_bagian' => $bagian_name,
                 'personil' => []
             ];
         }
         
-        $grouped_data[$unsur_id]['bagian'][$bagian_id]['personil'][] = [
+        $grouped_data[$bagian_id]['unsur'][$unsur_id]['personil'][] = [
             'id' => $p['id'],
             'nama' => $p['nama'],
             'nrp' => $p['nrp'],
@@ -138,10 +167,17 @@ try {
         ];
     }
     
-    // Sort by unsur urutan
+    // Sort bagian by name, then sort unsur within each bagian by urutan
     uasort($grouped_data, function($a, $b) {
-        return $a['urutan'] <=> $b['urutan'];
+        return strcasecmp($a['nama_bagian'], $b['nama_bagian']);
     });
+    
+    // Sort unsur within each bagian by urutan
+    foreach ($grouped_data as $bagian_id => &$bagian) {
+        uasort($bagian['unsur'], function($a, $b) {
+            return ($a['urutan'] ?? 999) <=> ($b['urutan'] ?? 999);
+        });
+    }
     
     // Get statistics
     $stats = [

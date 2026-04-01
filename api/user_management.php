@@ -12,7 +12,11 @@ header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 
 require_once __DIR__ . '/../core/config.php';
 require_once __DIR__ . '/../core/Database.php';
+require_once __DIR__ . '/../core/SessionManager.php';
 require_once __DIR__ . '/../core/auth_helper.php';
+
+// Initialize session
+SessionManager::start();
 
 // Disable error display in production
 if (ENVIRONMENT !== 'development') {
@@ -20,8 +24,9 @@ if (ENVIRONMENT !== 'development') {
     ini_set('display_errors', 0);
 }
 
-// Check authentication
+// Check authentication using AuthHelper
 if (!AuthHelper::validateSession()) {
+    http_response_code(401);
     echo json_encode([
         'success' => false,
         'message' => 'Unauthorized access',

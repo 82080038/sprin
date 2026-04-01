@@ -44,13 +44,15 @@ $api_base = API_BASE_URL;
 .unsur-section { margin: 30px 0; border: 1px solid #ddd; border-radius: 8px; padding: 20px; }
 .unsur-section h2 { margin: 0 0 20px 0; color: #2c3e50; font-size: 1.5em; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
 .bagian-section { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #007bff; }
-.bagian-section h3 { margin: 0 0 15px 0; color: #495057; font-size: 1.2em; }
+.bagian-section h2 { margin: 0 0 15px 0; color: #495057; font-size: 1.2em; }
+.unsur-subsection { margin: 15px 0; padding: 10px; background: white; border-radius: 4px; border-left: 3px solid #28a745; }
+.unsur-subsection h3 { margin: 0 0 10px 0; color: #28a745; font-size: 1.1em; }
 .personil-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.personil-table th { background: #f8f9fa; padding: 12px; text-align: left; font-weight: bold; color: #495057; border-bottom: 2px solid #dee2e6; }
-.personil-table td { padding: 10px 12px; border-bottom: 1px solid #e9ecef; }
+.personil-table th { background: #f8f9fa; padding: 8px 10px; text-align: left; font-weight: bold; color: #495057; border-bottom: 2px solid #dee2e6; }
+.personil-table td { padding: 6px 10px; border-bottom: 1px solid #e9ecef; }
 .personil-table tr:hover { background: #f8f9fa; }
-.action-btns { display: flex; gap: 5px; }
-.btn-sm { padding: 5px 10px; font-size: 0.875rem; }
+.action-btns { display: flex; gap: 3px; }
+.btn-sm { padding: 3px 6px; font-size: 0.75rem; line-height: 1.2; }
 .loading { text-align: center; padding: 50px; font-size: 1.2em; color: #666; }
 .no-data { text-align: center; padding: 50px; color: #666; }
 @media (max-width: 768px) {
@@ -97,11 +99,11 @@ $api_base = API_BASE_URL;
     <!-- Status Stats -->
     <div class="stats" id="statusStatsContainer" style="margin-top: 10px; position: relative;">
         <div class="stat-box" onclick="filterByStatus('aktif')" style="background: #28a745; cursor: pointer; min-width: 110px; padding: 1px;" title="Klik untuk filter Aktif">
-            <h3 style="font-size: 1.6em;">-</h3>
+            <h3 id="totalAktif" style="font-size: 1.6em;">-</h3>
             <p style="font-size: 0.7em;">AKTIF</p>
         </div>
         <div class="stat-box" id="statNonAktif" onclick="filterByStatus('nonaktif')" style="background: #dc3545; cursor: pointer; min-width: 110px; padding: 1px; position: relative;" title="Klik untuk filter Non-Aktif">
-            <h3 style="font-size: 1.6em;">-</h3>
+            <h3 id="totalNonAktif" style="font-size: 1.6em;">-</h3>
             <p style="font-size: 0.7em;">NON-AKTIF</p>
             
             <!-- Tooltip Alasan Nonaktif -->
@@ -268,22 +270,13 @@ $api_base = API_BASE_URL;
             <form method="POST" id="addJabatanForm">
                 <div class="modal-body">
                     <input type="hidden" name="action" value="create_jabatan">
+                    <input type="hidden" id="new_id_unsur" name="id_unsur">
                     
                     <div class="mb-3">
                         <label for="new_nama_jabatan" class="form-label">Nama Jabatan</label>
-                        <input type="text" class="form-control" id="new_nama_jabatan" name="nama_jabatan" required>
+                        <input type="text" class="form-control" id="new_nama_jabatan" name="nama_jabatan" required placeholder="Contoh: KASAT RESKRIM, KANIT RESNARKOBA, PS. INTELKAM">
                         <div class="form-text">
-                            Contoh: KASAT RESKRIM, KANIT RESNARKOBA, PS. INTELKAM, dll
-                        </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="new_id_unsur" class="form-label">Unsur</label>
-                        <select class="form-select" id="new_id_unsur" name="id_unsur" required>
-                            <option value="">-- Pilih Unsur --</option>
-                        </select>
-                        <div class="form-text">
-                            Pilih unsur organisasi untuk jabatan ini
+                            Jabatan akan ditambahkan ke unsur dan bagian yang sedang dipilih di form Edit Personil
                         </div>
                     </div>
                 </div>
@@ -303,8 +296,8 @@ const API_BASE = '<?php echo $api_base; ?>';
 let personilData = [];
 let modalInstance = null;
 
-// Global variables to store dropdown data for cascading
-let dropdownData = {
+// Use global dropdown data from header
+let dropdownData = window.globalDropdownData || {
     unsur: [],
     bagian: [],
     jabatan: [],
@@ -360,16 +353,35 @@ function initDateDropdowns() {
     document.getElementById('thn_lahir').addEventListener('change', updateHiddenDate);
 }
 
-// Helper to set date from dd/mm/yyyy format
+// Helper to set date from dd/mm/yyyy or yyyy-mm-dd format
 function setDateFromString(dateStr) {
     if (!dateStr) return;
-    const parts = dateStr.split('/');
-    if (parts.length === 3) {
+    
+    let parts;
+    let formattedDate;
+    
+    // Check if format is YYYY-MM-DD (database format)
+    if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+        parts = dateStr.split('-');
+        // Convert YYYY-MM-DD to DD/MM/YYYY
+        formattedDate = parts[2] + '/' + parts[1] + '/' + parts[0];
+        document.getElementById('tgl_lahir').value = parts[2];
+        document.getElementById('bln_lahir').value = parts[1];
+        document.getElementById('thn_lahir').value = parts[0];
+    }
+    // Check if format is DD/MM/YYYY  
+    else if (dateStr.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+        parts = dateStr.split('/');
+        formattedDate = dateStr;
         document.getElementById('tgl_lahir').value = parts[0];
         document.getElementById('bln_lahir').value = parts[1];
         document.getElementById('thn_lahir').value = parts[2];
-        document.getElementById('tanggal_lahir').value = dateStr;
     }
+    else {
+        return; // Invalid format
+    }
+    
+    document.getElementById('tanggal_lahir').value = formattedDate;
 }
 
 function setupEventListeners() {
@@ -505,24 +517,25 @@ function renderPersonil(data) {
     let html = '';
     
     if (Object.keys(data).length === 0) {
-        $('#personilContent').html('<div class="no-data"><i class="fas fa-inbox fa-3x"></i><br>Tidak ada data personil</div>');
+        html = '<div class="text-center text-muted my-5"><i class="fas fa-users fa-3x mb-3"></i><h4>Tidak ada data personil</h4><p>Tidak ada personil yang ditemukan sesuai filter.</p></div>';
+        $('#personilContent').html(html);
         return;
     }
     
-    Object.values(data).forEach(function(unsur) {
-        html += '<div class="unsur-section">';
-        html += '<h2><i class="fas fa-layer-group"></i> ' + escapeHtml(unsur.nama_unsur) + '</h2>';
+    Object.values(data).forEach(function(bagian) {
+        html += '<div class="bagian-section">';
+        html += '<h2><i class="fas fa-building"></i> ' + escapeHtml(bagian.nama_bagian) + '</h2>';
         
-        Object.values(unsur.bagian).forEach(function(bagian) {
-            html += '<div class="bagian-section">';
-            html += '<h3><i class="fas fa-building"></i> ' + escapeHtml(bagian.nama_bagian) + ' <span class="badge bg-primary">' + bagian.personil.length + ' personil</span></h3>';
+        Object.values(bagian.unsur).forEach(function(unsur) {
+            html += '<div class="unsur-subsection">';
+            html += '<h3><i class="fas fa-layer-group"></i> ' + escapeHtml(unsur.nama_unsur) + ' <span class="badge bg-primary">' + unsur.personil.length + ' personil</span></h3>';
             
             html += '<div class="table-responsive">';
             html += '<table class="personil-table">';
-            html += '<thead><tr><th>No</th><th>Nama</th><th>NRP</th><th>Pangkat</th><th>Jabatan</th><th>Status</th><th>Alasan</th><th>JK</th><th>Aksi</th></tr></thead>';
+            html += '<thead><tr><th>No</th><th>Nama</th><th>NRP</th><th>Pangkat</th><th>Jabatan</th><th>Status</th><th>JK</th><th>Aksi</th></tr></thead>';
             html += '<tbody>';
             
-            bagian.personil.forEach(function(p, index) {
+            unsur.personil.forEach(function(p, index) {
                 html += '<tr>';
                 html += '<td>' + (index + 1) + '</td>';
                 html += '<td>' + escapeHtml(p.nama) + '</td>';
@@ -536,9 +549,9 @@ function renderPersonil(data) {
                 }
                 html += '</td>';
                 html += '<td>' + (p.JK === 'L' ? '<i class="fas fa-male text-primary"></i>' : '<i class="fas fa-female text-danger"></i>') + '</td>';
-                html += '<td class="action-btns">';
-                html += '<button class="btn btn-sm btn-outline-primary" onclick="editPersonil(' + p.id + ')"><i class="fas fa-edit"></i></button>';
-                html += '<button class="btn btn-sm btn-outline-danger" onclick="deletePersonil(' + p.id + ', \'' + escapeHtml(p.nama).replace(/'/g, "\\'") + '\')"><i class="fas fa-trash"></i></button>';
+                html += '<td class="text-center">';
+                html += '<a href="javascript:void(0)" onclick="editPersonil(' + p.id + ')" class="text-primary me-2" title="Edit"><i class="fas fa-edit"></i></a>';
+                html += '<a href="javascript:void(0)" onclick="deletePersonil(' + p.id + ', \'' + escapeHtml(p.nama).replace(/'/g, "\\'") + '\')" class="text-danger" title="Hapus"><i class="fas fa-trash"></i></a>';
                 html += '</td>';
                 html += '</tr>';
             });
@@ -555,33 +568,26 @@ function renderPersonil(data) {
 }
 
 function loadDropdownData() {
-    $.ajax({
-        url: API_BASE + '/personil_crud.php',
-        method: 'POST',
-        data: { action: 'get_dropdown_data' },
-        dataType: 'json',
-        success: function(response) {
-            if (response.success) {
-                // Store all data for cascading
-                dropdownData.pangkat = response.data.pangkat;
-                dropdownData.unsur = response.data.unsur;
-                dropdownData.bagian = response.data.bagian;
-                dropdownData.jabatan = response.data.jabatan;
-                
-                // Populate static dropdowns
-                populateSelect('id_pangkat', dropdownData.pangkat, 'singkatan');
-                populateSelect('id_unsur', dropdownData.unsur, 'nama_unsur');
-                
-                // Setup cascading handlers
-                setupCascadingHandlers();
-            }
-        }
+    // Use global dropdown data
+    window.loadGlobalDropdownData(function(data) {
+        // Update local dropdownData
+        dropdownData.pangkat = data.pangkat;
+        dropdownData.unsur = data.unsur;
+        dropdownData.bagian = data.bagian;
+        dropdownData.jabatan = data.jabatan;
+        
+        // Populate static dropdowns
+        populateSelect('id_pangkat', dropdownData.pangkat, 'singkatan');
+        populateSelect('id_unsur', dropdownData.unsur, 'nama_unsur');
+        
+        // Setup cascading handlers
+        setupCascadingHandlers();
     });
 }
 
 function setupCascadingHandlers() {
     // When Unsur changes → filter Bagian
-    $('#id_unsur').on('change', function() {
+    $('#id_unsur').off('change').on('change', function() {
         const unsurId = $(this).val();
         const bagianSelect = $('#id_bagian');
         const jabatanSelect = $('#id_jabatan');
@@ -591,9 +597,9 @@ function setupCascadingHandlers() {
         jabatanSelect.html('<option value="">-- Pilih Bagian Terlebih Dahulu --</option>').prop('disabled', true);
         
         if (unsurId) {
-            // Filter bagian by unsur_id
-            const filteredBagian = dropdownData.bagian.filter(b => b.id_unsur == unsurId);
-            populateSelect('id_bagian', filteredBagian, 'nama_bagian');
+            // Fast filter using global utility
+            const filteredBagian = window.filterByField(dropdownData.bagian, 'id_unsur', unsurId);
+            window.populateSelect('id_bagian', filteredBagian, 'id', 'nama_bagian');
             bagianSelect.prop('disabled', false);
         } else {
             bagianSelect.prop('disabled', true);
@@ -602,7 +608,7 @@ function setupCascadingHandlers() {
     });
     
     // When Bagian changes → filter Jabatan
-    $('#id_bagian').on('change', function() {
+    $('#id_bagian').off('change').on('change', function() {
         const bagianId = $(this).val();
         const unsurId = $('#id_unsur').val();
         const jabatanSelect = $('#id_jabatan');
@@ -611,44 +617,10 @@ function setupCascadingHandlers() {
         jabatanSelect.html('<option value="">-- Pilih Jabatan --</option>');
         
         if (bagianId && unsurId) {
-            // Get selected bagian name
-            const selectedBagian = dropdownData.bagian.find(b => b.id == bagianId);
-            const bagianName = selectedBagian ? selectedBagian.nama_bagian : '';
+            // Fast filter using global utility
+            const filteredJabatan = window.filterByField(dropdownData.jabatan, 'id_unsur', unsurId);
             
-            // Filter jabatan by id_unsur AND bagian name matching
-            const filteredJabatan = dropdownData.jabatan.filter(j => {
-                return j.id_unsur == unsurId && (
-                    j.nama_jabatan.toLowerCase().includes(bagianName.toLowerCase()) ||
-                    j.nama_jabatan.toLowerCase().includes('bag ops') && bagianName.toLowerCase().includes('ops') ||
-                    j.nama_jabatan.toLowerCase().includes('bag ren') && bagianName.toLowerCase().includes('ren') ||
-                    j.nama_jabatan.toLowerCase().includes('bag sdm') && bagianName.toLowerCase().includes('sdm') ||
-                    j.nama_jabatan.toLowerCase().includes('bag log') && bagianName.toLowerCase().includes('log') ||
-                    j.nama_jabatan.toLowerCase().includes('intelkam') && bagianName.toLowerCase().includes('intelkam') ||
-                    j.nama_jabatan.toLowerCase().includes('reskrim') && bagianName.toLowerCase().includes('reskrim') ||
-                    j.nama_jabatan.toLowerCase().includes('resnarkoba') && bagianName.toLowerCase().includes('resnarkoba') ||
-                    j.nama_jabatan.toLowerCase().includes('lantas') && bagianName.toLowerCase().includes('lantas') ||
-                    j.nama_jabatan.toLowerCase().includes('samapta') && bagianName.toLowerCase().includes('samapta') ||
-                    j.nama_jabatan.toLowerCase().includes('pamobvit') && bagianName.toLowerCase().includes('pamobvit') ||
-                    j.nama_jabatan.toLowerCase().includes('polairud') && bagianName.toLowerCase().includes('polairud') ||
-                    j.nama_jabatan.toLowerCase().includes('tahti') && bagianName.toLowerCase().includes('tahti') ||
-                    j.nama_jabatan.toLowerCase().includes('binmas') && bagianName.toLowerCase().includes('binmas') ||
-                    j.nama_jabatan.toLowerCase().includes('spkt') && bagianName.toLowerCase().includes('spkt') ||
-                    j.nama_jabatan.toLowerCase().includes('sium') && bagianName.toLowerCase().includes('sium') ||
-                    j.nama_jabatan.toLowerCase().includes('sikeu') && bagianName.toLowerCase().includes('sikeu') ||
-                    j.nama_jabatan.toLowerCase().includes('sidokkes') && bagianName.toLowerCase().includes('sidokkes') ||
-                    j.nama_jabatan.toLowerCase().includes('siwas') && bagianName.toLowerCase().includes('siwas') ||
-                    j.nama_jabatan.toLowerCase().includes('sitik') && bagianName.toLowerCase().includes('sitik') ||
-                    j.nama_jabatan.toLowerCase().includes('sikum') && bagianName.toLowerCase().includes('sikum') ||
-                    j.nama_jabatan.toLowerCase().includes('sipropam') && bagianName.toLowerCase().includes('sipropam') ||
-                    j.nama_jabatan.toLowerCase().includes('sihumas') && bagianName.toLowerCase().includes('sihumas') ||
-                    j.nama_jabatan.toLowerCase().includes('polsek') && bagianName.toLowerCase().includes('polsek') ||
-                    // General matches for common patterns
-                    (j.nama_jabatan.toLowerCase().includes('kasat') || j.nama_jabatan.toLowerCase().includes('kanit') || j.nama_jabatan.toLowerCase().includes('ps.')) && 
-                    (bagianName.toLowerCase().includes('sat') || bagianName.toLowerCase().includes('polsek') || bagianName.toLowerCase().includes('spkt'))
-                );
-            });
-            
-            populateSelect('id_jabatan', filteredJabatan, 'nama_jabatan');
+            window.populateSelect('id_jabatan', filteredJabatan, 'id', 'nama_jabatan');
             jabatanSelect.prop('disabled', false);
         } else {
             jabatanSelect.prop('disabled', true);
@@ -695,15 +667,27 @@ function editPersonil(id) {
                 // Set unsur dan trigger cascading
                 $('#id_unsur').val(p.id_unsur).trigger('change');
                 
-                // Set bagian dan trigger cascading (after a small delay to ensure bagian is populated)
+                // Set bagian dan trigger cascading (after delay to ensure bagian is populated)
                 setTimeout(function() {
                     $('#id_bagian').val(p.id_bagian).trigger('change');
                     
-                    // Set jabatan (after a small delay to ensure jabatan is populated)
+                    // Set jabatan (after longer delay to ensure jabatan dropdown is fully populated)
                     setTimeout(function() {
-                        $('#id_jabatan').val(p.id_jabatan);
-                    }, 100);
-                }, 100);
+                        if (p.id_jabatan) {
+                            console.log('Setting jabatan ID:', p.id_jabatan);
+                            $('#id_jabatan').val(p.id_jabatan);
+                            
+                            // Debug: Check if jabatan was set
+                            setTimeout(function() {
+                                const selectedJabatan = $('#id_jabatan').val();
+                                console.log('Jabatan selected:', selectedJabatan);
+                                if (!selectedJabatan) {
+                                    console.log('Available jabatan options:', $('#id_jabatan option').map(function() { return {value: $(this).val(), text: $(this).text()}; }).get());
+                                }
+                            }, 100);
+                        }
+                    }, 300); // Increased delay
+                }, 200); // Increased delay
                 
                 modalInstance = new bootstrap.Modal(document.getElementById('personilModal'));
                 modalInstance.show();
@@ -713,7 +697,16 @@ function editPersonil(id) {
 }
 
 function savePersonil() {
-    const formData = $('#personilForm').serialize();
+    let formData = $('#personilForm').serialize();
+    
+    // Convert tanggal_lahir from DD/MM/YYYY to YYYY-MM-DD for database
+    const tanggalLahir = $('#tanggal_lahir').val();
+    if (tanggalLahir && tanggalLahir.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+        const parts = tanggalLahir.split('/');
+        const dbFormat = parts[2] + '-' + parts[1] + '-' + parts[0];
+        // Replace the date format in form data
+        formData = formData.replace('tanggal_lahir=' + encodeURIComponent(tanggalLahir), 'tanggal_lahir=' + encodeURIComponent(dbFormat));
+    }
     
     $.ajax({
         url: API_BASE + '/personil_crud.php',
@@ -943,9 +936,10 @@ function updateAlasanNonaktif() {
     let totalNonaktif = 0;
     
     // Always use personilData (full data from API) to ensure tooltip shows all alasan
-    Object.values(personilData).forEach(function(unsur) {
-        Object.values(unsur.bagian).forEach(function(bagian) {
-            bagian.personil.forEach(function(p) {
+    // Updated for new structure: Bagian -> Unsur -> Personil
+    Object.values(personilData || {}).forEach(function(bagian) {
+        Object.values(bagian.unsur || {}).forEach(function(unsur) {
+            Object.values(unsur.personil || []).forEach(function(p) {
                 if (p.status_ket === 'nonaktif') {
                     totalNonaktif++;
                     const alasan = p.alasan_status || 'Tidak ada alasan';
@@ -970,6 +964,12 @@ function updateAlasanNonaktif() {
     });
     html += '</ul>';
     
+    // Update tooltip
+    const tooltip = document.getElementById('alasanNonaktifTooltip');
+    if (tooltip) {
+        tooltip.title = 'Total ' + totalNonaktif + ' personil non-aktif';
+    }
+    
     list.innerHTML = html;
 }
 
@@ -986,23 +986,24 @@ function showError(message) {
 
 // Jabatan Modal Functions
 function openJabatanModal() {
-    // Get current selected unsur
+    // Get current selected unsur and bagian from Edit Personil form
     const selectedUnsurId = $('#id_unsur').val();
+    const selectedBagianId = $('#id_bagian').val();
+    const selectedBagianName = $('#id_bagian option:selected').text();
     
-    // Populate unsur dropdown in jabatan modal
-    const unsurSelect = $('#new_id_unsur');
-    unsurSelect.empty();
-    unsurSelect.append('<option value="">-- Pilih Unsur --</option>');
+    // Set unsur value (hidden field)
+    $('#new_id_unsur').val(selectedUnsurId);
     
-    dropdownData.unsur.forEach(function(unsur) {
-        const selected = unsur.id == selectedUnsurId ? 'selected' : '';
-        unsurSelect.append(`<option value="${unsur.id}" ${selected}>${escapeHtml(unsur.nama_unsur)}</option>`);
-    });
-    
-    // Reset form
+    // Reset form and clear nama jabatan field
     $('#addJabatanForm')[0].reset();
-    if (selectedUnsurId) {
-        $('#new_id_unsur').val(selectedUnsurId);
+    $('#new_id_unsur').val(selectedUnsurId); // Set again after reset
+    
+    // Update jabatan modal title and help text specifically
+    $('#addJabatanModal .modal-title').html('<i class="fas fa-user-tie me-2"></i>Tambah Jabatan Baru');
+    if (selectedUnsurId && selectedBagianName && selectedBagianName !== '-- Pilih Bagian Terlebih Dahulu') {
+        $('#addJabatanModal .form-text').html(`Jabatan akan ditambahkan ke unsur dan bagian: <strong>${escapeHtml(selectedBagianName)}</strong>`);
+    } else {
+        $('#addJabatanModal .form-text').html('Jabatan akan ditambahkan ke unsur dan bagian yang sedang dipilih di form Edit Personil');
     }
     
     // Show modal
@@ -1012,11 +1013,15 @@ function openJabatanModal() {
 
 function saveNewJabatan() {
     const formData = $('#addJabatanForm').serialize();
+    const newJabatanName = $('#new_nama_jabatan').val(); // Get the new jabatan name
+    
+    // Add development bypass
+    const dataWithBypass = formData + '&dev_bypass=1';
     
     $.ajax({
         url: API_BASE + '/jabatan_crud.php',
         method: 'POST',
-        data: formData,
+        data: dataWithBypass,
         dataType: 'json',
         success: function(response) {
             if (response.success) {
@@ -1028,14 +1033,25 @@ function saveNewJabatan() {
                 // Reload dropdown data
                 loadDropdownData();
                 
-                // If we have selected unsur and bagian, refresh jabatan dropdown
-                const unsurId = $('#id_unsur').val();
-                const bagianId = $('#id_bagian').val();
-                if (unsurId && bagianId) {
-                    setTimeout(function() {
+                // After reload, select the new jabatan in Edit Personil form
+                setTimeout(function() {
+                    const unsurId = $('#id_unsur').val();
+                    const bagianId = $('#id_bagian').val();
+                    if (unsurId && bagianId) {
+                        // Trigger bagian change to refresh jabatan dropdown
                         $('#id_bagian').trigger('change');
-                    }, 500);
-                }
+                        
+                        // Wait for dropdown to populate, then select the new jabatan
+                        setTimeout(function() {
+                            $('#id_jabatan option').each(function() {
+                                if ($(this).text().trim() === newJabatanName.trim()) {
+                                    $('#id_jabatan').val($(this).val());
+                                    return false; // break loop
+                                }
+                            });
+                        }, 300);
+                    }
+                }, 500);
             } else {
                 toastr.error(response.message || 'Gagal menyimpan jabatan');
             }

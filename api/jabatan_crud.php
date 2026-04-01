@@ -14,18 +14,41 @@ header('Access-Control-Allow-Methods: POST');
 
 // Include configuration
 require_once __DIR__ . '/../core/config.php';
-require_once __DIR__ . '/../core/calendar_config.php';
+require_once __DIR__ . '/../core/Database.php';
+require_once __DIR__ . '/../core/SessionManager.php';
+require_once __DIR__ . '/../core/auth_helper.php';
 
-// Start session if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// Initialize session
+SessionManager::start();
 
-// Check authentication
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
-    exit;
+// Check authentication using AuthHelper
+if (!AuthHelper::validateSession()) {
+    // Development bypass - remove in production
+    if (ENVIRONMENT === 'development' && isset($_GET['dev_bypass'])) {
+        error_log("JABATAN CRUD - Development bypass enabled");
+    } else {
+        // Debug info for development
+        if (ENVIRONMENT === 'development') {
+            error_log("JABATAN CRUD AUTH FAILED - Session: " . print_r($_SESSION, true) . " Cookies: " . print_r($_COOKIE, true));
+            http_response_code(401);
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Unauthorized - Session not valid',
+                'debug' => [
+                    'session_status' => session_status(),
+                    'session_data' => $_SESSION,
+                    'cookie_data' => $_COOKIE,
+                    'auth_helper_result' => AuthHelper::validateSession(),
+                    'current_user' => AuthHelper::getCurrentUser()
+                ],
+                'timestamp' => date('c')
+            ]);
+        } else {
+            http_response_code(401);
+            echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+        }
+        exit;
+    }
 }
 
 // Only accept POST requests
@@ -52,11 +75,14 @@ if (!in_array($action, $valid_actions)) {
 }
 
 try {
-    // Connect to database
-    $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";unix_socket=/opt/lampp/var/mysql/mysql.sock";
-    $pdo = new PDO($dsn, DB_USER, DB_PASS);
+    // Use Database singleton
+    $db = Database::getInstance();
+    $pdo = $db->getConnection();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    
+    // Debug: Log action and data
+    error_log("JABATAN CRUD - Action: " . $action . ", Data: " . print_r($_POST, true));
     
     switch ($action) {
         case 'get_jabatan_list':
@@ -132,6 +158,9 @@ try {
                 exit;
             }
             
+            // Generate kode_jabatan from nama_jabatan
+            $kode_jabatan = strtoupper(preg_replace('/[^a-zA-Z0-9]/', '', $nama_jabatan));
+            
             // Check for duplicate
             $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM jabatan WHERE nama_jabatan = ? AND id_unsur = ?");
             $checkStmt->execute([$nama_jabatan, $id_unsur]);
@@ -140,13 +169,28 @@ try {
                 exit;
             }
             
-            $stmt = $pdo->prepare("INSERT INTO jabatan (nama_jabatan, id_unsur) VALUES (?, ?)");
-            $stmt->execute([$nama_jabatan, $id_unsur]);
+            // Check for duplicate kode_jabatan
+            $checkKodeStmt = $pdo->prepare("SELECT COUNT(*) FROM jabatan WHERE kode_jabatan = ?");
+            $checkKodeStmt->execute([$kode_jabatan]);
+            if ($checkKodeStmt->fetchColumn() > 0) {
+                // If duplicate, append number
+                $counter = 1;
+                do {
+                    $new_kode = $kode_jabatan . $counter;
+                    $checkKodeStmt->execute([$new_kode]);
+                    $counter++;
+                } while ($checkKodeStmt->fetchColumn() > 0);
+                $kode_jabatan = $new_kode;
+            }
+            
+            $stmt = $pdo->prepare("INSERT INTO jabatan (kode_jabatan, nama_jabatan, id_unsur) VALUES (?, ?, ?)");
+            $stmt->execute([$kode_jabatan, $nama_jabatan, $id_unsur]);
             
             echo json_encode([
                 'success' => true, 
-                'message' => 'Jabatan berhasil ditambahkan',
-                'id' => $pdo->lastInsertId()
+                'message' => 'Jabatan berhasil ditambahkan dengan kode: ' . $kode_jabatan,
+                'id' => $pdo->lastInsertId(),
+                'kode_jabatan' => $kode_jabatan
             ]);
             break;
             

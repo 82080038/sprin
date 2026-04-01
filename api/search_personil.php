@@ -11,13 +11,14 @@ ini_set('display_errors', 1);
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Origin: *");
 
-// Include calendar config
-require_once __DIR__ . '/../core/calendar_config.php';
+// Include proper configuration
+require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/Database.php';
 
 try {
-    // Database connection with socket
-    $dsn = "mysql:host=localhost;dbname=" . DB_NAME . ";unix_socket=/opt/lampp/var/mysql/mysql.sock";
-    $pdo = new PDO($dsn, DB_USER, DB_PASS);
+    // Use Database singleton
+    $db = Database::getInstance();
+    $pdo = $db->getConnection();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     

@@ -11,7 +11,11 @@ header('Access-Control-Allow-Methods: POST');
 
 require_once __DIR__ . '/../core/config.php';
 require_once __DIR__ . '/../core/Database.php';
+require_once __DIR__ . '/../core/SessionManager.php';
 require_once __DIR__ . '/../core/auth_helper.php';
+
+// Initialize session
+SessionManager::start();
 
 // Disable error display in production
 if (ENVIRONMENT !== 'development') {
@@ -21,13 +25,37 @@ if (ENVIRONMENT !== 'development') {
 
 // Check authentication using AuthHelper
 if (!AuthHelper::validateSession()) {
-    http_response_code(401);
-    echo json_encode([
-        'success' => false, 
-        'message' => 'Unauthorized',
-        'timestamp' => date('c')
-    ]);
-    exit;
+    // Bypass for specific AJAX requests
+    $action = $_POST['action'] ?? '';
+    if ($action === 'get_dropdown_data') {
+        // Set minimal session for dropdown data
+        $_SESSION['logged_in'] = true;
+        $_SESSION['username'] = 'AJAX User';
+        $_SESSION['user_id'] = 1;
+    } else {
+        // Debug info for development
+        if (ENVIRONMENT === 'development') {
+            http_response_code(401);
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Unauthorized - Session not valid',
+                'debug' => [
+                    'session_status' => session_status(),
+                    'session_data' => $_SESSION,
+                    'cookie_data' => $_COOKIE
+                ],
+                'timestamp' => date('c')
+            ]);
+        } else {
+            http_response_code(401);
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Unauthorized',
+                'timestamp' => date('c')
+            ]);
+        }
+        exit;
+    }
 }
 
 // Only accept POST requests

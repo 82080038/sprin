@@ -12,9 +12,19 @@ class SprinTestSuite {
     async setup() {
         console.log('🚀 Starting SPRIN Test Suite...');
         this.browser = await puppeteer.launch({
-            headless: false,
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
-            defaultViewport: { width: 1366, height: 768 }
+            headless: true,
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-accelerated-2d-canvas',
+                '--no-first-run',
+                '--no-zygote',
+                '--single-process',
+                '--disable-gpu'
+            ],
+            defaultViewport: { width: 1366, height: 768 },
+            timeout: 60000
         });
         this.page = await this.browser.newPage();
 
