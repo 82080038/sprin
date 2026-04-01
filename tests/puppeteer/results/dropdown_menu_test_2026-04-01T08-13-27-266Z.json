@@ -1,0 +1,175 @@
+{
+  "timestamp": "2026-04-01T08:13:27.266Z",
+  "testType": "Dropdown Navigation Menu Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Dropdown Elements Exist",
+      "status": "PASS",
+      "data": [
+        {
+          "index": 0,
+          "text": "Bagian",
+          "hasDropdownToggle": true,
+          "hasDropdownMenu": true,
+          "menuItems": 4
+        },
+        {
+          "index": 1,
+          "text": "Laporan",
+          "hasDropdownToggle": true,
+          "hasDropdownMenu": true,
+          "menuItems": 4
+        },
+        {
+          "index": 2,
+          "text": "Pengaturan",
+          "hasDropdownToggle": true,
+          "hasDropdownMenu": true,
+          "menuItems": 3
+        }
+      ]
+    },
+    {
+      "test": "Bootstrap Dropdown Available",
+      "status": "PASS",
+      "data": {
+        "bootstrapLoaded": true,
+        "dropdownAvailable": true,
+        "totalDropdowns": 3,
+        "dropdownInstances": [
+          {
+            "index": 0,
+            "text": "Bagian",
+            "hasInstance": false
+          },
+          {
+            "index": 1,
+            "text": "Laporan",
+            "hasInstance": false
+          },
+          {
+            "index": 2,
+            "text": "Pengaturan",
+            "hasInstance": false
+          }
+        ]
+      }
+    },
+    {
+      "test": "Dropdown Click - Bagian",
+      "status": "PASS",
+      "data": {
+        "visible": true,
+        "itemCount": 4,
+        "menuItems": [
+          {
+            "text": "Manajemen Unsur",
+            "href": "http://localhost/sprint/pages/unsur.php"
+          },
+          {
+            "text": "Manajemen Bagian",
+            "href": "http://localhost/sprint/pages/bagian.php"
+          },
+          {
+            "text": "Manajemen Jabatan",
+            "href": "http://localhost/sprint/pages/jabatan.php"
+          },
+          {
+            "text": "Struktur Organisasi",
+            "href": "#"
+          }
+        ]
+      }
+    },
+    {
+      "test": "Dropdown Click - Laporan",
+      "status": "PASS",
+      "data": {
+        "visible": true,
+        "itemCount": 4,
+        "menuItems": [
+          {
+            "text": "Export PDF",
+            "href": "#"
+          },
+          {
+            "text": "Export Excel",
+            "href": "#"
+          },
+          {
+            "text": "Cetak Laporan",
+            "href": "#"
+          },
+          {
+            "text": "Statistik",
+            "href": "#"
+          }
+        ]
+      }
+    },
+    {
+      "test": "Dropdown Click - Pengaturan",
+      "status": "PASS",
+      "data": {
+        "visible": true,
+        "itemCount": 3,
+        "menuItems": [
+          {
+            "text": "Manajemen User",
+            "href": "http://localhost/sprint/pages/user_management.php"
+          },
+          {
+            "text": "Manajemen Backup",
+            "href": "http://localhost/sprint/pages/backup_management.php"
+          },
+          {
+            "text": "Pengaturan Sistem",
+            "href": "#"
+          }
+        ]
+      }
+    },
+    {
+      "test": "Dropdown Navigation",
+      "status": "FAIL",
+      "error": "Unknown error"
+    },
+    {
+      "test": "Responsive Dropdown - Desktop",
+      "status": "PASS",
+      "data": {
+        "navbarVisible": true,
+        "dropdownCount": 3,
+        "togglerVisible": true,
+        "navbarCollapsed": false
+      }
+    },
+    {
+      "test": "Responsive Dropdown - Tablet",
+      "status": "PASS",
+      "data": {
+        "navbarVisible": true,
+        "dropdownCount": 3,
+        "togglerVisible": true,
+        "navbarCollapsed": false
+      }
+    },
+    {
+      "test": "Responsive Dropdown - Mobile",
+      "status": "PASS",
+      "data": {
+        "navbarVisible": true,
+        "dropdownCount": 3,
+        "togglerVisible": true,
+        "navbarCollapsed": false
+      }
+    }
+  ],
+  "summary": {
+    "total": 9,
+    "passed": 8,
+    "failed": 1,
+    "warnings": 0
+  }
+}

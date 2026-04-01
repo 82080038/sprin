@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-04-01T08:20:12.480Z",
+  "testType": "Bagian Drag & Drop Functionality Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "SortableJS Library",
+      "status": "PASS",
+      "data": {
+        "sortableLoaded": true,
+        "jQueryLoaded": false,
+        "bootstrapLoaded": true
+      }
+    },
+    {
+      "test": "Drag-Drop Elements",
+      "status": "PASS",
+      "data": {
+        "unsurCardsCount": 6,
+        "sortableContainersCount": 6,
+        "bagianItemsCount": 29,
+        "hasSortableClass": true,
+        "hasDraggableItems": true
+      }
+    },
+    {
+      "test": "Sortable Initialization",
+      "status": "WARNING",
+      "data": {
+        "totalContainers": 6,
+        "initializedContainers": 0,
+        "sortableInstances": 0
+      }
+    },
+    {
+      "test": "Drag Interaction",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "itemId": null,
+        "itemText": "PIMPINAN\n                                    \n                                        PIMPINAN\n                                        ID: 1",
+        "totalItems": 29
+      }
+    },
+    {
+      "test": "Move Bagian API",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "status": 200,
+        "data": {
+          "success": true,
+          "message": "Bagian berhasil dipindahkan!"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 4,
+    "failed": 0,
+    "warnings": 1
+  }
+}

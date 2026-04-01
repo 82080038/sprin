@@ -351,10 +351,46 @@ h2, h3, h4, h5, h6 {
     padding: 12px 15px;
 }
 
-/* Mobile Modals */
+/* Mobile Modals - Override untuk konsistensi */
 .modal-dialog {
     margin: 10px;
     max-width: calc(100% - 20px);
+}
+
+/* Override untuk modal-sm */
+.modal-dialog.modal-sm {
+    max-width: 300px !important;
+    margin: 1.75rem auto !important;
+}
+
+/* Override untuk modal-md */
+.modal-dialog.modal-md {
+    max-width: 500px !important;
+    margin: 1.75rem auto !important;
+}
+
+/* Override untuk modal-lg */
+.modal-dialog.modal-lg {
+    max-width: 800px !important;
+    margin: 1.75rem auto !important;
+}
+
+/* Responsive untuk modal-sm */
+@media (max-width: 576px) {
+    .modal-dialog.modal-sm {
+        max-width: 280px !important;
+        margin: 0.5rem auto !important;
+    }
+    
+    .modal-dialog.modal-md {
+        max-width: 450px !important;
+        margin: 0.5rem auto !important;
+    }
+    
+    .modal-dialog.modal-lg {
+        max-width: 95% !important;
+        margin: 0.5rem auto !important;
+    }
 }
 
 .modal-content {

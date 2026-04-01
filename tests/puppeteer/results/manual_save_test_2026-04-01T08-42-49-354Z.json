@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-04-01T08:42:49.354Z",
+  "testType": "Manual Save Button Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Manual Trigger Changes",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "saveButtonVisible": true,
+        "cancelButtonVisible": true,
+        "changesCount": 1
+      }
+    },
+    {
+      "test": "Manual Save",
+      "status": "FAIL",
+      "error": "this.page.waitForTimeout is not a function"
+    }
+  ],
+  "summary": {
+    "total": 2,
+    "passed": 1,
+    "failed": 1,
+    "warnings": 0
+  }
+}

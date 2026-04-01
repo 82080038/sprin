@@ -1,0 +1,309 @@
+{
+  "timestamp": "2026-04-01T08:41:45.718Z",
+  "testType": "Complete Bagian Drag-Drop Persistence Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Current State Capture",
+      "status": "PASS",
+      "data": [
+        {
+          "unsurIndex": 0,
+          "unsurName": "UNSUR PIMPINAN",
+          "totalBagians": 1,
+          "bagians": [
+            {
+              "position": 0,
+              "id": "1",
+              "name": "PIMPINAN",
+              "urutan": "1",
+              "unsurId": "1"
+            }
+          ]
+        },
+        {
+          "unsurIndex": 1,
+          "unsurName": "UNSUR PEMBANTU PIMPINAN",
+          "totalBagians": 4,
+          "bagians": [
+            {
+              "position": 0,
+              "id": "5",
+              "name": "BAG LOG",
+              "urutan": "2",
+              "unsurId": "2"
+            },
+            {
+              "position": 1,
+              "id": "2",
+              "name": "BAG OPS",
+              "urutan": "3",
+              "unsurId": "2"
+            },
+            {
+              "position": 2,
+              "id": "3",
+              "name": "BAG REN",
+              "urutan": "4",
+              "unsurId": "2"
+            },
+            {
+              "position": 3,
+              "id": "4",
+              "name": "BAG SDM",
+              "urutan": "5",
+              "unsurId": "2"
+            }
+          ]
+        },
+        {
+          "unsurIndex": 2,
+          "unsurName": "UNSUR PELAKSANA TUGAS POKOK",
+          "totalBagians": 10,
+          "bagians": [
+            {
+              "position": 0,
+              "id": "14",
+              "name": "SAT BINMAS",
+              "urutan": "6",
+              "unsurId": "3"
+            },
+            {
+              "position": 1,
+              "id": "6",
+              "name": "SAT INTELKAM",
+              "urutan": "7",
+              "unsurId": "3"
+            },
+            {
+              "position": 2,
+              "id": "9",
+              "name": "SAT LANTAS",
+              "urutan": "8",
+              "unsurId": "3"
+            },
+            {
+              "position": 3,
+              "id": "11",
+              "name": "SAT PAMOBVIT",
+              "urutan": "9",
+              "unsurId": "3"
+            },
+            {
+              "position": 4,
+              "id": "12",
+              "name": "SAT POLAIRUD",
+              "urutan": "10",
+              "unsurId": "3"
+            },
+            {
+              "position": 5,
+              "id": "7",
+              "name": "SAT RESKRIM",
+              "urutan": "11",
+              "unsurId": "3"
+            },
+            {
+              "position": 6,
+              "id": "8",
+              "name": "SAT RESNARKOBA",
+              "urutan": "12",
+              "unsurId": "3"
+            },
+            {
+              "position": 7,
+              "id": "10",
+              "name": "SAT SAMAPTA",
+              "urutan": "13",
+              "unsurId": "3"
+            },
+            {
+              "position": 8,
+              "id": "13",
+              "name": "SAT TAHTI",
+              "urutan": "14",
+              "unsurId": "3"
+            },
+            {
+              "position": 9,
+              "id": "20",
+              "name": "SPKT",
+              "urutan": "15",
+              "unsurId": "3"
+            }
+          ]
+        },
+        {
+          "unsurIndex": 3,
+          "unsurName": "UNSUR PELAKSANA KEWILAYAHAN",
+          "totalBagians": 5,
+          "bagians": [
+            {
+              "position": 0,
+              "id": "15",
+              "name": "POLSEK HARIAN BOHO",
+              "urutan": "16",
+              "unsurId": "4"
+            },
+            {
+              "position": 1,
+              "id": "18",
+              "name": "POLSEK ONAN RUNGGU",
+              "urutan": "17",
+              "unsurId": "4"
+            },
+            {
+              "position": 2,
+              "id": "16",
+              "name": "POLSEK PALIPI",
+              "urutan": "18",
+              "unsurId": "4"
+            },
+            {
+              "position": 3,
+              "id": "19",
+              "name": "POLSEK PANGURURAN",
+              "urutan": "19",
+              "unsurId": "4"
+            },
+            {
+              "position": 4,
+              "id": "17",
+              "name": "POLSEK SIMANINDO",
+              "urutan": "20",
+              "unsurId": "4"
+            }
+          ]
+        },
+        {
+          "unsurIndex": 4,
+          "unsurName": "UNSUR PENDUKUNG",
+          "totalBagians": 9,
+          "bagians": [
+            {
+              "position": 0,
+              "id": "23",
+              "name": "SIDOKKES",
+              "urutan": "21",
+              "unsurId": "5"
+            },
+            {
+              "position": 1,
+              "id": "28",
+              "name": "SIHUMAS",
+              "urutan": "22",
+              "unsurId": "5"
+            },
+            {
+              "position": 2,
+              "id": "22",
+              "name": "SIKEU",
+              "urutan": "23",
+              "unsurId": "5"
+            },
+            {
+              "position": 3,
+              "id": "26",
+              "name": "SIKUM",
+              "urutan": "24",
+              "unsurId": "5"
+            },
+            {
+              "position": 4,
+              "id": "27",
+              "name": "SIPROPAM",
+              "urutan": "25",
+              "unsurId": "5"
+            },
+            {
+              "position": 5,
+              "id": "25",
+              "name": "SITIK",
+              "urutan": "26",
+              "unsurId": "5"
+            },
+            {
+              "position": 6,
+              "id": "21",
+              "name": "SIUM",
+              "urutan": "27",
+              "unsurId": "5"
+            },
+            {
+              "position": 7,
+              "id": "24",
+              "name": "SIWAS",
+              "urutan": "28",
+              "unsurId": "5"
+            },
+            {
+              "position": 8,
+              "id": "24",
+              "name": "SIWAS",
+              "urutan": "28",
+              "unsurId": "5"
+            }
+          ]
+        },
+        {
+          "unsurIndex": 5,
+          "unsurName": "UNSUR LAINNYA",
+          "totalBagians": 0,
+          "bagians": []
+        }
+      ]
+    },
+    {
+      "test": "Container Selection",
+      "status": "PASS",
+      "data": {
+        "containerIndex": 1,
+        "unsurName": "UNSUR PEMBANTU PIMPINAN",
+        "itemCount": 4,
+        "firstItem": {
+          "id": "5",
+          "name": "BAG LOG",
+          "urutan": "2"
+        },
+        "secondItem": {
+          "id": "2",
+          "name": "BAG OPS",
+          "urutan": "3"
+        }
+      }
+    },
+    {
+      "test": "Real Drag Drop",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "initialState": {
+          "firstId": "5",
+          "firstName": "BAG LOG",
+          "firstUrutan": "2",
+          "secondId": "2",
+          "secondName": "BAG OPS",
+          "secondUrutan": "3"
+        },
+        "finalState": {
+          "firstId": "5",
+          "firstName": "BAG LOG",
+          "newUrutan": "1",
+          "secondId": "2",
+          "secondName": "BAG OPS"
+        }
+      }
+    },
+    {
+      "test": "Save Changes",
+      "status": "FAIL",
+      "error": "Save button not visible"
+    }
+  ],
+  "summary": {
+    "total": 4,
+    "passed": 3,
+    "failed": 1,
+    "warnings": 0
+  }
+}

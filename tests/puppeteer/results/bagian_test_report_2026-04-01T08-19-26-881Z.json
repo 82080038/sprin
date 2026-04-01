@@ -1,0 +1,107 @@
+{
+  "timestamp": "2026-04-01T08:19:26.881Z",
+  "testType": "Bagian Page Comprehensive Test",
+  "browser": {
+    "headless": false,
+    "slowMo": 10,
+    "defaultViewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "args": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-accelerated-2d-canvas",
+      "--disable-gpu",
+      "--window-size=1366,768",
+      "--start-maximized",
+      "--disable-extensions",
+      "--disable-infobars"
+    ]
+  },
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Page Title",
+      "status": "PASS",
+      "description": "Page title should be visible"
+    },
+    {
+      "test": "Container",
+      "status": "PASS",
+      "description": "Main container should exist"
+    },
+    {
+      "test": "Action Buttons",
+      "status": "PASS",
+      "description": "Action buttons container should exist"
+    },
+    {
+      "test": "Add Button",
+      "status": "FAIL",
+      "description": "Add bagian button should exist",
+      "error": "Waiting for selector `[[[{\"name\":\"xpath\",\"value\":\"//button[contains(text(), \\\"Tambah Bagian\\\")]\"}]]]` failed"
+    },
+    {
+      "test": "Refresh Button",
+      "status": "FAIL",
+      "description": "Refresh button should exist",
+      "error": "Waiting for selector `[[[{\"name\":\"xpath\",\"value\":\"//button[contains(text(), \\\"Refresh\\\")]\"}]]]` failed"
+    },
+    {
+      "test": "Instructions Alert",
+      "status": "FAIL",
+      "description": "Instructions alert should be visible",
+      "error": "Waiting for selector `[[[{\"name\":\"xpath\",\"value\":\"//div[contains(@class, \\\"alert-info\\\") and contains(text(), \\\"Petunjuk\\\")]\"}]]]` failed"
+    },
+    {
+      "test": "Unsur Container",
+      "status": "PASS",
+      "description": "Unsur-bagian container should exist"
+    },
+    {
+      "test": "Unsur Cards",
+      "status": "PASS",
+      "description": "Unsur cards should exist"
+    },
+    {
+      "test": "Bagian Dropdown Dropdown",
+      "status": "FAIL",
+      "error": "Cannot read properties of null (reading 'click')"
+    },
+    {
+      "test": "Laporan Dropdown Dropdown",
+      "status": "FAIL",
+      "error": "Cannot read properties of null (reading 'click')"
+    },
+    {
+      "test": "Pengaturan Dropdown Dropdown",
+      "status": "FAIL",
+      "error": "Cannot read properties of null (reading 'click')"
+    },
+    {
+      "test": "Modal Functionality",
+      "status": "FAIL",
+      "error": "Cannot read properties of null (reading 'click')"
+    },
+    {
+      "test": "Data Loading",
+      "status": "PASS",
+      "data": {
+        "unsurCards": 6
+      }
+    },
+    {
+      "test": "Error Handling",
+      "status": "FAIL",
+      "error": "Cannot read properties of null (reading 'click')"
+    }
+  ],
+  "summary": {
+    "total": 14,
+    "passed": 6,
+    "failed": 8,
+    "warnings": 0
+  }
+}

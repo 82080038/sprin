@@ -1,0 +1,52 @@
+{
+  "timestamp": "2026-04-01T08:44:26.710Z",
+  "testType": "Direct API Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Direct API Test",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "status": 200,
+        "statusText": "OK",
+        "data": {
+          "success": true,
+          "message": "Bagian berhasil dipindahkan dan urutan diperbarui!"
+        }
+      }
+    },
+    {
+      "test": "Real Change Scenario",
+      "status": "PASS",
+      "data": {
+        "getResponseStatus": true,
+        "getResponseText": "<br />\n<b>Warning</b>:  error_log(/opt/lampp/htdocs/sprint/core/../logs/error.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/sprint/core/error_handler.php</b> on line <b>130</b...",
+        "moveResponseStatus": true,
+        "moveResponseText": "{\"success\":true,\"message\":\"Bagian berhasil dipindahkan dan urutan diperbarui!\"}",
+        "moveData": {
+          "success": true,
+          "message": "Bagian berhasil dipindahkan dan urutan diperbarui!"
+        }
+      }
+    },
+    {
+      "test": "Database Change Verification",
+      "status": "PASS",
+      "data": [
+        {
+          "id": "5",
+          "name": "BAG LOG",
+          "urutan": "1",
+          "unsurId": "2"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "warnings": 0
+  }
+}

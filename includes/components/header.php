@@ -389,8 +389,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
     }
     </style>
 
-    <!-- jQuery (for compatibility) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
     <!-- Bootstrap JS -->
@@ -399,6 +397,27 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
     
     <script>
+    // Configure toastr to prevent conflicts
+    if (typeof toastr !== 'undefined') {
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+    }
+    
     // Suppress specific console warnings
     const originalConsoleWarn = console.warn;
     console.warn = function(...args) {
@@ -493,30 +512,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
         return data.filter(item => item[field] == value);
     };
     
-    // Consolidated DOMContentLoaded initialization
+    // Simple Bootstrap initialization
     document.addEventListener('DOMContentLoaded', function() {
         console.log('Initializing application...');
         
-        // 1. Initialize dropdown data if needed
-        const currentPage = window.location.pathname.split('/').pop();
-        const pagesNeedingDropdown = ['personil.php', 'bagian.php', 'jabatan.php'];
-        const hasDropdownElements = document.querySelector('[data-need-dropdown]') !== null;
-        
-        if (pagesNeedingDropdown.includes(currentPage) || hasDropdownElements) {
-            console.log('Loading dropdown data for page:', currentPage);
-            window.loadGlobalDropdownData();
-        } else {
-            console.log('Skipping dropdown data load for page:', currentPage);
-        }
-        
-        // 2. Initialize global dropdown manager
-        if (window.GlobalDropdownManager) {
-            window.GlobalDropdownManager.init();
-        }
-        
-        // 3. Initialize Bootstrap components
+        // Check if Bootstrap is loaded
         if (typeof bootstrap !== 'undefined') {
-            console.log('Bootstrap loaded, initializing components...');
+            console.log('Bootstrap loaded successfully');
             
             // Initialize tooltips
             const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -524,158 +526,18 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
             
-            // Initialize dropdowns automatically using Bootstrap data API
-            // No need for manual initialization - Bootstrap handles it
+            console.log('Bootstrap dropdowns ready');
+            
+        } else {
+            console.error('Bootstrap not loaded, dropdowns may not work');
         }
         
-        // 4. Initialize page-specific functionality
+        // Initialize page-specific functionality
         if (typeof initializePage === 'function') {
             initializePage();
         }
         
         console.log('Application initialization complete');
-    });
-    
-    // Global dropdown menu management
-    window.GlobalDropdownManager = {
-        initialized: false,
-        
-        init: function() {
-            if (this.initialized) return;
-            
-            // Initialize all dropdowns on page
-            this.initializeAllDropdowns();
-            
-            // Setup MutationObserver for dynamic content
-            this.setupMutationObserver();
-            
-            this.initialized = true;
-            console.log('Global dropdown manager initialized');
-        },
-        
-        initializeAllDropdowns: function() {
-            // Find all dropdown toggles
-            const dropdowns = document.querySelectorAll('[data-bs-toggle="dropdown"]');
-            
-            dropdowns.forEach(function(dropdown) {
-                // Skip if already initialized
-                if (dropdown.getAttribute('data-dropdown-initialized')) return;
-                
-                try {
-                    // Initialize Bootstrap dropdown
-                    const dropdownInstance = new bootstrap.Dropdown(dropdown);
-                    
-                    // Mark as initialized
-                    dropdown.setAttribute('data-dropdown-initialized', 'true');
-                    
-                    // Add event listeners for better UX
-                    dropdown.addEventListener('show.bs.dropdown', function() {
-                        // Add loading state if needed
-                        const menu = dropdown.nextElementSibling;
-                        if (menu && menu.classList.contains('dropdown-menu')) {
-                            menu.style.minWidth = dropdown.offsetWidth + 'px';
-                        }
-                    });
-                    
-                    dropdown.addEventListener('shown.bs.dropdown', function() {
-                        // Focus first item if needed
-                        const menu = dropdown.nextElementSibling;
-                        if (menu) {
-                            const firstItem = menu.querySelector('.dropdown-item:not(.disabled)');
-                            if (firstItem) {
-                                firstItem.focus();
-                            }
-                        }
-                    });
-                    
-                } catch (error) {
-                    console.warn('Failed to initialize dropdown:', error);
-                }
-            });
-        },
-        
-        setupMutationObserver: function() {
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    if (mutation.type === 'childList') {
-                        // Check for new dropdowns
-                        mutation.addedNodes.forEach(function(node) {
-                            if (node.nodeType === 1) { // Element node
-                                const newDropdowns = node.querySelectorAll ? 
-                                    node.querySelectorAll('[data-bs-toggle="dropdown"]') : [];
-                                
-                                if (node.hasAttribute && node.hasAttribute('data-bs-toggle="dropdown"')) {
-                                    newDropdowns = [node];
-                                }
-                                
-                                // Initialize new dropdowns
-                                newDropdowns.forEach(function(dropdown) {
-                                    if (!dropdown.getAttribute('data-dropdown-initialized')) {
-                                        try {
-                                            new bootstrap.Dropdown(dropdown);
-                                            dropdown.setAttribute('data-dropdown-initialized', 'true');
-                                        } catch (error) {
-                                            console.warn('Failed to initialize new dropdown:', error);
-                                        }
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            });
-            
-            // Observe entire document for changes
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true
-            });
-        },
-        
-        refresh: function() {
-            // Re-initialize all dropdowns
-            this.initializeAllDropdowns();
-        },
-        
-        destroy: function(dropdown) {
-            if (dropdown && dropdown.getAttribute('data-dropdown-initialized')) {
-                try {
-                    const instance = bootstrap.Dropdown.getInstance(dropdown);
-                    if (instance) {
-                        instance.dispose();
-                    }
-                    dropdown.removeAttribute('data-dropdown-initialized');
-                } catch (error) {
-                    console.warn('Failed to destroy dropdown:', error);
-                }
-            }
-        }
-    };
-    
-    // Auto-initialize global dropdown manager
-    document.addEventListener('DOMContentLoaded', function() {
-        window.GlobalDropdownManager.init();
-    });
-    
-    // Initialize Bootstrap components
-    document.addEventListener('DOMContentLoaded', function() {
-        // Check if Bootstrap is loaded
-        if (typeof bootstrap !== 'undefined') {
-            console.log('Bootstrap loaded, global dropdown manager active');
-            
-            // Initialize tooltips (keep this)
-            function initializeTooltips() {
-                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                tooltipTriggerList.map(function (tooltipTriggerEl) {
-                    return new bootstrap.Tooltip(tooltipTriggerEl);
-                });
-            }
-            
-            initializeTooltips();
-            
-        } else {
-            console.warn('Bootstrap not loaded, dropdowns may not work');
-        }
     });
     </script>
 </head>
@@ -745,11 +607,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                 <i class="fa-solid fa-chart-pie"></i> Statistik
                             </a></li>
                         </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?php echo url('pages/reporting.php'); ?>">
-                            <i class="fa-solid fa-chart-bar me-1"></i> Laporan
-                        </a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">

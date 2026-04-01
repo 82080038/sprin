@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-04-01T09:18:02.349Z",
+  "testType": "Modal Error Fix Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Add Modal",
+      "status": "FAIL",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "test": "Edit Modal",
+      "status": "FAIL",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "test": "JavaScript Errors",
+      "status": "PASS",
+      "data": {
+        "errors": 0
+      }
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 1,
+    "failed": 2,
+    "warnings": 0
+  }
+}

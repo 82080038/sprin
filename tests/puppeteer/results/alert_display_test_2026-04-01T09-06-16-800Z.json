@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-04-01T09:06:16.800Z",
+  "testType": "Alert Display Test for Unsur Delete",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Alert Detection",
+      "status": "PASS",
+      "data": {
+        "message": "Tidak dapat menghapus unsur 'UNSUR LAINNYA' karena masih memiliki 1 bagian!\n\nBagian terkait:\n1. BKO\n\nPindahkan atau hapus semua bagian terlebih dahulu\n\nKlik OK untuk mencoba lagi, atau Cancel untuk batal.",
+        "type": "confirm"
+      }
+    },
+    {
+      "test": "Alert Detection",
+      "status": "PASS",
+      "data": {
+        "message": "Pilih opsi untuk menghapus unsur \"UNSUR LAINNYA\":\n\n1. Pindahkan ke: UNSUR PIMPINAN\n2. Pindahkan ke: UNSUR PELAKSANA TUGAS POKOK\n3. Pindahkan ke: UNSUR PELAKSANA KEWILAYAHAN\n4. Pindahkan ke: UNSUR PENDUKUNG\n\n5. Hapus beserta semua bagian\n\nMasukkan nomor pilihan (1-5):",
+        "type": "prompt"
+      }
+    },
+    {
+      "test": "Delete Button Click",
+      "status": "PASS",
+      "data": {
+        "onclick": "deleteUnsur(6, 'UNSUR LAINNYA')",
+        "visible": true,
+        "text": ""
+      }
+    },
+    {
+      "test": "Alert Content Check",
+      "status": "FAIL",
+      "error": "this.page.waitForTimeout is not a function"
+    },
+    {
+      "test": "Alert Detection",
+      "status": "PASS",
+      "data": {
+        "message": "Tidak dapat menghapus unsur 'UNSUR LAINNYA' karena masih memiliki 1 bagian!\n\nBagian terkait:\n1. BKO\n\nPindahkan atau hapus semua bagian terlebih dahulu\n\nKlik OK untuk mencoba lagi, atau Cancel untuk batal.",
+        "type": "confirm"
+      }
+    },
+    {
+      "test": "Alert Detection",
+      "status": "PASS",
+      "data": {
+        "message": "Pilih opsi untuk menghapus unsur \"UNSUR LAINNYA\":\n\n1. Pindahkan ke: UNSUR PIMPINAN\n2. Pindahkan ke: UNSUR PELAKSANA TUGAS POKOK\n3. Pindahkan ke: UNSUR PELAKSANA KEWILAYAHAN\n4. Pindahkan ke: UNSUR PENDUKUNG\n\n5. Hapus beserta semua bagian\n\nMasukkan nomor pilihan (1-5):",
+        "type": "prompt"
+      }
+    },
+    {
+      "test": "Direct JavaScript Test",
+      "status": "FAIL",
+      "data": {
+        "success": false,
+        "message": "No alert triggered within timeout"
+      }
+    }
+  ],
+  "summary": {
+    "total": 7,
+    "passed": 5,
+    "failed": 2,
+    "warnings": 0
+  }
+}

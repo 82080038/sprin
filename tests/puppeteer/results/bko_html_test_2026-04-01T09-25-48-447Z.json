@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-04-01T09:25:48.447Z",
+  "testType": "BKO HTML Output Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "BKO HTML Output",
+      "status": "FAIL",
+      "data": {
+        "found": false,
+        "html": "UNSUR LAINNYA</h6>\n                        <small>Urutan: 6</small>\n                    </div>\n                    <div class=\"d-flex align-items-center\">\n                        <span class=\"badge bg-light text-dark me-2\">0</span>\n                        <button class=\"btn btn-sm add-bagian-btn\" onclick=\"openAddModalForUnsur(6, '"
+      }
+    },
+    {
+      "test": "Badge Count Check",
+      "status": "FAIL",
+      "data": {
+        "unsurName": "UNSUR LAINNYA",
+        "badgeCount": 0,
+        "badgeText": "0"
+      }
+    }
+  ],
+  "summary": {
+    "total": 2,
+    "passed": 0,
+    "failed": 2,
+    "warnings": 0
+  }
+}

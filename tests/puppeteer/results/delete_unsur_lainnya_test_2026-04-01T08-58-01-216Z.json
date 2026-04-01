@@ -1,0 +1,127 @@
+{
+  "timestamp": "2026-04-01T08:58:01.216Z",
+  "testType": "Delete UNSUR LAINNYA Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Find Unsur Lainnya",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "unsur": {
+          "id": 6,
+          "kode_unsur": "UNSUR_LAINNYA",
+          "nama_unsur": "UNSUR LAINNYA",
+          "deskripsi": "Unit khusus dan penugasan khusus",
+          "tingkat": "POLRES",
+          "urutan": 6,
+          "is_active": 1,
+          "created_at": "2026-03-29 01:16:57",
+          "updated_at": "2026-03-29 01:16:57"
+        },
+        "allUnsurs": [
+          {
+            "id": 1,
+            "kode_unsur": "UNSUR_PIMPINAN",
+            "nama_unsur": "UNSUR PIMPINAN",
+            "deskripsi": "Kapolres dan Wakapolres sesuai PERKAP No. 23 Tahun 2010",
+            "tingkat": "POLRES",
+            "urutan": 1,
+            "is_active": 1,
+            "created_at": "2026-03-29 01:16:57",
+            "updated_at": "2026-03-29 01:16:57"
+          },
+          {
+            "id": 3,
+            "kode_unsur": "UNSUR_PELAKSANA_TUGAS_POKOK",
+            "nama_unsur": "UNSUR PELAKSANA TUGAS POKOK",
+            "deskripsi": "Satuan Tugas Pokok di tingkat POLRES",
+            "tingkat": "POLRES",
+            "urutan": 3,
+            "is_active": 1,
+            "created_at": "2026-03-29 01:16:57",
+            "updated_at": "2026-03-29 01:16:57"
+          },
+          {
+            "id": 4,
+            "kode_unsur": "UNSUR_PELAKSANA_KEWILAYAHAN",
+            "nama_unsur": "UNSUR PELAKSANA KEWILAYAHAN",
+            "deskripsi": "Kepolisian Sektor (POLSEK) jajaran POLRES",
+            "tingkat": "POLRES",
+            "urutan": 4,
+            "is_active": 1,
+            "created_at": "2026-03-29 01:16:57",
+            "updated_at": "2026-03-29 01:16:57"
+          },
+          {
+            "id": 5,
+            "kode_unsur": "UNSUR_PENDUKUNG",
+            "nama_unsur": "UNSUR PENDUKUNG",
+            "deskripsi": "Unit pendukung operasional dan administrasi",
+            "tingkat": "POLRES",
+            "urutan": 5,
+            "is_active": 1,
+            "created_at": "2026-03-29 01:16:57",
+            "updated_at": "2026-03-29 01:16:57"
+          },
+          {
+            "id": 6,
+            "kode_unsur": "UNSUR_LAINNYA",
+            "nama_unsur": "UNSUR LAINNYA",
+            "deskripsi": "Unit khusus dan penugasan khusus",
+            "tingkat": "POLRES",
+            "urutan": 6,
+            "is_active": 1,
+            "created_at": "2026-03-29 01:16:57",
+            "updated_at": "2026-03-29 01:16:57"
+          }
+        ]
+      }
+    },
+    {
+      "test": "Delete Unsur Lainnya",
+      "status": "FAIL",
+      "data": {
+        "success": true,
+        "status": 200,
+        "statusText": "OK",
+        "data": {
+          "success": false,
+          "message": "Tidak dapat menghapus unsur 'UNSUR LAINNYA' karena masih memiliki 1 bagian!",
+          "details": {
+            "unsur_name": "UNSUR LAINNYA",
+            "bagian_count": 1,
+            "bagian_list": [
+              "BKO"
+            ],
+            "suggestion": "Pindahkan atau hapus semua bagian terlebih dahulu"
+          }
+        }
+      }
+    },
+    {
+      "test": "Delete Rejection Investigation",
+      "status": "PASS",
+      "data": {
+        "bagianData": {
+          "rawResponse": "<br />\n<b>Warning</b>:  error_log(/opt/lampp/htdocs/sprint/core/../logs/error.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/sprint/core/error_handler.php</b> on line <b>130</b><br />\n<br />\n<b>Warning</b>:  Undefined variable $bagianData in <b>/opt/lampp/htdocs/sprint/pages/bagian.php</b> on line <b>56</b><br />\n{\"success\":true,\"data\":null}",
+          "parseError": "Unexpected token '<', \"<br />\n<b>\"... is not valid JSON"
+        },
+        "personilData": {
+          "rawResponse": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">\n<head>\n<title>Object not found!</title>\n<link rev=\"made\" href=\"mailto:you@example.com\" />\n<style type=\"text/css\"><!--/*--><![CDATA[/*><!--*/ \n    body { color: #000000; background-color: #FFFFFF; }\n    a:link { color: #0000CC; }\n    p, address {margin-left: 3em;}\n    span {font-size: smaller;}\n/*]]>*/--></style>\n</head>\n\n<body>\n<h1>Object not found!</h1>\n<p>\n\n\n    The requested URL was not found on this server.\n\n  \n\n    The link on the\n    <a href=\"http://localhost/sprint/pages/unsur.php\">referring\n    page</a> seems to be wrong or outdated. Please inform the author of\n    <a href=\"http://localhost/sprint/pages/unsur.php\">that page</a>\n    about the error.\n\n  \n\n</p>\n<p>\nIf you think this is a server error, please contact\nthe <a href=\"mailto:you@example.com\">webmaster</a>.\n\n</p>\n\n<h2>Error 404</h2>\n<address>\n  <a href=\"/\">localhost</a><br />\n  <span>Apache/2.4.58 (Unix) OpenSSL/1.1.1w PHP/8.2.12 mod_perl/2.0.12 Perl/v5.34.1</span>\n</address>\n</body>\n</html>\n\n",
+          "parseError": "Unexpected token '<', \"<?xml vers\"... is not valid JSON"
+        },
+        "scheduleData": {
+          "rawResponse": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">\n<head>\n<title>Object not found!</title>\n<link rev=\"made\" href=\"mailto:you@example.com\" />\n<style type=\"text/css\"><!--/*--><![CDATA[/*><!--*/ \n    body { color: #000000; background-color: #FFFFFF; }\n    a:link { color: #0000CC; }\n    p, address {margin-left: 3em;}\n    span {font-size: smaller;}\n/*]]>*/--></style>\n</head>\n\n<body>\n<h1>Object not found!</h1>\n<p>\n\n\n    The requested URL was not found on this server.\n\n  \n\n    The link on the\n    <a href=\"http://localhost/sprint/pages/unsur.php\">referring\n    page</a> seems to be wrong or outdated. Please inform the author of\n    <a href=\"http://localhost/sprint/pages/unsur.php\">that page</a>\n    about the error.\n\n  \n\n</p>\n<p>\nIf you think this is a server error, please contact\nthe <a href=\"mailto:you@example.com\">webmaster</a>.\n\n</p>\n\n<h2>Error 404</h2>\n<address>\n  <a href=\"/\">localhost</a><br />\n  <span>Apache/2.4.58 (Unix) OpenSSL/1.1.1w PHP/8.2.12 mod_perl/2.0.12 Perl/v5.34.1</span>\n</address>\n</body>\n</html>\n\n",
+          "parseError": "Unexpected token '<', \"<?xml vers\"... is not valid JSON"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 2,
+    "failed": 1,
+    "warnings": 0
+  }
+}

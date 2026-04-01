@@ -1,0 +1,108 @@
+{
+  "timestamp": "2026-04-01T07:58:08.165Z",
+  "testType": "Bagian Page Comprehensive Test",
+  "browser": {
+    "headless": false,
+    "slowMo": 10,
+    "defaultViewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "args": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-accelerated-2d-canvas",
+      "--disable-gpu",
+      "--window-size=1366,768",
+      "--start-maximized",
+      "--disable-extensions",
+      "--disable-infobars"
+    ]
+  },
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Page Title",
+      "status": "FAIL",
+      "description": "Page title should be visible",
+      "error": "this.page.$x is not a function"
+    },
+    {
+      "test": "Container",
+      "status": "PASS",
+      "description": "Main container should exist"
+    },
+    {
+      "test": "Action Buttons",
+      "status": "PASS",
+      "description": "Action buttons container should exist"
+    },
+    {
+      "test": "Add Button",
+      "status": "FAIL",
+      "description": "Add bagian button should exist",
+      "error": "Waiting for selector `[[[{\"name\":\"xpath\",\"value\":\"//button[contains(text(), \\\"Tambah Bagian\\\")]\"}]]]` failed"
+    },
+    {
+      "test": "Refresh Button",
+      "status": "FAIL",
+      "description": "Refresh button should exist",
+      "error": "Waiting for selector `[[[{\"name\":\"xpath\",\"value\":\"//button[contains(text(), \\\"Refresh\\\")]\"}]]]` failed"
+    },
+    {
+      "test": "Instructions Alert",
+      "status": "FAIL",
+      "description": "Instructions alert should be visible",
+      "error": "Waiting for selector `[[[{\"name\":\"xpath\",\"value\":\"//div[contains(@class, \\\"alert-info\\\") and contains(text(), \\\"Petunjuk\\\")]\"}]]]` failed"
+    },
+    {
+      "test": "Unsur Container",
+      "status": "PASS",
+      "description": "Unsur-bagian container should exist"
+    },
+    {
+      "test": "Unsur Cards",
+      "status": "PASS",
+      "description": "Unsur cards should exist"
+    },
+    {
+      "test": "Bagian Dropdown Dropdown",
+      "status": "FAIL",
+      "error": "this.page.$x is not a function"
+    },
+    {
+      "test": "Laporan Dropdown Dropdown",
+      "status": "FAIL",
+      "error": "this.page.$x is not a function"
+    },
+    {
+      "test": "Pengaturan Dropdown Dropdown",
+      "status": "FAIL",
+      "error": "this.page.$x is not a function"
+    },
+    {
+      "test": "Modal Functionality",
+      "status": "FAIL",
+      "error": "this.page.$x is not a function"
+    },
+    {
+      "test": "Data Loading",
+      "status": "PASS",
+      "data": {
+        "unsurCards": 6
+      }
+    },
+    {
+      "test": "Error Handling",
+      "status": "FAIL",
+      "error": "SyntaxError: Failed to execute 'querySelector' on 'Document': 'button:has-text(\"Tambah Bagian\")' is not a valid selector."
+    }
+  ],
+  "summary": {
+    "total": 14,
+    "passed": 5,
+    "failed": 9,
+    "warnings": 0
+  }
+}

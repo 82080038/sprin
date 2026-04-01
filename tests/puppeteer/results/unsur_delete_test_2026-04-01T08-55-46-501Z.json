@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-04-01T08:55:46.501Z",
+  "testType": "Unsur Delete Functionality Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Delete Unsur With Bagian",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "status": 200,
+        "data": {
+          "success": false,
+          "message": "Tidak dapat menghapus unsur 'UNSUR PEMBANTU PIMPINAN' karena masih memiliki 4 bagian!",
+          "details": {
+            "unsur_name": "UNSUR PEMBANTU PIMPINAN",
+            "bagian_count": 4,
+            "bagian_list": [
+              "BAG OPS",
+              "BAG REN",
+              "BAG SDM",
+              "BAG LOG - TEST EDIT"
+            ],
+            "suggestion": "Pindahkan atau hapus semua bagian terlebih dahulu"
+          }
+        }
+      }
+    },
+    {
+      "test": "Force Delete Unsur",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "status": 200,
+        "data": {
+          "success": true,
+          "message": "Unsur 'UNSUR PEMBANTU PIMPINAN' berhasil dihapus dan () bagian dipindahkan ke 'UNSUR PIMPINAN'!"
+        }
+      }
+    },
+    {
+      "test": "Empty Unsur Delete",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "message": "Unsur berhasil dihapus!"
+      }
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 3,
+    "failed": 0,
+    "warnings": 0
+  }
+}

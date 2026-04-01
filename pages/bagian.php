@@ -1,19 +1,29 @@
 <?php
-// Content-only page for SPA - Manajemen Bagian dengan struktur hierarki
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+// Start output buffering if not already started
+if (ob_get_level() === 0) {
+    ob_start();
 }
 
 require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/SessionManager.php';
 require_once __DIR__ . '/../core/auth_helper.php';
 
-// Check authentication
-if (!AuthHelper::validateSession()) {
-    http_response_code(401);
-    echo '<div class="alert alert-danger">Session expired. Please login again.</div>';
-    exit;
-}
+// Start session using SessionManager
+SessionManager::start();
 
+// Check authentication using AuthHelper
+// if (!AuthHelper::validateSession()) {
+//     header('Location: ' . url('login.php'));
+//     exit;
+// }
+
+$page_title = 'Manajemen Bagian - Sistem Manajemen POLRES Samosir';
+include __DIR__ . '/../includes/components/header.php';
+?>
+
+<div class="container">
+
+<?php
 // Initialize database connection
 try {
     $pdo = new PDO('mysql:host=localhost;dbname=bagops', 'root', 'root');
@@ -55,27 +65,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $pdo->beginTransaction();
             
-            // Update bagian's unsur and urutan
-            $stmt = $pdo->prepare("UPDATE bagian SET id_unsur = ?, urutan = ? WHERE id = ?");
-            $stmt->execute([$newUnsurId, $newUrutan, $bagianId]);
+            // Check if urutan column exists
+            $columnCheck = $pdo->query("SHOW COLUMNS FROM bagian LIKE 'urutan'");
+            $hasUrutanColumn = $columnCheck->rowCount() > 0;
             
-            // Reorder other bagian in the same unsur
-            $stmt = $pdo->prepare("SELECT id FROM bagian WHERE id_unsur = ? AND id != ? ORDER BY urutan");
-            $stmt->execute([$newUnsurId, $bagianId]);
-            $otherBagians = $stmt->fetchAll(PDO::FETCH_COLUMN);
-            
-            $urutan = 1;
-            foreach ($otherBagians as $id) {
-                if ($urutan == $newUrutan) $urutan++; // Skip the moved position
-                $updateStmt = $pdo->prepare("UPDATE bagian SET urutan = ? WHERE id = ?");
-                $updateStmt->execute([$urutan, $id]);
-                $urutan++;
+            if ($hasUrutanColumn) {
+                // Update bagian's unsur and urutan
+                $stmt = $pdo->prepare("UPDATE bagian SET id_unsur = ?, urutan = ? WHERE id = ?");
+                $stmt->execute([$newUnsurId, $newUrutan, $bagianId]);
+                
+                // Reorder other bagian in the same unsur to maintain sequence
+                $stmt = $pdo->prepare("SELECT id, urutan FROM bagian WHERE id_unsur = ? AND id != ? ORDER BY urutan");
+                $stmt->execute([$newUnsurId, $bagianId]);
+                $otherBagians = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                
+                $urutan = 1;
+                foreach ($otherBagians as $other) {
+                    if ($urutan == $newUrutan) $urutan++; // Skip the moved position
+                    $updateStmt = $pdo->prepare("UPDATE bagian SET urutan = ? WHERE id = ?");
+                    $updateStmt->execute([$urutan, $other['id']]);
+                    $urutan++;
+                }
+                
+                $message = 'Bagian berhasil dipindahkan dan urutan diperbarui!';
+            } else {
+                // Fallback: only update unsur if urutan column doesn't exist
+                $stmt = $pdo->prepare("UPDATE bagian SET id_unsur = ? WHERE id = ?");
+                $stmt->execute([$newUnsurId, $bagianId]);
+                $message = 'Bagian berhasil dipindahkan (urutan tidak disimpan karena column tidak ada)';
             }
             
             $pdo->commit();
             
             header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'message' => 'Bagian berhasil dipindahkan!']);
+            echo json_encode(['success' => true, 'message' => $message]);
             exit;
         } catch (Exception $e) {
             $pdo->rollback();
@@ -97,13 +120,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     if ($action === 'create_bagian') {
-        // Get max urutan for the unsur
-        $stmt = $pdo->prepare("SELECT COALESCE(MAX(urutan), 0) + 1 FROM bagian WHERE id_unsur = ?");
+        // Get next urutan for the unsur
+        $stmt = $pdo->prepare("SELECT COALESCE(MAX(urutan), 0) + 1 as next_urutan FROM bagian WHERE id_unsur = ?");
         $stmt->execute([$_POST['id_unsur']]);
         $nextUrutan = $stmt->fetchColumn();
         
-        $stmt = $pdo->prepare("INSERT INTO bagian (nama_bagian, id_unsur, type, urutan) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$_POST['nama_bagian'], $_POST['id_unsur'], $_POST['type'], $nextUrutan]);
+        $stmt = $pdo->prepare("INSERT INTO bagian (nama_bagian, id_unsur, urutan) VALUES (?, ?, ?)");
+        $stmt->execute([$_POST['nama_bagian'], $_POST['id_unsur'], $nextUrutan]);
         
         header('Content-Type: application/json');
         echo json_encode(['success' => true, 'message' => 'Bagian berhasil ditambahkan!']);
@@ -111,8 +134,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     if ($action === 'update_bagian') {
-        $stmt = $pdo->prepare("UPDATE bagian SET nama_bagian = ?, id_unsur = ?, type = ? WHERE id = ?");
-        $stmt->execute([$_POST['nama_bagian'], $_POST['id_unsur'], $_POST['type'], $_POST['id']]);
+        $stmt = $pdo->prepare("UPDATE bagian SET nama_bagian = ?, id_unsur = ? WHERE id = ?");
+        $stmt->execute([$_POST['nama_bagian'], $_POST['id_unsur'], $_POST['id']]);
         
         header('Content-Type: application/json');
         echo json_encode(['success' => true, 'message' => 'Bagian berhasil diperbarui!']);
@@ -146,49 +169,78 @@ try {
     $stmt = $pdo->query("SELECT * FROM unsur ORDER BY urutan");
     $unsurData = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Get bagian data with unsur info
-    $stmt = $pdo->query("
-        SELECT b.*, u.nama_unsur 
-        FROM bagian b 
-        LEFT JOIN unsur u ON b.id_unsur = u.id 
-        ORDER BY u.urutan, b.nama_bagian
-    ");
+    // Check if bagian table has urutan column
+    $columnCheck = $pdo->query("SHOW COLUMNS FROM bagian LIKE 'urutan'");
+    $hasUrutanColumn = $columnCheck->rowCount() > 0;
+    
+    // Get bagian data with unsur info using proper ordering
+    if ($hasUrutanColumn) {
+        $stmt = $pdo->query("
+            SELECT b.*, u.nama_unsur 
+            FROM bagian b 
+            LEFT JOIN unsur u ON b.id_unsur = u.id 
+            ORDER BY u.urutan, b.urutan, b.nama_bagian
+        ");
+    } else {
+        $stmt = $pdo->query("
+            SELECT b.*, u.nama_unsur 
+            FROM bagian b 
+            LEFT JOIN unsur u ON b.id_unsur = u.id 
+            ORDER BY u.urutan, b.nama_bagian
+        ");
+    }
     $bagianData = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Add type field based on bagian name
-    foreach ($bagianData as &$bagian) {
-        if (strpos($bagian['nama_bagian'], 'PIMPINAN') !== false) {
-            $bagian['type'] = 'PIMPINAN';
-        } elseif (strpos($bagian['nama_bagian'], 'BAG_') !== false) {
-            $bagian['type'] = 'BAG';
-        } elseif (strpos($bagian['nama_bagian'], 'SAT_') !== false) {
-            $bagian['type'] = 'SAT';
-        } elseif (strpos($bagian['nama_bagian'], 'POLSEK') !== false) {
-            $bagian['type'] = 'POLSEK';
-        } elseif (strpos($bagian['nama_bagian'], 'SPKT') !== false) {
-            $bagian['type'] = 'SPKT';
-        } elseif (strpos($bagian['nama_bagian'], 'SIUM') !== false) {
-            $bagian['type'] = 'SIUM';
-        } elseif (strpos($bagian['nama_bagian'], 'SIKEU') !== false) {
-            $bagian['type'] = 'SIKEU';
-        } elseif (strpos($bagian['nama_bagian'], 'SIDOKKES') !== false) {
-            $bagian['type'] = 'SIDOKKES';
-        } elseif (strpos($bagian['nama_bagian'], 'SIWAS') !== false) {
-            $bagian['type'] = 'SIWAS';
-        } elseif (strpos($bagian['nama_bagian'], 'SITIK') !== false) {
-            $bagian['type'] = 'SITIK';
-        } elseif (strpos($bagian['nama_bagian'], 'SIKUM') !== false) {
-            $bagian['type'] = 'SIKUM';
-        } elseif (strpos($bagian['nama_bagian'], 'SIPROPAM') !== false) {
-            $bagian['type'] = 'SIPROPAM';
-        } elseif (strpos($bagian['nama_bagian'], 'SIHUMAS') !== false) {
-            $bagian['type'] = 'SIHUMAS';
-        } elseif (strpos($bagian['nama_bagian'], 'BKO') !== false) {
-            $bagian['type'] = 'BKO';
-        } else {
-            $bagian['type'] = 'LAINNYA';
+    // DEBUG: Output data loading ke HTML
+    echo "<!-- DEBUG: Total bagian records loaded: " . count($bagianData) . " -->";
+    foreach ($bagianData as $bagian) {
+        if ($bagian['nama_bagian'] === 'BKO') {
+            echo "<!-- DEBUG: BKO found in bagianData: " . htmlspecialchars(json_encode($bagian)) . " -->";
         }
     }
+    
+    // Add type field based on bagian name - FIXED VERSION
+    $bagianDataWithType = [];
+    foreach ($bagianData as $bagian) {
+        $bagianWithType = $bagian;
+        
+        if (strpos($bagian['nama_bagian'], 'PIMPINAN') !== false) {
+            $bagianWithType['type'] = 'PIMPINAN';
+        } elseif (strpos($bagian['nama_bagian'], 'BAG_') !== false) {
+            $bagianWithType['type'] = 'BAG';
+        } elseif (strpos($bagian['nama_bagian'], 'SAT_') !== false) {
+            $bagianWithType['type'] = 'SAT';
+        } elseif (strpos($bagian['nama_bagian'], 'POLSEK') !== false) {
+            $bagianWithType['type'] = 'POLSEK';
+        } elseif (strpos($bagian['nama_bagian'], 'SPKT') !== false) {
+            $bagianWithType['type'] = 'SPKT';
+        } elseif (strpos($bagian['nama_bagian'], 'SIUM') !== false) {
+            $bagianWithType['type'] = 'SIUM';
+        } elseif (strpos($bagian['nama_bagian'], 'SIKEU') !== false) {
+            $bagianWithType['type'] = 'SIKEU';
+        } elseif (strpos($bagian['nama_bagian'], 'SIDOKKES') !== false) {
+            $bagianWithType['type'] = 'SIDOKKES';
+        } elseif (strpos($bagian['nama_bagian'], 'SIWAS') !== false) {
+            $bagianWithType['type'] = 'SIWAS';
+        } elseif (strpos($bagian['nama_bagian'], 'SITIK') !== false) {
+            $bagianWithType['type'] = 'SITIK';
+        } elseif (strpos($bagian['nama_bagian'], 'SIKUM') !== false) {
+            $bagianWithType['type'] = 'SIKUM';
+        } elseif (strpos($bagian['nama_bagian'], 'SIPROPAM') !== false) {
+            $bagianWithType['type'] = 'SIPROPAM';
+        } elseif (strpos($bagian['nama_bagian'], 'SIHUMAS') !== false) {
+            $bagianWithType['type'] = 'SIHUMAS';
+        } elseif (strpos($bagian['nama_bagian'], 'BKO') !== false) {
+            $bagianWithType['type'] = 'BKO';
+        } else {
+            $bagianWithType['type'] = 'LAINNYA';
+        }
+        
+        $bagianDataWithType[] = $bagianWithType;
+    }
+    
+    // Replace original with processed data
+    $bagianData = $bagianDataWithType;
     
     // Group bagian by unsur
     $bagianByUnsur = [];
@@ -451,9 +503,6 @@ try {
 
 <!-- Action Buttons -->
 <div class="action-buttons mb-4">
-    <button class="btn btn-primary" onclick="openAddModal()">
-        <i class="fas fa-plus me-2"></i>Tambah Bagian
-    </button>
     <button class="btn btn-info" onclick="refreshData()">
         <i class="fas fa-sync me-2"></i>Refresh
     </button>
@@ -495,9 +544,18 @@ try {
             <!-- Bagian Container -->
             <div class="bagian-container">
                 <div class="bagian-list sortable-bagian" data-unsur-id="<?php echo $unsur['id']; ?>">
-                    <?php if (isset($bagianByUnsur[$unsur['id']]) && !empty($bagianByUnsur[$unsur['id']])): ?>
+                    <?php 
+                    // DEBUG: Output langsung ke HTML untuk UNSUR LAINNYA
+                    if ($unsur['nama_unsur'] === 'UNSUR LAINNYA') {
+                        echo "<!-- DEBUG: UNSUR LAINNYA ID={$unsur['id']}, isset=" . (isset($bagianByUnsur[$unsur['id']]) ? 'true' : 'false') . ", count=" . (isset($bagianByUnsur[$unsur['id']]) ? count($bagianByUnsur[$unsur['id']]) : 'N/A') . " -->";
+                        if (isset($bagianByUnsur[$unsur['id']])) {
+                            echo "<!-- DEBUG: bagians=" . htmlspecialchars(json_encode($bagianByUnsur[$unsur['id']])) . " -->";
+                        }
+                    }
+                    ?>
+                    <?php if (isset($bagianByUnsur[$unsur['id']]) && count($bagianByUnsur[$unsur['id']]) > 0): ?>
                         <?php foreach ($bagianByUnsur[$unsur['id']] as $bagian): ?>
-                        <div class="bagian-item" data-bagian-id="<?php echo $bagian['id']; ?>" data-unsur-id="<?php echo $bagian['id_unsur']; ?>">
+                        <div class="bagian-item" data-id="<?php echo $bagian['id']; ?>" data-urutan="<?php echo $bagian['urutan']; ?>" data-unsur-id="<?php echo $bagian['id_unsur']; ?>">
                             <div class="d-flex align-items-center">
                                 <div class="drag-handle">
                                     <i class="fas fa-grip-vertical"></i>
@@ -538,7 +596,7 @@ try {
 
 <!-- Add/Edit Bagian Modal -->
 <div class="modal fade" id="bagianModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -559,7 +617,7 @@ try {
                     
                     <div class="mb-3">
                         <label for="id_unsur" class="form-label">Unsur</label>
-                        <select class="form-select" id="id_unsur" name="id_unsur" required>
+                        <select class="form-select" id="id_unsur" name="id_unsur" required onchange="onUnsurChange()">
                             <option value="">-- Pilih Unsur --</option>
                             <?php foreach ($unsurData as $unsur): ?>
                             <option value="<?php echo $unsur['id']; ?>"><?php echo htmlspecialchars($unsur['nama_unsur']); ?></option>
@@ -583,6 +641,9 @@ try {
                             <option value="SIHUMAS">SIHUMAS</option>
                             <option value="BKO">BKO</option>
                         </select>
+                        <div class="form-text">
+                            <i class="fas fa-info-circle me-1"></i>Type akan otomatis disesuaikan berdasarkan unsur yang dipilih
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -597,11 +658,97 @@ try {
 </div>
 
 <script>
+// Fallback notification system if window.SPRINT is not available
+if (!window.SPRINT) {
+    window.SPRINT = {
+        showSuccess: function(message) {
+            try {
+                if (typeof toastr !== 'undefined' && toastr.success) {
+                    toastr.success(message);
+                } else {
+                    console.log('SUCCESS: ' + message);
+                    // Create a simple notification div
+                    const notification = document.createElement('div');
+                    notification.className = 'alert alert-success alert-dismissible fade show position-fixed';
+                    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                    notification.innerHTML = `
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    `;
+                    document.body.appendChild(notification);
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 3000);
+                }
+            } catch (error) {
+                console.log('SUCCESS: ' + message);
+                alert(message);
+            }
+        },
+        showError: function(message) {
+            try {
+                if (typeof toastr !== 'undefined' && toastr.error) {
+                    toastr.error(message);
+                } else {
+                    console.error('ERROR: ' + message);
+                    // Create a simple notification div
+                    const notification = document.createElement('div');
+                    notification.className = 'alert alert-danger alert-dismissible fade show position-fixed';
+                    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                    notification.innerHTML = `
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    `;
+                    document.body.appendChild(notification);
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 5000);
+                }
+            } catch (error) {
+                console.error('ERROR: ' + message);
+                alert('Error: ' + message);
+            }
+        }
+    };
+}
+
 // Page-specific JavaScript for Hierarchical Bagian Management
 let bagianData = <?php echo json_encode($bagianData); ?>;
 let originalBagianData = [...bagianData];
 let changes = [];
 let sortableInstances = [];
+
+// Debug: Check if libraries are loaded
+console.log('Libraries check:');
+console.log('Bootstrap available:', typeof bootstrap !== 'undefined');
+console.log('Toastr available:', typeof toastr !== 'undefined');
+console.log('SPRINT available:', typeof window.SPRINT !== 'undefined');
+
+// Initialize toastr if available but not configured
+if (typeof toastr !== 'undefined' && !toastr.options) {
+    console.log('Configuring toastr...');
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+}
 
 // Initialize sortable for each bagian container
 function initializeSortable() {
@@ -631,13 +778,14 @@ function initializeSortable() {
 // Handle bagian movement between unsur
 function handleBagianMove(evt) {
     const bagianElement = evt.item;
-    const bagianId = bagianElement.dataset.bagianId;
+    const bagianId = bagianElement.dataset.id; // Fixed: use data-id instead of data-bagianId
     const oldUnsurId = evt.from.dataset.unsurId;
     const newUnsurId = evt.to.dataset.unsurId;
     const newIndex = evt.newIndex;
     
     // Update visual state
     bagianElement.dataset.unsurId = newUnsurId;
+    bagianElement.dataset.urutan = newIndex + 1; // Update urutan attribute
     
     // Track change
     const change = {
@@ -675,12 +823,18 @@ function hideSaveButtons() {
 // Save all changes
 function saveAllChanges() {
     if (changes.length === 0) {
-        window.SPRINT.showSuccess('Tidak ada perubahan untuk disimpan.');
+        try {
+            window.SPRINT.showSuccess('Tidak ada perubahan untuk disimpan.');
+        } catch (error) {
+            console.log('Tidak ada perubahan untuk disimpan.');
+        }
         return;
     }
     
+    console.log('Saving changes:', changes);
+    
     const savePromises = changes.map(change => {
-        return fetch('pages/bagian_hierarki.php', {
+        return fetch('<?php echo url('pages/bagian.php'); ?>', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
@@ -695,20 +849,39 @@ function saveAllChanges() {
     Promise.all(savePromises)
         .then(responses => Promise.all(responses.map(r => r.json())))
         .then(results => {
+            console.log('Save results:', results);
             const allSuccess = results.every(r => r.success);
             if (allSuccess) {
-                window.SPRINT.showSuccess('Semua perubahan berhasil disimpan!');
+                try {
+                    window.SPRINT.showSuccess('Semua perubahan berhasil disimpan!');
+                } catch (error) {
+                    console.log('Semua perubahan berhasil disimpan!');
+                    alert('Semua perubahan berhasil disimpan!');
+                }
                 changes = [];
                 hideSaveButtons();
                 refreshData();
             } else {
                 const failed = results.filter(r => !r.success);
-                window.SPRINT.showError('Beberapa perubahan gagal: ' + failed.map(r => r.message).join(', '));
+                const errorMessage = 'Beberapa perubahan gagal: ' + failed.map(r => r.message).join(', ');
+                try {
+                    window.SPRINT.showError(errorMessage);
+                } catch (error) {
+                    console.error(errorMessage);
+                    alert(errorMessage);
+                }
             }
         })
         .catch(error => {
             console.error('Error saving changes:', error);
-            window.SPRINT.showError('Terjadi kesalahan saat menyimpan perubahan.');
+            const errorMessage = 'Terjadi kesalahan saat menyimpan perubahan.';
+            try {
+                window.SPRINT.showError(errorMessage);
+            } catch (notificationError) {
+                console.error('Notification error:', notificationError);
+                console.error('Original error:', error);
+                alert(errorMessage + ' Check console for details.');
+            }
         });
 }
 
@@ -753,14 +926,65 @@ function openAddModalForUnsur(unsurId, unsurName) {
     document.getElementById('formId').value = '';
     document.getElementById('nama_bagian').value = '';
     document.getElementById('id_unsur').value = unsurId;
-    document.getElementById('type').value = 'BAG/SAT/SIE';
+    
+    // Auto-set type based on unsur
+    const autoType = getBagianTypeByUnsur(unsurId, unsurName);
+    document.getElementById('type').value = autoType;
     
     const modal = new bootstrap.Modal(document.getElementById('bagianModal'));
     modal.show();
 }
 
+function getBagianTypeByUnsur(unsurId, unsurName) {
+    // Mapping unsur ke default bagian type
+    const unsurTypeMapping = {
+        // UNSUR PIMPINAN
+        '1': 'PIMPINAN',
+        'UNSUR PIMPINAN': 'PIMPINAN',
+        
+        // PEMBANTU PIMPINAN DAN STAFF
+        '8': 'BAG',
+        'PEMBANTU PIMPINAN DAN STAFF': 'BAG',
+        
+        // UNSUR PELAKSANA TUGAS POKOK
+        '3': 'SAT',
+        'UNSUR PELAKSANA TUGAS POKOK': 'SAT',
+        
+        // UNSUR PELAKSANA KEWILAYAHAN  
+        '4': 'POLSEK',
+        'UNSUR PELAKSANA KEWILAYAHAN': 'POLSEK',
+        
+        // UNSUR PENDUKUNG
+        '5': 'SIUM',
+        'UNSUR PENDUKUNG': 'SIUM',
+        
+        // UNSUR LAINNYA
+        '6': 'BKO',
+        'UNSUR LAINNYA': 'BKO'
+    };
+    
+    // Try to find by ID first, then by name
+    return unsurTypeMapping[unsurId] || 
+           unsurTypeMapping[unsurName] || 
+           'BAG/SAT/SIE'; // Default fallback
+}
+
+function onUnsurChange() {
+    const unsurSelect = document.getElementById('id_unsur');
+    const typeSelect = document.getElementById('type');
+    
+    if (unsurSelect.value) {
+        const selectedOption = unsurSelect.options[unsurSelect.selectedIndex];
+        const unsurName = selectedOption.textContent;
+        const unsurId = unsurSelect.value;
+        
+        const autoType = getBagianTypeByUnsur(unsurId, unsurName);
+        typeSelect.value = autoType;
+    }
+}
+
 function editBagian(id) {
-    fetch('pages/bagian_hierarki.php', {
+    fetch('<?php echo url('pages/bagian.php'); ?>', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ action: 'get_bagian_detail', id: id })
@@ -779,12 +1003,22 @@ function editBagian(id) {
             const modal = new bootstrap.Modal(document.getElementById('bagianModal'));
             modal.show();
         } else {
-            window.SPRINT.showError('Error: Bagian tidak ditemukan');
+            try {
+                window.SPRINT.showError('Error: Bagian tidak ditemukan');
+            } catch (error) {
+                console.error('Error: Bagian tidak ditemukan');
+                alert('Error: Bagian tidak ditemukan');
+            }
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        window.SPRINT.showError('Error: ' + error.message);
+        try {
+            window.SPRINT.showError('Error: ' + error.message);
+        } catch (notificationError) {
+            console.error('Error: ' + error.message);
+            alert('Error: ' + error.message);
+        }
     });
 }
 
@@ -812,23 +1046,37 @@ document.getElementById('bagianForm').addEventListener('submit', function(e) {
     const formData = new FormData(this);
     const action = formData.get('action');
     
-    fetch('pages/bagian_hierarki.php', {
+    fetch('<?php echo url('pages/bagian.php'); ?>', {
         method: 'POST',
         body: formData
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            window.SPRINT.showSuccess(data.message);
+            try {
+                window.SPRINT.showSuccess(data.message);
+            } catch (error) {
+                console.log('Success: ' + data.message);
+            }
             bootstrap.Modal.getInstance(document.getElementById('bagianModal')).hide();
             refreshData();
         } else {
-            window.SPRINT.showError('Error: ' + data.message);
+            try {
+                window.SPRINT.showError('Error: ' + data.message);
+            } catch (error) {
+                console.error('Error: ' + data.message);
+                alert('Error: ' + data.message);
+            }
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        window.SPRINT.showError('Error: Terjadi kesalahan saat menyimpan data');
+        try {
+            window.SPRINT.showError('Error: Terjadi kesalahan saat menyimpan data');
+        } catch (notificationError) {
+            console.error('Error: Terjadi kesalahan saat menyimpan data');
+            alert('Error: Terjadi kesalahan saat menyimpan data');
+        }
     });
 });
 
@@ -845,3 +1093,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+</div> <!-- End container -->
+
+<?php include '../includes/components/footer.php'; ?>

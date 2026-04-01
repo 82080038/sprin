@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     
     if ($action === 'get_unsur_list') {
-        $stmt = $pdo->query("SELECT id, nama_unsur, urutan FROM unsur WHERE is_active = 1 ORDER BY urutan");
+        $stmt = $pdo->query("SELECT id, nama_unsur, urutan FROM unsur ORDER BY urutan");
         $unsurData = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         header('Content-Type: application/json');
@@ -47,8 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 j.id,
                 j.nama_jabatan,
                 j.id_unsur,
-                u.nama_unsur,
-                u.urutan as urutan_unsur,
+                COALESCE(u.nama_unsur, 'BELUM DISET') as nama_unsur,
+                COALESCE(u.urutan, 99) as urutan_unsur,
                 (SELECT COUNT(*) FROM personil p WHERE p.id_jabatan = j.id AND p.is_deleted = FALSE AND p.is_active = TRUE) as personil_count
             FROM jabatan j
             LEFT JOIN unsur u ON j.id_unsur = u.id
@@ -79,8 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 j.id,
                 j.nama_jabatan,
                 j.id_unsur,
-                u.nama_unsur,
-                u.urutan as urutan_unsur
+                COALESCE(u.nama_unsur, 'BELUM DISET') as nama_unsur,
+                COALESCE(u.urutan, 99) as urutan_unsur
             FROM jabatan j
             LEFT JOIN unsur u ON j.id_unsur = u.id
             WHERE j.id = ?
@@ -191,23 +191,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Get current data
+// Get bagian data for top level grouping
+$stmt = $pdo->query("
+    SELECT 
+        b.id,
+        b.nama_bagian,
+        b.id_unsur,
+        u.nama_unsur as unsur_name,
+        u.urutan as unsur_urutan
+    FROM bagian b
+    LEFT JOIN unsur u ON b.id_unsur = u.id
+    ORDER BY u.urutan ASC, b.nama_bagian ASC
+");
+$bagianData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Get jabatan data with bagian info
 $stmt = $pdo->query("
     SELECT 
         j.id,
         j.nama_jabatan,
         j.id_unsur,
-        u.nama_unsur,
-        u.urutan as urutan_unsur,
+        COALESCE(u.nama_unsur, 'BELUM DISET') as nama_unsur,
+        COALESCE(u.urutan, 99) as urutan_unsur,
         (SELECT COUNT(*) FROM personil p WHERE p.id_jabatan = j.id AND p.is_deleted = FALSE AND p.is_active = TRUE) as personil_count
     FROM jabatan j
     LEFT JOIN unsur u ON j.id_unsur = u.id
-    ORDER BY u.urutan ASC, j.nama_jabatan ASC
+    ORDER BY COALESCE(u.urutan, 99) ASC, j.nama_jabatan ASC
 ");
 $jabatanData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Get unsur data for dropdown
-$stmt = $pdo->query("SELECT id, nama_unsur, urutan FROM unsur WHERE is_active = 1 ORDER BY urutan");
+$stmt = $pdo->query("SELECT id, nama_unsur, urutan FROM unsur ORDER BY urutan");
 $unsurData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -289,105 +303,492 @@ $unsurData = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <!-- Jabatan Table Grouped by Unsur -->
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-list me-2"></i>Daftar Jabatan per Unsur
-        </div>
-        <div class="card-body">
-            <div id="jabatanContainer">
-                <?php
-                // Group jabatan by unsur
-                $jabatanByUnsur = [];
-                foreach ($jabatanData as $jabatan) {
-                    $unsurId = $jabatan['id_unsur'] ?? 0;
-                    $unsurName = $jabatan['nama_unsur'] ?? 'Unknown';
-                    $urutanUnsur = $jabatan['urutan_unsur'] ?? 999;
-                    
-                    if (!isset($jabatanByUnsur[$unsurId])) {
-                        $jabatanByUnsur[$unsurId] = [
-                            'nama_unsur' => $unsurName,
-                            'urutan_unsur' => $urutanUnsur,
-                            'jabatans' => []
-                        ];
-                    }
-                    $jabatanByUnsur[$unsurId]['jabatans'][] = $jabatan;
-                }
-                
-                // Sort by unsur order
-                uasort($jabatanByUnsur, function($a, $b) {
-                    return $a['urutan_unsur'] - $b['urutan_unsur'];
-                });
-                
-                foreach ($jabatanByUnsur as $unsurId => $unsurGroup):
-                ?>
-                <div class="unsur-section mb-4">
-                    <div class="unsur-header d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="mb-0">
+    <!-- Bagian, Unsur, dan Jabatan Cards -->
+    <div id="bagian-unsur-jabatan-container" class="row">
+        <?php 
+        // Group bagian by unsur
+        $bagianByUnsur = [];
+        foreach ($bagianData as $bagian) {
+            $unsurId = $bagian['id_unsur'] ?? 0;
+            $unsurName = $bagian['unsur_name'] ?? 'Unknown';
+            $unsurUrutan = $bagian['unsur_urutan'] ?? 999;
+            
+            if (!isset($bagianByUnsur[$unsurId])) {
+                $bagianByUnsur[$unsurId] = [
+                    'nama_unsur' => $unsurName,
+                    'urutan_unsur' => $unsurUrutan,
+                    'bagians' => []
+                ];
+            }
+            $bagianByUnsur[$unsurId]['bagians'][] = $bagian;
+        }
+        
+        // Sort by unsur order
+        uasort($bagianByUnsur, function($a, $b) {
+            return $a['urutan_unsur'] - $b['urutan_unsur'];
+        });
+        
+        foreach ($bagianByUnsur as $unsurId => $unsurGroup):
+        ?>
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">
                             <i class="fas fa-layer-group me-2"></i>
                             <?php echo htmlspecialchars($unsurGroup['nama_unsur']); ?>
-                        </h4>
-                        <span class="badge bg-primary">
-                            <?php echo count($unsurGroup['jabatans']); ?> Jabatan
+                        </h6>
+                        <span class="badge bg-light text-dark">
+                            <?php echo count($unsurGroup['bagians']); ?> Bagian
                         </span>
                     </div>
-                    
-                    <div class="table-responsive">
-                        <table class="table table-hover table-sm">
-                            <thead class="table-light">
-                                <tr>
-                                    <th width="50">No</th>
-                                    <th>Nama Jabatan</th>
-                                    <th width="150">Jumlah Personil</th>
-                                    <th width="100">Status</th>
-                                    <th width="150">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php $no = 1; foreach ($unsurGroup['jabatans'] as $jabatan): ?>
-                                <tr id="jabatan-row-<?php echo $jabatan['id']; ?>">
-                                    <td><?php echo $no++; ?></td>
-                                    <td>
-                                        <strong><?php echo htmlspecialchars($jabatan['nama_jabatan']); ?></strong>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-info">
-                                            <?php echo $jabatan['personil_count']; ?>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="badge <?php echo $jabatan['personil_count'] > 0 ? 'bg-success' : 'bg-warning'; ?>">
-                                            <?php echo $jabatan['personil_count'] > 0 ? 'Aktif' : 'Kosong'; ?>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <button class="btn btn-sm btn-outline-primary" onclick="viewJabatan(<?php echo $jabatan['id']; ?>)">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-warning" onclick="editJabatan(<?php echo $jabatan['id']; ?>)">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteJabatan(<?php echo $jabatan['id']; ?>)">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
-                <?php endforeach; ?>
+                
+                <div class="card-body p-0">
+                    <?php foreach ($unsurGroup['bagians'] as $bagian): ?>
+                    <div class="bagian-section">
+                        <div class="bagian-header d-flex justify-content-between align-items-center p-3 border-bottom">
+                            <div>
+                                <h6 class="mb-1">
+                                    <i class="fas fa-building me-2"></i>
+                                    <?php echo htmlspecialchars($bagian['nama_bagian']); ?>
+                                </h6>
+                                <small class="text-muted">ID: <?php echo $bagian['id']; ?></small>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-sm btn-outline-primary add-jabatan-btn me-2" 
+                                        onclick="openAddModalForBagian(<?php echo $bagian['id']; ?>, '<?php echo htmlspecialchars($bagian['nama_bagian']); ?>')">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <span class="badge bg-info jabatan-count" data-bagian-id="<?php echo $bagian['id']; ?>">
+                                    0
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="jabatan-container p-3">
+                            <div class="jabatan-list" data-bagian-id="<?php echo $bagian['id']; ?>">
+                                <?php
+                                // Get jabatan for this bagian (by unsur matching)
+                                $bagianJabatan = array_filter($jabatanData, function($jabatan) use ($bagian) {
+                                    return $jabatan['id_unsur'] == $bagian['id_unsur'];
+                                });
+                                
+                                if (!empty($bagianJabatan)):
+                                    foreach ($bagianJabatan as $index => $jabatan):
+                                ?>
+                                <div class="jabatan-item d-flex justify-content-between align-items-center p-2 mb-2 border rounded">
+                                    <div class="flex-grow-1">
+                                        <div class="fw-bold"><?php echo htmlspecialchars($jabatan['nama_jabatan']); ?></div>
+                                        <small class="text-muted">
+                                            <span class="badge bg-success me-1"><?php echo $jabatan['personil_count']; ?> Personil</span>
+                                            ID: <?php echo $jabatan['id']; ?>
+                                        </small>
+                                    </div>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary" onclick="viewJabatan(<?php echo $jabatan['id']; ?>)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-outline-warning" onclick="editJabatan(<?php echo $jabatan['id']; ?>)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger" onclick="deleteJabatan(<?php echo $jabatan['id']; ?>, '<?php echo htmlspecialchars($jabatan['nama_jabatan']); ?>')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <?php 
+                                    endforeach;
+                                else:
+                                ?>
+                                <div class="text-muted text-center p-3">
+                                    <i class="fas fa-inbox mb-2"></i>
+                                    <p class="mb-2">Belum ada jabatan</p>
+                                    <button class="btn btn-sm btn-primary" onclick="openAddModalForBagian(<?php echo $bagian['id']; ?>, '<?php echo htmlspecialchars($bagian['nama_bagian']); ?>')">
+                                        <i class="fas fa-plus me-1"></i>Tambah Jabatan
+                                    </button>
+                                </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </div>
+        <?php endforeach; ?>
     </div>
 </div>
 
 <!-- Add/Edit Modal -->
 <div class="modal fade" id="jabatanModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-tie me-2"></i>
+                    <span id="modalTitle">Tambah Jabatan</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST" id="jabatanForm">
+                <div class="modal-body">
+                    <input type="hidden" name="action" id="formAction" value="create_jabatan">
+                    <input type="hidden" name="id" id="formId">
+                    <input type="hidden" name="id_bagian" id="id_bagian">
+                    
+                    <div class="mb-3">
+                        <label for="nama_jabatan" class="form-label">Nama Jabatan</label>
+                        <input type="text" class="form-control" id="nama_jabatan" name="nama_jabatan" required>
+                        <div class="form-text">
+                            Contoh: KASAT RESKRIM, KANIT RESNARKOBA, PS. INTELKAM, dll
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_unsur" class="form-label">Unsur</label>
+                        <select class="form-select" id="id_unsur" name="id_unsur" required>
+                            <option value="">-- Pilih Unsur --</option>
+                            <?php foreach ($unsurData as $unsur): ?>
+                            <option value="<?php echo $unsur['id']; ?>">
+                                <?php echo htmlspecialchars($unsur['nama_unsur']); ?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <div class="form-text">
+                            Pilih unsur organisasi untuk jabatan ini
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- View Modal -->
+<div class="modal fade" id="viewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-eye me-2"></i>Detail Jabatan
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Nama Jabatan:</strong>
+                        <p id="viewJabatanNama"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Unsur:</strong>
+                        <p id="viewJabatanUnsur"></p>
+                    </div>
+                </div>
+                
+                <h6>Personil di Jabatan Ini:</h6>
+                <div id="viewJabatanPersonil"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.bagian-section {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.bagian-section:last-child {
+    border-bottom: none;
+}
+
+.bagian-header {
+    background: #f8f9fa;
+    transition: all 0.2s ease;
+}
+
+.bagian-header:hover {
+    background: #e9ecef;
+}
+
+.jabatan-item {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.jabatan-item:hover {
+    background: #f8f9fa;
+    border-color: #007bff;
+    box-shadow: 0 2px 4px rgba(0,123,255,0.1);
+}
+
+.add-jabatan-btn {
+    transition: all 0.2s ease;
+}
+
+.add-jabatan-btn:hover {
+    background: #007bff;
+    color: white;
+}
+
+.jabatan-count {
+    min-width: 20px;
+}
+
+@media (max-width: 768px) {
+    .bagian-header {
+        padding: 1rem !important;
+    }
+    
+    .jabatan-item {
+        padding: 0.5rem !important;
+    }
+    
+    .btn-group .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+</style>
+
+<script>
+let jabatanData = <?php echo json_encode($jabatanData); ?>;
+let bagianData = <?php echo json_encode($bagianData); ?>;
+let unsurData = <?php echo json_encode($unsurData); ?>;
+
+// Update jabatan counts on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateJabatanCounts();
+});
+
+function updateJabatanCounts() {
+    // Count jabatan per bagian
+    const jabatanByBagian = {};
+    
+    jabatanData.forEach(jabatan => {
+        // Find bagian that matches this jabatan's unsur
+        const matchingBagian = bagianData.find(bagian => 
+            bagian.id_unsur == jabatan.id_unsur
+        );
+        
+        if (matchingBagian) {
+            if (!jabatanByBagian[matchingBagian.id]) {
+                jabatanByBagian[matchingBagian.id] = 0;
+            }
+            jabatanByBagian[matchingBagian.id]++;
+        }
+    });
+    
+    // Update UI counts
+    document.querySelectorAll('.jabatan-count').forEach(badge => {
+        const bagianId = badge.getAttribute('data-bagian-id');
+        const count = jabatanByBagian[bagianId] || 0;
+        badge.textContent = count;
+    });
+}
+
+function openAddModalForBagian(bagianId, bagianName) {
+    // Find bagian and get unsur info
+    const bagian = bagianData.find(b => b.id == bagianId);
+    if (!bagian) {
+        alert('Bagian tidak ditemukan');
+        return;
+    }
+    
+    document.getElementById('modalTitle').textContent = `Tambah Jabatan - ${bagianName}`;
+    document.getElementById('formAction').value = 'create_jabatan';
+    document.getElementById('formId').value = '';
+    document.getElementById('id_bagian').value = bagianId;
+    document.getElementById('nama_jabatan').value = '';
+    document.getElementById('id_unsur').value = bagian.id_unsur;
+    
+    new bootstrap.Modal(document.getElementById('jabatanModal')).show();
+}
+
+function openAddModal() {
+    document.getElementById('modalTitle').textContent = 'Tambah Jabatan';
+    document.getElementById('formAction').value = 'create_jabatan';
+    document.getElementById('formId').value = '';
+    document.getElementById('id_bagian').value = '';
+    document.getElementById('nama_jabatan').value = '';
+    document.getElementById('id_unsur').value = '';
+    
+    new bootstrap.Modal(document.getElementById('jabatanModal')).show();
+}
+
+function editJabatan(jabatanId) {
+    fetch('jabatan.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            action: 'get_jabatan_detail',
+            id: jabatanId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.data) {
+            const jabatan = data.data;
+            document.getElementById('modalTitle').textContent = 'Edit Jabatan';
+            document.getElementById('formAction').value = 'update_jabatan';
+            document.getElementById('formId').value = jabatan.id;
+            document.getElementById('nama_jabatan').value = jabatan.nama_jabatan || '';
+            document.getElementById('id_unsur').value = jabatan.id_unsur || '';
+            document.getElementById('id_bagian').value = '';
+            
+            new bootstrap.Modal(document.getElementById('jabatanModal')).show();
+        } else {
+            showAlert('danger', 'Error: Jabatan tidak ditemukan');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('danger', 'Terjadi kesalahan saat mengambil data jabatan');
+    });
+}
+
+function deleteJabatan(jabatanId, jabatanName) {
+    if (confirm(`Apakah Anda yakin ingin menghapus "${jabatanName}"?`)) {
+        fetch('jabatan.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'delete_jabatan',
+                id: jabatanId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert('success', data.message);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                showAlert('danger', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert('danger', 'Terjadi kesalahan saat menghapus jabatan');
+        });
+    }
+}
+
+function viewJabatan(jabatanId) {
+    const jabatan = jabatanData.find(j => j.id == jabatanId);
+    
+    document.getElementById('viewJabatanNama').textContent = jabatan ? jabatan.nama_jabatan : '';
+    document.getElementById('viewJabatanUnsur').textContent = jabatan ? jabatan.nama_unsur : '';
+    
+    // Simple personil display
+    document.getElementById('viewJabatanPersonil').innerHTML = `
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            Data personil dapat dilihat di halaman Personil Management
+        </div>
+    `;
+    
+    new bootstrap.Modal(document.getElementById('viewModal')).show();
+}
+
+function exportData() {
+    // Simple export to text
+    let text = "DAFTAR JABATAN POLRES SAMOSIR\n\n";
+    
+    jabatanData.forEach((jabatan, index) => {
+        text += `${index + 1}. ${jabatan.nama_jabatan}\n`;
+        text += `   Unsur: ${jabatan.nama_unsur}\n`;
+        text += `   Jumlah Personil: ${jabatan.personil_count}\n`;
+        text += `   Status: ${jabatan.personil_count > 0 ? 'Aktif' : 'Kosong'}\n\n`;
+    });
+    
+    // Create blob and download
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'daftar_jabatan_polres_samosir.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+}
+
+function refreshData() {
+    window.location.reload();
+}
+
+function showAlert(type, message) {
+    // Create alert element
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    // Insert at top of container
+    const container = document.querySelector('.container');
+    container.insertBefore(alertDiv, container.firstChild);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.parentNode.removeChild(alertDiv);
+        }
+    }, 5000);
+}
+
+// Form submission
+document.getElementById('jabatanForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('jabatan.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert('success', data.message);
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        } else {
+            showAlert('danger', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showAlert('danger', 'Terjadi kesalahan saat menyimpan data');
+    });
+});
+</script>
+
+<?php include __DIR__ . '/../includes/components/footer.php'; ?>
+
+<!-- Add/Edit Modal -->
+<div class="modal fade" id="jabatanModal" tabindex="-1">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -837,10 +1238,6 @@ function renderJabatanTable(jabatanList) {
     document.getElementById('jabatanContainer').innerHTML = html;
 }
 
-function refreshData() {
-    window.location.reload();
-}
-
 function exportData() {
     // Simple export to text
     let text = "DAFTAR JABATAN POLRES SAMOSIR\n\n";
@@ -852,17 +1249,24 @@ function exportData() {
         text += `   Status: ${jabatan.personil_count > 0 ? 'Aktif' : 'Kosong'}\n\n`;
     });
     
+    // Create blob and download
     const blob = new Blob([text], { type: 'text/plain' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = 'daftar_jabatan_polres_samosir.txt';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
 }
 
+function refreshData() {
+    window.location.reload();
+}
+
 function showAlert(type, message) {
-    // Simple alert using Bootstrap
+    // Create alert element
     const alertDiv = document.createElement('div');
     alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
     alertDiv.innerHTML = `

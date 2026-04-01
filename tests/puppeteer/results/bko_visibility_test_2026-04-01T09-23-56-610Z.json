@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-04-01T09:23:56.610Z",
+  "testType": "BKO Visibility in UNSUR LAINNYA Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "BKO Visibility",
+      "status": "FAIL",
+      "data": {
+        "index": 5,
+        "unsurName": "UNSUR LAINNYA",
+        "unsurId": "6",
+        "totalBagians": 0,
+        "html": "<div class=\"unsur-card\" data-unsur-id=\"6\">\n            <!-- Unsur Header -->\n            <div class=\"unsur-header\">\n                <div class=\"d-flex justify-content-between align-items-center\">\n                    <div>\n                        <h6 class=\"mb-1\"><i class=\"fas fa-layer-group me-2\"></i>UNSUR LAINNYA</h6>\n                        <small>Urutan: 6</small>\n                    </div>\n                    <div class=\"d-flex align-items-center\">\n                        <span class=\"badge ..."
+      }
+    },
+    {
+      "test": "BKO Hidden Check",
+      "status": "FAIL",
+      "error": "BKO element not found"
+    }
+  ],
+  "summary": {
+    "total": 2,
+    "passed": 0,
+    "failed": 2,
+    "warnings": 0
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-04-01T08:43:22.627Z",
+  "testType": "Manual Save Button Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Manual Trigger Changes",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "saveButtonVisible": true,
+        "cancelButtonVisible": true,
+        "changesCount": 1
+      }
+    },
+    {
+      "test": "Manual Save",
+      "status": "PASS",
+      "data": {
+        "saveResult": {
+          "success": true,
+          "message": "Save button clicked"
+        },
+        "notifications": []
+      }
+    },
+    {
+      "test": "Database Update Verification",
+      "status": "WARNING",
+      "data": {
+        "saveButtonHidden": false,
+        "cancelButtonHidden": false,
+        "changesArray": [
+          {
+            "bagian_id": "5",
+            "old_unsur_id": "2",
+            "new_unsur_id": "2",
+            "new_urutan": 2
+          }
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 2,
+    "failed": 0,
+    "warnings": 1
+  }
+}

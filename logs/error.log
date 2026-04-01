@@ -217,3 +217,8 @@ Stack trace:
 [2026-03-31 02:43:36] [EXCEPTION] Failed opening required '/opt/lampp/htdocs/sprint/cron/../core/AuthHelper.php' (include_path='.:/usr/share/php') in /opt/lampp/htdocs/sprint/cron/check_integration.php on line 9
 Stack trace:
 #0 {main}
+[2026-04-01 08:59:10] [FATAL] Uncaught PDOException: SQLSTATE[HY000] [2002] No such file or directory in Command line code:3
+Stack trace:
+#0 Command line code(3): PDO->__construct()
+#1 {main}
+  thrown in Command line code on line 3

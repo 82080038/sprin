@@ -1,0 +1,280 @@
+{
+  "timestamp": "2026-04-01T08:49:37.372Z",
+  "testType": "Edit Bagian Functionality Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Edit Buttons Found",
+      "status": "PASS",
+      "data": [
+        {
+          "index": 0,
+          "onclick": "editBagian(1)",
+          "bagianId": "1",
+          "bagianName": "PIMPINAN",
+          "visible": true
+        },
+        {
+          "index": 1,
+          "onclick": "editBagian(2)",
+          "bagianId": "2",
+          "bagianName": "BAG OPS",
+          "visible": true
+        },
+        {
+          "index": 2,
+          "onclick": "editBagian(4)",
+          "bagianId": "4",
+          "bagianName": "BAG SDM",
+          "visible": true
+        },
+        {
+          "index": 3,
+          "onclick": "editBagian(3)",
+          "bagianId": "3",
+          "bagianName": "BAG REN",
+          "visible": true
+        },
+        {
+          "index": 4,
+          "onclick": "editBagian(5)",
+          "bagianId": "5",
+          "bagianName": "BAG LOG",
+          "visible": true
+        },
+        {
+          "index": 5,
+          "onclick": "editBagian(20)",
+          "bagianId": "20",
+          "bagianName": "SPKT",
+          "visible": true
+        },
+        {
+          "index": 6,
+          "onclick": "editBagian(7)",
+          "bagianId": "7",
+          "bagianName": "SAT RESKRIM",
+          "visible": true
+        },
+        {
+          "index": 7,
+          "onclick": "editBagian(9)",
+          "bagianId": "9",
+          "bagianName": "SAT LANTAS",
+          "visible": true
+        },
+        {
+          "index": 8,
+          "onclick": "editBagian(6)",
+          "bagianId": "6",
+          "bagianName": "SAT INTELKAM",
+          "visible": true
+        },
+        {
+          "index": 9,
+          "onclick": "editBagian(11)",
+          "bagianId": "11",
+          "bagianName": "SAT PAMOBVIT",
+          "visible": true
+        },
+        {
+          "index": 10,
+          "onclick": "editBagian(12)",
+          "bagianId": "12",
+          "bagianName": "SAT POLAIRUD",
+          "visible": true
+        },
+        {
+          "index": 11,
+          "onclick": "editBagian(14)",
+          "bagianId": "14",
+          "bagianName": "SAT BINMAS",
+          "visible": true
+        },
+        {
+          "index": 12,
+          "onclick": "editBagian(8)",
+          "bagianId": "8",
+          "bagianName": "SAT RESNARKOBA",
+          "visible": true
+        },
+        {
+          "index": 13,
+          "onclick": "editBagian(10)",
+          "bagianId": "10",
+          "bagianName": "SAT SAMAPTA",
+          "visible": true
+        },
+        {
+          "index": 14,
+          "onclick": "editBagian(13)",
+          "bagianId": "13",
+          "bagianName": "SAT TAHTI",
+          "visible": true
+        },
+        {
+          "index": 15,
+          "onclick": "editBagian(15)",
+          "bagianId": "15",
+          "bagianName": "POLSEK HARIAN BOHO",
+          "visible": true
+        },
+        {
+          "index": 16,
+          "onclick": "editBagian(18)",
+          "bagianId": "18",
+          "bagianName": "POLSEK ONAN RUNGGU",
+          "visible": true
+        },
+        {
+          "index": 17,
+          "onclick": "editBagian(16)",
+          "bagianId": "16",
+          "bagianName": "POLSEK PALIPI",
+          "visible": true
+        },
+        {
+          "index": 18,
+          "onclick": "editBagian(19)",
+          "bagianId": "19",
+          "bagianName": "POLSEK PANGURURAN",
+          "visible": true
+        },
+        {
+          "index": 19,
+          "onclick": "editBagian(17)",
+          "bagianId": "17",
+          "bagianName": "POLSEK SIMANINDO",
+          "visible": true
+        },
+        {
+          "index": 20,
+          "onclick": "editBagian(23)",
+          "bagianId": "23",
+          "bagianName": "SIDOKKES",
+          "visible": true
+        },
+        {
+          "index": 21,
+          "onclick": "editBagian(28)",
+          "bagianId": "28",
+          "bagianName": "SIHUMAS",
+          "visible": true
+        },
+        {
+          "index": 22,
+          "onclick": "editBagian(22)",
+          "bagianId": "22",
+          "bagianName": "SIKEU",
+          "visible": true
+        },
+        {
+          "index": 23,
+          "onclick": "editBagian(26)",
+          "bagianId": "26",
+          "bagianName": "SIKUM",
+          "visible": true
+        },
+        {
+          "index": 24,
+          "onclick": "editBagian(27)",
+          "bagianId": "27",
+          "bagianName": "SIPROPAM",
+          "visible": true
+        },
+        {
+          "index": 25,
+          "onclick": "editBagian(25)",
+          "bagianId": "25",
+          "bagianName": "SITIK",
+          "visible": true
+        },
+        {
+          "index": 26,
+          "onclick": "editBagian(21)",
+          "bagianId": "21",
+          "bagianName": "SIUM",
+          "visible": true
+        },
+        {
+          "index": 27,
+          "onclick": "editBagian(24)",
+          "bagianId": "24",
+          "bagianName": "SIWAS",
+          "visible": true
+        },
+        {
+          "index": 28,
+          "onclick": "editBagian(24)",
+          "bagianId": "24",
+          "bagianName": "SIWAS",
+          "visible": true
+        }
+      ]
+    },
+    {
+      "test": "Edit Button Click",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "message": "Edit button clicked"
+      }
+    },
+    {
+      "test": "Modal State",
+      "status": "PASS",
+      "data": {
+        "modalExists": true,
+        "modalVisible": true,
+        "modalTitle": "Edit Bagian",
+        "formAction": "update_bagian",
+        "formId": "1",
+        "namaBagian": "PIMPINAN",
+        "idUnsur": "1",
+        "type": ""
+      }
+    },
+    {
+      "test": "Edit Bagian API",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "status": 200,
+        "statusText": "OK",
+        "data": {
+          "success": true,
+          "data": {
+            "id": 5,
+            "kode_bagian": "BAG_LOG",
+            "nama_bagian": "BAG LOG",
+            "id_unsur": 2,
+            "urutan": 4,
+            "deskripsi": "Bagian Logistik",
+            "is_active": 1,
+            "created_at": "2026-03-29 01:16:57",
+            "updated_at": "2026-04-01 15:45:31"
+          }
+        }
+      }
+    },
+    {
+      "test": "Update Bagian API",
+      "status": "FAIL",
+      "data": {
+        "success": true,
+        "status": 200,
+        "statusText": "OK",
+        "data": {
+          "rawResponse": "<br />\n<b>Warning</b>:  error_log(/opt/lampp/htdocs/sprint/core/../logs/error.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/sprint/core/error_handler.php</b> on line <b>130</b><br />\n<br />\n<b>Warning</b>:  error_log(/opt/lampp/htdocs/sprint/core/../logs/error.log): Failed to open stream: Permission denied in <b>/opt/lampp/htdocs/sprint/core/error_handler.php</b> on line <b>130</b><br />\n<h1>Error Occurred</h1><pre>[EXCEPTION] SQLSTATE[42S22]: Column not found: 1054 Unknown column &#039;type&#039; in &#039;field list&#039; in /opt/lampp/htdocs/sprint/pages/bagian.php on line 138\nStack trace:\n#0 /opt/lampp/htdocs/sprint/pages/bagian.php(138): PDOStatement-&gt;execute(Array)\n#1 {main}</pre>",
+          "parseError": "Unexpected token '<', \"<br />\n<b>\"... is not valid JSON"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 4,
+    "failed": 1,
+    "warnings": 0
+  }
+}

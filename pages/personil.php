@@ -258,7 +258,7 @@ $api_base = API_BASE_URL;
 
 <!-- Add Jabatan Modal -->
 <div class="modal fade" id="addJabatanModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">

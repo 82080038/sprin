@@ -150,7 +150,7 @@ include __DIR__ . '/../includes/components/header.php';
 
 <!-- Add User Modal -->
 <div class="modal fade" id="addUserModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -198,7 +198,7 @@ include __DIR__ . '/../includes/components/header.php';
 
 <!-- Edit User Modal -->
 <div class="modal fade" id="editUserModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -253,7 +253,7 @@ include __DIR__ . '/../includes/components/header.php';
 
 <!-- Change Password Modal -->
 <div class="modal fade" id="changePasswordModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">

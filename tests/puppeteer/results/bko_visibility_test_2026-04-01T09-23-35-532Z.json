@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-04-01T09:23:35.532Z",
+  "testType": "BKO Visibility in UNSUR LAINNYA Test",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "BKO Visibility",
+      "status": "FAIL",
+      "error": "SyntaxError: Failed to execute 'querySelectorAll' on 'Document': '[data-id*=\"29\"], .bagian-name:contains(\"BKO\")' is not a valid selector."
+    },
+    {
+      "test": "BKO Hidden Check",
+      "status": "FAIL",
+      "error": "BKO element not found"
+    }
+  ],
+  "summary": {
+    "total": 2,
+    "passed": 0,
+    "failed": 2,
+    "warnings": 0
+  }
+}

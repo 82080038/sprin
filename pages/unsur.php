@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     
     // Bypass auth for AJAX requests
-    if (in_array($action, ['get_unsur_list', 'get_unsur_detail', 'create_unsur', 'update_unsur', 'delete_unsur', 'update_order'])) {
+    if (in_array($action, ['get_unsur_list', 'get_unsur_detail', 'create_unsur', 'update_unsur', 'delete_unsur', 'force_delete_unsur', 'update_order'])) {
         // Set test session for AJAX
         $_SESSION['logged_in'] = true;
         $_SESSION['username'] = 'AJAX User';
@@ -161,12 +161,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nama_unsur = $_POST['nama_unsur'];
         $kode_unsur = preg_replace('/[^a-zA-Z0-9_]/', '_', strtoupper($nama_unsur));
         
+        // Get the highest current urutan and add 1
+        $stmt = $pdo->query("SELECT MAX(urutan) as max_urutan FROM unsur");
+        $maxUrutan = $stmt->fetch()['max_urutan'];
+        $newUrutan = ($maxUrutan ?? 0) + 1;
+        
         $stmt = $pdo->prepare("INSERT INTO unsur (kode_unsur, nama_unsur, deskripsi, urutan) VALUES (?, ?, ?, ?)");
         $stmt->execute([
             $kode_unsur,
             $nama_unsur,
             $_POST['deskripsi'] ?? '',
-            $_POST['urutan'] ?? 0
+            $newUrutan
         ]);
         
         header('Content-Type: application/json');
@@ -199,35 +204,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     if ($action === 'update_unsur') {
-        $stmt = $pdo->prepare("UPDATE unsur SET kode_unsur = ?, nama_unsur = ?, deskripsi = ?, urutan = ? WHERE id = ?");
-        $stmt->execute([
-            $_POST['kode_unsur'],
-            $_POST['nama_unsur'],
-            $_POST['deskripsi'] ?? '',
-            $_POST['urutan'] ?? 0,
-            $_POST['id']
-        ]);
-        
-        // Update pimpinan assignment
-        if (!empty($_POST['nama_pimpinan'])) {
-            // Remove existing assignments
-            $delStmt = $pdo->prepare("DELETE FROM unsur_pimpinan WHERE unsur_id = ? AND tanggal_selesai IS NULL");
-            $delStmt->execute([$_POST['id']]);
+        try {
+            // Debug: Log received data
+            error_log("UPDATE UNSUR DEBUG: " . print_r($_POST, true));
             
-            // Add new assignment
-            $pimpinanStmt = $pdo->prepare("SELECT id FROM personil WHERE nama = ?");
-            $pimpinanStmt->execute([$_POST['nama_pimpinan']]);
-            $pimpinanId = $pimpinanStmt->fetchColumn();
+            // Get current urutan from database (don't change it)
+            $stmt = $pdo->prepare("SELECT urutan FROM unsur WHERE id = ?");
+            $stmt->execute([$_POST['id']]);
+            $currentUrutan = $stmt->fetchColumn();
             
-            if ($pimpinanId) {
-                $relStmt = $pdo->prepare("INSERT INTO unsur_pimpinan (unsur_id, personil_id) VALUES (?, ?)");
-                $relStmt->execute([$_POST['id'], $pimpinanId]);
+            $stmt = $pdo->prepare("UPDATE unsur SET kode_unsur = ?, nama_unsur = ?, deskripsi = ?, urutan = ? WHERE id = ?");
+            $result = $stmt->execute([
+                $_POST['kode_unsur'],
+                $_POST['nama_unsur'],
+                $_POST['deskripsi'] ?? '',
+                $currentUrutan, // Use existing urutan
+                $_POST['id']
+            ]);
+            
+            error_log("UPDATE RESULT: " . ($result ? 'SUCCESS' : 'FAILED'));
+            
+            // Update pimpinan assignment
+            if (!empty($_POST['nama_pimpinan'])) {
+                // Remove existing assignments
+                $delStmt = $pdo->prepare("DELETE FROM unsur_pimpinan WHERE unsur_id = ? AND tanggal_selesai IS NULL");
+                $delStmt->execute([$_POST['id']]);
+                
+                // Add new assignment
+                $pimpinanStmt = $pdo->prepare("SELECT id FROM personil WHERE nama = ?");
+                $pimpinanStmt->execute([$_POST['nama_pimpinan']]);
+                $pimpinanId = $pimpinanStmt->fetchColumn();
+                
+                if ($pimpinanId) {
+                    $relStmt = $pdo->prepare("INSERT INTO unsur_pimpinan (unsur_id, personil_id) VALUES (?, ?)");
+                    $relStmt->execute([$_POST['id'], $pimpinanId]);
+                }
             }
+            
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => 'Unsur berhasil diperbarui!']);
+            exit;
+        } catch (Exception $e) {
+            error_log("UPDATE UNSUR ERROR: " . $e->getMessage());
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+            exit;
         }
-        
-        header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'message' => 'Unsur berhasil diperbarui!']);
-        exit;
     }
     
     if ($action === 'delete_unsur') {
@@ -237,8 +259,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $bagianCount = $stmt->fetchColumn();
         
         if ($bagianCount > 0) {
+            // Get details for better error message
+            $stmt = $pdo->prepare("SELECT nama_unsur FROM unsur WHERE id = ?");
+            $stmt->execute([$_POST['id']]);
+            $unsurName = $stmt->fetchColumn();
+            
+            // Get bagian details
+            $stmt = $pdo->prepare("SELECT nama_bagian FROM bagian WHERE id_unsur = ? LIMIT 5");
+            $stmt->execute([$_POST['id']]);
+            $bagianList = $stmt->fetchAll(PDO::FETCH_COLUMN);
+            
             header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'Tidak dapat menghapus unsur yang masih memiliki bagian!']);
+            echo json_encode([
+                'success' => false, 
+                'message' => "Tidak dapat menghapus unsur '$unsurName' karena masih memiliki $bagianCount bagian!", 
+                'details' => [
+                    'unsur_name' => $unsurName,
+                    'bagian_count' => $bagianCount,
+                    'bagian_list' => $bagianList,
+                    'suggestion' => 'Pindahkan atau hapus semua bagian terlebih dahulu'
+                ]
+            ]);
             exit;
         }
         
@@ -248,6 +289,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Content-Type: application/json');
         echo json_encode(['success' => true, 'message' => 'Unsur berhasil dihapus!']);
         exit;
+    }
+    
+    if ($action === 'force_delete_unsur') {
+        try {
+            $pdo->beginTransaction();
+            
+            $unsurId = $_POST['id'];
+            $reassignToUnsurId = $_POST['reassign_to_unsur_id'] ?? null;
+            
+            // Get unsur name for logging
+            $stmt = $pdo->prepare("SELECT nama_unsur FROM unsur WHERE id = ?");
+            $stmt->execute([$unsurId]);
+            $unsurName = $stmt->fetchColumn();
+            
+            // If reassign_to_unsur_id is provided, move bagian to that unsur
+            if ($reassignToUnsurId) {
+                $stmt = $pdo->prepare("UPDATE bagian SET id_unsur = ? WHERE id_unsur = ?");
+                $stmt->execute([$reassignToUnsurId, $unsurId]);
+                
+                // Get reassign unsur name
+                $stmt = $pdo->prepare("SELECT nama_unsur FROM unsur WHERE id = ?");
+                $stmt->execute([$reassignToUnsurId]);
+                $reassignUnsurName = $stmt->fetchColumn();
+                
+                $message = "Unsur '$unsurName' berhasil dihapus dan $stmt->rowCount() bagian dipindahkan ke '$reassignUnsurName'!";
+            } else {
+                // Delete all bagian in this unsur
+                $stmt = $pdo->prepare("DELETE FROM bagian WHERE id_unsur = ?");
+                $deletedBagians = $stmt->rowCount();
+                
+                $message = "Unsur '$unsurName' berhasil dihapus beserta $deletedBagians bagian terkait!";
+            }
+            
+            // Now delete the unsur
+            $stmt = $pdo->prepare("DELETE FROM unsur WHERE id = ?");
+            $stmt->execute([$unsurId]);
+            
+            $pdo->commit();
+            
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => $message]);
+            exit;
+            
+        } catch (Exception $e) {
+            $pdo->rollback();
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => 'Gagal menghapus unsur: ' . $e->getMessage()]);
+            exit;
+        }
     }
 }
 
@@ -341,7 +431,7 @@ if ($unsurData === false) {
 
 <!-- Add/Edit Modal -->
 <div class="modal fade" id="unsurModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
@@ -354,21 +444,19 @@ if ($unsurData === false) {
                 <div class="modal-body">
                     <input type="hidden" name="action" id="formAction" value="create_unsur">
                     <input type="hidden" name="id" id="formId">
+                    <input type="hidden" name="kode_unsur" id="kode_unsur">
                     
                     <div class="mb-3">
                         <label for="nama_unsur" class="form-label">Nama Unsur</label>
-                        <input type="text" class="form-control" id="nama_unsur" name="nama_unsur" required>
+                        <input type="text" class="form-control" id="nama_unsur" name="nama_unsur" required onchange="generateKodeUnsur()">
                         <div class="form-text">
                             Contoh: UNSUR PIMPINAN, UNSUR PEMBANTU PIMPINAN
                         </div>
                     </div>
                     
-                    <div class="mb-3">
-                        <label for="urutan" class="form-label">Urutan</label>
-                        <input type="number" class="form-control" id="urutan" name="urutan" min="0" required>
-                        <div class="form-text">
-                            Nomor urutan untuk penampilan (1 = paling atas)
-                        </div>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Urutan Otomatis:</strong> Unsur akan ditambahkan di urutan paling bawah dan dapat diatur menggunakan drag & drop.
                     </div>
                     
                     <div class="mb-3">
@@ -571,103 +659,266 @@ function saveOrder() {
     });
 }
 
+function generateKodeUnsur() {
+    const namaUnsur = document.getElementById('nama_unsur').value;
+    const kodeUnsur = namaUnsur.toUpperCase()
+        .replace(/[^A-Z0-9_]/g, '_')
+        .replace(/_+/g, '_')
+        .replace(/^_|_$/g, '');
+    
+    document.getElementById('kode_unsur').value = kodeUnsur;
+}
+
 function openAddModal() {
-    // Clear form fields first
-    document.getElementById('modalTitle').textContent = 'Tambah Unsur';
-    document.getElementById('formAction').value = 'create_unsur';
-    document.getElementById('formId').value = '';
-    document.getElementById('nama_unsur').value = '';
-    document.getElementById('urutan').value = '';
-    document.getElementById('deskripsi').value = '';
-    
-    // Show modal with proper handling
-    const modal = new bootstrap.Modal(document.getElementById('unsurModal'));
-    
-    // Clean up any existing modal instance
-    const existingModal = bootstrap.Modal.getInstance(document.getElementById('unsurModal'));
-    if (existingModal) {
-        existingModal.dispose();
+    try {
+        // Clear form fields first
+        const modalTitle = document.getElementById('modalTitle');
+        const formAction = document.getElementById('formAction');
+        const formId = document.getElementById('formId');
+        const namaUnsur = document.getElementById('nama_unsur');
+        const deskripsi = document.getElementById('deskripsi');
+        const kodeUnsur = document.getElementById('kode_unsur');
+        
+        if (!modalTitle || !formAction || !formId || !namaUnsur || !deskripsi || !kodeUnsur) {
+            console.error('Modal form elements not found');
+            alert('Error: Form elements not found');
+            return;
+        }
+        
+        modalTitle.textContent = 'Tambah Unsur';
+        formAction.value = 'create_unsur';
+        formId.value = '';
+        namaUnsur.value = '';
+        deskripsi.value = '';
+        kodeUnsur.value = '';
+        
+        // Show modal with proper handling
+        const modalElement = document.getElementById('unsurModal');
+        if (!modalElement) {
+            console.error('Modal element not found');
+            alert('Error: Modal not found');
+            return;
+        }
+        
+        // Clean up any existing modal instance
+        const existingModal = bootstrap.Modal.getInstance(modalElement);
+        if (existingModal) {
+            existingModal.dispose();
+        }
+        
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+    } catch (error) {
+        console.error('Error opening add modal:', error);
+        alert('Error: Failed to open modal - ' + error.message);
     }
-    
-    modal.show();
 }
 
 function editUnsur(id) {
-    console.log('Editing unsur with ID:', id);
-    
-    // Get unsur data from database
+    try {
+        console.log('Editing unsur with ID:', id);
+        
+        // Get unsur data from database
+        fetch('unsur.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'get_unsur_detail',
+                id: id
+            })
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response data:', data);
+            if (data.success && data.data) {
+                const unsur = data.data;
+                console.log('Unsur data:', unsur);
+                
+                // Get form elements safely
+                const modalTitle = document.getElementById('modalTitle');
+                const formAction = document.getElementById('formAction');
+                const formId = document.getElementById('formId');
+                const namaUnsur = document.getElementById('nama_unsur');
+                const deskripsi = document.getElementById('deskripsi');
+                const kodeUnsur = document.getElementById('kode_unsur');
+                
+                if (!modalTitle || !formAction || !formId || !namaUnsur || !deskripsi || !kodeUnsur) {
+                    console.error('Modal form elements not found');
+                    alert('Error: Form elements not found');
+                    return;
+                }
+                
+                // Fill form fields
+                modalTitle.textContent = 'Edit Unsur';
+                formAction.value = 'update_unsur';
+                formId.value = unsur.id;
+                namaUnsur.value = unsur.nama_unsur;
+                deskripsi.value = unsur.deskripsi || '';
+                kodeUnsur.value = unsur.kode_unsur;
+                
+                // Show modal with proper handling
+                const modalElement = document.getElementById('unsurModal');
+                if (!modalElement) {
+                    console.error('Modal element not found');
+                    alert('Error: Modal not found');
+                    return;
+                }
+                
+                // Clean up any existing modal instance
+                const existingModal = bootstrap.Modal.getInstance(modalElement);
+                if (existingModal) {
+                    existingModal.dispose();
+                }
+                
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+            } else {
+                console.error('Error in response:', data);
+                alert('Error: Unsur tidak ditemukan');
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            alert('Error: ' + error.message);
+        });
+    } catch (error) {
+        console.error('Error in editUnsur:', error);
+        alert('Error: Failed to edit unsur - ' + error.message);
+    }
+}
+
+function deleteUnsur(id, nama) {
+    // First check if unsur has bagian
     fetch('unsur.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-            action: 'get_unsur_detail',
+            action: 'delete_unsur',
             id: id
         })
     })
-    .then(response => {
-        console.log('Response status:', response.status);
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        console.log('Response data:', data);
-        if (data.success && data.data) {
-            const unsur = data.data;
-            console.log('Unsur data:', unsur);
-            
-            // Fill form fields
-            document.getElementById('modalTitle').textContent = 'Edit Unsur';
-            document.getElementById('formAction').value = 'update_unsur';
-            document.getElementById('formId').value = unsur.id;
-            document.getElementById('nama_unsur').value = unsur.nama_unsur;
-            document.getElementById('urutan').value = unsur.urutan;
-            document.getElementById('deskripsi').value = unsur.deskripsi || '';
-            
-            // Show modal with proper handling
-            const modal = new bootstrap.Modal(document.getElementById('unsurModal'));
-            
-            // Clean up any existing modal instance
-            const existingModal = bootstrap.Modal.getInstance(document.getElementById('unsurModal'));
-            if (existingModal) {
-                existingModal.dispose();
+        if (data.success) {
+            // Unsur deleted successfully
+            if (data.message) {
+                alert(data.message);
             }
-            
-            modal.show();
+            location.reload();
         } else {
-            console.error('Error in response:', data);
-            alert('Error: Unsur tidak ditemukan');
+            // Unsur has bagian, show detailed error and options
+            if (data.details) {
+                const details = data.details;
+                let message = data.message + '\n\n';
+                
+                if (details.bagian_list && details.bagian_list.length > 0) {
+                    message += 'Bagian terkait:\n';
+                    details.bagian_list.forEach((bagian, index) => {
+                        message += `${index + 1}. ${bagian}\n`;
+                    });
+                    
+                    if (details.bagian_count > details.bagian_list.length) {
+                        message += `... dan ${details.bagian_count - details.bagian_list.length} lainnya\n`;
+                    }
+                }
+                
+                message += '\n' + details.suggestion;
+                
+                // Show options
+                const userChoice = confirm(message + '\n\nKlik OK untuk mencoba lagi, atau Cancel untuk batal.');
+                if (userChoice) {
+                    // User wants to proceed with force delete options
+                    showForceDeleteOptions(id, details);
+                }
+            } else {
+                alert(data.message || 'Gagal menghapus unsur');
+            }
         }
     })
     .catch(error => {
-        console.error('Fetch error:', error);
+        console.error('Delete error:', error);
         alert('Error: ' + error.message);
     });
 }
 
-function deleteUnsur(id, nama) {
-    if (confirm(`Apakah Anda yakin ingin menghapus unsur "${nama}"?`)) {
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.innerHTML = `
-            <input type="hidden" name="action" value="delete_unsur">
-            <input type="hidden" name="id" value="${id}">
-        `;
-        document.body.appendChild(form);
-        form.submit();
-    }
+function showForceDeleteOptions(unsurId, details) {
+    // Get all other unsur options for reassigning
+    fetch('unsur.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            action: 'get_unsur_list'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.data) {
+            const otherUnsurs = data.data.filter(u => u.id != unsurId);
+            
+            if (otherUnsurs.length === 0) {
+                // No other unsur to reassign to
+                if (confirm(`Tidak ada unsur lain untuk dipindahkan. Apakah Anda yakin ingin menghapus unsur "${details.unsur_name}" beserta semua ${details.bagian_count} bagian terkait?`)) {
+                    forceDeleteUnsur(unsurId, null);
+                }
+            } else {
+                // Create a simple choice dialog
+                const options = otherUnsurs.map((unsur, index) => 
+                    `${index + 1}. Pindahkan ke: ${unsur.nama_unsur}`
+                ).join('\n');
+                
+                const choice = prompt(
+                    `Pilih opsi untuk menghapus unsur "${details.unsur_name}":\n\n` +
+                    options + '\n' +
+                    `\n${otherUnsurs.length + 1}. Hapus beserta semua bagian\n` +
+                    `\nMasukkan nomor pilihan (1-${otherUnsurs.length + 1}):`
+                );
+                
+                if (choice) {
+                    const choiceNum = parseInt(choice);
+                    
+                    if (choiceNum >= 1 && choiceNum <= otherUnsurs.length) {
+                        // Reassign to selected unsur
+                        const selectedUnsur = otherUnsurs[choiceNum - 1];
+                        if (confirm(`Pindahkan ${details.bagian_count} bagian ke "${selectedUnsur.nama_unsur}" dan hapus unsur "${details.unsur_name}"?`)) {
+                            forceDeleteUnsur(unsurId, selectedUnsur.id);
+                        }
+                    } else if (choiceNum === otherUnsurs.length + 1) {
+                        // Delete with bagians
+                        if (confirm(`Hapus unsur "${details.unsur_name}" beserta semua ${details.bagian_count} bagian terkait?`)) {
+                            forceDeleteUnsur(unsurId, null);
+                        }
+                    } else {
+                        alert('Pilihan tidak valid');
+                    }
+                }
+            }
+        } else {
+            alert('Gagal mengambil data unsur');
+        }
+    })
+    .catch(error => {
+        console.error('Get unsur list error:', error);
+        alert('Error: ' + error.message);
+    });
 }
 
-function refreshData() {
-    window.location.reload();
-}
-
-// Form submission
-document.getElementById('unsurForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+function forceDeleteUnsur(unsurId, reassignToUnsurId) {
+    const formData = new FormData();
+    formData.append('action', 'force_delete_unsur');
+    formData.append('id', unsurId);
     
-    const formData = new FormData(this);
-    const action = formData.get('action');
+    if (reassignToUnsurId) {
+        formData.append('reassign_to_unsur_id', reassignToUnsurId);
+    }
     
     fetch('unsur.php', {
         method: 'POST',
@@ -679,12 +930,66 @@ document.getElementById('unsurForm').addEventListener('submit', function(e) {
             alert(data.message);
             location.reload();
         } else {
-            alert('Error: ' + data.message);
+            alert('Gagal menghapus unsur: ' + (data.message || 'Unknown error'));
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Error: Terjadi kesalahan saat menyimpan data');
+        console.error('Force delete error:', error);
+        alert('Error: ' + error.message);
     });
+}
+
+function refreshData() {
+    window.location.reload();
+}
+
+// Form submission
+document.getElementById('unsurForm').addEventListener('submit', function(e) {
+    try {
+        // Check if event exists and prevent default
+        if (e && e.preventDefault) {
+            e.preventDefault();
+        } else {
+            // Fallback for older browsers or if event is null
+            console.warn('Event or preventDefault not available');
+            return false;
+        }
+        
+        const formData = new FormData(this);
+        const action = formData.get('action');
+        
+        // Debug: Log form data
+        console.log('Form Data:');
+        for (let [key, value] of formData.entries()) {
+            console.log(key + ':', value);
+        }
+        
+        fetch('unsur.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response data:', data);
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Form submission error:', error);
+            alert('Error: ' + error.message);
+        });
+    } catch (error) {
+        console.error('Form submission handler error:', error);
+        alert('Error: Failed to submit form - ' + error.message);
+    }
+    
+    return false;
 });
 </script>

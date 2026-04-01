@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-04-01T09:21:40.692Z",
+  "testType": "Unsur Lainnya Bagian Verification",
+  "baseUrl": "http://localhost/sprint",
+  "results": [
+    {
+      "test": "Unsur Lainnya Bagian Check",
+      "status": "WARNING",
+      "data": {
+        "message": "UNSUR LAINNYA exists but has no bagian",
+        "data": {
+          "unsurIndex": 5,
+          "unsurName": "UNSUR LAINNYA",
+          "totalBagians": 0,
+          "bagians": []
+        }
+      }
+    },
+    {
+      "test": "Database Unsur Lainnya Check",
+      "status": "FAIL",
+      "error": "Unexpected token '<', \"<!DOCTYPE \"... is not valid JSON"
+    },
+    {
+      "test": "Direct Query Check",
+      "status": "PASS",
+      "data": {
+        "success": true,
+        "status": 200,
+        "data": {
+          "success": true,
+          "data": {
+            "id": 6,
+            "kode_bagian": "SAT_INTELKAM",
+            "nama_bagian": "SAT INTELKAM",
+            "id_unsur": 3,
+            "urutan": 4,
+            "deskripsi": "Satuan Intelijen dan Keamanan",
+            "is_active": 1,
+            "created_at": "2026-03-29 01:16:57",
+            "updated_at": "2026-04-01 15:47:41"
+          }
+        }
+      }
+    }
+  ],
+  "summary": {
+    "total": 3,
+    "passed": 1,
+    "failed": 1,
+    "warnings": 1
+  }
+}
