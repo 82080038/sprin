@@ -1,0 +1,65 @@
+# Dependencies
+vendor/
+composer.lock
+node_modules/
+package-lock.json
+
+# Testing files (exclude all test outputs)
+tests/screenshots/
+tests/results/
+tests/*.png
+tests/*.jpg
+tests/*.jpeg
+tests/test-*.html
+tests/test-*.json
+tests/comparison-*.html
+tests/comparison-*.json
+
+# Logs and temporary files
+logs/
+*.log
+*.tmp
+*.cache
+cache/
+
+# Backup files (keep structure only)
+backups/*.sql
+backups/*.zip
+backups/*.gz
+!backups/.gitkeep
+
+# Large data files (keep examples only)
+*.pdf
+*.xlsx
+*.docx
+*.csv
+
+# Keep JSON output files
+!PERSONIL_ALL.json
+!STRONG_POINT_ALL.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Session files
+clear_session.php
+debug_*.php
+test_*.php
+
+# Documentation drafts
+*_DRAFT.md
+*_NOTES.md
