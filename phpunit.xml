@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         executionOrder="depends,defects"
+         forceCoversAnnotation="false"
+         beStrictAboutCoversAnnotation="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTodoAnnotatedTests="true"
+         verbose="true">
+    <testsuites>
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory suffix="Test.php">./tests/Integration</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./api</directory>
+            <directory suffix=".php">./core</directory>
+            <directory suffix=".php">./pages</directory>
+            <exclude>
+                <directory suffix=".php">./vendor</directory>
+                <directory suffix=".php">./tests</directory>
+                <directory suffix=".php">./node_modules</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <junit outputFile="tests/reports/junit.xml"/>
+        <teamcity outputFile="tests/reports/teamcity.txt"/>
+    </logging>
+
+    <php>
+        <server name="DB_HOST" value="localhost"/>
+        <server name="DB_NAME" value="sprint_test"/>
+        <server name="DB_USER" value="test"/>
+        <server name="DB_PASS" value="test"/>
+        <env name="APP_ENV" value="testing"/>
+    </php>
+</phpunit>

@@ -1,0 +1,19 @@
+{
+    "recommendations": [
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug",
+        "formulahendry.auto-rename-tag",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-json",
+        "codeium.codeium",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-eslint",
+        "ms-vscode.vscode-jest",
+        "ms-playwright.playwright",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-markdown",
+        "ms-vscode.vscode-git",
+        "formulahendry.auto-close-tag",
+        "christian-kohler.path-intellisense"
+    ]
+}

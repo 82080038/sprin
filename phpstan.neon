@@ -1,0 +1,28 @@
+parameters:
+    level: 6
+    paths:
+        - api
+        - core
+        - pages
+        - security
+    excludePaths:
+        - tests
+        - backups
+        - node_modules
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    checkAlwaysTrueCheckTypeFunctionCall: false
+    checkAlwaysTrueInstanceof: false
+    checkAlwaysTrueStrictComparison: false
+    checkFunctionNameCase: false
+    checkInternalClassCaseSensitivity: false
+    checkMissingCallableSignature: true
+    checkMissingVarTagTypehint: true
+    checkTooWideReturnTypesInProtectedAndPublicMethods: false
+    checkUninitializedProperties: false
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - '#Call to an undefined method.*#'
+        - '#Access to an undefined property.*#'
+    bootstrapFiles:
+        - core/config.php

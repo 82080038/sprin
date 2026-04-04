@@ -1,0 +1,102 @@
+# SPRIN Application .gitignore
+
+# Dependencies
+vendor/
+composer.lock
+node_modules/
+package-lock.json
+
+# Testing files (exclude all test outputs)
+tests/test-results/
+tests/playwright-report/
+tests/screenshots/
+tests/results/
+tests/*.png
+tests/*.jpg
+tests/*.jpeg
+tests/test-*.html
+tests/test-*.json
+tests/comparison-*.html
+tests/comparison-*.json
+tests/node_modules/
+
+# Logs and temporary files
+logs/
+*.log
+*.tmp
+*.cache
+cache/
+
+# Backup files (keep structure only)
+backups/*.sql
+backups/*.zip
+backups/*.gz
+!backups/.gitkeep
+sprint_backup_*.tar.gz
+bagops_current_*.sql
+
+# Large data files (keep examples only)
+*.pdf
+*.xlsx
+*.docx
+*.csv
+
+# Keep JSON output files
+!PERSONIL_ALL.json
+!STRONG_POINT_ALL.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Session files
+clear_session.php
+debug_*.php
+test_*.php
+
+# Documentation drafts
+*_DRAFT.md
+*_NOTES.md
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Runtime
+*.pid
+*.seed
+*.pid.lock
+
+# Application specific
+*.trace.zip
+test-results/
+
+# Removed files cleanup
+python_script/
+@[database]/
+assets/
+comprehensive_test*.js
+comprehensive_test*.json
+enhanced_test.*
+final_test.*
+*_test_report.*
+api_test.php
+simple_api_test.php
+database_cache.php
+SPRIN*.code-workspace
