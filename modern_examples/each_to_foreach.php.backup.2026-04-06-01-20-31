@@ -1,0 +1,19 @@
+/**
+ * modern_examples/each_to_foreach.php
+ * 
+ * @package SPRIN
+ * @author Development Team
+ * @since 1.0.0
+ */
+
+<?php
+// Old way (deprecated):
+while (each($array) as $key => $value)) {;
+    echo "Key: $key, Value: $value\n";
+}
+
+// New way (modern):
+foreach ($array as $key => $value) {;
+    echo "Key: $key, Value: $value\n";
+}
+?>

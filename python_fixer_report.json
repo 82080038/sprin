@@ -1,0 +1,655 @@
+{
+    "timestamp": "Sen 06 Apr 2026 12:28:12  WIB",
+    "base_path": "/opt/lampp/htdocs/sprint",
+    "issues_found": {
+        "syntax_errors": [
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/calendar_dashboard.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\", expecting \")\" in /opt/lampp/htdocs/sprint/pages/calendar_dashboard.php on line 32"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/pangkat.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/pages/pangkat.php on line 33"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/jenis_personil.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/pages/jenis_personil.php on line 33"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/JWTAuth.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/core/JWTAuth.php on line 102"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/auth_check.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/core/auth_check.php on line 10"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/APIEndpointValidator.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/APIEndpointValidator.php on line 463"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/pagination_personil.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/pagination_personil.php on line 26"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/advanced_search.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/advanced_search.php on line 26"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_management_v2.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/personil_management_v2.php on line 522"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/export_personil.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/export_personil.php on line 23"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/bagian_crud.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/bagian_crud.php on line 28"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_detail.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/personil_detail.php on line 23"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/DataConsistencyValidator.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/DataConsistencyValidator.php on line 383"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/user_management.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/user_management.php on line 39"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/report_api.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/report_api.php on line 26"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/kepegawaian_management_v2.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/kepegawaian_management_v2.php on line 545"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_simple_fixed.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/personil_simple_fixed.php on line 23"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/master_kepegawaian_crud.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/master_kepegawaian_crud.php on line 221"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/router.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/router.php on line 25"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/jabatan_crud.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\", expecting \")\" in /opt/lampp/htdocs/sprint/api/jabatan_crud.php on line 28"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/penugasan_management_v2.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/penugasan_management_v2.php on line 67"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/update_pangkat.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\", expecting \")\" in /opt/lampp/htdocs/sprint/api/update_pangkat.php on line 16"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_list.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\", expecting \")\" in /opt/lampp/htdocs/sprint/api/personil_list.php on line 30"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/unsur_crud.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\", expecting \")\" in /opt/lampp/htdocs/sprint/api/unsur_crud.php on line 28"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/search_personil.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\", expecting \")\" in /opt/lampp/htdocs/sprint/api/search_personil.php on line 27"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/DatabaseStructureChecker.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/DatabaseStructureChecker.php on line 113"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/calendar_api.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\", expecting \")\" in /opt/lampp/htdocs/sprint/api/calendar_api.php on line 42"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/health_check.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/health_check.php on line 40"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_simple.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\", expecting \")\" in /opt/lampp/htdocs/sprint/api/personil_simple.php on line 22"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/backup_api.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\", expecting \")\" in /opt/lampp/htdocs/sprint/api/backup_api.php on line 27"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_crud.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\", expecting \")\" in /opt/lampp/htdocs/sprint/api/personil_crud.php on line 31"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/penugasan_crud.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"=>\", expecting \"]\" in /opt/lampp/htdocs/sprint/api/penugasan_crud.php on line 45"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/calendar_api_fixed.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\", expecting \")\" in /opt/lampp/htdocs/sprint/api/calendar_api_fixed.php on line 33"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/unsur_stats.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\", expecting \")\" in /opt/lampp/htdocs/sprint/api/unsur_stats.php on line 41"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/critical_tables_crud.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/critical_tables_crud.php on line 193"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/v1/index.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"\\\" in /opt/lampp/htdocs/sprint/api/v1/index.php on line 18"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Parse error:  syntax error, unexpected token \"?\", expecting end of file in /opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php on line 776"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/security/input_validator.php",
+                "error": "Xdebug: [Log Files] File '/var/log/xdebug.log' could not be opened.\nPHP Fatal error:  Cannot redeclare InputValidator::validateRequired() in /opt/lampp/htdocs/sprint/security/input_validator.php on line 258"
+            }
+        ],
+        "deprecated_functions": [],
+        "security_issues": [
+            {
+                "file": "/opt/lampp/htdocs/sprint/cron/check_integration.php",
+                "type": "security_issue",
+                "line": 55,
+                "issue": "exec() function",
+                "context": "t($ch, CURLOPT_TIMEOUT, 10);\n    $response = curl_exec($ch);\n    $httpCode = curl_getinfo($ch, CURLINFO_H"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/cron/check_integration.php",
+                "type": "security_issue",
+                "line": 87,
+                "issue": "exec() function",
+                "context": "RLOPT_RETURNTRANSFER, true);\n    $response = curl_exec($ch);\n    curl_close($ch);\n    \n    $data = json_d"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/cron/check_integration.php",
+                "type": "security_issue",
+                "line": 193,
+                "issue": "exec() function",
+                "context": "RLOPT_FOLLOWLOCATION, true);\n    $response = curl_exec($ch);\n    $httpCode = curl_getinfo($ch, CURLINFO_H"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/schedule_manager.php",
+                "type": "security_issue",
+                "line": 274,
+                "issue": "exec() function",
+                "context": "false);\n            \n            $response = curl_exec($ch);\n            $http_code = curl_getinfo($ch, C"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/schedule_manager.php",
+                "type": "security_issue",
+                "line": 366,
+                "issue": "exec() function",
+                "context": "false);\n            \n            $response = curl_exec($ch);\n            $http_code = curl_getinfo($ch, C"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/Database.php",
+                "type": "security_issue",
+                "line": 30,
+                "issue": "exec() function",
+                "context": "          // Set timezone\n            $this->pdo->exec(\"SET time_zone = '+07:00'\");\n            $this->pd"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/Database.php",
+                "type": "security_issue",
+                "line": 31,
+                "issue": "exec() function",
+                "context": "T time_zone = '+07:00'\");\n            $this->pdo->exec(\"SET SESSION sql_mode = 'STRICT_ALL_TABLES'\");\n   "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/DatabaseOptimizer.php",
+                "type": "security_issue",
+                "line": 102,
+                "issue": "exec() function",
+                "context": "    try {\n            $this->db->getConnection()->exec(\"OPTIMIZE TABLE $table\");\n            $results['op"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/DatabaseOptimizer.php",
+                "type": "security_issue",
+                "line": 130,
+                "issue": "exec() function",
+                "context": " ($columns)\";\n        $this->db->getConnection()->exec($sql);\n        \n        return true;\n    }\n    \n  "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/DatabaseOptimizer.php",
+                "type": "security_issue",
+                "line": 206,
+                "issue": "exec() function",
+                "context": "    try {\n            $this->db->getConnection()->exec($sql);\n            return true;\n        } catch (E"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/BackupManager.php",
+                "type": "security_issue",
+                "line": 53,
+                "issue": "exec() function",
+                "context": "peshellarg($filepath)\n        );\n        \n        exec($command, $output, $returnCode);\n        \n        "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/BackupManager.php",
+                "type": "security_issue",
+                "line": 63,
+                "issue": "exec() function",
+                "context": " \" > \" . escapeshellarg($compressedFile);\n        exec($compressCommand);\n        \n        // Remove unco"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/BackupManager.php",
+                "type": "security_issue",
+                "line": 332,
+                "issue": "exec() function",
+                "context": "= file_get_contents($filepath);\n            $pdo->exec($sql);\n            \n            return [\n         "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/AuditTrail.php",
+                "type": "security_issue",
+                "line": 57,
+                "issue": "exec() function",
+                "context": "    try {\n            $this->db->getConnection()->exec($sql);\n        } catch (PDOException $e) {\n       "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/APIEndpointValidator.php",
+                "type": "security_issue",
+                "line": 269,
+                "issue": "exec() function",
+                "context": "    ]);\n            \n            $response = curl_exec($ch);\n            $http_code = curl_getinfo($ch, C"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/E2EClient.php",
+                "type": "security_issue",
+                "line": 51,
+                "issue": "exec() function",
+                "context": "ata);\n        }\n        \n        $response = curl_exec($ch);\n        $httpCode = curl_getinfo($ch, CURLIN"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/bulk_update_personil.php",
+                "type": "security_issue",
+                "line": 38,
+                "issue": "exec() function",
+                "context": "         // Clear existing data\n            $pdo->exec(\"DELETE FROM personil\");\n            \n            "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_api.php",
+                "type": "security_issue",
+                "line": 92,
+                "issue": "exec() function",
+                "context": "SSL_VERIFYPEER, false);\n    \n    $response = curl_exec($ch);\n    $http_code = curl_getinfo($ch, CURLINFO_"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/ForeignKeyFixer.php",
+                "type": "security_issue",
+                "line": 28,
+                "issue": "exec() function",
+                "context": "oreign key checks temporarily\n        $this->pdo->exec(\"SET FOREIGN_KEY_CHECKS = 0\");\n        \n        tr"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/ForeignKeyFixer.php",
+                "type": "security_issue",
+                "line": 47,
+                "issue": "exec() function",
+                "context": "enable foreign key checks\n            $this->pdo->exec(\"SET FOREIGN_KEY_CHECKS = 1\");\n        }\n        \n"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/ForeignKeyFixer.php",
+                "type": "security_issue",
+                "line": 109,
+                "issue": "exec() function",
+                "context": "  if (!$exists) {\n                    $this->pdo->exec($constraint['sql']);\n                    $results["
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/ForeignKeyFixer.php",
+                "type": "security_issue",
+                "line": 163,
+                "issue": "exec() function",
+                "context": "  if (!$exists) {\n                    $this->pdo->exec($constraint['sql']);\n                    $results["
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/ForeignKeyFixer.php",
+                "type": "security_issue",
+                "line": 217,
+                "issue": "exec() function",
+                "context": "  if (!$exists) {\n                    $this->pdo->exec($constraint['sql']);\n                    $results["
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/ForeignKeyFixer.php",
+                "type": "security_issue",
+                "line": 289,
+                "issue": "exec() function",
+                "context": "  if (!$exists) {\n                    $this->pdo->exec($constraint['sql']);\n                    $results["
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/health_check.php",
+                "type": "security_issue",
+                "line": 117,
+                "issue": "exec() function",
+                "context": "tData);\n            \n            $response = curl_exec($ch);\n            $httpCode = curl_getinfo($ch, CU"
+            }
+        ],
+        "database_issues": [
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/WebSocketServer.php",
+                "type": "database_issue",
+                "line": 28,
+                "issue": "Hardcoded database connection",
+                "context": "base connection\n        try {\n            $dsn = \"mysql:host=localhost;dbname=bagops;unix_socket=/opt/lampp/var/mysql/mysql.sock\";\n   "
+            }
+        ],
+        "session_issues": [
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/reporting.php",
+                "type": "session_issue",
+                "line": 8,
+                "issue": "session_start() call",
+                "context": " Page\n * Generate and export various reports\n */\n\nsession_start();\nrequire_once __DIR__ . '/../core/config.php';\nre"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/calendar_dashboard.php",
+                "type": "session_issue",
+                "line": 4,
+                "issue": "session_start() call",
+                "context": "\nif (session_status() === PHP_SESSION_NONE) {\n    session_start();\n}\nrequire_once __DIR__ . '/../core/config.php';\n"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+                "type": "session_issue",
+                "line": 8,
+                "issue": "session_start() call",
+                "context": " Page\n * Manage database backups and restore\n */\n\nsession_start();\nrequire_once __DIR__ . '/../core/config.php';\nre"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/structure.php",
+                "type": "session_issue",
+                "line": 9,
+                "issue": "session_start() call",
+                "context": "\nif (session_status() === PHP_SESSION_NONE) {\n    session_start();\n}\n\n// Include config first\nrequire_once __DIR__ "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/bagian.php",
+                "type": "session_issue",
+                "line": 55,
+                "issue": "old session format",
+                "context": "         // Set test session for AJAX\n            $_SESSION['logged_in'] = true;\n            $_SESSION['username'] = 'AJAX"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/pangkat.php",
+                "type": "session_issue",
+                "line": 13,
+                "issue": "old session format",
+                "context": "\n    \n    // For testing, set a dummy session\n    $_SESSION['logged_in'] = true;\n    $_SESSION['username'] = 'test_user';\n"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/pangkat.php",
+                "type": "session_issue",
+                "line": 44,
+                "issue": "old session format",
+                "context": "         // Set test session for AJAX\n            $_SESSION['logged_in'] = true;\n            $_SESSION['username'] = 'AJAX"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/jenis_personil.php",
+                "type": "session_issue",
+                "line": 13,
+                "issue": "old session format",
+                "context": "\n    \n    // For testing, set a dummy session\n    $_SESSION['logged_in'] = true;\n    $_SESSION['username'] = 'test_user';\n"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/jenis_personil.php",
+                "type": "session_issue",
+                "line": 44,
+                "issue": "old session format",
+                "context": "         // Set test session for AJAX\n            $_SESSION['logged_in'] = true;\n            $_SESSION['username'] = 'AJAX"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/pages/unsur.php",
+                "type": "session_issue",
+                "line": 323,
+                "issue": "old session format",
+                "context": ")) {\n        // Set test session for AJAX\n        $_SESSION['logged_in'] = true;\n        $_SESSION['username'] = 'AJAX Use"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/SessionManager.php",
+                "type": "session_issue",
+                "line": 5,
+                "issue": "session_start() call",
+                "context": "handling\n * Solves session conflicts and multiple session_start() issues\n */\n\nclass SessionManager {\n    private st"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/SessionManager.php",
+                "type": "session_issue",
+                "line": 23,
+                "issue": "session_start() call",
+                "context": "etime', 3600); // 1 hour\n            \n            session_start();\n            self::$started = true;\n            \n"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/SessionManager.php",
+                "type": "session_issue",
+                "line": 27,
+                "issue": "session check without proper validation",
+                "context": "generate session ID for security\n            if (!isset($_SESSION['regenerated'])) {\n                session_regener"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/Controller.php",
+                "type": "session_issue",
+                "line": 164,
+                "issue": "session_start() call",
+                "context": "sion_status() === PHP_SESSION_NONE) {\n            session_start();\n        }\n        $_SESSION['flash_message'] = ["
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/Controller.php",
+                "type": "session_issue",
+                "line": 174,
+                "issue": "session_start() call",
+                "context": "sion_status() === PHP_SESSION_NONE) {\n            session_start();\n        }\n        \n        if (isset($_SESSION['"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/Controller.php",
+                "type": "session_issue",
+                "line": 177,
+                "issue": "session check without proper validation",
+                "context": "  session_start();\n        }\n        \n        if (isset($_SESSION['flash_message'])) {\n            $flash = $_SESSIO"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/auth_helper.php",
+                "type": "session_issue",
+                "line": 18,
+                "issue": "session_start() call",
+                "context": "sion_status() === PHP_SESSION_NONE) {\n            session_start();\n        }\n        \n        // Check if user is l"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/auth_helper.php",
+                "type": "session_issue",
+                "line": 102,
+                "issue": "session_start() call",
+                "context": "sion_status() === PHP_SESSION_NONE) {\n            session_start();\n        }\n        \n        $_SESSION['user_id'] "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/auth_helper.php",
+                "type": "session_issue",
+                "line": 118,
+                "issue": "session_start() call",
+                "context": "sion_status() === PHP_SESSION_NONE) {\n            session_start();\n        }\n        \n        session_destroy();\n  "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/auth_helper.php",
+                "type": "session_issue",
+                "line": 22,
+                "issue": "session check without proper validation",
+                "context": "     // Check if user is logged in\n        return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);\n    }"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/logout.php",
+                "type": "session_issue",
+                "line": 3,
+                "issue": "session_start() call",
+                "context": "<?php\ndeclare(strict_types=1);\nsession_start();\nrequire_once __DIR__ . '/config.php';\nrequire_on"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/api_response.php",
+                "type": "session_issue",
+                "line": 118,
+                "issue": "session_start() call",
+                "context": "  public static function checkApiAuth() {\n        session_start();\n        if (!isset($_SESSION['logged_in']) || $_"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/api_response.php",
+                "type": "session_issue",
+                "line": 119,
+                "issue": "old session format",
+                "context": "h() {\n        session_start();\n        if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {\n            self::unauthorized('Authe"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/api_response.php",
+                "type": "session_issue",
+                "line": 119,
+                "issue": "session check without proper validation",
+                "context": "ApiAuth() {\n        session_start();\n        if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/AuditTrail.php",
+                "type": "session_issue",
+                "line": 184,
+                "issue": "session_start() call",
+                "context": "sion_status() === PHP_SESSION_NONE) {\n            session_start();\n        }\n        \n        return [\n            "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/core/auth_check.php",
+                "type": "session_issue",
+                "line": 4,
+                "issue": "session_start() call",
+                "context": "\nif (session_status() === PHP_SESSION_NONE) {\n    session_start();\n}\nrequire_once __DIR__ . '/config.php';\nrequire_"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/security_middleware.php",
+                "type": "session_issue",
+                "line": 99,
+                "issue": "session_start() call",
+                "context": "sion_status() === PHP_SESSION_NONE) {\n            session_start();\n        }\n        \n        if (!isset($_SESSION["
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/security_middleware.php",
+                "type": "session_issue",
+                "line": 120,
+                "issue": "session_start() call",
+                "context": "sion_status() === PHP_SESSION_NONE) {\n            session_start();\n        }\n        \n        if (empty($_SESSION['"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/security_middleware.php",
+                "type": "session_issue",
+                "line": 102,
+                "issue": "session check without proper validation",
+                "context": " session_start();\n        }\n        \n        if (!isset($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_tok"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/auth_helper.php",
+                "type": "session_issue",
+                "line": 32,
+                "issue": "session_start() call",
+                "context": "sion_status() === PHP_SESSION_NONE) {\n            session_start();\n        }\n        \n        // Check if user is l"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/auth_helper.php",
+                "type": "session_issue",
+                "line": 36,
+                "issue": "session check without proper validation",
+                "context": "        // Check if user is logged in\n        if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {\n   "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_detail.php",
+                "type": "session_issue",
+                "line": 3,
+                "issue": "session_start() call",
+                "context": "<?php\ndeclare(strict_types=1);\nsession_start();\nrequire_once __DIR__ . '/../core/config.php';\n\n/"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_detail.php",
+                "type": "session_issue",
+                "line": 7,
+                "issue": "old session format",
+                "context": "/config.php';\n\n// Check authentication\nif (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {\n    header('Content-Type: application"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_detail.php",
+                "type": "session_issue",
+                "line": 7,
+                "issue": "session check without proper validation",
+                "context": "./core/config.php';\n\n// Check authentication\nif (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/performance_middleware.php",
+                "type": "session_issue",
+                "line": 114,
+                "issue": "session check without proper validation",
+                "context": "  return in_array($method, $cacheableMethods) && !isset($_SESSION['user_id']);\n    }\n    \n    /**\n     * Generate ET"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_api.php",
+                "type": "session_issue",
+                "line": 3,
+                "issue": "session_start() call",
+                "context": "<?php\ndeclare(strict_types=1);\nsession_start();\nrequire_once __DIR__ . '/../core/config.php';\nre"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_delete.php",
+                "type": "session_issue",
+                "line": 3,
+                "issue": "session_start() call",
+                "context": "<?php\ndeclare(strict_types=1);\nsession_start();\nrequire_once __DIR__ . '/../core/config.php';\n\n/"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_delete.php",
+                "type": "session_issue",
+                "line": 7,
+                "issue": "old session format",
+                "context": "/config.php';\n\n// Check authentication\nif (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {\n    header('Content-Type: application"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/personil_delete.php",
+                "type": "session_issue",
+                "line": 7,
+                "issue": "session check without proper validation",
+                "context": "./core/config.php';\n\n// Check authentication\nif (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/v1/index.php",
+                "type": "session_issue",
+                "line": 95,
+                "issue": "old session format",
+                "context": "/ Check session authentication\n        if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {\n            ApiResponse::error('Unaut"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/api/v1/index.php",
+                "type": "session_issue",
+                "line": 95,
+                "issue": "session check without proper validation",
+                "context": "     // Check session authentication\n        if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) "
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+                "type": "session_issue",
+                "line": 674,
+                "issue": "session check without proper validation",
+                "context": "ermission']) || $item['permission'] === 'all' || (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin"
+            },
+            {
+                "file": "/opt/lampp/htdocs/sprint/includes/components/footer.php",
+                "type": "session_issue",
+                "line": 16,
+                "issue": "session check without proper validation",
+                "context": " me-1\"></i>\n                    Login: <?php echo isset($_SESSION['login_time']) ? date('d M Y H:i', strtotime($_SES"
+            }
+        ]
+    },
+    "files_analyzed": 114,
+    "files_fixed": 0,
+    "total_fixes_applied": 0,
+    "responsive_design_fixed": false,
+    "fixes_applied": []
+}

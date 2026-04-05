@@ -1,303 +1,151 @@
 <?php
-declare(strict_types=1);
-// Start output buffering if not already started
-if (ob_get_level() === 0) {
-    ob_start();
+/**
+ * Main Dashboard Page
+ */
+
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: /login.php');
+    exit();
 }
 
-require_once __DIR__ . '/../core/config.php';
-require_once __DIR__ . '/../core/SessionManager.php';
-require_once __DIR__ . '/../core/auth_helper.php';
-
-// Start session using SessionManager
-SessionManager::start();
-
-// Check authentication using AuthHelper
-if (!AuthHelper::validateSession()) {
-    header('Location: ' . url('login.php'));
-    exit;
-}
-
-$page_title = 'Dashboard - Sistem Manajemen POLRES Samosir';
-include __DIR__ . '/../includes/components/header.php';
 ?>
-<div class="container">
-    <div class="hero-section">
-        <div class="container">
-            <h1>Sistem Manajemen Polres Samosir</h1>
-            <p>Platform terintegrasi untuk pengelolaan data personil dan penjadwalan operasional</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Dashboard - SPRIN</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; }
+        .sidebar { background: #343a40; min-height: 100vh; }
+        .sidebar .nav-link { color: #fff; padding: 15px 20px; }
+        .sidebar .nav-link:hover { background: #495057; }
+        .sidebar .nav-link.active { background: #007bff; }
+        .main-content { padding: 20px; }
+        .card { border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 sidebar p-0">
+                <div class="p-3 text-center bg-dark text-white">
+                    <h4>SPIN</h4>
+                    <small>Sistem Manajemen Personil</small>
+                </div>
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="#">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a class="nav-link" href="/pages/personil.php">
+                        <i class="fas fa-users"></i> Personil
+                    </a>
+                    <a class="nav-link" href="/pages/bagian.php">
+                        <i class="fas fa-building"></i> Bagian
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-id-badge"></i> Jabatan
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-cogs"></i> Unsur
+                    </a>
+                    <hr class="text-white">
+                    <a class="nav-link" href="/logout.php">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </nav>
+            </div>
+            <div class="col-md-9 main-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Dashboard</h2>
+                    <div>
+                        <span class="text-muted">Welcome, </span>
+                        <strong><?= htmlspecialchars($_SESSION['username'] ?? 'User') ?></strong>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Personil</h5>
+                                <h2>0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Bagian</h5>
+                                <h2>0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Jabatan</h5>
+                                <h2>0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Unsur</h5>
+                                <h2>0</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <a href="/pages/personil.php" class="btn btn-primary w-100">
+                                    <i class="fas fa-plus"></i> Add Personil
+                                </a>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <a href="/pages/bagian.php" class="btn btn-success w-100">
+                                    <i class="fas fa-plus"></i> Add Bagian
+                                </a>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <button class="btn btn-info w-100">
+                                    <i class="fas fa-file-export"></i> Export Data
+                                </button>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <button class="btn btn-warning w-100">
+                                    <i class="fas fa-cog"></i> Settings
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Recent Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">No recent activity to display.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="container">
-        <div class="row mb-5">
-            <div class="col-lg-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <div class="mb-3">
-                            <i class="fas fa-users fa-3x text-primary"></i>
-                        </div>
-                        <h3 class="card-title">Data Personil</h3>
-                        <p class="card-text">
-                            Kelola data personil POLRES Samosir secara lengkap, termasuk pimpinan, bagian, dan detail personil dengan sistem yang sudah terintegrasi.
-                        </p>
-                        <a href="personil.php" class="btn btn-primary">
-                            <i class="fas fa-arrow-right me-2"></i>Buka Data Personil
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <div class="mb-3">
-                            <i class="fas fa-calendar-alt fa-3x text-success"></i>
-                        </div>
-                        <h3 class="card-title">Schedule Management</h3>
-                        <p class="card-text">
-                            Sistem penjadwalan modern untuk BAGOPS dengan kalender interaktif, integrasi Google Calendar, dan manajemen shift otomatis.
-                        </p>
-                        <a href="calendar_dashboard.php" class="btn btn-success">
-                            <i class="fas fa-arrow-right me-2"></i>Buka Schedule
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 col-sm-6">
-                    <div class="card text-center mb-3">
-                        <div class="card-body">
-                            <h3 class="card-title" id="totalPersonil">-</h3>
-                            <p class="card-text">Total Personil</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="card text-center mb-3">
-                        <div class="card-body">
-                            <h3 class="card-title" id="polriCount">-</h3>
-                            <p class="card-text">POLRI</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="card text-center mb-3">
-                        <div class="card-body">
-                            <h3 class="card-title" id="asnCount">-</h3>
-                            <p class="card-text">ASN/P3K</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="card text-center mb-3">
-                        <div class="card-body">
-                            <h3 class="card-title" id="schedulesToday">-</h3>
-                            <p class="card-text">Jadwal Hari Ini</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Additional Statistics Row -->
-            <div class="row mt-4">
-                <div class="col-md-3 col-sm-6">
-                    <div class="card text-center mb-3">
-                        <div class="card-body">
-                            <h3 class="card-title" id="maleCount">-</h3>
-                            <p class="card-text">Laki-laki</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="card text-center mb-3">
-                        <div class="card-body">
-                            <h3 class="card-title" id="femaleCount">-</h3>
-                            <p class="card-text">Perempuan</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="card text-center mb-3">
-                        <div class="card-body">
-                            <h3 class="card-title" id="withGelarCount">-</h3>
-                            <p class="card-text">Dengan Gelar</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="card text-center mb-3">
-                        <div class="card-body">
-                            <h3 class="card-title" id="totalBagian">-</h3>
-                            <p class="card-text">Total Bagian</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<?php include '../includes/components/footer.php'; ?>
-
-<script>
-    // Load statistics
-    document.addEventListener('DOMContentLoaded', function() {
-        loadStatistics();
-    });
     
-    function loadStatistics() {
-        // Load personil statistics from updated API
-        fetch('<?php echo url('api/personil_simple.php'); ?>')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const stats = data.data.statistics;
-                    
-                    // Update basic statistics
-                    document.getElementById('totalPersonil').textContent = stats.total_personil;
-                    document.getElementById('polriCount').textContent = stats.polri_count;
-                    document.getElementById('asnCount').textContent = stats.total_personil - stats.polri_count;
-                    document.getElementById('totalBagian').textContent = Object.keys(stats.unsur_distribution).length;
-                    
-                    // Load detailed statistics
-                    loadDetailedStatistics();
-                }
-            })
-            .catch(error => {
-                console.error('Error loading statistics:', error);
-                // Set default values on error
-                document.getElementById('totalPersonil').textContent = '0';
-                document.getElementById('polriCount').textContent = '0';
-                document.getElementById('asnCount').textContent = '0';
-                document.getElementById('totalBagian').textContent = '0';
-            });
-            
-        // Load schedule statistics (existing functionality)
-        loadScheduleStatistics();
-    }
-    
-    function loadDetailedStatistics() {
-        // Load detailed statistics from unsur_stats API
-        fetch('<?php echo url('api/unsur_stats.php'); ?>')
-            .then(response => {
-                // Check if response is valid JSON
-                const contentType = response.headers.get('content-type');
-                if (!contentType || !contentType.includes('application/json')) {
-                    throw new Error('Invalid response format: ' + contentType);
-                }
-                return response.text();
-            })
-            .then(text => {
-                try {
-                    // Parse JSON manually
-                    const data = JSON.parse(text);
-                    if (data.success) {
-                        // API returns overall_statistics directly in data
-                        const overall = data.data.overall_statistics;
-                        
-                        // Update gender statistics
-                        document.getElementById('maleCount').textContent = overall.by_jk.L || 0;
-                        document.getElementById('femaleCount').textContent = overall.by_jk.P || 0;
-                        
-                        // Update gelar statistics
-                        if (overall.data_completeness) {
-                            document.getElementById('withGelarCount').textContent = overall.data_completeness.with_gelar || 0;
-                        } else {
-                            document.getElementById('withGelarCount').textContent = 0;
-                        }
-                    } else {
-                        console.error('API returned error:', data.message);
-                    }
-                } catch (parseError) {
-                    console.error('JSON parsing error:', parseError, 'Response text:', text.substring(0, 200));
-                    throw parseError;
-                }
-            })
-            .catch(error => {
-                console.error('Error loading detailed statistics:', error);
-                // Set default values
-                document.getElementById('maleCount').textContent = '0';
-                document.getElementById('femaleCount').textContent = '0';
-                document.getElementById('withGelarCount').textContent = '0';
-            });
-    }
-    
-    function loadScheduleStatistics() {
-        // Load schedule statistics (existing functionality)
-        fetch('<?php echo url('api/calendar_api.php?action=getStats'); ?>')
-            .then(response => {
-                // Check if response is HTML error
-                const contentType = response.headers.get('content-type');
-                if (contentType && contentType.includes('text/html')) {
-                    console.warn('Calendar API returned HTML, using fallback');
-                    // Set default values
-                    document.getElementById('schedulesToday').textContent = '0';
-                    const weekElement = document.getElementById('schedulesWeek');
-                    if (weekElement) {
-                        weekElement.textContent = '0';
-                    }
-                    return;
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data && data.success) {
-                    document.getElementById('schedulesToday').textContent = data.data.today || 0;
-                    // Update schedulesWeek if element exists
-                    const weekElement = document.getElementById('schedulesWeek');
-                    if (weekElement) {
-                        weekElement.textContent = data.data.week || 0;
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Error loading schedule statistics:', error);
-                // Set default values
-                document.getElementById('schedulesToday').textContent = '0';
-                const weekElement = document.getElementById('schedulesWeek');
-                if (weekElement) {
-                    weekElement.textContent = '0';
-                }
-            });
-    }
-    
-    // Add animation for statistics
-    function animateNumber(element, target, duration = 1000) {
-        const start = 0;
-        const increment = target / (duration / 16);
-        let current = start;
-        
-        const timer = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-                current = target;
-                clearInterval(timer);
-            }
-            element.textContent = Math.floor(current);
-        }, 16);
-    }
-    
-    // Animate statistics when loaded
-    function animateStatistics() {
-        const elements = [
-            { id: 'totalPersonil', target: parseInt(document.getElementById('totalPersonil').textContent) },
-            { id: 'polriCount', target: parseInt(document.getElementById('polriCount').textContent) },
-            { id: 'asnCount', target: parseInt(document.getElementById('asnCount').textContent) },
-            { id: 'maleCount', target: parseInt(document.getElementById('maleCount').textContent) },
-            { id: 'femaleCount', target: parseInt(document.getElementById('femaleCount').textContent) },
-            { id: 'withGelarCount', target: parseInt(document.getElementById('withGelarCount').textContent) }
-        ];
-        
-        elements.forEach((item, index) => {
-            setTimeout(() => {
-                animateNumber(document.getElementById(item.id), item.target);
-            }, index * 100);
-        });
-    }
-    
-    // Trigger animation after statistics are loaded
-    setTimeout(animateStatistics, 500);
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

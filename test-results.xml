@@ -1,0 +1,368 @@
+<testsuites id="" name="" tests="6" failures="3" skipped="0" errors="1" time="31.737383">
+<testsuite name="login.spec.js" timestamp="2026-04-05T17:16:37.855Z" hostname="chromium" tests="6" failures="3" skipped="0" time="84.726" errors="1">
+<testcase name="SPRIN Login Tests › should display login page correctly" classname="login.spec.js" time="3.776">
+</testcase>
+<testcase name="SPRIN Login Tests › should show error with invalid credentials" classname="login.spec.js" time="4.461">
+</testcase>
+<testcase name="SPRIN Login Tests › should login successfully with valid credentials" classname="login.spec.js" time="25.339">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › login.spec.js:40:3 › SPRIN Login Tests › should login successfully with valid credentials 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /main\.php/
+    Received string:  "http://localhost/sprint/login.php"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 10000ms
+        13 × unexpected value "http://localhost/sprint/login.php"
+
+
+      43 |     await page.click('button[type="submit"]');
+      44 |
+    > 45 |     await expect(page).toHaveURL(/main\.php/, { timeout: 10000 });
+         |                        ^
+      46 |     await expect(page.locator('body')).toContainText('Dashboard');
+      47 |   });
+      48 |
+        at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:45:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /main\.php/
+    Received string:  "http://localhost/sprint/login.php"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 10000ms
+        13 × unexpected value "http://localhost/sprint/login.php"
+
+
+      43 |     await page.click('button[type="submit"]');
+      44 |
+    > 45 |     await expect(page).toHaveURL(/main\.php/, { timeout: 10000 });
+         |                        ^
+      46 |     await expect(page.locator('body')).toContainText('Dashboard');
+      47 |   });
+      48 |
+        at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:45:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="SPRIN Login Tests › should work with Quick Login feature" classname="login.spec.js" time="28.054">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › login.spec.js:49:3 › SPRIN Login Tests › should work with Quick Login feature ───────
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /main\.php/
+    Received string:  "http://localhost/sprint/login.php"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 10000ms
+        14 × unexpected value "http://localhost/sprint/login.php"
+
+
+      54 |     if (await quickLoginButton.isVisible()) {
+      55 |       await quickLoginButton.click();
+    > 56 |       await expect(page).toHaveURL(/main\.php/, { timeout: 10000 });
+         |                          ^
+      57 |       await expect(page.locator('body')).toContainText('Dashboard');
+      58 |     } else {
+      59 |       }
+        at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:56:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /main\.php/
+    Received string:  "http://localhost/sprint/login.php"
+    Timeout: 10000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 10000ms
+        14 × unexpected value "http://localhost/sprint/login.php"
+
+
+      54 |     if (await quickLoginButton.isVisible()) {
+      55 |       await quickLoginButton.click();
+    > 56 |       await expect(page).toHaveURL(/main\.php/, { timeout: 10000 });
+         |                          ^
+      57 |       await expect(page.locator('body')).toContainText('Dashboard');
+      58 |     } else {
+      59 |       }
+        at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:56:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+<testcase name="SPRIN Login Tests › should redirect to login when accessing protected pages without auth" classname="login.spec.js" time="10.608">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+<error message="page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at http://localhost/sprint/pages/personil.php" type="Error">
+<![CDATA[  [chromium] › login.spec.js:62:3 › SPRIN Login Tests › should redirect to login when accessing protected pages without auth 
+
+    Error: page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at http://localhost/sprint/pages/personil.php
+    Call log:
+      - navigating to "http://localhost/sprint/pages/personil.php", waiting until "load"
+
+
+      72 |
+      73 |     for (const pageUrl of protectedPages) {
+    > 74 |       await page.goto(pageUrl);
+         |                  ^
+      75 |       await page.waitForTimeout(2000);
+      76 |
+      77 |       const currentUrl = page.url();
+        at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:74:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at http://localhost/sprint/pages/personil.php
+    Call log:
+      - navigating to "http://localhost/sprint/pages/personil.php", waiting until "load"
+
+
+      72 |
+      73 |     for (const pageUrl of protectedPages) {
+    > 74 |       await page.goto(pageUrl);
+         |                  ^
+      75 |       await page.waitForTimeout(2000);
+      76 |
+      77 |       const currentUrl = page.url();
+        at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:74:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</error>
+</testcase>
+<testcase name="SPRIN Login Tests › should maintain session after login" classname="login.spec.js" time="12.488">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium/video.webm]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/video.webm]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/error-context.md]]
+
+[[ATTACHMENT|test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/trace.zip]]
+]]>
+</system-out>
+<failure message="expect(page).toHaveURL(expected) failed" type="expect.toHaveURL">
+<![CDATA[  [chromium] › login.spec.js:85:3 › SPRIN Login Tests › should maintain session after login ────────
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /main\.php/
+    Received string:  "http://localhost/sprint/login.php"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        9 × unexpected value "http://localhost/sprint/login.php"
+
+
+      89 |     await page.click('button[type="submit"]');
+      90 |
+    > 91 |     await expect(page).toHaveURL(/main\.php/);
+         |                        ^
+      92 |
+      93 |     await page.goto(urlHelper.getPersonilUrl());
+      94 |     await page.waitForTimeout(2000);
+        at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:91:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium/error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /main\.php/
+    Received string:  "http://localhost/sprint/login.php"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        9 × unexpected value "http://localhost/sprint/login.php"
+
+
+      89 |     await page.click('button[type="submit"]');
+      90 |
+    > 91 |     await expect(page).toHaveURL(/main\.php/);
+         |                        ^
+      92 |
+      93 |     await page.goto(urlHelper.getPersonilUrl());
+      94 |     await page.waitForTimeout(2000);
+        at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:91:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/trace.zip
+    Usage:
+
+        npx playwright show-trace ../../test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

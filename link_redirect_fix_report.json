@@ -1,0 +1,4305 @@
+{
+    "timestamp": "2026-04-06T00:49:15.405426",
+    "summary": {
+        "total_issues_found": 141,
+        "total_fixes_applied": 264,
+        "issues_by_type": {
+            "relative_path": 10,
+            "file_not_found": 116,
+            "query_string_without_php": 15
+        },
+        "fixes_by_type": {
+            "relative_path_fix": 10,
+            "missing_file_fix": 116,
+            "query_string_fix": 15,
+            "pattern_fix": 122,
+            "url_helper_created": 1
+        }
+    },
+    "issues_found": [
+        {
+            "type": "relative_path",
+            "severity": "medium",
+            "description": "Relative path link",
+            "link": {
+                "type": "javascript_link",
+                "url": "../api/unsur_stats.php",
+                "file": "/opt/lampp/htdocs/sprint/pages/reporting.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "api/unsur_stats.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: pages/personil_upgraded.php",
+            "link": {
+                "type": "css_link",
+                "url": "pages/personil_upgraded.php",
+                "file": "/opt/lampp/htdocs/sprint/pages/personil.php",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "ActionDispatcher.d.ts",
+                "argparse.js",
+                "compare-loose.js",
+                "provider.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: pages/personil_upgraded.php",
+            "link": {
+                "type": "css_link",
+                "url": "pages/personil_upgraded.php",
+                "file": "/opt/lampp/htdocs/sprint/pages/personil.php",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "ActionDispatcher.d.ts",
+                "argparse.js",
+                "compare-loose.js",
+                "provider.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "javascript_link",
+                "url": "<?php echo url(",
+                "file": "/opt/lampp/htdocs/sprint/pages/personil.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "javascript_link",
+                "url": "<?php echo url(",
+                "file": "/opt/lampp/htdocs/sprint/pages/personil.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "javascript_link",
+                "url": "<?php echo API_BASE_URL; ?>/v1/jabatan.php?id=",
+                "file": "/opt/lampp/htdocs/sprint/pages/jabatan.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "index.php?php echo API_BASE_URL; "
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "javascript_link",
+                "url": "<?php echo API_BASE_URL; ?>/v1/bagian.php?unsur_id=",
+                "file": "/opt/lampp/htdocs/sprint/pages/jabatan.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "index.php?php echo API_BASE_URL; "
+        },
+        {
+            "type": "relative_path",
+            "severity": "medium",
+            "description": "Relative path link",
+            "link": {
+                "type": "javascript_link",
+                "url": "../api/backup_api.php?action=list",
+                "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "api/backup_api.php?action=list"
+        },
+        {
+            "type": "relative_path",
+            "severity": "medium",
+            "description": "Relative path link",
+            "link": {
+                "type": "javascript_link",
+                "url": "../api/backup_api.php?action=stats",
+                "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "api/backup_api.php?action=stats"
+        },
+        {
+            "type": "relative_path",
+            "severity": "medium",
+            "description": "Relative path link",
+            "link": {
+                "type": "javascript_link",
+                "url": "../api/backup_api.php",
+                "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "api/backup_api.php"
+        },
+        {
+            "type": "relative_path",
+            "severity": "medium",
+            "description": "Relative path link",
+            "link": {
+                "type": "javascript_link",
+                "url": "../api/backup_api.php",
+                "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "api/backup_api.php"
+        },
+        {
+            "type": "relative_path",
+            "severity": "medium",
+            "description": "Relative path link",
+            "link": {
+                "type": "javascript_link",
+                "url": "../api/backup_api.php",
+                "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "api/backup_api.php"
+        },
+        {
+            "type": "relative_path",
+            "severity": "medium",
+            "description": "Relative path link",
+            "link": {
+                "type": "javascript_link",
+                "url": "../api/backup_api.php",
+                "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "api/backup_api.php"
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "css_link",
+                "url": "api/calendar_api.php?action=getStats",
+                "file": "/opt/lampp/htdocs/sprint/pages/main.php",
+                "context": "CSS url() function"
+            },
+            "suggested_fix": "index.php?action=getStats"
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "javascript_link",
+                "url": "<?php echo url(",
+                "file": "/opt/lampp/htdocs/sprint/pages/main.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "javascript_link",
+                "url": "<?php echo url(",
+                "file": "/opt/lampp/htdocs/sprint/pages/main.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "javascript_link",
+                "url": "<?php echo url(",
+                "file": "/opt/lampp/htdocs/sprint/pages/main.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "javascript_link",
+                "url": "<?php echo url(",
+                "file": "/opt/lampp/htdocs/sprint/pages/bagian.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "javascript_link",
+                "url": "<?php echo url(",
+                "file": "/opt/lampp/htdocs/sprint/pages/bagian.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "javascript_link",
+                "url": "<?php echo url(",
+                "file": "/opt/lampp/htdocs/sprint/pages/bagian.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "index.php?php echo url("
+        },
+        {
+            "type": "relative_path",
+            "severity": "medium",
+            "description": "Relative path link",
+            "link": {
+                "type": "javascript_link",
+                "url": "../api/personil_management_v2.php",
+                "file": "/opt/lampp/htdocs/sprint/pages/dashboard_v2.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "api/personil_management_v2.php"
+        },
+        {
+            "type": "relative_path",
+            "severity": "medium",
+            "description": "Relative path link",
+            "link": {
+                "type": "javascript_link",
+                "url": "../api/kepegawaian_management_v2.php",
+                "file": "/opt/lampp/htdocs/sprint/pages/dashboard_v2.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "api/kepegawaian_management_v2.php"
+        },
+        {
+            "type": "relative_path",
+            "severity": "medium",
+            "description": "Relative path link",
+            "link": {
+                "type": "javascript_link",
+                "url": "../api/penugasan_management_v2.php",
+                "file": "/opt/lampp/htdocs/sprint/pages/dashboard_v2.php",
+                "context": "JavaScript navigation/AJAX"
+            },
+            "suggested_fix": "api/penugasan_management_v2.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: $version",
+            "link": {
+                "type": "css_link",
+                "url": "$version",
+                "file": "/opt/lampp/htdocs/sprint/core/config.php",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "minor.js",
+                "versions.js",
+                "version.js",
+                "version.ts",
+                "versions.ts"
+            ],
+            "suggested_fix": "minor.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: $path",
+            "link": {
+                "type": "css_link",
+                "url": "$path",
+                "file": "/opt/lampp/htdocs/sprint/core/config.php",
+                "context": "CSS url() function"
+            },
+            "similar_files": [],
+            "suggested_fix": "$path"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: error_pages/403.php",
+            "link": {
+                "type": "css_link",
+                "url": "error_pages/403.php",
+                "file": "/opt/lampp/htdocs/sprint/core/auth_helper.php",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "argparse.js",
+                "compare-loose.js",
+                "http-error.d.ts",
+                "pre-commit.sample"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "html_link",
+                "url": "<?php echo url(",
+                "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+                "context": "HTML anchor tag"
+            },
+            "suggested_fix": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "html_link",
+                "url": "<?php echo url(",
+                "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+                "context": "HTML anchor tag"
+            },
+            "suggested_fix": "index.php?php echo url("
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: javascript:void(0)",
+            "link": {
+                "type": "html_link",
+                "url": "javascript:void(0)",
+                "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+                "context": "HTML anchor tag"
+            },
+            "similar_files": [
+                "ActionDispatcher.js",
+                "path-visitor.d.ts",
+                "revisions.d.ts.map",
+                "Coverage.d.ts.map",
+                "vm-interface.js.map"
+            ],
+            "suggested_fix": "ActionDispatcher.js"
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "html_link",
+                "url": "<?php echo url(",
+                "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+                "context": "HTML anchor tag"
+            },
+            "suggested_fix": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_without_php",
+            "severity": "high",
+            "description": "Query string without .php extension",
+            "link": {
+                "type": "html_link",
+                "url": "<?php echo $crumb[",
+                "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+                "context": "HTML anchor tag"
+            },
+            "suggested_fix": "index.php?php echo $crumb["
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: <?php echo BASE_URL; ?>/pages/profile.php",
+            "link": {
+                "type": "html_link",
+                "url": "<?php echo BASE_URL; ?>/pages/profile.php",
+                "file": "/opt/lampp/htdocs/sprint/includes/components/header.php",
+                "context": "HTML anchor tag"
+            },
+            "similar_files": [
+                "webdriver-bidi-bluetooth.js.map",
+                "python_main_issue_resolution.md",
+                "DATA_SOURCE_MIGRATION_COMPLETE.md",
+                "chrome-headless-shell.d.ts.map",
+                "performance_middleware.php"
+            ],
+            "suggested_fix": "performance_middleware.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: <?php echo BASE_URL; ?>/pages/change_password.php",
+            "link": {
+                "type": "html_link",
+                "url": "<?php echo BASE_URL; ?>/pages/change_password.php",
+                "file": "/opt/lampp/htdocs/sprint/includes/components/header.php",
+                "context": "HTML anchor tag"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "webdriver-bidi-bluetooth.js.map",
+                "python_main_issue_resolution.md",
+                "chrome.d.ts.map",
+                "DATA_SOURCE_MIGRATION_COMPLETE.md"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: filter.url",
+            "link": {
+                "type": "css_link",
+                "url": "filter.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/api/BrowserContext.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Inspector.pdl",
+                "interface.c",
+                "url.d.ts",
+                "fileUtil.js",
+                "parseUtil.js"
+            ],
+            "suggested_fix": "Inspector.pdl"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/bidi/Page.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: cookieUrl",
+            "link": {
+                "type": "css_link",
+                "url": "cookieUrl",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/bidi/Page.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Cookie.js",
+                "Cookie.ts",
+                "errorUtil.cjs",
+                "Mocker.ts"
+            ],
+            "suggested_fix": "Cookie.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: cookieUrl",
+            "link": {
+                "type": "css_link",
+                "url": "cookieUrl",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/bidi/Page.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Cookie.js",
+                "Cookie.ts",
+                "errorUtil.cjs",
+                "Mocker.ts"
+            ],
+            "suggested_fix": "Cookie.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/bidi/Page.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: frame.url",
+            "link": {
+                "type": "css_link",
+                "url": "frame.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/bidi/util.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Buffer.js",
+                "Frame.ts",
+                "Realm.d.ts",
+                "result.js",
+                "Readme.md"
+            ],
+            "suggested_fix": "Buffer.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: pageURL",
+            "link": {
+                "type": "css_link",
+                "url": "pageURL",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Page.pdl"
+            ],
+            "suggested_fix": "Page.pdl"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: frame.url",
+            "link": {
+                "type": "css_link",
+                "url": "frame.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/utils.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Buffer.js",
+                "Frame.ts",
+                "Realm.d.ts",
+                "result.js",
+                "Readme.md"
+            ],
+            "suggested_fix": "Buffer.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: event.url",
+            "link": {
+                "type": "css_link",
+                "url": "event.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Coverage.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Poller.ts",
+                "events.js",
+                "result.d.ts",
+                "netUtils.js",
+                "result.js"
+            ],
+            "suggested_fix": "Poller.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: filter.url",
+            "link": {
+                "type": "css_link",
+                "url": "filter.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/api/BrowserContext.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Inspector.pdl",
+                "interface.c",
+                "url.d.ts",
+                "fileUtil.js",
+                "parseUtil.js"
+            ],
+            "suggested_fix": "Inspector.pdl"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/bidi/Page.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: cookieUrl",
+            "link": {
+                "type": "css_link",
+                "url": "cookieUrl",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/bidi/Page.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Cookie.js",
+                "Cookie.ts",
+                "errorUtil.cjs",
+                "Mocker.ts"
+            ],
+            "suggested_fix": "Cookie.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: cookieUrl",
+            "link": {
+                "type": "css_link",
+                "url": "cookieUrl",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/bidi/Page.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Cookie.js",
+                "Cookie.ts",
+                "errorUtil.cjs",
+                "Mocker.ts"
+            ],
+            "suggested_fix": "Cookie.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/bidi/Page.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: frame.url",
+            "link": {
+                "type": "css_link",
+                "url": "frame.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/bidi/util.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Buffer.js",
+                "Frame.ts",
+                "Realm.d.ts",
+                "result.js",
+                "Readme.md"
+            ],
+            "suggested_fix": "Buffer.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: pageURL",
+            "link": {
+                "type": "css_link",
+                "url": "pageURL",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Page.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Page.pdl"
+            ],
+            "suggested_fix": "Page.pdl"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: frame.url",
+            "link": {
+                "type": "css_link",
+                "url": "frame.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/utils.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Buffer.js",
+                "Frame.ts",
+                "Realm.d.ts",
+                "result.js",
+                "Readme.md"
+            ],
+            "suggested_fix": "Buffer.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: event.url",
+            "link": {
+                "type": "css_link",
+                "url": "event.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Coverage.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Poller.ts",
+                "events.js",
+                "result.d.ts",
+                "netUtils.js",
+                "result.js"
+            ],
+            "suggested_fix": "Poller.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: filter.url",
+            "link": {
+                "type": "css_link",
+                "url": "filter.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/es5-iife/puppeteer-core-browser.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Inspector.pdl",
+                "interface.c",
+                "url.d.ts",
+                "fileUtil.js",
+                "parseUtil.js"
+            ],
+            "suggested_fix": "Inspector.pdl"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: event.url",
+            "link": {
+                "type": "css_link",
+                "url": "event.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/es5-iife/puppeteer-core-browser.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Poller.ts",
+                "events.js",
+                "result.d.ts",
+                "netUtils.js",
+                "result.js"
+            ],
+            "suggested_fix": "Poller.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: frame.url",
+            "link": {
+                "type": "css_link",
+                "url": "frame.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/es5-iife/puppeteer-core-browser.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Buffer.js",
+                "Frame.ts",
+                "Realm.d.ts",
+                "result.js",
+                "Readme.md"
+            ],
+            "suggested_fix": "Buffer.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: pageURL",
+            "link": {
+                "type": "css_link",
+                "url": "pageURL",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/es5-iife/puppeteer-core-browser.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Page.pdl"
+            ],
+            "suggested_fix": "Page.pdl"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: res.headers.location",
+            "link": {
+                "type": "css_link",
+                "url": "res.headers.location",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/httpUtil.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "TargetManageEvents.d.ts",
+                "handlers.d.ts",
+                "getDirectory.d.ts",
+                "ActionDispatcher.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: downloadOptions",
+            "link": {
+                "type": "css_link",
+                "url": "downloadOptions",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/install.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "provider.d.ts",
+                "domexception.d.ts",
+                "IsolatedWorlds.ts",
+                "BrowserLauncher.d.ts"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: downloadOptions",
+            "link": {
+                "type": "css_link",
+                "url": "downloadOptions",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/install.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "provider.d.ts",
+                "domexception.d.ts",
+                "IsolatedWorlds.ts",
+                "BrowserLauncher.d.ts"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: options",
+            "link": {
+                "type": "css_link",
+                "url": "options",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/DefaultProvider.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "PDFOptions.d.ts",
+                "th.json",
+                "Input.ts",
+                "ConnectOptions.d.ts",
+                "description"
+            ],
+            "suggested_fix": "PDFOptions.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: `https://storage.googleapis.com/chromium-browser-snapshots/${folder(platform",
+            "link": {
+                "type": "css_link",
+                "url": "`https://storage.googleapis.com/chromium-browser-snapshots/${folder(platform",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/browser-data/chromium.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "compare-loose.js",
+                "DeviceRequestPrompt.d.ts.map",
+                "WebExtensionProcessor.js.map",
+                "pre-commit.sample"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: `${baseVersionUrl}/last-known-good-versions.json`",
+            "link": {
+                "type": "css_link",
+                "url": "`${baseVersionUrl}/last-known-good-versions.json`",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/browser-data/chrome.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "WebExtensionProcessor.js.map",
+                "BrowserLauncher.d.ts",
+                "webdriver-bidi-bluetooth.js.map",
+                "Inspector.pdl"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: `${baseVersionUrl}/latest-versions-per-milestone.json`",
+            "link": {
+                "type": "css_link",
+                "url": "`${baseVersionUrl}/latest-versions-per-milestone.json`",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/browser-data/chrome.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "compare-loose.js",
+                "DeviceRequestPrompt.d.ts.map",
+                "WebExtensionProcessor.js.map",
+                "pre-commit.sample"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: `${baseVersionUrl}/latest-patch-versions-per-build.json`",
+            "link": {
+                "type": "css_link",
+                "url": "`${baseVersionUrl}/latest-patch-versions-per-build.json`",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/browser-data/chrome.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "DeviceRequestPrompt.d.ts.map",
+                "WebExtensionProcessor.js.map",
+                "pre-commit.sample",
+                "BrowserLauncher.d.ts"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: `${baseVersionUrl}/firefox_versions.json`",
+            "link": {
+                "type": "css_link",
+                "url": "`${baseVersionUrl}/firefox_versions.json`",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/browser-data/firefox.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "DeviceRequestPrompt.d.ts.map",
+                "WebExtensionProcessor.js.map",
+                "BrowserLauncher.d.ts",
+                "ponyfill.es2018.mjs.map"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: res.headers.location",
+            "link": {
+                "type": "css_link",
+                "url": "res.headers.location",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/httpUtil.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "TargetManageEvents.d.ts",
+                "handlers.d.ts",
+                "getDirectory.d.ts",
+                "ActionDispatcher.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: downloadOptions",
+            "link": {
+                "type": "css_link",
+                "url": "downloadOptions",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/install.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "provider.d.ts",
+                "domexception.d.ts",
+                "IsolatedWorlds.ts",
+                "BrowserLauncher.d.ts"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: downloadOptions",
+            "link": {
+                "type": "css_link",
+                "url": "downloadOptions",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/install.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "provider.d.ts",
+                "domexception.d.ts",
+                "IsolatedWorlds.ts",
+                "BrowserLauncher.d.ts"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: options",
+            "link": {
+                "type": "css_link",
+                "url": "options",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/DefaultProvider.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "PDFOptions.d.ts",
+                "th.json",
+                "Input.ts",
+                "ConnectOptions.d.ts",
+                "description"
+            ],
+            "suggested_fix": "PDFOptions.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: `https://storage.googleapis.com/chromium-browser-snapshots/${folder(platform",
+            "link": {
+                "type": "css_link",
+                "url": "`https://storage.googleapis.com/chromium-browser-snapshots/${folder(platform",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/browser-data/chromium.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "compare-loose.js",
+                "DeviceRequestPrompt.d.ts.map",
+                "WebExtensionProcessor.js.map",
+                "pre-commit.sample"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: `${baseVersionUrl}/last-known-good-versions.json`",
+            "link": {
+                "type": "css_link",
+                "url": "`${baseVersionUrl}/last-known-good-versions.json`",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/browser-data/chrome.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "WebExtensionProcessor.js.map",
+                "BrowserLauncher.d.ts",
+                "webdriver-bidi-bluetooth.js.map",
+                "Inspector.pdl"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: `${baseVersionUrl}/latest-versions-per-milestone.json`",
+            "link": {
+                "type": "css_link",
+                "url": "`${baseVersionUrl}/latest-versions-per-milestone.json`",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/browser-data/chrome.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "compare-loose.js",
+                "DeviceRequestPrompt.d.ts.map",
+                "WebExtensionProcessor.js.map",
+                "pre-commit.sample"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: `${baseVersionUrl}/latest-patch-versions-per-build.json`",
+            "link": {
+                "type": "css_link",
+                "url": "`${baseVersionUrl}/latest-patch-versions-per-build.json`",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/browser-data/chrome.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "DeviceRequestPrompt.d.ts.map",
+                "WebExtensionProcessor.js.map",
+                "pre-commit.sample",
+                "BrowserLauncher.d.ts"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: `${baseVersionUrl}/firefox_versions.json`",
+            "link": {
+                "type": "css_link",
+                "url": "`${baseVersionUrl}/firefox_versions.json`",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/browser-data/firefox.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "ActionDispatcher.d.ts",
+                "DeviceRequestPrompt.d.ts.map",
+                "WebExtensionProcessor.js.map",
+                "BrowserLauncher.d.ts",
+                "ponyfill.es2018.mjs.map"
+            ],
+            "suggested_fix": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/cjs/bidiMapper/modules/context/BrowsingContextImpl.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/cjs/bidiMapper/modules/network/NetworkUtils.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/cjs/bidiMapper/modules/network/NetworkProcessor.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: patternUrl",
+            "link": {
+                "type": "css_link",
+                "url": "patternUrl",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/cjs/bidiMapper/modules/network/NetworkProcessor.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "handlers.d.ts",
+                "Inspector.pdl",
+                "interface.c",
+                "esgenerate",
+                "parseUtil.js"
+            ],
+            "suggested_fix": "handlers.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/cjs/utils/urlHelpers.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/esm/bidiMapper/modules/context/BrowsingContextImpl.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/esm/bidiMapper/modules/network/NetworkUtils.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/esm/bidiMapper/modules/network/NetworkProcessor.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: patternUrl",
+            "link": {
+                "type": "css_link",
+                "url": "patternUrl",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/esm/bidiMapper/modules/network/NetworkProcessor.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "handlers.d.ts",
+                "Inspector.pdl",
+                "interface.c",
+                "esgenerate",
+                "parseUtil.js"
+            ],
+            "suggested_fix": "handlers.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/esm/utils/urlHelpers.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: patternUrl",
+            "link": {
+                "type": "css_link",
+                "url": "patternUrl",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "handlers.d.ts",
+                "Inspector.pdl",
+                "interface.c",
+                "esgenerate",
+                "parseUtil.js"
+            ],
+            "suggested_fix": "handlers.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: input.data",
+            "link": {
+                "type": "css_link",
+                "url": "input.data",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "interface.c",
+                "Dialog.d.ts",
+                "phpunit.xml",
+                "update.sample",
+                "parseUtil.js"
+            ],
+            "suggested_fix": "interface.c"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: message",
+            "link": {
+                "type": "css_link",
+                "url": "message",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Mutex.js",
+                "OutgoingMessage.d.ts",
+                "Frame.ts",
+                "Page.js",
+                "parse.js"
+            ],
+            "suggested_fix": "Mutex.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: message",
+            "link": {
+                "type": "css_link",
+                "url": "message",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Mutex.js",
+                "OutgoingMessage.d.ts",
+                "Frame.ts",
+                "Page.js",
+                "parse.js"
+            ],
+            "suggested_fix": "Mutex.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/response.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: input.url",
+            "link": {
+                "type": "css_link",
+                "url": "input.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/request.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "phpunit.xml",
+                "url.d.ts",
+                "parseUtil.js",
+                "Audits.pdl",
+                "Input.pdl"
+            ],
+            "suggested_fix": "phpunit.xml"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: input",
+            "link": {
+                "type": "css_link",
+                "url": "input",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/request.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Input.pdl",
+                "Input.ts",
+                "InputSource.js",
+                "input_validator.php",
+                "InputSource.js.map"
+            ],
+            "suggested_fix": "input_validator.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: referrer",
+            "link": {
+                "type": "css_link",
+                "url": "referrer",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/request.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "argparse.js",
+                "browser.mjs",
+                "core.js.map",
+                "Buffer.js",
+                "interface.c"
+            ],
+            "suggested_fix": "argparse.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: this[INTERNALS].parsedURL",
+            "link": {
+                "type": "css_link",
+                "url": "this[INTERNALS].parsedURL",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/request.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "TargetManageEvents.d.ts",
+                "handlers.d.ts",
+                "ActionDispatcher.d.ts",
+                "DeviceRequestPrompt.d.ts.map"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/utils/referrer.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: request.url",
+            "link": {
+                "type": "css_link",
+                "url": "request.url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/utils/referrer.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "handlers.d.ts",
+                "HTTPRequest.d.ts",
+                "Inspector.pdl",
+                "Buffer.js",
+                "UserContext.ts"
+            ],
+            "suggested_fix": "handlers.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: original",
+            "link": {
+                "type": "css_link",
+                "url": "original",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/utils/is.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "main.yml",
+                "config",
+                "minor.js",
+                "login.php",
+                "Dialog.ts"
+            ],
+            "suggested_fix": "login.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: destination",
+            "link": {
+                "type": "css_link",
+                "url": "destination",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/utils/is.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "handlers.d.ts",
+                "provider.d.ts",
+                "index.d.ts",
+                "Inspector.pdl",
+                "interface.c"
+            ],
+            "suggested_fix": "handlers.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: original",
+            "link": {
+                "type": "css_link",
+                "url": "original",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/utils/is.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "main.yml",
+                "config",
+                "minor.js",
+                "login.php",
+                "Dialog.ts"
+            ],
+            "suggested_fix": "login.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: destination",
+            "link": {
+                "type": "css_link",
+                "url": "destination",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/utils/is.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "handlers.d.ts",
+                "provider.d.ts",
+                "index.d.ts",
+                "Inspector.pdl",
+                "interface.c"
+            ],
+            "suggested_fix": "handlers.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/pac-resolver/dist/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: params",
+            "link": {
+                "type": "css_link",
+                "url": "params",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/mini/schemas.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "Frame.ts",
+                "parse.js",
+                "url-search-params.d.ts",
+                "map.js"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: params",
+            "link": {
+                "type": "css_link",
+                "url": "params",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/mini/schemas.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "Frame.ts",
+                "parse.js",
+                "url-search-params.d.ts",
+                "map.js"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: orig",
+            "link": {
+                "type": "css_link",
+                "url": "orig",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/core/schemas.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "global-origin.d.ts"
+            ],
+            "suggested_fix": "global-origin.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: `http://[${payload.value}]`",
+            "link": {
+                "type": "css_link",
+                "url": "`http://[${payload.value}]`",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/core/schemas.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [],
+            "suggested_fix": "`http://[${payload.value}]`"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: `http://[${address}]`",
+            "link": {
+                "type": "css_link",
+                "url": "`http://[${address}]`",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/core/schemas.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [],
+            "suggested_fix": "`http://[${address}]`"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: data",
+            "link": {
+                "type": "css_link",
+                "url": "data",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/core/schemas.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "data.d.ts",
+                "DATA_SOURCE_MIGRATION_COMPLETE.md",
+                "DatabaseStructureChecker.php",
+                "database_update.md",
+                "browser-data.ts"
+            ],
+            "suggested_fix": "DatabaseStructureChecker.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: payload.value",
+            "link": {
+                "type": "css_link",
+                "url": "payload.value",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/core/schemas.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "handlers.d.ts",
+                "Dialog.d.ts",
+                "LazyArg.d.ts",
+                "Realm.js.map",
+                "update.sample"
+            ],
+            "suggested_fix": "handlers.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: params",
+            "link": {
+                "type": "css_link",
+                "url": "params",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/classic/schemas.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "Frame.ts",
+                "parse.js",
+                "url-search-params.d.ts",
+                "map.js"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: params",
+            "link": {
+                "type": "css_link",
+                "url": "params",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/classic/schemas.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "Frame.ts",
+                "parse.js",
+                "url-search-params.d.ts",
+                "map.js"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: input.data",
+            "link": {
+                "type": "css_link",
+                "url": "input.data",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v3/types.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "interface.c",
+                "Dialog.d.ts",
+                "phpunit.xml",
+                "update.sample",
+                "parseUtil.js"
+            ],
+            "suggested_fix": "interface.c"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: message",
+            "link": {
+                "type": "css_link",
+                "url": "message",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v3/types.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Mutex.js",
+                "OutgoingMessage.d.ts",
+                "Frame.ts",
+                "Page.js",
+                "parse.js"
+            ],
+            "suggested_fix": "Mutex.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: message",
+            "link": {
+                "type": "css_link",
+                "url": "message",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v3/types.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Mutex.js",
+                "OutgoingMessage.d.ts",
+                "Frame.ts",
+                "Page.js",
+                "parse.js"
+            ],
+            "suggested_fix": "Mutex.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: b",
+            "link": {
+                "type": "css_link",
+                "url": "b",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@tootallnate/quickjs-emscripten/dist/generated/emscripten-module.WASM_RELEASE_SYNC.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "browser.mjs",
+                "WebExtensionProcessor.js.map",
+                "be.json",
+                "BrowserLauncher.d.ts",
+                "webdriver-bidi-bluetooth.js.map"
+            ],
+            "suggested_fix": "browser.mjs"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: b",
+            "link": {
+                "type": "css_link",
+                "url": "b",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/@tootallnate/quickjs-emscripten/dist/generated/emscripten-module.WASM_RELEASE_SYNC.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "browser.mjs",
+                "WebExtensionProcessor.js.map",
+                "be.json",
+                "BrowserLauncher.d.ts",
+                "webdriver-bidi-bluetooth.js.map"
+            ],
+            "suggested_fix": "browser.mjs"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: address",
+            "link": {
+                "type": "css_link",
+                "url": "address",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/ws/lib/websocket.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url.d.ts",
+                "address-error.js.map",
+                "ota.d.ts",
+                "web.d.ts",
+                "be.d.ts"
+            ],
+            "suggested_fix": "url.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: uri",
+            "link": {
+                "type": "css_link",
+                "url": "uri",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/get-uri/dist/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "security_audit.md",
+                "SecurityMiddleware.php",
+                "SecurityDetails.js.map",
+                "SecurityDetails.d.ts.map",
+                "Security.pdl"
+            ],
+            "suggested_fix": "SecurityMiddleware.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/socks-proxy-agent/dist/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: uri",
+            "link": {
+                "type": "css_link",
+                "url": "uri",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/socks-proxy-agent/dist/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "security_audit.md",
+                "SecurityMiddleware.php",
+                "SecurityDetails.js.map",
+                "SecurityDetails.d.ts.map",
+                "Security.pdl"
+            ],
+            "suggested_fix": "SecurityMiddleware.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/socks-proxy-agent/dist/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: proxy",
+            "link": {
+                "type": "css_link",
+                "url": "proxy",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/http-proxy-agent/dist/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "protocol-tests-proxy-api.d.ts",
+                "protocol-proxy-api.d.ts",
+                "proxy-agent.d.ts",
+                "env-http-proxy-agent.d.ts",
+                "ChannelProxy.js"
+            ],
+            "suggested_fix": "protocol-tests-proxy-api.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: filepath",
+            "link": {
+                "type": "css_link",
+                "url": "filepath",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/bare-fs/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Makefile",
+                "Fetch.pdl"
+            ],
+            "suggested_fix": "Makefile"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: s,e,n",
+            "link": {
+                "type": "css_link",
+                "url": "s,e,n",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/source-map/dist/source-map.min.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [],
+            "suggested_fix": "s,e,n"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: u,n,this._sourceMapURL",
+            "link": {
+                "type": "css_link",
+                "url": "u,n,this._sourceMapURL",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/source-map/dist/source-map.min.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "ActionDispatcher.d.ts",
+                "GetQueryHandler.d.ts",
+                "pre-commit.sample",
+                "BrowserLauncher.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: r.sourceRoot,e,n",
+            "link": {
+                "type": "css_link",
+                "url": "r.sourceRoot,e,n",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/source-map/dist/source-map.min.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "getDirectory.d.ts",
+                "ActionDispatcher.d.ts",
+                "compare-loose.js",
+                "browser.mjs",
+                "provider.d.ts"
+            ],
+            "suggested_fix": "getDirectory.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: this.sourceRoot,i,this._sourceMapURL",
+            "link": {
+                "type": "css_link",
+                "url": "this.sourceRoot,i,this._sourceMapURL",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/source-map/dist/source-map.min.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "getDirectory.d.ts",
+                "ActionDispatcher.d.ts",
+                "compare-loose.js",
+                "provider.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: t.consumer.sourceRoot,u,this._sourceMapURL",
+            "link": {
+                "type": "css_link",
+                "url": "t.consumer.sourceRoot,u,this._sourceMapURL",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/source-map/dist/source-map.min.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "getDirectory.d.ts",
+                "ActionDispatcher.d.ts",
+                "compare-loose.js",
+                "DeviceRequestPrompt.d.ts.map"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: proxy",
+            "link": {
+                "type": "css_link",
+                "url": "proxy",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/https-proxy-agent/dist/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "protocol-tests-proxy-api.d.ts",
+                "protocol-proxy-api.d.ts",
+                "proxy-agent.d.ts",
+                "env-http-proxy-agent.d.ts",
+                "ChannelProxy.js"
+            ],
+            "suggested_fix": "protocol-tests-proxy-api.d.ts"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: ${options.prefix}${form}",
+            "link": {
+                "type": "html_link",
+                "url": "${options.prefix}${form}",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/ip-address/dist/ipv6.js",
+                "context": "HTML anchor tag"
+            },
+            "similar_files": [
+                "DefaultProvider.spec.ts",
+                "frontend_components.md",
+                "revisions.d.ts.map",
+                "SystemMonitor.php",
+                "permissions.ts"
+            ],
+            "suggested_fix": "SystemMonitor.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: ${options.prefix}${form}",
+            "link": {
+                "type": "html_link",
+                "url": "${options.prefix}${form}",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/ip-address/dist/ipv6.js",
+                "context": "HTML anchor tag"
+            },
+            "similar_files": [
+                "DefaultProvider.spec.ts",
+                "frontend_components.md",
+                "revisions.d.ts.map",
+                "SystemMonitor.php",
+                "permissions.ts"
+            ],
+            "suggested_fix": "SystemMonitor.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/ip-address/dist/ipv6.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: value",
+            "link": {
+                "type": "css_link",
+                "url": "value",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/bare-url/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [],
+            "suggested_fix": "value"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/bare-url/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: pathname",
+            "link": {
+                "type": "css_link",
+                "url": "pathname",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/bare-url/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "main.php",
+                "Frame.ts",
+                "Page.ts",
+                "Cache.ts",
+                "path.js"
+            ],
+            "suggested_fix": "main.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/proxy-from-env/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: url",
+            "link": {
+                "type": "css_link",
+                "url": "url",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/proxy-from-env/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "url-search-params.js",
+                "url.d.ts",
+                "urlHelpers.d.ts",
+                "bare-url.bare",
+                "url-search-params.d.ts"
+            ],
+            "suggested_fix": "url-search-params.js"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: input",
+            "link": {
+                "type": "css_link",
+                "url": "input",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/proxy-from-env/test.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Input.pdl",
+                "Input.ts",
+                "InputSource.js",
+                "input_validator.php",
+                "InputSource.js.map"
+            ],
+            "suggested_fix": "input_validator.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: input",
+            "link": {
+                "type": "css_link",
+                "url": "input",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/proxy-from-env/test.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "Input.pdl",
+                "Input.ts",
+                "InputSource.js",
+                "input_validator.php",
+                "InputSource.js.map"
+            ],
+            "suggested_fix": "input_validator.php"
+        },
+        {
+            "type": "file_not_found",
+            "severity": "high",
+            "description": "Target file not found: proxy",
+            "link": {
+                "type": "css_link",
+                "url": "proxy",
+                "file": "/opt/lampp/htdocs/sprint/node_modules/proxy-agent/dist/index.js",
+                "context": "CSS url() function"
+            },
+            "similar_files": [
+                "protocol-tests-proxy-api.d.ts",
+                "protocol-proxy-api.d.ts",
+                "proxy-agent.d.ts",
+                "env-http-proxy-agent.d.ts",
+                "ChannelProxy.js"
+            ],
+            "suggested_fix": "protocol-tests-proxy-api.d.ts"
+        }
+    ],
+    "fixes_applied": [
+        {
+            "type": "relative_path_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/reporting.php",
+            "old_url": "../api/unsur_stats.php",
+            "new_url": "api/unsur_stats.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/personil.php",
+            "old_url": "pages/personil_upgraded.php",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/personil.php",
+            "old_url": "pages/personil_upgraded.php",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/personil.php",
+            "old_url": "<?php echo url(",
+            "new_url": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/personil.php",
+            "old_url": "<?php echo url(",
+            "new_url": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/jabatan.php",
+            "old_url": "<?php echo API_BASE_URL; ?>/v1/jabatan.php?id=",
+            "new_url": "index.php?php echo API_BASE_URL; "
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/jabatan.php",
+            "old_url": "<?php echo API_BASE_URL; ?>/v1/bagian.php?unsur_id=",
+            "new_url": "index.php?php echo API_BASE_URL; "
+        },
+        {
+            "type": "relative_path_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+            "old_url": "../api/backup_api.php?action=list",
+            "new_url": "api/backup_api.php?action=list"
+        },
+        {
+            "type": "relative_path_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+            "old_url": "../api/backup_api.php?action=stats",
+            "new_url": "api/backup_api.php?action=stats"
+        },
+        {
+            "type": "relative_path_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+            "old_url": "../api/backup_api.php",
+            "new_url": "api/backup_api.php"
+        },
+        {
+            "type": "relative_path_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+            "old_url": "../api/backup_api.php",
+            "new_url": "api/backup_api.php"
+        },
+        {
+            "type": "relative_path_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+            "old_url": "../api/backup_api.php",
+            "new_url": "api/backup_api.php"
+        },
+        {
+            "type": "relative_path_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+            "old_url": "../api/backup_api.php",
+            "new_url": "api/backup_api.php"
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/main.php",
+            "old_url": "api/calendar_api.php?action=getStats",
+            "new_url": "index.php?action=getStats"
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/main.php",
+            "old_url": "<?php echo url(",
+            "new_url": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/main.php",
+            "old_url": "<?php echo url(",
+            "new_url": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/main.php",
+            "old_url": "<?php echo url(",
+            "new_url": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/bagian.php",
+            "old_url": "<?php echo url(",
+            "new_url": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/bagian.php",
+            "old_url": "<?php echo url(",
+            "new_url": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/bagian.php",
+            "old_url": "<?php echo url(",
+            "new_url": "index.php?php echo url("
+        },
+        {
+            "type": "relative_path_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/dashboard_v2.php",
+            "old_url": "../api/personil_management_v2.php",
+            "new_url": "api/personil_management_v2.php"
+        },
+        {
+            "type": "relative_path_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/dashboard_v2.php",
+            "old_url": "../api/kepegawaian_management_v2.php",
+            "new_url": "api/kepegawaian_management_v2.php"
+        },
+        {
+            "type": "relative_path_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/dashboard_v2.php",
+            "old_url": "../api/penugasan_management_v2.php",
+            "new_url": "api/penugasan_management_v2.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/config.php",
+            "old_url": "$version",
+            "new_url": "minor.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/config.php",
+            "old_url": "$path",
+            "new_url": "$path"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/auth_helper.php",
+            "old_url": "error_pages/403.php",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+            "old_url": "<?php echo url(",
+            "new_url": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+            "old_url": "<?php echo url(",
+            "new_url": "index.php?php echo url("
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+            "old_url": "javascript:void(0)",
+            "new_url": "ActionDispatcher.js"
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+            "old_url": "<?php echo url(",
+            "new_url": "index.php?php echo url("
+        },
+        {
+            "type": "query_string_fix",
+            "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+            "old_url": "<?php echo $crumb[",
+            "new_url": "index.php?php echo $crumb["
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/includes/components/header.php",
+            "old_url": "<?php echo BASE_URL; ?>/pages/profile.php",
+            "new_url": "performance_middleware.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/includes/components/header.php",
+            "old_url": "<?php echo BASE_URL; ?>/pages/change_password.php",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/api/BrowserContext.js",
+            "old_url": "filter.url",
+            "new_url": "Inspector.pdl"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/bidi/Page.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/bidi/Page.js",
+            "old_url": "cookieUrl",
+            "new_url": "Cookie.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/bidi/Page.js",
+            "old_url": "cookieUrl",
+            "new_url": "Cookie.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/bidi/Page.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/bidi/util.js",
+            "old_url": "frame.url",
+            "new_url": "Buffer.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Page.js",
+            "old_url": "pageURL",
+            "new_url": "Page.pdl"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/utils.js",
+            "old_url": "frame.url",
+            "new_url": "Buffer.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/cjs/puppeteer/cdp/Coverage.js",
+            "old_url": "event.url",
+            "new_url": "Poller.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/api/BrowserContext.js",
+            "old_url": "filter.url",
+            "new_url": "Inspector.pdl"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/bidi/Page.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/bidi/Page.js",
+            "old_url": "cookieUrl",
+            "new_url": "Cookie.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/bidi/Page.js",
+            "old_url": "cookieUrl",
+            "new_url": "Cookie.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/bidi/Page.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/bidi/util.js",
+            "old_url": "frame.url",
+            "new_url": "Buffer.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Page.js",
+            "old_url": "pageURL",
+            "new_url": "Page.pdl"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/utils.js",
+            "old_url": "frame.url",
+            "new_url": "Buffer.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/esm/puppeteer/cdp/Coverage.js",
+            "old_url": "event.url",
+            "new_url": "Poller.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/es5-iife/puppeteer-core-browser.js",
+            "old_url": "filter.url",
+            "new_url": "Inspector.pdl"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/es5-iife/puppeteer-core-browser.js",
+            "old_url": "event.url",
+            "new_url": "Poller.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/es5-iife/puppeteer-core-browser.js",
+            "old_url": "frame.url",
+            "new_url": "Buffer.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/puppeteer-core/lib/es5-iife/puppeteer-core-browser.js",
+            "old_url": "pageURL",
+            "new_url": "Page.pdl"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/httpUtil.js",
+            "old_url": "res.headers.location",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/install.js",
+            "old_url": "downloadOptions",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/install.js",
+            "old_url": "downloadOptions",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/DefaultProvider.js",
+            "old_url": "options",
+            "new_url": "PDFOptions.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/browser-data/chromium.js",
+            "old_url": "`https://storage.googleapis.com/chromium-browser-snapshots/${folder(platform",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/browser-data/chrome.js",
+            "old_url": "`${baseVersionUrl}/last-known-good-versions.json`",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/browser-data/chrome.js",
+            "old_url": "`${baseVersionUrl}/latest-versions-per-milestone.json`",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/browser-data/chrome.js",
+            "old_url": "`${baseVersionUrl}/latest-patch-versions-per-build.json`",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/cjs/browser-data/firefox.js",
+            "old_url": "`${baseVersionUrl}/firefox_versions.json`",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/httpUtil.js",
+            "old_url": "res.headers.location",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/install.js",
+            "old_url": "downloadOptions",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/install.js",
+            "old_url": "downloadOptions",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/DefaultProvider.js",
+            "old_url": "options",
+            "new_url": "PDFOptions.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/browser-data/chromium.js",
+            "old_url": "`https://storage.googleapis.com/chromium-browser-snapshots/${folder(platform",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/browser-data/chrome.js",
+            "old_url": "`${baseVersionUrl}/last-known-good-versions.json`",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/browser-data/chrome.js",
+            "old_url": "`${baseVersionUrl}/latest-versions-per-milestone.json`",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/browser-data/chrome.js",
+            "old_url": "`${baseVersionUrl}/latest-patch-versions-per-build.json`",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@puppeteer/browsers/lib/esm/browser-data/firefox.js",
+            "old_url": "`${baseVersionUrl}/firefox_versions.json`",
+            "new_url": "ActionDispatcher.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/cjs/bidiMapper/modules/context/BrowsingContextImpl.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/cjs/bidiMapper/modules/network/NetworkUtils.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/cjs/bidiMapper/modules/network/NetworkProcessor.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/cjs/bidiMapper/modules/network/NetworkProcessor.js",
+            "old_url": "patternUrl",
+            "new_url": "handlers.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/cjs/utils/urlHelpers.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/esm/bidiMapper/modules/context/BrowsingContextImpl.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/esm/bidiMapper/modules/network/NetworkUtils.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/esm/bidiMapper/modules/network/NetworkProcessor.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/esm/bidiMapper/modules/network/NetworkProcessor.js",
+            "old_url": "patternUrl",
+            "new_url": "handlers.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/esm/utils/urlHelpers.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+            "old_url": "patternUrl",
+            "new_url": "handlers.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+            "old_url": "input.data",
+            "new_url": "interface.c"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+            "old_url": "message",
+            "new_url": "Mutex.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/chromium-bidi/lib/iife/mapperTab.js",
+            "old_url": "message",
+            "new_url": "Mutex.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/response.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/request.js",
+            "old_url": "input.url",
+            "new_url": "phpunit.xml"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/request.js",
+            "old_url": "input",
+            "new_url": "input_validator.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/request.js",
+            "old_url": "referrer",
+            "new_url": "argparse.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/request.js",
+            "old_url": "this[INTERNALS].parsedURL",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/utils/referrer.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/utils/referrer.js",
+            "old_url": "request.url",
+            "new_url": "handlers.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/utils/is.js",
+            "old_url": "original",
+            "new_url": "login.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/utils/is.js",
+            "old_url": "destination",
+            "new_url": "handlers.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/utils/is.js",
+            "old_url": "original",
+            "new_url": "login.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/node-fetch/src/utils/is.js",
+            "old_url": "destination",
+            "new_url": "handlers.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/pac-resolver/dist/index.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/mini/schemas.js",
+            "old_url": "params",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/mini/schemas.js",
+            "old_url": "params",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/core/schemas.js",
+            "old_url": "orig",
+            "new_url": "global-origin.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/core/schemas.js",
+            "old_url": "`http://[${payload.value}]`",
+            "new_url": "`http://[${payload.value}]`"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/core/schemas.js",
+            "old_url": "`http://[${address}]`",
+            "new_url": "`http://[${address}]`"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/core/schemas.js",
+            "old_url": "data",
+            "new_url": "DatabaseStructureChecker.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/core/schemas.js",
+            "old_url": "payload.value",
+            "new_url": "handlers.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/classic/schemas.js",
+            "old_url": "params",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v4/classic/schemas.js",
+            "old_url": "params",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v3/types.js",
+            "old_url": "input.data",
+            "new_url": "interface.c"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v3/types.js",
+            "old_url": "message",
+            "new_url": "Mutex.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/zod/v3/types.js",
+            "old_url": "message",
+            "new_url": "Mutex.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@tootallnate/quickjs-emscripten/dist/generated/emscripten-module.WASM_RELEASE_SYNC.js",
+            "old_url": "b",
+            "new_url": "browser.mjs"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/@tootallnate/quickjs-emscripten/dist/generated/emscripten-module.WASM_RELEASE_SYNC.js",
+            "old_url": "b",
+            "new_url": "browser.mjs"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/ws/lib/websocket.js",
+            "old_url": "address",
+            "new_url": "url.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/get-uri/dist/index.js",
+            "old_url": "uri",
+            "new_url": "SecurityMiddleware.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/socks-proxy-agent/dist/index.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/socks-proxy-agent/dist/index.js",
+            "old_url": "uri",
+            "new_url": "SecurityMiddleware.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/socks-proxy-agent/dist/index.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/http-proxy-agent/dist/index.js",
+            "old_url": "proxy",
+            "new_url": "protocol-tests-proxy-api.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/bare-fs/index.js",
+            "old_url": "filepath",
+            "new_url": "Makefile"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/source-map/dist/source-map.min.js",
+            "old_url": "s,e,n",
+            "new_url": "s,e,n"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/source-map/dist/source-map.min.js",
+            "old_url": "u,n,this._sourceMapURL",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/source-map/dist/source-map.min.js",
+            "old_url": "r.sourceRoot,e,n",
+            "new_url": "getDirectory.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/source-map/dist/source-map.min.js",
+            "old_url": "this.sourceRoot,i,this._sourceMapURL",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/source-map/dist/source-map.min.js",
+            "old_url": "t.consumer.sourceRoot,u,this._sourceMapURL",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/https-proxy-agent/dist/index.js",
+            "old_url": "proxy",
+            "new_url": "protocol-tests-proxy-api.d.ts"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/ip-address/dist/ipv6.js",
+            "old_url": "${options.prefix}${form}",
+            "new_url": "SystemMonitor.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/ip-address/dist/ipv6.js",
+            "old_url": "${options.prefix}${form}",
+            "new_url": "SystemMonitor.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/ip-address/dist/ipv6.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/bare-url/index.js",
+            "old_url": "value",
+            "new_url": "value"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/bare-url/index.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/bare-url/index.js",
+            "old_url": "pathname",
+            "new_url": "main.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/proxy-from-env/index.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/proxy-from-env/index.js",
+            "old_url": "url",
+            "new_url": "url-search-params.js"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/proxy-from-env/test.js",
+            "old_url": "input",
+            "new_url": "input_validator.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/proxy-from-env/test.js",
+            "old_url": "input",
+            "new_url": "input_validator.php"
+        },
+        {
+            "type": "missing_file_fix",
+            "file": "/opt/lampp/htdocs/sprint/node_modules/proxy-agent/dist/index.js",
+            "old_url": "proxy",
+            "new_url": "protocol-tests-proxy-api.d.ts"
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/improved_error_handler.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/index.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/login.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/cron/check_integration.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/cron/check_database.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/cron/backup_cron.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/error_pages/500.php",
+            "changes": [
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/error_pages/404.php",
+            "changes": [
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/settings.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/personil_management_v2_regulation.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/reporting.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/calendar_dashboard.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/main_navigasi_v2.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/personil.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/jabatan.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/backup_management.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/structure.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/main.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/monitoring_dashboard.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/backup.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/bagian.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/jadwal.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/dashboard_v2.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/laporan_personil.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/pangkat.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/calendar.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/personnel_sections.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/jenis_personil.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/pages/unsur.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/ExportManager.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/schedule_manager.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/JWTAuth.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/SystemMonitor.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/SecurityMiddleware.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/AdvancedSearch.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/Database.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/environment_detector.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/config.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/SessionManager.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/DatabaseOptimizer.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/Controller.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/Model.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/auth_helper.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/error_handler.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/config_dev.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/font_config.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/BackupManager.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/personil_first_flow_config.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/logout.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/CacheManager.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/api_response.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/APIDocumentation.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/AuditTrail.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/WebSocketServer.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/calendar_config.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/core/auth_check.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/BagianUrutanFixer.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/APIEndpointValidator.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/NRPValidationFixer.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/security_middleware.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/pagination_personil.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/unsur_terminal.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/advanced_search.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/E2EClient.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/simple.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/APIResponse.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/personil_management_v2.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/export_personil.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/auth_helper.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/SimpleDatabaseChecker.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/bagian_crud.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/personil_detail.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/DataConsistencyValidator.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/bulk_update_personil.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/user_management.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/APIResponseStandardizer.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/report_api.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/google_calendar_api.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/kepegawaian_management_v2.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/personil_simple_fixed.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/personil.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/performance_middleware.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/master_kepegawaian_crud.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/DataQualityAnalyzer.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/ForeignKeyChecker.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/ManualNRPFixer.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/router.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/jabatan_crud.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/penugasan_management_v2.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/DataIntegrityValidator.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/activity_log.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/personil_api.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/update_pangkat.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/personil_list.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/personil_delete.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/unsur_crud.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/health_check_new.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/DatabaseHealthReporter.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/search_personil.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/bagian.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/DatabaseStructureChecker.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/ForeignKeyFixer.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/calendar_api.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/health_check.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/personil_simple.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/backup_api.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/personil_crud.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/NRPFormatFixer.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/penugasan_crud.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/performance_metrics.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/unsur.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/calendar_api_fixed.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/unsur_stats.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/critical_tables_crud.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/api/v1/index.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/includes/components/nav_header_v2.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/includes/components/header.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/includes/components/nav_footer_v2.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/includes/components/footer.php",
+            "changes": [
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/security/input_validator.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/security/create_default_user.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "pattern_fix",
+            "file": "/opt/lampp/htdocs/sprint/security/security_headers.php",
+            "changes": [
+                "Double slashes",
+                "Spaces in URLs"
+            ]
+        },
+        {
+            "type": "url_helper_created",
+            "file": "core/url_helper.php",
+            "description": "Created URL helper functions for consistent URL handling"
+        }
+    ],
+    "recommendations": [
+        "Use the new url_helper.php functions for consistent URL generation",
+        "Test all fixed links and redirects",
+        "Implement automated link checking in CI/CD",
+        "Use absolute URLs to avoid relative path issues",
+        "Regularly scan for broken links"
+    ]
+}

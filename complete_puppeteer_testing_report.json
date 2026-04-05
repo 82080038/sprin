@@ -1,0 +1,236 @@
+{
+    "timestamp": "2026-04-06 01:51:54",
+    "objective": "Complete Puppeteer testing with batch error fixing",
+    "summary": {
+        "total_tests": 10,
+        "files_fixed": 7,
+        "errors_found": 4,
+        "warnings_found": 0
+    },
+    "test_results": [
+        {
+            "url": "http:\/\/localhost\/sprint\/",
+            "path": "\/",
+            "type": "page",
+            "status": 200,
+            "response_time": 5.89,
+            "timestamp": "2026-04-06 01:51:54",
+            "errors": [
+                "PHP error detected in response"
+            ],
+            "warnings": [
+                "No valid HTML structure found"
+            ],
+            "content_length": 229,
+            "content_type": "text\/html; charset=UTF-8",
+            "css_links": 0,
+            "js_scripts": 0
+        },
+        {
+            "url": "http:\/\/localhost\/sprint\/login.php",
+            "path": "\/login.php",
+            "type": "page",
+            "status": "error",
+            "response_time": 5.34,
+            "timestamp": "2026-04-06 01:51:54",
+            "errors": [],
+            "warnings": [],
+            "error": "Connection failed"
+        },
+        {
+            "url": "http:\/\/localhost\/sprint\/pages\/main.php",
+            "path": "\/pages\/main.php",
+            "type": "page",
+            "status": "error",
+            "response_time": 2.19,
+            "timestamp": "2026-04-06 01:51:54",
+            "errors": [],
+            "warnings": [],
+            "error": "Connection failed"
+        },
+        {
+            "url": "http:\/\/localhost\/sprint\/pages\/personil.php",
+            "path": "\/pages\/personil.php",
+            "type": "page",
+            "status": "error",
+            "response_time": 9.11,
+            "timestamp": "2026-04-06 01:51:54",
+            "errors": [],
+            "warnings": [],
+            "error": "Connection failed"
+        },
+        {
+            "url": "http:\/\/localhost\/sprint\/pages\/bagian.php",
+            "path": "\/pages\/bagian.php",
+            "type": "page",
+            "status": "error",
+            "response_time": 3.88,
+            "timestamp": "2026-04-06 01:51:54",
+            "errors": [],
+            "warnings": [],
+            "error": "Connection failed"
+        },
+        {
+            "url": "http:\/\/localhost\/sprint\/api\/health_check.php",
+            "path": "\/api\/health_check.php",
+            "type": "api",
+            "status": 200,
+            "response_time": 1.95,
+            "timestamp": "2026-04-06 01:51:54",
+            "errors": [
+                "Invalid JSON: Syntax error"
+            ],
+            "warnings": [],
+            "content_length": 4742,
+            "content_type": "text\/html; charset=UTF-8",
+            "is_valid_json": false
+        },
+        {
+            "url": "http:\/\/localhost\/sprint\/api\/personil_list.php",
+            "path": "\/api\/personil_list.php",
+            "type": "api",
+            "status": 200,
+            "response_time": 3.11,
+            "timestamp": "2026-04-06 01:51:54",
+            "errors": [
+                "Invalid JSON: Syntax error"
+            ],
+            "warnings": [],
+            "content_length": 6350,
+            "content_type": "text\/html; charset=UTF-8",
+            "is_valid_json": false
+        },
+        {
+            "url": "http:\/\/localhost\/sprint\/api\/bagian_crud.php",
+            "path": "\/api\/bagian_crud.php",
+            "type": "api",
+            "status": 200,
+            "response_time": 0.72,
+            "timestamp": "2026-04-06 01:51:54",
+            "errors": [
+                "Invalid JSON: Syntax error"
+            ],
+            "warnings": [],
+            "content_length": 16385,
+            "content_type": "text\/html; charset=UTF-8",
+            "is_valid_json": false
+        },
+        {
+            "url": "http:\/\/localhost\/sprint\/api\/jabatan_crud.php",
+            "path": "\/api\/jabatan_crud.php",
+            "type": "api",
+            "status": 200,
+            "response_time": 1.33,
+            "timestamp": "2026-04-06 01:51:54",
+            "errors": [
+                "Invalid JSON: Syntax error"
+            ],
+            "warnings": [],
+            "content_length": 9697,
+            "content_type": "text\/html; charset=UTF-8",
+            "is_valid_json": false
+        },
+        {
+            "url": "http:\/\/localhost\/sprint\/api\/unsur_crud.php",
+            "path": "\/api\/unsur_crud.php",
+            "type": "api",
+            "status": 200,
+            "response_time": 1.08,
+            "timestamp": "2026-04-06 01:51:54",
+            "errors": [
+                "Invalid JSON: Syntax error"
+            ],
+            "warnings": [],
+            "content_length": 11964,
+            "content_type": "text\/html; charset=UTF-8",
+            "is_valid_json": false
+        }
+    ],
+    "errors_found": [
+        {
+            "url": "\/login.php",
+            "error": "Connection failed",
+            "type": "page"
+        },
+        {
+            "url": "\/pages\/main.php",
+            "error": "Connection failed",
+            "type": "page"
+        },
+        {
+            "url": "\/pages\/personil.php",
+            "error": "Connection failed",
+            "type": "page"
+        },
+        {
+            "url": "\/pages\/bagian.php",
+            "error": "Connection failed",
+            "type": "page"
+        }
+    ],
+    "warnings_found": [],
+    "fixed_files": [
+        "pages\/personil.php",
+        "pages\/bagian.php",
+        "api\/health_check.php",
+        "api\/personil_list.php",
+        "api\/bagian_crud.php",
+        "api\/jabatan_crud.php",
+        "api\/unsur_crud.php"
+    ],
+    "error_categories": {
+        "php_syntax": [
+            {
+                "file": "\/",
+                "error": "PHP error detected in response"
+            }
+        ],
+        "css_issues": [],
+        "js_errors": [],
+        "api_errors": [
+            {
+                "file": "\/api\/health_check.php",
+                "error": "Invalid JSON: Syntax error"
+            },
+            {
+                "file": "\/api\/personil_list.php",
+                "error": "Invalid JSON: Syntax error"
+            },
+            {
+                "file": "\/api\/bagian_crud.php",
+                "error": "Invalid JSON: Syntax error"
+            },
+            {
+                "file": "\/api\/jabatan_crud.php",
+                "error": "Invalid JSON: Syntax error"
+            },
+            {
+                "file": "\/api\/unsur_crud.php",
+                "error": "Invalid JSON: Syntax error"
+            }
+        ],
+        "connection_errors": [],
+        "other_errors": [
+            {
+                "url": "\/login.php",
+                "error": "Connection failed",
+                "type": "page"
+            },
+            {
+                "url": "\/pages\/main.php",
+                "error": "Connection failed",
+                "type": "page"
+            },
+            {
+                "url": "\/pages\/personil.php",
+                "error": "Connection failed",
+                "type": "page"
+            },
+            {
+                "url": "\/pages\/bagian.php",
+                "error": "Connection failed",
+                "type": "page"
+            }
+        ]
+    }
+}

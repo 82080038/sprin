@@ -1,20 +1,28 @@
 {
-  "name": "sprint",
-  "version": "1.0.0",
-  "description": "Aplikasi web-based untuk manajemen personil dan jadwal POLRES Samosir.",
-  "main": "test_personil_puppeteer.js",
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "node-fetch": "^3.3.2",
-    "puppeteer": "^24.40.0"
-  }
+    "name": "sprint",
+    "version": "1.0.0",
+    "description": "Aplikasi web-based untuk manajemen personil dan jadwal POLRES Samosir.",
+    "main": "test_login_puppeteer.js",
+    "directories": {
+        "doc": "docs",
+        "test": "tests"
+    },
+    "scripts": {
+        "test": "node test_comprehensive_puppeteer.js",
+        "test:quick": "node test_login_puppeteer.js",
+        "test:debug": "node test_comprehensive_puppeteer.js",
+        "test:report": "open comprehensive-test-report.html"
+    },
+    "keywords": [
+        "puppeteer",
+        "testing",
+        "php",
+        "sprint"
+    ],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "node-fetch": "^3.3.2",
+        "puppeteer": "^24.40.0"
+    }
 }

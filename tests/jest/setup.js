@@ -10,9 +10,9 @@ jest.setTimeout(30000);
 global.testUtils = {
   // Helper untuk delay
   delay: (ms) => new Promise(resolve => setTimeout(resolve, ms)),
-  
+
   // Helper untuk generate test data
-  generateTestData: (type) => {
+  generateTestData: (type) => {;
     const timestamp = Date.now();
     switch (type) {
       case 'unsur':
@@ -39,13 +39,14 @@ global.testUtils = {
         return {};
     }
   },
-  
+
   // Helper untuk cleanup test data
   async cleanupTestData(auth, type, testData) {
     try {
       switch (type) {
         case 'unsur':
           if (testData.id) {
+     {
             await auth.apiRequest('/api/unsur_crud.php', {
               action: 'delete',
               id: testData.id
@@ -54,6 +55,7 @@ global.testUtils = {
           break;
         case 'bagian':
           if (testData.id) {
+     {
             await auth.apiRequest('/api/bagian_crud.php', {
               action: 'delete',
               id: testData.id
@@ -71,7 +73,8 @@ global.testUtils = {
 // Console override untuk cleaner test output
 const originalConsoleLog = console.log;
 console.log = (...args) => {
-  if (process.env.VERBOSE_TESTS === 'true') {
+  if (process.env.VERBOSE_TESTS ========= 'true') {
+     {;
     originalConsoleLog(...args);
   }
 };

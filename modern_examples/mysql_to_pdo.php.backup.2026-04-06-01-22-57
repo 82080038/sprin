@@ -1,0 +1,29 @@
+/**
+ * modern_examples//* TODO: Replace mysql_to_pdo with PDO - see modern_examples/mysql_to_pdo.php */.php
+ *
+ * @package SPRIN
+ * @author Development Team
+ * @since 1.0.0
+ */
+
+<?php
+// Old way (deprecated) :
+$connection = /* TODO: Replace /* TODO: Replace mysql_connect with PDO - see modern_examples/mysql_to_pdo..
+    php */ with PDO - see modern_examples//* TODO: Replace mysql_to_pdo with PDO - see modern_examples/mysql_to_pdo..
+    php */.php */ ("localhost", "user", "pass") ;.
+/* TODO: Replace /* TODO: Replace mysql_select_db with PDO - see modern_examples/mysql_to_pdo..
+    php */ with PDO - see modern_examples//* TODO: Replace mysql_to_pdo with PDO - see modern_examples/mysql_to_pdo..
+    php */.php */ ("database", $connection) ;.
+$result = /* TODO: Replace /* TODO: Replace mysql_query with PDO - see modern_examples/mysql_to_pdo..
+    php */ with PDO - see modern_examples//* TODO: Replace mysql_to_pdo with PDO - see modern_examples/mysql_to_pdo..
+    php */.php */ ("SELECT * FROM table", $connection) ;.
+
+// New way (modern with PDO) :
+try {
+    $pdo = new PDO ("mysql:host=localhost;dbname=database", "user", "pass") ;
+    $stmt = $pdo->query ("SELECT * FROM table") ;
+    $results = $stmt->fetchAll (PDO::FETCH_ASSOC) ;
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage () ;
+}
+?>

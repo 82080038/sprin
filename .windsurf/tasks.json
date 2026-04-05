@@ -1,91 +1,185 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Start PHP Built-in Server",
-      "type": "shell",
-      "command": "php",
-      "args": [
-        "-S",
-        "localhost:8000",
-        "-t",
-        "${workspaceFolder}"
-      ],
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Run PHPStan",
-      "type": "shell",
-      "command": "vendor/bin/phpstan",
-      "args": [
-        "analyse",
-        "--memory-limit=2G"
-      ],
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Run PHPUnit Tests",
-      "type": "shell",
-      "command": "vendor/bin/phpunit",
-      "args": [
-        "--configuration",
-        "phpunit.xml"
-      ],
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Run Jest Tests",
-      "type": "shell",
-      "command": "npm",
-      "args": [
-        "test"
-      ],
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Run Playwright Tests",
-      "type": "shell",
-      "command": "npx",
-      "args": [
-        "playwright",
-        "test"
-      ],
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Python Analysis",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "analyze_application.py"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Security Audit",
+            "type": "shell",
+            "command": "python3",
+            "args": [
+                "-c",
+                "import subprocess; subprocess.run(['python3', 'analyze_application.py'], check=True)"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Install Dependencies",
+            "type": "shell",
+            "command": "npm",
+            "args": [
+                "install"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run PHPStan",
+            "type": "shell",
+            "command": "vendor/bin/phpstan",
+            "args": [
+                "analyse",
+                "--memory-limit=2G"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run PHPUnit Tests",
+            "type": "shell",
+            "command": "vendor/bin/phpunit",
+            "args": [
+                "--configuration",
+                "phpunit.xml"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Jest Tests",
+            "type": "shell",
+            "command": "npm",
+            "args": [
+                "test"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Playwright Tests",
+            "type": "shell",
+            "command": "npx",
+            "args": [
+                "playwright",
+                "test",
+                "--reporter=html",
+                "--reporter=line"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Playwright Tests (Headed)",
+            "type": "shell",
+            "command": "npx",
+            "args": [
+                "playwright",
+                "test",
+                "--headed"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Generate Playwright Report",
+            "type": "shell",
+            "command": "npx",
+            "args": [
+                "playwright",
+                "show-report"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ],
+    "application_tasks": {
+        "maintenance": [
+            "Monitor and optimize database performance",
+            "Update security patches and dependencies",
+            "Backup and restore data integrity",
+            "Log analysis and error monitoring"
+        ],
+        "development": [
+            "Implement new features following existing patterns",
+            "Debug and fix reported issues",
+            "Optimize application performance",
+            "Enhance user interface and experience",
+            "Test and validate functionality"
+        ],
+        "security": [
+            "Review and patch security vulnerabilities",
+            "Update authentication mechanisms",
+            "Validate input sanitization",
+            "Audit access control systems"
+        ],
+        "api_management": [
+            "Maintain API endpoint consistency",
+            "Optimize API response times",
+            "Document API interfaces",
+            "Test API functionality"
+        ]
     }
-  ]
 }

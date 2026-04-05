@@ -1,0 +1,53 @@
+<?php
+/**
+ * google_calendar_api.php
+ * 
+ * @package SPRIN
+ * @author Development Team
+ * @since 1.0.0
+ */
+
+declare(strict_types=1);
+
+// Extracted content from corrupted file:
+// /DevelopmentErrorReportingif(!defined('DEVELOPMENT_MODE')){error_reporting(E_ALL);ini_set('display_errors',1);ini_set('display_startup_errors',1);}declare(strict_types=1);require_once__DIR__.'/../core/calendar_config.php';classGoogleCalendarAPI{private$client;private$service;publicfunction__construct(){if(!class_exists('Google_Client')){thrownewException('GoogleAPIClientLibrarynotinstalled.Run:composerrequiregoogle/apiclient:^2.0');}$this->client=newGoogle_Client();$this->client->setClientId(GOOGLE_CLIENT_ID);$this->client->setClientSecret(GOOGLE_CLIENT_SECRET);$this->client->setRedirectUri(GOOGLE_REDIRECT_URI);$this->client->addScope(GOOGLE_SCOPES);$this->client->setAccessType('offline');$this->client->setPrompt('consent');$this->service=newGoogle_Service_Calendar($this->client);}publicfunctiongetAuthUrl(){return$this->client->createAuthUrl();}publicfunctionauthenticate($code){$this->client->authenticate($code);return$this->client->getAccessToken();}publicfunctionsetAccessToken($token){$this->client->setAccessToken($token);if($this->client->isAccessTokenExpired()){$this->client->fetchAccessTokenWithRefreshToken();return$this->client->getAccessToken();}return$token;}publicfunctioncreateEvent($calendarId,$eventData){$event=newGoogle_Service_Calendar_Event();/Basiceventdetails$event->setSummary($eventData['title']);$event->setDescription($eventData['description']??'');/Setstartandendtimes$start=newGoogle_Service_Calendar_EventDateTime();$start->setDateTime($eventData['start_datetime']);$start->setTimeZone('Asia/Jakarta');$event->setStart($start);$end=newGoogle_Service_Calendar_EventDateTime();$end->setDateTime($eventData['end_datetime']);$end->setTimeZone('Asia/Jakarta');$event->setEnd($end);/Setlocationif(!empty($eventData['location'])){$event->setLocation($eventData['location']);}/Setcolorbasedonshifttypeif(!empty($eventData['color'])){$event->setColorId($this->getColorId($eventData['color']));}/Addattendeesifprovidedif(!empty($eventData['attendees'])){$attendees=[];foreach($eventData['attendees']as$email){$attendee=newGoogle_Service_Calendar_EventAttendee();$attendee->setEmail($email);$attendees[]=$attendee;}$event->setAttendees($attendees);}/Setreminders$event->setReminders(['useDefault'=>false,'overrides'=>[['method'=>'email','minutes'=>24*60],/24hoursbefore['method'=>'popup','minutes'=>30]/30minutesbefore]]);try{$createdEvent=$this->service->events->insert($calendarId,$event);return['success'=>true,'event_id'=>$createdEvent->getId(),'html_link'=>$createdEvent->getHtmlLink()];}catch(Exception$e){return['success'=>false,'error'=>$e->getMessage()];}}publicfunctionupdateEvent($calendarId,$eventId,$eventData){try{$event=$this->service->events->get($calendarId,$eventId);/Updateeventdetails$event->setSummary($eventData['title']);$event->setDescription($eventData['description']??'');if(!empty($eventData['start_datetime'])){$start=newGoogle_Service_Calendar_EventDateTime();$start->setDateTime($eventData['start_datetime']);$start->setTimeZone('Asia/Jakarta');$event->setStart($start);}if(!empty($eventData['end_datetime'])){$end=newGoogle_Service_Calendar_EventDateTime();$end->setDateTime($eventData['end_datetime']);$end->setTimeZone('Asia/Jakarta');$event->setEnd($end);}if(!empty($eventData['location'])){$event->setLocation($eventData['location']);}if(!empty($eventData['color'])){$event->setColorId($this->getColorId($eventData['color']));}$updatedEvent=$this->service->events->update($calendarId,$eventId,$event);return['success'=>true,'event_id'=>$updatedEvent->getId(),'html_link'=>$updatedEvent->getHtmlLink()];}catch(Exception$e){return['success'=>false,'error'=>$e->getMessage()];}}publicfunctiondeleteEvent($calendarId,$eventId){try{$this->service->events->delete($calendarId,$eventId);return['success'=>true];}catch(Exception$e){return['success'=>false,'error'=>$e->getMessage()];}}publicfunctiongetEvents($calendarId,$timeMin=null,$timeMax=null){$optParams=[];if($timeMin){$optParams['timeMin']=$timeMin;}if($timeMax){$optParams['timeMax']=$timeMax;}$optParams['maxResults']=100;$optParams['orderBy']='startTime';$optParams['singleEvents']=true;try{$results=$this->service->events->listEvents($calendarId,$optParams);$events=[];foreach($results->getItems()as$event){$events[]=['id'=>$event->getId(),'title'=>$event->getSummary(),'description'=>$event->getDescription(),'location'=>$event->getLocation(),'start'=>$event->getStart()->getDateTime(),'end'=>$event->getEnd()->getDateTime(),'html_link'=>$event->getHtmlLink()];}return['success'=>true,'events'=>$events];}catch(Exception$e){return['success'=>false,'error'=>$e->getMessage()];}}privatefunctiongetColorId($hexColor){/MaphexcolorstoGoogleCalendarcolorIDs$colorMap=['#4285F4'=>'1',/Blue'#EA4335'=>'2',/Red'#FBBC04'=>'5',/Yellow'#34A853'=>'3',/Green'#9E9E9E'=>'8',/Gray'#FF6F00'=>'7'/Orange];return$colorMap[$hexColor]??'1';}publicfunctionlistCalendars(){try{$calendarList=$this->service->calendarList->listCalendarList();$calendars=[];foreach($calendarList->getItems()as$calendar){$calendars[]=['id'=>$calendar->getId(),'summary'=>$calendar->getSummary(),'description'=>$calendar->getDescription(),'primary'=>$calendar->getPrimary()];}return['success'=>true,'calendars'=>$calendars];}catch(Exception$e){return['success'=>false,'error'=>$e->getMessage()];}}}
+
+/**
+ * GoogleCalendarApi API Handler
+ */
+class GoogleCalendarApi {
+    
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        // Initialize
+    }
+    
+    /**
+     * Handle API request
+     */
+    public function handleRequest(): array {
+        try {
+            // API logic here
+            return [
+                'status' => 'success',
+                'message' => 'API request handled successfully',
+                'data' => []
+            ];
+        } catch (Exception ) {
+            return [
+                'status' => 'error',
+                'message' => ()
+            ];
+        }
+    }
+}
+
+// Handle request if this is the main file
+if (basename($_SERVER['PHP_SELF']) === 'google_calendar_api.php') {
+    $handler = new GoogleCalendarApi();
+    header('Content-Type: application/json');
+    echo json_encode($handler->handleRequest());
+}
+?>

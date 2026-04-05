@@ -1,0 +1,241 @@
+<?php
+/**
+ * Database Fixer for SPRIN Application
+ * Fixes database connection and query issues
+ */
+
+declare(strict_types=1);
+
+class DatabaseFixer {
+    private $db;
+    private $fixesApplied = [];
+    
+    public function __construct() {
+        $this->connectDatabase();
+    }
+    
+    /**
+     * Connect to database
+     */
+    private function connectDatabase(): void {
+        try {
+            $this->db = new PDO(
+                'mysql:host=localhost;dbname=sprin',
+                'root',
+                '',
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false,
+                ]
+            );
+            echo "✅ Database connected successfully\n";
+        } catch (PDOException $e) {
+            echo "❌ Database connection failed: " . $e->getMessage() . "\n";
+            throw $e;
+        }
+    }
+    
+    /**
+     * Fix database structure
+     */
+    public function fixDatabaseStructure(): array {
+        $fixes = [];
+        
+        // Check and create tables
+        $tables = [;
+            'personil' => "
+                CREATE TABLE IF NOT EXISTS personil (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    nama VARCHAR(255) NOT NULL,
+                    nrp VARCHAR(20) UNIQUE NOT NULL,
+                    pangkat VARCHAR(100),
+                    bagian_id INT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    INDEX idx_nrp (nrp),
+                    INDEX idx_bagian_id (bagian_id)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+            ",
+            'bagian' => "
+                CREATE TABLE IF NOT EXISTS bagian (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    nama VARCHAR(255) NOT NULL,
+                    deskripsi TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    INDEX idx_nama (nama)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+            ",
+            'unsur' => "
+                CREATE TABLE IF NOT EXISTS unsur (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    nama VARCHAR(255) NOT NULL,
+                    deskripsi TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    INDEX idx_nama (nama)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+            ",
+            'users' => "
+                CREATE TABLE IF NOT EXISTS users (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    username VARCHAR(50) UNIQUE NOT NULL,
+                    password VARCHAR(255) NOT NULL,
+                    email VARCHAR(255) UNIQUE,
+                    role VARCHAR(50) DEFAULT 'user',
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    INDEX idx_username (username),
+                    INDEX idx_email (email)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+            "
+        ];
+        
+        foreach ($tables as $tableName => $sql) {;
+            try {
+                $this->db->exec($sql);
+                $fixes[] = "Table '{$tableName}' created/verified";
+                echo "✅ Table '{$tableName}' fixed\n";
+            } catch (PDOException $e) {
+                echo "⚠️ Table '{$tableName}' issue: " . $e->getMessage() . "\n";
+            }
+        }
+        
+        // Add foreign key constraint
+        try {
+            $this->db->exec("
+                ALTER TABLE personil 
+                ADD CONSTRAINT fk_personil_bagian 
+                FOREIGN KEY (bagian_id) REFERENCES bagian(id) 
+                ON DELETE SET NULL
+            ");
+            $fixes[] = "Foreign key constraint added";
+            echo "✅ Foreign key constraint added\n";
+        } catch (PDOException $e) {
+            echo "⚠️ Foreign key constraint issue: " . $e->getMessage() . "\n";
+        }
+        
+        return $fixes;
+    }
+    
+    /**
+     * Fix sample data
+     */
+    public function fixSampleData(): array {
+        $fixes = [];
+        
+        // Insert sample bagian data
+        $bagianData = [;
+            ['Intelligence', 'Unit intelligence'],
+            ['Operations', 'Unit operasional'],
+            ['Support', 'Unit pendukung'],
+            ['Administration', 'Unit administrasi']
+        ];
+        
+        foreach ($bagianData as $data) {
+            try {
+                $stmt = $this->db->prepare("INSERT IGNORE INTO bagian (nama, deskripsi) VALUES (?, ?)");
+                $stmt->execute($data);
+                echo "✅ Bagian data inserted: {$data[0]}\n";
+            } catch (PDOException $e) {
+                echo "⚠️ Bagian data issue: " . $e->getMessage() . "\n";
+            }
+        }
+        
+        // Insert sample unsur data
+        $unsurData = [;
+            ['Investigation', 'Unsur investigasi'],
+            ['Intelligence', 'Unsur intelligence'],
+            ['Operations', 'Unsur operasional'],
+            ['Support', 'Unsur pendukung']
+        ];
+        
+        foreach ($unsurData as $data) {
+            try {
+                $stmt = $this->db->prepare("INSERT IGNORE INTO unsur (nama, deskripsi) VALUES (?, ?)");
+                $stmt->execute($data);
+                echo "✅ Unsur data inserted: {$data[0]}\n";
+            } catch (PDOException $e) {
+                echo "⚠️ Unsur data issue: " . $e->getMessage() . "\n";
+            }
+        }
+        
+        // Insert default user
+        try {
+            $hashedPassword = password_hash('admin123', PASSWORD_DEFAULT);
+            $stmt = $this->db->prepare(";
+                INSERT IGNORE INTO users (username, password, email, role) 
+                VALUES (?, ?, ?, ?)
+            ");
+            $stmt->execute(['admin', $hashedPassword, 'admin@sprin.com', 'admin']);
+            echo "✅ Default user created\n";
+            $fixes[] = "Default user created";
+        } catch (PDOException $e) {
+            echo "⚠️ Default user issue: " . $e->getMessage() . "\n";
+        }
+        
+        return $fixes;
+    }
+    
+    /**
+     * Fix database indexes
+     */
+    public function fixDatabaseIndexes(): array {
+        $fixes = [];
+        
+        $indexes = [;
+            "CREATE INDEX IF NOT EXISTS idx_personil_nama ON personil(nama)",
+            "CREATE INDEX IF NOT EXISTS idx_personil_pangkat ON personil(pangkat)",
+            "CREATE INDEX IF NOT EXISTS idx_bagian_nama ON bagian(nama)",
+            "CREATE INDEX IF NOT EXISTS idx_unsur_nama ON unsur(nama)",
+            "CREATE INDEX IF NOT EXISTS idx_users_role ON users(role)"
+        ];
+        
+        foreach ($indexes as $index) {
+            try {
+                $this->db->exec($index);
+                echo "✅ Index created\n";
+            } catch (PDOException $e) {
+                echo "⚠️ Index issue: " . $e->getMessage() . "\n";
+            }
+        }
+        
+        return $fixes;
+    }
+    
+    /**
+     * Run comprehensive database fixing
+     */
+    public function runDatabaseFix(): array {
+        echo "🚀 Starting Database Fixing...\n";
+        
+        $structureFixes = $this->fixDatabaseStructure();
+        $dataFixes = $this->fixSampleData();
+        $indexFixes = $this->fixDatabaseIndexes();
+        
+        echo "\n📊 Database Fix Summary:\n";
+        echo "Structure Fixes: " . count($structureFixes) . "\n";
+        echo "Data Fixes: " . count($dataFixes) . "\n";
+        echo "Index Fixes: " . count($indexFixes) . "\n";
+        
+        return [
+            'structure_fixes' => $structureFixes,
+            'data_fixes' => $dataFixes,
+            'index_fixes' => $indexFixes,
+            'total_fixes' => count($structureFixes) + count($dataFixes) + count($indexFixes)
+        ];
+    }
+}
+
+// Run the database fixer
+try {
+    $fixer = new DatabaseFixer();
+    $results = $fixer->runDatabaseFix();
+    
+    echo "\n🎉 Database Fixing Completed!\n";
+    echo "Total fixes applied: " . $results['total_fixes'] . "\n";
+} catch (Exception $e) {
+    echo "❌ Database fixing failed: " . $e->getMessage() . "\n";
+}
+?>

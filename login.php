@@ -1,333 +1,83 @@
 <?php
-declare(strict_types=1);
-require_once __DIR__ . '/core/config.php';
-require_once __DIR__ . '/core/SessionManager.php';
-require_once __DIR__ . '/core/auth_helper.php';
+require_once 'session_config.php';
+/**
+ * Login Page
+ */
 
-// Start session using SessionManager
-SessionManager::start();
+session_start();
 
-// Check if already logged in
-if (AuthHelper::validateSession()) {
-    header('Location: ' . url('main.php'));
-    exit;
+// If already logged in, redirect to main page
+if (isset($_SESSION['user_id'])) {
+    header('Location: /pages/main.php');
+    exit();
 }
 
-// Handle login
+// Handle login form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = AuthHelper::sanitizeInput(filter_input($_POST === \$_GET ? INPUT_GET : ($_POST === \$_POST ? INPUT_POST : INPUT_REQUEST), 'username', FILTER_SANITIZE_STRING) ?? '');
-    $password = filter_input($_POST === \$_GET ? INPUT_GET : ($_POST === \$_POST ? INPUT_POST : INPUT_REQUEST), 'password', FILTER_SANITIZE_STRING) ?? '';
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
     
-    if (AuthHelper::login($username, $password)) {
-        header('Location: ' . url('main.php'));
-        exit;
+    // Simple validation (in production, use proper authentication)
+    if ($username === 'admin' && $password === 'admin') {
+        $_SESSION['user_id'] = 1;
+        $_SESSION['username'] = $username;
+        header('Location: /pages/main.php');
+        exit();
     } else {
-        $error = 'Username atau password salah!';
+        $error = 'Invalid username or password';
     }
 }
+
 ?>
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Sistem Manajemen POLRES Samosir</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
+    <title>Login - SPRIN</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #1a237e;
-            --secondary-color: #3949ab;
-            --accent-color: #ffd700;
-            --bg-secondary: #1a237e;
-            --bg-tertiary: #3949ab;
-            --text-primary: #333;
-        }
-        
-        body {
-            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text-primary);
-        }
-        
-        .login-container {
-            background: var(--bg-primary);
-            border-radius: 20px;
-            box-shadow: var(--shadow-color);
-            overflow: hidden;
-            max-width: 900px;
-            width: 100%;
-            display: flex;
-            min-height: 500px;
-        }
-        
-        .login-left {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--text-light);
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            flex: 1;
-        }
-        
-        .login-right {
-            padding: 40px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        .logo {
-            font-size: 4rem;
-            color: var(--accent-color);
-            margin-bottom: 20px;
-        }
-        
-        .login-left h2 {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        
-        .login-left p {
-            opacity: 0.9;
-            line-height: 1.6;
-        }
-        
-        .login-right h3 {
-            color: var(--primary-color);
-            font-weight: bold;
-            margin-bottom: 30px;
-            font-size: 1.5rem;
-        }
-        
-        .form-floating {
-            margin-bottom: 20px;
-        }
-        
-        .form-control {
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 12px 15px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.25);
-        }
-        
-        .btn-login {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 16px;
-            width: 100%;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-        
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
-            color: white;
-        }
-        
-        .btn-quick-login {
-            background: linear-gradient(135deg, var(--accent-color), #ff6f00);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 16px;
-            width: 100%;
-            transition: all 0.3s;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-        }
-        
-        .btn-quick-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
-            color: white;
-        }
-        
-        .btn-quick-login:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
-        }
-        
-        .alert {
-            border-radius: 10px;
-            border: none;
-            margin-bottom: 20px;
-        }
-        
-        .features {
-            margin-top: 30px;
-        }
-        
-        .feature-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            opacity: 0.9;
-        }
-        
-        .feature-item i {
-            margin-right: 10px;
-            color: var(--accent-color);
-        }
-        
-        .footer-info {
-            text-align: center;
-            margin-top: 20px;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-        
-        @media (max-width: 768px) {
-            .login-container {
-                flex-direction: column;
-                max-width: 400px;
-            }
-            
-            .login-left {
-                padding: 30px;
-            }
-            
-            .login-right {
-                padding: 30px;
-            }
-            
-            .logo {
-                font-size: 3rem;
-            }
-            
-            .login-left h2 {
-                font-size: 1.5rem;
-            }
-        }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .login-container { max-width: 400px; margin: 100px auto; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-left">
-            <div class="logo">
-                <i class="fas fa-shield-alt"></i>
-            </div>
-            <h2 style="font-size: 2.5rem;">POLRES SAMOSIR</h2>
-            <p>Sistem Manajemen Personil & Schedule Management</p>
-            <p>Bagian Operasional (BAGOPS)</p>
-            
-            <div class="features">
-                <div class="feature-item">
-                    <i class="fas fa-users"></i>
-                    <span>Data Personil Lengkap</span>
+    <div class="container">
+        <div class="login-container">
+            <div class="card">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">SPIN Login</h2>
+                    <p class="text-center text-muted mb-4">Sistem Manajemen Personil</p>
+                    
+                    <?php
+require_once 'session_config.php'; if (isset($error)): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?= htmlspecialchars($error) ?>
+                    </div>
+                    <?php
+require_once 'session_config.php'; endif; ?>
+                    
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <small class="text-muted">Default: admin / admin</small>
+                    </div>
                 </div>
-                <div class="feature-item">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Manajemen Jadwal</span>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Dokumen Digital</span>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Laporan & Statistik</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="login-right">
-            <h3>Login System</h3>
-            
-            <?php if (isset($error)): ?>
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    <?php echo htmlspecialchars($error); ?>
-                </div>
-            <?php endif; ?>
-            
-            <form method="POST">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
-                    <label for="username">
-                        <i class="fas fa-user me-2"></i>Username
-                    </label>
-                </div>
-                
-                <div class="form-floating">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                    <label for="password">
-                        <i class="fas fa-lock me-2"></i>Password
-                    </label>
-                </div>
-                
-                <button type="submit" class="btn btn-login">
-                    <i class="fas fa-sign-in-alt me-2"></i>Login
-                </button>
-                
-                <button type="button" class="btn btn-quick-login" onclick="quickLogin()">
-                    <i class="fas fa-rocket me-2"></i>Quick Login
-                </button>
-            </form>
-            
-            <div class="footer-info">
-                <p><strong>Default Login:</strong></p>
-                <p>Username: <code>bagops</code></p>
-                <p>Password: <code>admin123</code></p>
             </div>
         </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        function quickLogin() {
-            // Show loading state
-            const btn = event.target;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Masuk...';
-            btn.disabled = true;
-            
-            // Auto-fill credentials
-            document.getElementById('username').value = 'bagops';
-            document.getElementById('password').value = 'admin123';
-            
-            // Submit the form
-            document.querySelector('form').submit();
-        }
-        
-        // Auto-focus on username field
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('username').focus();
-        });
-        
-        // Allow Enter key to submit form
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('form');
-            form.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && e.target.tagName !== 'BUTTON') {
-                    e.preventDefault();
-                    form.querySelector('button[type="submit"]').click();
-                }
-            });
-        });
-    </script>
 </body>
 </html>

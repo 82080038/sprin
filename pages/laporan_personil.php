@@ -1,30 +1,9 @@
-<?php
-declare(strict_types=1);
-require_once '../core/config.php'; 
-require_once '../core/auth_check.php'; 
-$page_title = 'Laporan Personil - POLRES Samosir'; 
-include '../includes/components/header.php'; 
-?>
+/**
+ * pages/laporan_personil.php
+ *
+ * @package SPRIN
+ * @author Development Team
+ * @since 1.0.0
+ */
 
-<div class="container">
-    <div class="page-header">
-        <h1><i class="fas fa-chart-bar me-2"></i>Laporan Personil</h1>
-        <p class="text-muted">Generate dan kelola laporan personil POLRES Samosir</p>
-    </div>
-    
-    <div class="alert alert-info">
-        <i class="fas fa-info-circle me-2"></i>
-        Halaman ini dalam pengembangan
-    </div>
-    
-    <div class="card">
-        <div class="card-header">
-            <h5 class="mb-0">Laporan Personil</h5>
-        </div>
-        <div class="card-body">
-            <p class="text-muted">Fitur laporan akan segera tersedia.</p>
-        </div>
-    </div>
-</div>
-
-<?php include '../includes/components/footer.php'; ?>
+<?phpdeclare(strict_types=1);/DevelopmentErrorReportingif(!defined('DEVELOPMENT_MODE')){error_reporting(E_ALL);ini_set('display_errors',1);ini_set('display_startup_errors',1);}require_once'../core/config.php';require_once'../core/auth_check.php';$page_title='LaporanPersonil-POLRESSamosir';include'../includes/components/header.php';?><divclass="container"><divclass="page-header"><h1><iclass="fasfa-chart-barme-2"></i>LaporanPersonil</h1><pclass="text-muted">GeneratedankelolalaporanpersonilPOLRESSamosir</p></div><divclass="alertalert-info"><iclass="fasfa-info-circleme-2"></i>Halamaninidalampengembangan</div><divclass="card"><divclass="card-header"><h5class="mb-0">LaporanPersonil</h5></div><divclass="card-body"><pclass="text-muted">Fiturlaporanakansegeratersedia.</p></div></div></div><?phpinclude'../includes/components/footer.php';?>

@@ -1,28 +1,102 @@
 parameters:
-    level: 6
+    level: 8
     paths:
         - api
         - core
         - pages
         - security
+        - includes
     excludePaths:
         - tests
         - backups
         - node_modules
+        - vendor
+        - cache
+        - tmp
+        - logs
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
     checkAlwaysTrueCheckTypeFunctionCall: false
     checkAlwaysTrueInstanceof: false
     checkAlwaysTrueStrictComparison: false
-    checkFunctionNameCase: false
+    checkFunctionNameCase: true
     checkInternalClassCaseSensitivity: false
     checkMissingCallableSignature: true
     checkMissingVarTagTypehint: true
     checkTooWideReturnTypesInProtectedAndPublicMethods: false
     checkUninitializedProperties: false
     reportUnmatchedIgnoredErrors: false
+    checkClassCaseSensitivity: true
+    checkExplicitMixed: true
+    checkThisOnly: false
+    checkUnionTypes: true
+    checkBenevolentUnionTypes: false
+    checkMissingIterableValueType: false
+    checkMissingVarTagTypehint: true
+    checkMissingReturnType: true
+    checkMissingCallableSignature: true
+    checkMissingTemplateParameterType: false
+    checkAlwaysTemplate: false
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+    checkClassCaseSensitivity: true
+    checkConstantCase: true
+    checkMagicMethodDefines: true
+    checkMissingCallableSignature: true
+    checkMissingVarTagTypehint: true
+    checkMissingReturnType: true
+    checkMissingTemplateParameterType: false
+    checkTooWideReturnTypesInProtectedAndPublicMethods: false
+    checkUninitializedProperties: false
+    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         - '#Call to an undefined method.*#'
         - '#Access to an undefined property.*#'
+        - '#Variable \$\w+ might not be defined.*#'
+        - '#Undefined variable: \$\w+.*#'
+        - '#Method .* should return .* but returns mixed.*#'
+        - '#Parameter \$\w+ of method .* has invalid typehint.*#'
     bootstrapFiles:
         - core/config.php
+        - core/SessionManager.php
+    memoryLimit: 4G
+    parallel:
+        jobSize: 20
+        maximumNumberOfProcesses: 32
+    tmpDir: cache/phpstan
+    resultCachePath: cache/phpstan/resultCache.php
+    editor:
+        enable: true
+        format: table
+        showProgressBar: true
+        showBaseline: true
+        showTipsOfTheDay: true
+        baselineFile: phpstan-baseline.neon
+    security:
+        enabled: true
+    rules:
+        - PHPStan\Rules\DeadCode\UnusedPrivatePropertyRule
+        - PHPStan\Rules\DeadCode\UnusedPrivateMethodRule
+        - PHPStan\Rules\DeadCode\UnusedClassConstantRule
+        - PHPStan\Rules\DeadCode\UnusedFunctionRule
+        - PHPStan\Rules\DeadCode\UnusedVariableRule
+        - PHPStan\Rules\Classes\RequireImplementsRule
+        - PHPStan\Rules\Classes\RequireParentConstructorCallRule
+        - PHPStan\Rules\Classes\RequireAbstractOrFinalRule
+        - PHPStan\Rules\Functions\MatchTypeRule
+        - PHPStan\Rules\Functions\ClosureThisCaptureRule
+        - PHPStan\Rules\Generics\GenericTypeInStaticContextRule
+        - PHPStan\Rules\Generics\GenericStaticMethodRule
+        - PHPStan\Rules\Generics\GenericStaticVariableRule
+        - PHPStan\Rules\StrictCalls\StrictFunctionCallRule
+        - PHPStan\Rules\StrictCalls\StrictFunctionCallParametersRule
+        - PHPStan\Rules\StrictCalls\StrictFunctionCallReturnTypeRule
+        - PHPStan\Rules\StrictCalls\StrictFunctionCallVariadicRule
+        - PHPStan\Rules\StrictCalls\StrictMethodCallRule
+        - PHPStan\Rules\StrictCalls\StrictMethodCallParametersRule
+        - PHPStan\Rules\StrictCalls\StrictMethodCallReturnTypeRule
+        - PHPStan\Rules\StrictCalls\StrictMethodCallVariadicRule
+        - PHPStan\Rules\StrictCalls\StrictStaticMethodCallRule
+        - PHPStan\Rules\StrictCalls\StrictStaticMethodCallParametersRule
+        - PHPStan\Rules\StrictCalls\StrictStaticMethodCallReturnTypeRule
+        - PHPStan\Rules\StrictCalls\StrictStaticMethodCallVariadicRule

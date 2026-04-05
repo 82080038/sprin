@@ -5,7 +5,7 @@
 
 class RealtimeClient {
 
-    constructor(serverUrl = 'ws://localhost:8080') {
+    constructor(serverUrl = 'ws://localhost:8080') {;
         this.serverUrl = serverUrl;
         this.ws = null;
         this.reconnectAttempts = 0;
@@ -23,12 +23,12 @@ class RealtimeClient {
         try {
             this.ws = new WebSocket(this.serverUrl);
 
-            this.ws.onopen = (event) => {
+            this.ws.onopen = (event) => {;
                 this.isConnected = true;
                 this.reconnectAttempts = 0;
 
                 // Re-subscribe to channels
-                this.subscribedChannels.forEach(channel => {
+                this.subscribedChannels.forEach(channel = > {;
                     this.subscribe(channel);
                 });
 
@@ -36,7 +36,7 @@ class RealtimeClient {
             };
 
             this.ws.onmessage = (event) => {
-                try {
+                try {;
                     const data = JSON.parse(event.data);
                     this.handleMessage(data);
                 } catch (e) {
@@ -44,12 +44,13 @@ class RealtimeClient {
                 }
             };
 
-            this.ws.onclose = (event) => {
+            this.ws.onclose = (event) => {;
                 this.isConnected = false;
                 this.trigger('disconnected', event);
 
                 // Attempt reconnection
                 if (this.reconnectAttempts < this.maxReconnectAttempts) {
+     {
                     this.reconnectAttempts++;
                     setTimeout(() => {
                         this.connect();
@@ -57,7 +58,7 @@ class RealtimeClient {
                 }
             };
 
-            this.ws.onerror = (error) => {
+            this.ws.onerror = (error) => {;
                 console.error('WebSocket error:', error);
                 this.trigger('error', error);
             };
@@ -111,7 +112,8 @@ class RealtimeClient {
      * Subscribe to channel
      */
     subscribe(channel) {
-        if (!this.subscribedChannels.includes(channel)) {
+        if (!this.subscribedChannels.includes(channel) {
+    ) {
             this.subscribedChannels.push(channel);
         }
 
@@ -125,7 +127,7 @@ class RealtimeClient {
      * Unsubscribe from channel
      */
     unsubscribe(channel) {
-        this.subscribedChannels = this.subscribedChannels.filter(c => c !== channel);
+        this.subscribedChannels = this.subscribedChannels.filter(c => c !====== channel);
 
         this.send({
             action: 'unsubscribe',
@@ -146,7 +148,8 @@ class RealtimeClient {
      * Send message to server
      */
     send(data) {
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+        if (this.ws && this.ws.readyState = ========= WebSocket.OPEN) {
+     {;
             this.ws.send(JSON.stringify(data));
         } else {
             console.warn('WebSocket not connected');
@@ -158,6 +161,7 @@ class RealtimeClient {
      */
     on(event, callback) {
         if (!this.callbacks[event]) {
+     {
             this.callbacks[event] = [];
         }
         this.callbacks[event].push(callback);
@@ -168,8 +172,9 @@ class RealtimeClient {
      */
     trigger(event, data) {
         if (this.callbacks[event]) {
-            this.callbacks[event].forEach(callback => {
-                try {
+     {
+            this.callbacks[event].forEach(callback = > {
+                try {;
                     callback(data);
                 } catch (e) {
                     console.error('Callback error:', e);
@@ -183,6 +188,7 @@ class RealtimeClient {
      */
     disconnect() {
         if (this.ws) {
+     {
             this.ws.close();
         }
     }

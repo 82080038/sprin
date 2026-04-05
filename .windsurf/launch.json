@@ -1,55 +1,55 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Listen for Xdebug",
-      "type": "php",
-      "request": "launch",
-      "port": 9003,
-      "pathMappings": {
-        "/opt/lampp/htdocs/sprint": "${workspaceFolder}"
-      },
-      "xdebugSettings": {
-        "max_children": 1000,
-        "max_data": 1024,
-        "max_depth": 10
-      }
-    },
-    {
-      "name": "Launch currently open script",
-      "type": "php",
-      "request": "launch",
-      "program": "${file}",
-      "cwd": "${fileDirname}",
-      "port": 0,
-      "runtimeArgs": [
-        "-dxdebug.mode=debug",
-        "-dxdebug.start_with_request=yes",
-        "-dxdebug.client_port=${port}"
-      ],
-      "env": {
-        "XDEBUG_MODE": "debug",
-        "XDEBUG_CONFIG": "client_port=${port}"
-      }
-    },
-    {
-      "name": "Launch Built-in web server",
-      "type": "php",
-      "request": "launch",
-      "runtimeArgs": [
-        "-dxdebug.mode=debug",
-        "-dxdebug.start_with_request=yes",
-        "-S",
-        "localhost:8000",
-        "-t",
-        "${workspaceFolder}"
-      ],
-      "port": 9003,
-      "serverReadyAction": {
-        "action": "openExternally",
-        "pattern": "Local web server started at (.+)",
-        "uriFormat": "%s"
-      }
-    }
-  ]
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Listen for Xdebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9003,
+            "pathMappings": {
+                "/opt/lampp/htdocs/sprint": "${workspaceFolder}"
+            },
+            "xdebugSettings": {
+                "max_children": 1000,
+                "max_data": 1024,
+                "max_depth": 10
+            }
+        },
+        {
+            "name": "Launch currently open script",
+            "type": "php",
+            "request": "launch",
+            "program": "${file}",
+            "cwd": "${fileDirname}",
+            "port": 0,
+            "runtimeArgs": [
+                "-dxdebug.mode=debug",
+                "-dxdebug.start_with_request=yes",
+                "-dxdebug.client_port=${port}"
+            ],
+            "env": {
+                "XDEBUG_MODE": "debug",
+                "XDEBUG_CONFIG": "client_port=${port}"
+            }
+        },
+        {
+            "name": "Launch Built-in web server",
+            "type": "php",
+            "request": "launch",
+            "runtimeArgs": [
+                "-dxdebug.mode=debug",
+                "-dxdebug.start_with_request=yes",
+                "-S",
+                "localhost:8000",
+                "-t",
+                "${workspaceFolder}"
+            ],
+            "port": 9003,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "Local web server started at (.+)",
+                "uriFormat": "%s"
+            }
+        }
+    ]
 }

@@ -1,0 +1,213 @@
+{
+    "timestamp": "2026-04-05T17:47:56.051Z",
+    "baseURL": "http://localhost/sprint",
+    "summary": {
+        "total": 14,
+        "passed": 9,
+        "failed": 5,
+        "successRate": "64.3"
+    },
+    "categories": {
+        "login": [
+            {
+                "test": "Login Page Load",
+                "status": "PASS",
+                "details": "URL: http://localhost/sprint/login.php"
+            },
+            {
+                "test": "Invalid Login",
+                "status": "PASS",
+                "details": "URL: http://localhost/sprint/login.php"
+            },
+            {
+                "test": "Valid Login",
+                "status": "PASS",
+                "details": "URL: http://localhost/sprint/main.php"
+            }
+        ],
+        "pages": [
+            {
+                "test": "Dashboard",
+                "status": "FAIL",
+                "details": "URL: http://localhost/sprint/pages/main.php, Has content: false"
+            },
+            {
+                "test": "Personil",
+                "status": "PASS",
+                "details": "URL: http://localhost/sprint/pages/personil.php, Has content: true"
+            },
+            {
+                "test": "Bagian",
+                "status": "PASS",
+                "details": "URL: http://localhost/sprint/pages/bagian.php, Has content: true"
+            },
+            {
+                "test": "Unsur",
+                "status": "PASS",
+                "details": "URL: http://localhost/sprint/pages/unsur.php, Has content: true"
+            },
+            {
+                "test": "Calendar",
+                "status": "FAIL",
+                "details": "URL: http://localhost/sprint/pages/calendar_dashboard.php, Has content: false"
+            }
+        ],
+        "api": [
+            {
+                "test": "Personil API",
+                "status": "PASS",
+                "details": "Status: 200"
+            },
+            {
+                "test": "Bagian API",
+                "status": "PASS",
+                "details": "Status: 200"
+            },
+            {
+                "test": "Unsur API",
+                "status": "PASS",
+                "details": "Status: 200"
+            }
+        ],
+        "responsive": [
+            {
+                "test": "Responsive Desktop",
+                "status": "FAIL",
+                "details": "Viewport: 1280x720"
+            },
+            {
+                "test": "Responsive Tablet",
+                "status": "FAIL",
+                "details": "Viewport: 768x1024"
+            },
+            {
+                "test": "Responsive Mobile",
+                "status": "FAIL",
+                "details": "Viewport: 375x667"
+            }
+        ]
+    },
+    "tests": [
+        {
+            "test": "Login Page Load",
+            "status": "PASS",
+            "details": "URL: http://localhost/sprint/login.php"
+        },
+        {
+            "test": "Invalid Login",
+            "status": "PASS",
+            "details": "URL: http://localhost/sprint/login.php"
+        },
+        {
+            "test": "Valid Login",
+            "status": "PASS",
+            "details": "URL: http://localhost/sprint/main.php"
+        },
+        {
+            "test": "Dashboard",
+            "status": "FAIL",
+            "details": "URL: http://localhost/sprint/pages/main.php, Has content: false"
+        },
+        {
+            "test": "Personil",
+            "status": "PASS",
+            "details": "URL: http://localhost/sprint/pages/personil.php, Has content: true"
+        },
+        {
+            "test": "Bagian",
+            "status": "PASS",
+            "details": "URL: http://localhost/sprint/pages/bagian.php, Has content: true"
+        },
+        {
+            "test": "Unsur",
+            "status": "PASS",
+            "details": "URL: http://localhost/sprint/pages/unsur.php, Has content: true"
+        },
+        {
+            "test": "Calendar",
+            "status": "FAIL",
+            "details": "URL: http://localhost/sprint/pages/calendar_dashboard.php, Has content: false"
+        },
+        {
+            "test": "Personil API",
+            "status": "PASS",
+            "details": "Status: 200"
+        },
+        {
+            "test": "Bagian API",
+            "status": "PASS",
+            "details": "Status: 200"
+        },
+        {
+            "test": "Unsur API",
+            "status": "PASS",
+            "details": "Status: 200"
+        },
+        {
+            "test": "Responsive Desktop",
+            "status": "FAIL",
+            "details": "Viewport: 1280x720"
+        },
+        {
+            "test": "Responsive Tablet",
+            "status": "FAIL",
+            "details": "Viewport: 768x1024"
+        },
+        {
+            "test": "Responsive Mobile",
+            "status": "FAIL",
+            "details": "Viewport: 375x667"
+        }
+    ],
+    "errors": [],
+    "screenshots": [
+        {
+            "file": "screenshots/login-page-load-2026-04-05T17-47-32-868Z.png",
+            "description": "Login Page Load: PASS"
+        },
+        {
+            "file": "screenshots/invalid-login-2026-04-05T17-47-35-908Z.png",
+            "description": "Invalid Login: PASS"
+        },
+        {
+            "file": "screenshots/valid-login-2026-04-05T17-47-40-235Z.png",
+            "description": "Valid Login: PASS"
+        },
+        {
+            "file": "screenshots/dashboard-2026-04-05T17-47-41-306Z.png",
+            "description": "Dashboard: FAIL"
+        },
+        {
+            "file": "screenshots/personil-2026-04-05T17-47-42-234Z.png",
+            "description": "Personil: PASS"
+        },
+        {
+            "file": "screenshots/bagian-2026-04-05T17-47-44-311Z.png",
+            "description": "Bagian: PASS"
+        },
+        {
+            "file": "screenshots/unsur-2026-04-05T17-47-46-376Z.png",
+            "description": "Unsur: PASS"
+        },
+        {
+            "file": "screenshots/calendar-2026-04-05T17-47-48-229Z.png",
+            "description": "Calendar: FAIL"
+        },
+        {
+            "file": "screenshots/responsive-desktop-2026-04-05T17-47-53-879Z.png",
+            "description": "Responsive Desktop: FAIL"
+        },
+        {
+            "file": "screenshots/responsive-tablet-2026-04-05T17-47-54-935Z.png",
+            "description": "Responsive Tablet: FAIL"
+        },
+        {
+            "file": "screenshots/responsive-mobile-2026-04-05T17-47-56-016Z.png",
+            "description": "Responsive Mobile: FAIL"
+        }
+    ],
+    "recommendations": [
+        "\ud83d\udd27 Fix failed tests before production deployment.",
+        "\ud83d\udcf1 Improve responsive design and mobile compatibility."
+    ]
+}

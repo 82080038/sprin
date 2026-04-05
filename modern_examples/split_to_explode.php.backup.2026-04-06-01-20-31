@@ -1,0 +1,15 @@
+/**
+ * modern_examples/split_to_explode.php
+ * 
+ * @package SPRIN
+ * @author Development Team
+ * @since 1.0.0
+ */
+
+<?php
+// Old way (deprecated):
+$parts = explode(\',\', $string);
+
+// New way (modern):
+$parts = explode(",", $string);
+?>

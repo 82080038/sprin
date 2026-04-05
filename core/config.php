@@ -1,5 +1,32 @@
 <?php
+/**
+ * core/config.php
+ *
+ * @package SPRIN
+ * @author Development Team
+ * @since 1.0.0
+ */
+
 declare(strict_types=1);
+
+// Include improved error handler based on phpdelusions.net best practices
+require_once __DIR__ . '/../improved_error_handler.php';
+
+// Development Mode Detection
+if (!defined('DEVELOPMENT_MODE')) {
+    define('DEVELOPMENT_MODE', true);
+}
+
+// Enable comprehensive error reporting in development
+if (DEVELOPMENT_MODE) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    ini_set('log_errors', 1);
+    ini_set('track_errors', 1);
+    ini_set('html_errors', 1);
+}
+
 /**
  * Configuration for POLRES Samosir Application
  */
@@ -44,6 +71,7 @@ define('API_TIMEOUT', 30); // seconds
 
 // Debug Configuration - ON for development
 define('DEBUG_MODE', true);
+
 if (DEBUG_MODE && session_status() === PHP_SESSION_NONE) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
@@ -60,15 +88,15 @@ if (ENVIRONMENT !== 'development') {
     ini_set('error_log', __DIR__ . '/logs/php_error.log');
 }
 
-// Initialize Error Handler
+// Initialize ErrorHandler
 require_once __DIR__ . '/error_handler.php';
 ErrorHandler::init();
 
 // Custom Error Handler for Production
 if (ENVIRONMENT !== 'development') {
-    set_error_handler(function($severity, $message, $file, $line) {
+    set_error_handler(function ($severity, $message, $file, $line) {
         // Log all errors but don't display them
-        $error_type = match($severity) {
+        $error_type = match ($severity) {
             E_ERROR => 'ERROR',
             E_WARNING => 'WARNING',
             E_PARSE => 'PARSE',
@@ -85,7 +113,7 @@ if (ENVIRONMENT !== 'development') {
             E_DEPRECATED => 'DEPRECATED',
             E_USER_DEPRECATED => 'USER_DEPRECATED'
         };
-        
+
         $log_message = sprintf(
             "[%s] %s: %s in %s on line %d",
             date('Y-m-d H:i:s'),
@@ -94,24 +122,24 @@ if (ENVIRONMENT !== 'development') {
             $file,
             $line
         );
-        
+
         error_log($log_message);
-        
+
         // Don't show errors to users in production
         return true;
     });
 }
 
 // Helper Functions
-function getBaseUrl() {
+function getBaseUrl(): string {
     return BASE_URL;
 }
 
-function getApiBaseUrl($version = API_VERSION) {
+function getApiBaseUrl(string $version = API_VERSION): string {
     return API_BASE_URL . '/' . $version;
 }
 
-function getCurrentUrl() {
+function getCurrentUrl(): string {
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'];
     $path = $_SERVER['REQUEST_URI'];
@@ -119,26 +147,23 @@ function getCurrentUrl() {
 }
 
 // URL Generation Functions
-function url($path = '') {
+function url(string $path = ''): string {
     return BASE_URL . '/' . ltrim($path, '/');
 }
 
-function api_url($path = '', $version = API_VERSION) {
-    return getApiBaseUrl($version) . '/' . ltrim($path, '/');
-}
 
-function asset_url($path = '') {
+function asset_url(string $path = ''): string {
     return BASE_URL . '/assets/' . ltrim($path, '/');
 }
 
-function redirect($path = '') {
+function redirect(string $path = ''): void {
     header('Location: ' . url($path));
     exit;
 }
 
 // Exception Handler for Production
 if (ENVIRONMENT !== 'development') {
-    set_exception_handler(function($exception) {
+    set_exception_handler(function ($exception) {
         $log_message = sprintf(
             "[%s] FATAL ERROR: %s in %s on line %d\nStack trace:\n%s",
             date('Y-m-d H:i:s'),
@@ -147,9 +172,9 @@ if (ENVIRONMENT !== 'development') {
             $exception->getLine(),
             $exception->getTraceAsString()
         );
-        
+
         error_log($log_message);
-        
+
         // Show user-friendly error page
         if (!headers_sent()) {
             header('HTTP/1.1 500 Internal Server Error');
@@ -157,11 +182,11 @@ if (ENVIRONMENT !== 'development') {
         } else {
             echo '<h1>System Error</h1><p>Please try again later.</p>';
         }
+
         exit;
     });
 }
 
 // End of configuration
 // Note: Response headers moved to individual pages to avoid conflicts
-
 ?>

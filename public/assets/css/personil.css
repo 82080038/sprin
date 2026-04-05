@@ -1,479 +1,417 @@
-/* Enhanced Personil Page Styling */
+* CSS Variables *
+:root {
+  --primary-color: #007bff
+  --secondary-color: #6c757d
+  --success-color: #28a745
+  --danger-color: #dc3545
+  --warning-color: #ffc107
+  --info-color: #17a2b8
+  --light-color: #f8f9fa
+  --dark-color: #343a40;}
 
-/* Main Container */
+* Enhanced Personil Page Styling *
+
+* Main Container *
 .personil-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-}
+    max-width: 1400px
+    margin: 0 auto
+    padding: 20px;}
 
-/* Header Section */
+* Header Section *
 .personil-header {
-    background: linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #ffd700 100%);
-    color: white;
-    padding: 40px 30px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    text-align: center;
-}
+    background: linear-gradient(135deg, #1a237e 0, #3949ab 50, #ffd700 100)
+    color: white
+    padding: 40px 30px
+    border-radius: 15px
+    margin-bottom: 30px
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2)
+    text-align: center;}
 
 .personil-header h1 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
+    font-size: 2.5rem
+    font-weight: bold
+    margin-bottom: 10px
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3)}
 
 .personil-header .subtitle {
-    font-size: 1.1rem;
-    opacity: 0.9;
-    margin-bottom: 20px;
-}
+    font-size: 1.1rem
+    opacity: 0.9
+    margin-bottom: 20px;}
 
-/* Statistics Cards */
+* Statistics Cards *
 .stats-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))
+    gap: 20px
+    margin-bottom: 30px;}
 
 .stat-card {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-left: 4px solid #1a237e;
-}
+    background: white
+    padding: 25px
+    border-radius: 12px
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1)
+    text-align: center
+    transition: transform 0.3s ease, box-shadow 0.3s ease
+    border-left: 4px solid #1a237e;}
 
 .stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
+    transform: translateY(-5px)
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15)}
 
 .stat-card .number {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #1a237e;
-    margin-bottom: 5px;
-}
+    font-size: 2.5rem
+    font-weight: bold
+    color: #1a237e
+    margin-bottom: 5px;}
 
 .stat-card .label {
-    font-size: 1rem;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
+    font-size: 1rem
+    color: #666
+    text-transform: uppercase
+    letter-spacing: 1px;}
 
-/* Pimpinan Section */
+* Pimpinan Section *
 .pimpinan-section {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-}
+    background: white
+    border-radius: 15px
+    padding: 30px
+    margin-bottom: 30px
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1)}
 
 .pimpinan-section h2 {
-    color: #1a237e;
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-bottom: 25px;
-    text-align: center;
-    position: relative;
-}
+    color: #1a237e
+    font-size: 1.8rem
+    font-weight: bold
+    margin-bottom: 25px
+    text-align: center
+    position: relative;}
 
 .pimpinan-section h2::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 3px;
-    background: linear-gradient(90deg, #1a237e, #ffd700);
-    border-radius: 2px;
-}
+    content: 
+    position: absolute
+    bottom: -10px
+    left: 50
+    transform: translateX(-50)
+    width: 80px
+    height: 3px
+    background: linear-gradient(90deg, #1a237e, #ffd700)
+    border-radius: 2px;}
 
 .pimpinan-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))
+    gap: 20px;}
 
 .pimpinan-card {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border: 1px solid #dee2e6;
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
+    background: linear-gradient(135deg, #f8f9fa 0, #e9ecef 100)
+    border: 1px solid #dee2e6
+    border-radius: 12px
+    padding: 20px
+    text-align: center
+    transition: all 0.3s ease
+    position: relative
+    overflow: hidden;}
 
 .pimpinan-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #1a237e, #3949ab, #ffd700);
-}
+    content: 
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    height: 4px
+    background: linear-gradient(90deg, #1a237e, #3949ab, #ffd700)}
 
 .pimpinan-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    border-color: #1a237e;
-}
+    transform: translateY(-5px)
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15)
+    border-color: #1a237e;}
 
 .pimpinan-card .nama {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #1a237e;
-    margin-bottom: 8px;
-    line-height: 1.3;
-}
+    font-size: 1.1rem
+    font-weight: bold
+    color: #1a237e
+    margin-bottom: 8px
+    line-height: 1.3;}
 
 .pimpinan-card .pangkat {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 5px;
-    font-weight: 500;
-}
+    font-size: 0.9rem
+    color: #666
+    margin-bottom: 5px
+    font-weight: 500;}
 
 .pimpinan-card .jabatan {
-    font-size: 0.85rem;
-    color: #888;
-    margin-bottom: 15px;
-    font-style: italic;
-}
+    font-size: 0.85rem
+    color: #888
+    margin-bottom: 15px
+    font-style: italic;}
 
 .pimpinan-card .ket {
-    margin-top: 10px;
-}
+    margin-top: 10px;}
 
-/* Status Buttons */
+* Status Buttons *
 .btn-ket {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+    padding: 6px 12px
+    border: none
+    border-radius: 20px
+    font-size: 0.75rem
+    font-weight: 500
+    text-transform: uppercase
+    letter-spacing: 0.5px
+    cursor: pointer
+    transition: all 0.3s ease;}
 
 .btn-aktif {
-    background: linear-gradient(135deg, #28a745, #20c997);
-    color: white;
-}
+    background: linear-gradient(135deg, #28a745, #20c997)
+    color: white;}
 
 .btn-aktif:hover {
-    background: linear-gradient(135deg, #218838, #1ea085);
-    transform: scale(1.05);
-}
+    background: linear-gradient(135deg, #218838, #1ea085)
+    transform: scale(1.05)}
 
 .btn-other {
-    background: linear-gradient(135deg, #ffc107, #fd7e14);
-    color: #212529;
-}
+    background: linear-gradient(135deg, #ffc107, #fd7e14)
+    color: #212529;}
 
 .btn-other:hover {
-    background: linear-gradient(135deg, #e0a800, #e55a00);
-    transform: scale(1.05);
-}
+    background: linear-gradient(135deg, #e0a800, #e55a00)
+    transform: scale(1.05)}
 
-/* Bagian Sections */
+* Bagian Sections *
 .bagian-section {
-    background: white;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
+    background: white
+    border-radius: 15px
+    margin-bottom: 20px
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1)
+    overflow: hidden
+    transition: all 0.3s ease;}
 
 .bagian-section:hover {
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-}
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15)}
 
 .bagian-header {
-    background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
-    color: white;
-    padding: 20px 25px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.3s ease;
-}
+    background: linear-gradient(135deg, #1a237e 0, #3949ab 100)
+    color: white
+    padding: 20px 25px
+    cursor: pointer
+    display: flex
+    justify-content: space-between
+    align-items: center
+    transition: all 0.3s ease;}
 
 .bagian-header:hover {
-    background: linear-gradient(135deg, #283593 0%, #5e35b1 100%);
-}
+    background: linear-gradient(135deg, #283593 0, #5e35b1 100)}
 
 .bagian-header h2 {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin: 0;
-}
+    font-size: 1.3rem
+    font-weight: bold
+    margin: 0px;}
 
 .bagian-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
+    display: flex
+    align-items: center
+    gap: 15px;}
 
 .bagian-count {
-    background: rgba(255,255,255,0.2);
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
+    background: rgba(255,255,255,0.2)
+    padding: 5px 12px
+    border-radius: 20px
+    font-size: 0.85rem
+    font-weight: 500;}
 
 .toggle-icon {
-    font-size: 1.2rem;
-    transition: transform 0.3s ease;
-}
+    font-size: 1.2rem
+    transition: transform 0.3s ease;}
 
 .bagian-section.collapsed .toggle-icon {
-    transform: rotate(180deg);
-}
+    transform: rotate(180deg)}
 
-/* Personil Tables */
+* Personil Tables *
 .personil-content {
-    padding: 25px;
-}
+    padding: 25px;}
 
 .personil-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 0;
-}
+    width: 100
+    border-collapse: collapse
+    margin-top: 0;}
 
 .personil-table thead {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-}
+    background: linear-gradient(135deg, #f8f9fa 0, #e9ecef 100)}
 
 .personil-table th {
-    padding: 15px 12px;
-    text-align: left;
-    font-weight: 600;
-    color: #1a237e;
-    border-bottom: 2px solid #1a237e;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+    padding: 15px 12px
+    text-align: left
+    font-weight: 600
+    color: #1a237e
+    border-bottom: 2px solid #1a237e
+    font-size: 0.85rem
+    text-transform: uppercase
+    letter-spacing: 0.5px;}
 
 .personil-table td {
-    padding: 12px;
-    border-bottom: 1px solid #dee2e6;
-    font-size: 0.9rem;
-}
+    padding: 12px
+    border-bottom: 1px solid #dee2e6
+    font-size: 0.9rem;}
 
 .personil-table tbody tr {
-    transition: background-color 0.3s ease;
-}
+    transition: background-color 0.3s ease;}
 
 .personil-table tbody tr:hover {
-    background-color: #f8f9fa;
-}
+    background-color: #f8f9fa;}
 
 .personil-table .nama-col {
-    font-weight: 500;
-    color: #1a237e;
-}
+    font-weight: 500
+    color: #1a237e;}
 
 .personil-table .nrp-col {
-    font-family: monospace;
-    color: #666;
-}
+    font-family: monospace
+    color: #666;}
 
 .personil-table .pangkat-col {
-    color: #495057;
-}
+    color: #495057;}
 
 .personil-table .jabatan-col {
-    color: #6c757d;
-}
+    color: #6c757d;}
 
 .personil-table .ket-col {
-    text-align: center;
-}
+    text-align: center;}
 
-/* Responsive Design */
-@media (max-width: 768px) {
+* Responsive Design *
+media (max-width: 768px)  {
     .personil-container {
-        padding: 10px;
-    }
+        padding: 10px;}
     
     .personil-header {
-        padding: 25px 20px;
-    }
+        padding: 25px 20px;}
     
     .personil-header h1 {
-        font-size: 2rem;
-    }
+        font-size: 2rem;}
     
     .stats-container {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 15px;
-    }
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))
+        gap: 15px;}
     
     .pimpinan-cards {
-        grid-template-columns: 1fr;
-    }
+        grid-template-columns: 1fr;}
     
     .pimpinan-section {
-        padding: 20px;
-    }
+        padding: 20px;}
     
     .bagian-header {
-        padding: 15px 20px;
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-    }
+        padding: 15px 20px
+        flex-direction: column
+        gap: 10px
+        text-align: center;}
     
     .bagian-header h2 {
-        font-size: 1.1rem;
-    }
+        font-size: 1.1rem;}
     
     .personil-content {
-        padding: 15px;
-        overflow-x: auto;
-    }
+        padding: 15px
+        overflow-x: auto;}
     
     .personil-table {
-        font-size: 0.8rem;
-    }
+        font-size: 0.8rem;}
     
     .personil-table th,
     .personil-table td {
-        padding: 8px 6px;
-    }
+        padding: 8px 6px;}
 }
 
-@media (max-width: 480px) {
+media (max-width: 480px)  {
     .stat-card .number {
-        font-size: 2rem;
-    }
+        font-size: 2rem;}
     
     .pimpinan-card .nama {
-        font-size: 1rem;
-    }
+        font-size: 1rem;}
     
     .personil-table {
-        font-size: 0.7rem;
-    }
+        font-size: 0.7rem;}
     
     .personil-table th,
     .personil-table td {
-        padding: 6px 4px;
-    }
+        padding: 6px 4px;}
 }
 
-/* Loading Animation */
+* Loading Animation *
 .loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-}
+    display: flex
+    justify-content: center
+    align-items: center
+    padding: 40px;}
 
 .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #1a237e;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+    width: 40px
+    height: 40px
+    border: 4px solid #f3f3f3
+    border-top: 4px solid #1a237e
+    border-radius: 50
+    animation: spin 1s linear infinite;}
+
+keyframes spin {
+    0 { transform: rotate(0deg)}
+    100 { transform: rotate(360deg)}
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Refresh Button */
+* Refresh Button *
 .refresh-section {
-    text-align: center;
-    margin: 30px 0;
-}
+    text-align: center
+    margin: 30px 0;}
 
 .btn-refresh {
-    background: linear-gradient(135deg, #1a237e, #3949ab);
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 25px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
+    background: linear-gradient(135deg, #1a237e, #3949ab)
+    color: white
+    border: none
+    padding: 12px 25px
+    border-radius: 25px
+    font-size: 1rem
+    font-weight: 500
+    cursor: pointer
+    transition: all 0.3s ease
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2)}
 
 .btn-refresh:hover {
-    background: linear-gradient(135deg, #283593, #5e35b1);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
+    background: linear-gradient(135deg, #283593, #5e35b1)
+    transform: translateY(-2px)
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3)}
 
 .btn-refresh:active {
-    transform: translateY(0);
-}
+    transform: translateY(0)}
 
-/* Search and Filter Section */
+* Search and Filter Section *
 .search-section {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-}
+    background: white
+    padding: 25px
+    border-radius: 15px
+    margin-bottom: 30px
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1)}
 
 .search-input {
-    width: 100%;
-    padding: 12px 20px;
-    border: 2px solid #e9ecef;
-    border-radius: 25px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
+    width: 100
+    padding: 12px 20px
+    border: 2px solid #e9ecef
+    border-radius: 25px
+    font-size: 1rem
+    transition: all 0.3s ease;}
 
 .search-input:focus {
-    outline: none;
-    border-color: #1a237e;
-    box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
-}
+    outline: none
+    border-color: #1a237e
+    box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1)}
 
-/* Print Styles */
-@media print {
+* Print Styles *
+media print  {
     .personil-header {
-        background: none !important;
-        color: black !important;
-        box-shadow: none !important;
-    }
+        background: none
+        color: black
+        box-shadow: none;}
     
     .btn-refresh,
     .search-section {
-        display: none !important;
-    }
+        display: none;}
     
     .pimpinan-section,
     .bagian-section {
-        break-inside: avoid;
-        box-shadow: none !important;
-        border: 1px solid #ddd !important;
-    }
+        break-inside: avoid
+        box-shadow: none
+        border: 1px solid #ddd;}
 }

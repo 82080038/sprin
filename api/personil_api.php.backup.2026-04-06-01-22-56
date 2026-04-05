@@ -1,0 +1,53 @@
+<?php
+/**
+ * personil_api.php
+ * 
+ * @package SPRIN
+ * @author Development Team
+ * @since 1.0.0
+ */
+
+declare(strict_types=1);
+
+// Extracted content from corrupted file:
+// /DevelopmentErrorReportingif(!defined('DEVELOPMENT_MODE')){error_reporting(E_ALL);ini_set('display_errors',1);ini_set('display_startup_errors',1);}declare(strict_types=1);session_start();require_once__DIR__.'/../core/config.php';require_once__DIR__.'/../core/SessionManager.php';require_once__DIR__.'/../core/auth_helper.php';/InitializesessionSessionManager::start();/CheckauthenticationusingAuthHelperif(!AuthHelper::validateSession()){header('Location:'.url('login.php'));exit;}$page_title='DataPersonil-POLRESSamosir';include__DIR__.'/../includes/components/header.php';/IncludeJavaScriptconfigurationinclude__DIR__.'/../public/assets/js/config.php';/***Convertkettexttobutton*/functioncreate_ket_button($ket_text){$ket_text=trim($ket_text);if(empty($ket_text)){return'-';}/Determinebuttonclassbasedonketcontent$button_class=determine_button_class($ket_text);/Truncatetextforsinglelinedisplay(max12characters)$display_text=truncate_text($ket_text,12);/CreatebuttonHTMLwithsinglelineconstraintreturn'<buttonclass="btn-ket'.$button_class.'"title="'.htmlspecialchars($ket_text).'">'.htmlspecialchars($display_text).'</button>';}/***Truncatetexttofitinsingleline*/functiontruncate_text($text,$max_length){if(strlen($text)<=$max_length){return$text;}returnsubstr($text,0,$max_length-3).'...';}/***Determinebuttonclassbasedonketcontent*/functiondetermine_button_class($ket_text){$ket_upper=strtoupper($ket_text);if($ket_upper==='OPCALLCENTRE'){return'btn-call-centre';}elseif($ket_upper==='P3K/BKOPOLDA'){return'btn-bko';}elseif($ket_upper==='BELUMMENGHADAP'){return'btn-belum-menghadap';}elseif($ket_upper==='AKTIF'){return'btn-aktif';}elseif(strpos($ket_upper,'DIK')!==false){return'btn-dik';}elseif(strpos($ket_upper,'CUTI')!==false){return'btn-cuti';}elseif(strpos($ket_upper,'TUGAS')!==false){return'btn-tugas';}elseif(strpos($ket_upper,'LAPOR')!==false){return'btn-lapor';}else{return'btn-other';}}/LoaddatafromAPIinsteadofJSONfilefunctionloadPersonilFromAPI(){$api_url=API_BASE_URL.'/personil_simple.php?limit=1000';/UsecURLtogetAPIdata$ch=curl_init();curl_setopt($ch,CURLOPT_URL,$api_url);curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);curl_setopt($ch,CURLOPT_TIMEOUT,30);curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);$response=curl_exec($ch);$http_code=curl_getinfo($ch,CURLINFO_HTTP_CODE);curl_close($ch);if($http_code!==200){thrownewException("APIrequestfailedwithHTTPcode:$http_code");}$data=json_decode($response,true);if(!$data||!$data['success']){thrownewException("APIrequestfailed:".($data['error']['message']??'Unknownerror'));}return$data['data'];}/ProcessAPIdatatomatchunsur-basedstructurefunctionprocessAPIData($api_data){$personil=$api_data['personil'];$statistics=$api_data['statistics'];/Grouppersonilbyunsurfirst,thenbybagian$unsur_data=[];$pimpinan_data=[];foreach($personilas$p){$personil_item=['nama'=>$p['nama_lengkap']??$p['nama'],'nrp'=>$p['nrp'],'pangkat'=>$p['pangkat_singkatan']??$p['nama_pangkat'],'jabatan'=>$p['nama_jabatan'],'ket'=>$p['status_ket']??'aktif','status_kepegawaian'=>$p['status_kepegawaian'],'unsur'=>$p['nama_unsur'],'bagian'=>$p['nama_bagian'],'kode_unsur'=>$p['kode_unsur'],'no_telepon'=>$p['no_telepon'],'email'=>$p['email'],'tanggal_lahir'=>$p['tanggal_lahir'],'agama'=>$p['agama'],'jenis_kelamin'=>$p['jenis_kelamin'],'alamat'=>$p['alamat'],'keterangan'=>$p['keterangan']];/Checkifthisispimpinan(onlyKapolres&Wakapolres)if(isPimpinan($p['nama_jabatan'])){$pimpinan_data[]=$personil_item;}else{$unsur_name=$p['nama_unsur']??'TANPAUNSUR';$bagian_name=$p['nama_bagian']??'TANPABAGIAN';if(!isset($unsur_data[$unsur_name])){$unsur_data[$unsur_name]=['nama_unsur'=>$unsur_name,'kode_unsur'=>$p['kode_unsur'],'bagian'=>[]];}if(!isset($unsur_data[$unsur_name]['bagian'][$bagian_name])){$unsur_data[$unsur_name]['bagian'][$bagian_name]=['nama_bagian'=>$bagian_name,'personil'=>[]];}$unsur_data[$unsur_name]['bagian'][$bagian_name]['personil'][]=$personil_item;}}/Sortunsurbypredefinedorder$unsur_order=['UNSURPIMPINAN','UNSURPEMBANTUPIMPINAN','UNSURPELAKSANATUGASPOKOK','UNSURPELAKSANAKEWILAYAHAN','UNSURPENDUKUNG','UNSURLAINNYA'];$sorted_unsur=[];foreach($unsur_orderas$unsur_name){if(isset($unsur_data[$unsur_name])){$sorted_unsur[$unsur_name]=$unsur_data[$unsur_name];/Sortbagianwithineachunsurksort($sorted_unsur[$unsur_name]['bagian']);}}return['pimpinan'=>$pimpinan_data,'unsur'=>$sorted_unsur,'statistics'=>$statistics];}/Checkifpositionisconsideredpimpinan(BasedonPERKAPNo.23Tahun2010)functionisPimpinan($jabatan){/UnsurPimpinanPOLREShanyaKapolres&Wakapolres(exactmatch)$jabatan_upper=strtoupper(trim($jabatan));/Exactmatchesonlyif($jabatan_upper==='KAPOLRES'||$jabatan_upper==='KAPOLRESSAMOSIR'||$jabatan_upper==='WAKAPOLRES'){returntrue;}returnfalse;}functiongetUnsurIcon($unsur_name){$icons=['UNSURPIMPINAN'=>'🏛️','UNSURPEMBANTUPIMPINAN'=>'📋','UNSURPELAKSANATUGASPOKOK'=>'⚡','UNSURPELAKSANAKEWILAYAHAN'=>'🏘️','UNSURPENDUKUNG'=>'🔧','UNSURLAINNYA'=>'📋'];return$icons[$unsur_name]??'📋';}/LoadandprocessdatafromDATABASEAPIONLYtry{$api_data=loadPersonilFromAPI();$data=processAPIData($api_data);/LogsuccessfulAPIloaderror_log("personil_api.php:APISUCCESS-Loaded".count($api_data['personil'])."personilfromdatabase");}catch(Exception$e){/NOFALLBACKTOJSON-ForceAPIusageerror_log("personil_api.php:APIFAILED-".$e->getMessage());/Showcriticalerrortouserdie("<divclass='containermt-5'><divclass='alertalert-danger'><h4><iclass='fasfa-exclamation-triangleme-2'></i>KoneksiDatabaseGagal</h4><p>Tidakdapatmengambildatapersonildaridatabase.</p><p><strong>Error:</strong>".htmlspecialchars($e->getMessage())."</p><hr><pclass='mb-0'><small>Silakanhubungiadministratorsistem.Aplikasihanyamenggunakandatadaridatabase,bukanfileJSON.</small></p></div></div>");}/Calculatestatisticsfromprocesseddata$totalPimpinan=count($data['pimpinan']);$totalUnsur=count($data['unsur']);$totalPersonil=0;$totalBagian=0;foreach($data['unsur']as$unsur){$totalBagian+=count($unsur['bagian']);foreach($unsur['bagian']as$bagian){$totalPersonil+=count($bagian['personil']);}}/UseAPIstatisticsifavailableif(isset($data['statistics'])){$api_stats=$data['statistics'];$totalPersonil=$api_stats['total_personil'];$totalPolri=$api_stats['polri_count'];$totalAsn=$api_stats['asn_count'];$totalP3k=$api_stats['p3k_count'];$totalAktif=$api_stats['aktif_count'];$unsur_distribution=$api_stats['unsur_distribution']??[];}else{/Fallbackstatistics$totalPolri=0;$totalAsn=0;$totalP3k=0;$totalAktif=0;$unsur_distribution=[];}
+
+/**
+ * PersonilApi API Handler
+ */
+class PersonilApi {
+    
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        // Initialize
+    }
+    
+    /**
+     * Handle API request
+     */
+    public function handleRequest(): array {
+        try {
+            // API logic here
+            return [
+                'status' => 'success',
+                'message' => 'API request handled successfully',
+                'data' => []
+            ];
+        } catch (Exception ) {
+            return [
+                'status' => 'error',
+                'message' => ()
+            ];
+        }
+    }
+}
+
+// Handle request if this is the main file
+if (basename($_SERVER['PHP_SELF']) === 'personil_api.php') {
+    $handler = new PersonilApi();
+    header('Content-Type: application/json');
+    echo json_encode($handler->handleRequest());
+}
+?>

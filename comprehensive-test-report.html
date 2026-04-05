@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive SPRIN Test Report - 4/6/2026, 12:47:56 AM</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .header { background: linear-gradient(135deg, #1a237e, #3949ab); color: white; padding: 30px; border-radius: 12px; text-align: center; }
+        .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0; }
+        .summary-card { padding: 25px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .pass { background: linear-gradient(135deg, #28a745, #20c997); color: white; }
+        .fail { background: linear-gradient(135deg, #dc3545, #fd7e14); color: white; }
+        .total { background: linear-gradient(135deg, #6c757d, #495057); color: white; }
+        .section { background: white; margin: 20px 0; padding: 25px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .test-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+        .test-result { padding: 15px; border-radius: 8px; border-left: 4px solid #ddd; }
+        .test-result.pass { border-left-color: #28a745; background: #f8fff9; }
+        .test-result.fail { border-left-color: #dc3545; background: #fff8f8; }
+        .screenshots { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .screenshot { text-align: center; }
+        .screenshot img { max-width: 100%; height: 200px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .recommendations { background: #e3f2fd; border-left: 4px solid #2196f3; }
+        .error { background: #ffebee; border-left: 4px solid #f44336; }
+        .progress-bar { width: 100%; height: 20px; background: #e9ecef; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #28a745, #20c997); transition: width 0.3s ease; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛡️ Comprehensive SPRIN Application Test Report</h1>
+        <p>Generated: 4/6/2026, 12:47:56 AM</p>
+        <p>Base URL: http://localhost/sprint</p>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 64.3%"></div>
+        </div>
+        <p>Success Rate: 64.3%</p>
+    </div>
+    
+    <div class="summary">
+        <div class="summary-card total">
+            <h2>14</h2>
+            <p>Total Tests</p>
+        </div>
+        <div class="summary-card pass">
+            <h2>9</h2>
+            <p>Passed ✅</p>
+        </div>
+        <div class="summary-card fail">
+            <h2>5</h2>
+            <p>Failed ❌</p>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>📋 Test Results by Category</h2>
+        <div class="test-grid">
+            
+                <div class="test-result">
+                    <h3>Login Tests</h3>
+                    <p>Total: 3 | Passed: 3 | Failed: 0</p>
+                </div>
+            
+                <div class="test-result">
+                    <h3>Pages Tests</h3>
+                    <p>Total: 5 | Passed: 3 | Failed: 2</p>
+                </div>
+            
+                <div class="test-result">
+                    <h3>Api Tests</h3>
+                    <p>Total: 3 | Passed: 3 | Failed: 0</p>
+                </div>
+            
+                <div class="test-result">
+                    <h3>Responsive Tests</h3>
+                    <p>Total: 3 | Passed: 0 | Failed: 3</p>
+                </div>
+            
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>🔍 Detailed Test Results</h2>
+        <div class="test-grid">
+            
+                <div class="test-result pass">
+                    <h4>Login Page Load - PASS</h4>
+                    <p>URL: http://localhost/sprint/login.php</p>
+                </div>
+            
+                <div class="test-result pass">
+                    <h4>Invalid Login - PASS</h4>
+                    <p>URL: http://localhost/sprint/login.php</p>
+                </div>
+            
+                <div class="test-result pass">
+                    <h4>Valid Login - PASS</h4>
+                    <p>URL: http://localhost/sprint/main.php</p>
+                </div>
+            
+                <div class="test-result fail">
+                    <h4>Dashboard - FAIL</h4>
+                    <p>URL: http://localhost/sprint/pages/main.php, Has content: false</p>
+                </div>
+            
+                <div class="test-result pass">
+                    <h4>Personil - PASS</h4>
+                    <p>URL: http://localhost/sprint/pages/personil.php, Has content: true</p>
+                </div>
+            
+                <div class="test-result pass">
+                    <h4>Bagian - PASS</h4>
+                    <p>URL: http://localhost/sprint/pages/bagian.php, Has content: true</p>
+                </div>
+            
+                <div class="test-result pass">
+                    <h4>Unsur - PASS</h4>
+                    <p>URL: http://localhost/sprint/pages/unsur.php, Has content: true</p>
+                </div>
+            
+                <div class="test-result fail">
+                    <h4>Calendar - FAIL</h4>
+                    <p>URL: http://localhost/sprint/pages/calendar_dashboard.php, Has content: false</p>
+                </div>
+            
+                <div class="test-result pass">
+                    <h4>Personil API - PASS</h4>
+                    <p>Status: 200</p>
+                </div>
+            
+                <div class="test-result pass">
+                    <h4>Bagian API - PASS</h4>
+                    <p>Status: 200</p>
+                </div>
+            
+                <div class="test-result pass">
+                    <h4>Unsur API - PASS</h4>
+                    <p>Status: 200</p>
+                </div>
+            
+                <div class="test-result fail">
+                    <h4>Responsive Desktop - FAIL</h4>
+                    <p>Viewport: 1280x720</p>
+                </div>
+            
+                <div class="test-result fail">
+                    <h4>Responsive Tablet - FAIL</h4>
+                    <p>Viewport: 768x1024</p>
+                </div>
+            
+                <div class="test-result fail">
+                    <h4>Responsive Mobile - FAIL</h4>
+                    <p>Viewport: 375x667</p>
+                </div>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="section recommendations">
+        <h2>💡 Recommendations</h2>
+        <ul>
+            <li>🔧 Fix failed tests before production deployment.</li><li>📱 Improve responsive design and mobile compatibility.</li>
+        </ul>
+    </div>
+    
+    <div class="section">
+        <h2>📸 Test Screenshots</h2>
+        <div class="screenshots">
+            
+                <div class="screenshot">
+                    <img src="screenshots/login-page-load-2026-04-05T17-47-32-868Z.png" alt="Login Page Load: PASS" / alt="">
+                    <p>Login Page Load: PASS</p>
+                </div>
+            
+                <div class="screenshot">
+                    <img src="screenshots/invalid-login-2026-04-05T17-47-35-908Z.png" alt="Invalid Login: PASS" / alt="">
+                    <p>Invalid Login: PASS</p>
+                </div>
+            
+                <div class="screenshot">
+                    <img src="screenshots/valid-login-2026-04-05T17-47-40-235Z.png" alt="Valid Login: PASS" / alt="">
+                    <p>Valid Login: PASS</p>
+                </div>
+            
+                <div class="screenshot">
+                    <img src="screenshots/dashboard-2026-04-05T17-47-41-306Z.png" alt="Dashboard: FAIL" / alt="">
+                    <p>Dashboard: FAIL</p>
+                </div>
+            
+                <div class="screenshot">
+                    <img src="screenshots/personil-2026-04-05T17-47-42-234Z.png" alt="Personil: PASS" / alt="">
+                    <p>Personil: PASS</p>
+                </div>
+            
+                <div class="screenshot">
+                    <img src="screenshots/bagian-2026-04-05T17-47-44-311Z.png" alt="Bagian: PASS" / alt="">
+                    <p>Bagian: PASS</p>
+                </div>
+            
+                <div class="screenshot">
+                    <img src="screenshots/unsur-2026-04-05T17-47-46-376Z.png" alt="Unsur: PASS" / alt="">
+                    <p>Unsur: PASS</p>
+                </div>
+            
+                <div class="screenshot">
+                    <img src="screenshots/calendar-2026-04-05T17-47-48-229Z.png" alt="Calendar: FAIL" / alt="">
+                    <p>Calendar: FAIL</p>
+                </div>
+            
+                <div class="screenshot">
+                    <img src="screenshots/responsive-desktop-2026-04-05T17-47-53-879Z.png" alt="Responsive Desktop: FAIL" / alt="">
+                    <p>Responsive Desktop: FAIL</p>
+                </div>
+            
+                <div class="screenshot">
+                    <img src="screenshots/responsive-tablet-2026-04-05T17-47-54-935Z.png" alt="Responsive Tablet: FAIL" / alt="">
+                    <p>Responsive Tablet: FAIL</p>
+                </div>
+            
+                <div class="screenshot">
+                    <img src="screenshots/responsive-mobile-2026-04-05T17-47-56-016Z.png" alt="Responsive Mobile: FAIL" / alt="">
+                    <p>Responsive Mobile: FAIL</p>
+                </div>
+            
+        </div>
+    </div>
+</body>
+</html>

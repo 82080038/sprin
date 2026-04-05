@@ -1,0 +1,67 @@
+{
+    "timestamp": "2026-04-06T01:06:57.130280",
+    "summary": {
+        "total_urls": 8,
+        "accessible": 8,
+        "failed": 0,
+        "success_rate": "100.0%"
+    },
+    "results": [
+        {
+            "url": "http://localhost/sprint/",
+            "status_code": 200,
+            "accessible": true,
+            "timestamp": "2026-04-06T01:06:57.061572",
+            "category": "main_pages"
+        },
+        {
+            "url": "http://localhost/sprint/login.php",
+            "status_code": 200,
+            "accessible": true,
+            "timestamp": "2026-04-06T01:06:57.079107",
+            "category": "main_pages"
+        },
+        {
+            "url": "http://localhost/sprint/pages/main.php",
+            "status_code": 200,
+            "accessible": true,
+            "timestamp": "2026-04-06T01:06:57.091253",
+            "category": "main_pages"
+        },
+        {
+            "url": "http://localhost/sprint/pages/personil.php",
+            "status_code": 200,
+            "accessible": true,
+            "timestamp": "2026-04-06T01:06:57.101407",
+            "category": "main_pages"
+        },
+        {
+            "url": "http://localhost/sprint/api/personil.php",
+            "status_code": 200,
+            "accessible": true,
+            "timestamp": "2026-04-06T01:06:57.110003",
+            "category": "api_endpoints"
+        },
+        {
+            "url": "http://localhost/sprint/api/bagian.php",
+            "status_code": 200,
+            "accessible": true,
+            "timestamp": "2026-04-06T01:06:57.116501",
+            "category": "api_endpoints"
+        },
+        {
+            "url": "http://localhost/sprint/api/unsur.php",
+            "status_code": 200,
+            "accessible": true,
+            "timestamp": "2026-04-06T01:06:57.128437",
+            "category": "api_endpoints"
+        },
+        {
+            "url": "http://localhost/sprint/api/health_check_new.php",
+            "status_code": 200,
+            "accessible": true,
+            "timestamp": "2026-04-06T01:06:57.130254",
+            "category": "api_endpoints"
+        }
+    ]
+}

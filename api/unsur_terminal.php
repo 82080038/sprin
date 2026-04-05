@@ -1,79 +1,9 @@
-<?php
-declare(strict_types=1);
-// Simple API to display UNSUR data in terminal
-require_once __DIR__ . '/../core/config.php';
+/**
+ * api/unsur_terminal.php
+ *
+ * @package SPRIN
+ * @author Development Team
+ * @since 1.0.0
+ */
 
-try {
-    $pdo = new PDO('mysql:host=localhost;dbname=bagops', 'root', 'root');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    echo "=== DATA UNSUR ===\n\n";
-    
-    // Get all unsur data
-    $stmt = $pdo->query("SELECT * FROM unsur ORDER BY urutan");
-    $unsurData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    echo "Total Unsur: " . count($unsurData) . "\n\n";
-    
-    foreach ($unsurData as $unsur) {
-        echo "ID: {$unsur['id']}\n";
-        echo "Kode: {$unsur['kode_unsur']}\n";
-        echo "Nama: {$unsur['nama_unsur']}\n";
-        echo "Urutan: {$unsur['urutan']}\n";
-        echo "Deskripsi: " . ($unsur['deskripsi'] ?? 'N/A') . "\n";
-        
-        // Get bagian count for this unsur
-        $stmt2 = $pdo->prepare("SELECT COUNT(*) as total FROM bagian WHERE id_unsur = ?");
-        $stmt2->execute([$unsur['id']]);
-        $bagianCount = $stmt2->fetch()['total'];
-        
-        echo "Total Bagian: $bagianCount\n";
-        
-        // Get bagian list
-        if ($bagianCount > 0) {
-            $stmt3 = $pdo->prepare("SELECT nama_bagian, kode_bagian, urutan FROM bagian WHERE id_unsur = ? ORDER BY urutan, nama_bagian");
-            $stmt3->execute([$unsur['id']]);
-            $bagians = $stmt3->fetchAll(PDO::FETCH_ASSOC);
-            
-            echo "Daftar Bagian:\n";
-            foreach ($bagians as $bagian) {
-                echo "  - {$bagian['nama_bagian']} ({$bagian['kode_bagian']}) - Urutan: {$bagian['urutan']}\n";
-            }
-        }
-        
-        echo str_repeat("-", 50) . "\n";
-    }
-    
-    echo "\n=== STATISTIK UNSUR ===\n";
-    
-    // Get statistics
-    $stmt = $pdo->query("
-        SELECT 
-            u.nama_unsur,
-            COUNT(b.id) as total_bagian,
-            COUNT(p.id) as total_personil
-        FROM unsur u
-        LEFT JOIN bagian b ON u.id = b.id_unsur
-        LEFT JOIN personil p ON b.id = p.id_bagian
-        GROUP BY u.id, u.nama_unsur
-        ORDER BY u.urutan
-    ");
-    
-    $stats = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    echo "\nFormat: | Nama Unsur | Total Bagian | Total Personil |\n";
-    echo str_repeat("-", 60) . "\n";
-    
-    foreach ($stats as $stat) {
-        printf("| %-20s | %-12s | %-12s |\n", 
-            $stat['nama_unsur'], 
-            $stat['total_bagian'], 
-            $stat['total_personil']
-        );
-    }
-    echo str_repeat("-", 60) . "\n";
-    
-} catch (Exception $e) {
-    echo "Error: " . $e->getMessage() . "\n";
-}
-?>
+<?php/DevelopmentErrorReportingif(!defined('DEVELOPMENT_MODE')){error_reporting(E_ALL);ini_set('display_errors',1);ini_set('display_startup_errors',1);}declare(strict_types=1);/SimpleAPItodisplayUNSURdatainterminalrequire_once__DIR__.'/../core/config.php';try{$pdo=newPDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';unix_socket='.DB_SOCKET,DB_USER,DB_PASS,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);$pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);echo"===DATAUNSUR===\n\n";/Getallunsurdata$stmt=$pdo->query("SELECT*FROMunsurORDERBYurutan");$unsurData=$stmt->fetchAll(PDO::FETCH_ASSOC);echo"TotalUnsur:".count($unsurData)."\n\n";forforeach($unsurDataas$unsur){echo"ID:{$unsur['id']}\n";echo"Kode:{$unsur['kode_unsur']}\n";echo"Nama:{$unsur['nama_unsur']}\n";echo"Urutan:{$unsur['urutan']}\n";echo"Deskripsi:".($unsur['deskripsi']??'N/A')."\n";/Getbagiancountforthisunsur$stmt2=$pdo->prepare("SELECTCOUNT(*)astotalFROMbagianWHEREid_unsur=?");$stmt2->execute([$unsur['id']]);$bagianCount=$stmt2->fetch()['total'];echo"TotalBagian:$bagianCount\n";/Getbagianlistif($bagianCount>0){$stmt3=$pdo->prepare("SELECTnama_bagian,kode_bagian,urutanFROMbagianWHEREid_unsur=?ORDERBYurutan,nama_bagian");$stmt3->execute([$unsur['id']]);$bagians=$stmt3->fetchAll(PDO::FETCH_ASSOC);echo"DaftarBagian:\n";forforeach($bagiansas$bagian){echo"-{$bagian['nama_bagian']}({$bagian['kode_bagian']})-Urutan:{$bagian['urutan']}\n";}}echostr_repeat("-",50)."\n";}echo"\n===STATISTIKUNSUR===\n";/Getstatistics$stmt=$pdo->query("SELECTu.nama_unsur,COUNT(b.id)astotal_bagian,COUNT(p.id)astotal_personilFROMunsuruLEFTJOINbagianbONu.id=b.id_unsurLEFTJOINpersonilpONb.id=p.id_bagianGROUPBYu.id,u.nama_unsurORDERBYu.urutan");$stats=$stmt->fetchAll(PDO::FETCH_ASSOC);echo"\nFormat:|NamaUnsur|TotalBagian|TotalPersonil|\n";echostr_repeat("-",60)."\n";forforeach($statsas$stat){printf("|%-20s|%-12s|%-12s|\n",$stat['nama_unsur'],$stat['total_bagian'],$stat['total_personil']);}echostr_repeat("-",60)."\n";}catch(Exception$e){echo"Error:".$e->getMessage()."\n";}?>

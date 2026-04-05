@@ -1,0 +1,760 @@
+{
+    "config": {
+        "configFile": "/opt/lampp/htdocs/sprint/playwright.config.js",
+        "rootDir": "/opt/lampp/htdocs/sprint/tests/playwright",
+        "forbidOnly": false,
+        "fullyParallel": true,
+        "globalSetup": null,
+        "globalTeardown": null,
+        "globalTimeout": 0,
+        "grep": {},
+        "grepInvert": null,
+        "maxFailures": 0,
+        "metadata": {
+            "actualWorkers": 4
+        },
+        "preserveOutput": "always",
+        "projects": [
+            {
+                "outputDir": "/opt/lampp/htdocs/sprint/test-results",
+                "repeatEach": 1,
+                "retries": 1,
+                "metadata": {
+                    "actualWorkers": 4
+                },
+                "id": "chromium",
+                "name": "chromium",
+                "testDir": "/opt/lampp/htdocs/sprint/tests/playwright",
+                "testIgnore": [],
+                "testMatch": [
+                    "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+                ],
+                "timeout": 30000
+            },
+            {
+                "outputDir": "/opt/lampp/htdocs/sprint/test-results",
+                "repeatEach": 1,
+                "retries": 1,
+                "metadata": {
+                    "actualWorkers": 4
+                },
+                "id": "firefox",
+                "name": "firefox",
+                "testDir": "/opt/lampp/htdocs/sprint/tests/playwright",
+                "testIgnore": [],
+                "testMatch": [
+                    "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+                ],
+                "timeout": 30000
+            },
+            {
+                "outputDir": "/opt/lampp/htdocs/sprint/test-results",
+                "repeatEach": 1,
+                "retries": 1,
+                "metadata": {
+                    "actualWorkers": 4
+                },
+                "id": "webkit",
+                "name": "webkit",
+                "testDir": "/opt/lampp/htdocs/sprint/tests/playwright",
+                "testIgnore": [],
+                "testMatch": [
+                    "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+                ],
+                "timeout": 30000
+            },
+            {
+                "outputDir": "/opt/lampp/htdocs/sprint/test-results",
+                "repeatEach": 1,
+                "retries": 1,
+                "metadata": {
+                    "actualWorkers": 4
+                },
+                "id": "Mobile Chrome",
+                "name": "Mobile Chrome",
+                "testDir": "/opt/lampp/htdocs/sprint/tests/playwright",
+                "testIgnore": [],
+                "testMatch": [
+                    "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+                ],
+                "timeout": 30000
+            },
+            {
+                "outputDir": "/opt/lampp/htdocs/sprint/test-results",
+                "repeatEach": 1,
+                "retries": 1,
+                "metadata": {
+                    "actualWorkers": 4
+                },
+                "id": "Mobile Safari",
+                "name": "Mobile Safari",
+                "testDir": "/opt/lampp/htdocs/sprint/tests/playwright",
+                "testIgnore": [],
+                "testMatch": [
+                    "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+                ],
+                "timeout": 30000
+            }
+        ],
+        "quiet": false,
+        "reporter": [
+            [
+                "html",
+                {
+                    "outputFolder": "playwright-report"
+                }
+            ],
+            [
+                "json",
+                {
+                    "outputFile": "test-results.json"
+                }
+            ],
+            [
+                "line",
+                null
+            ],
+            [
+                "junit",
+                {
+                    "outputFile": "test-results.xml"
+                }
+            ]
+        ],
+        "reportSlowTests": {
+            "max": 5,
+            "threshold": 300000
+        },
+        "shard": null,
+        "tags": [],
+        "updateSnapshots": "missing",
+        "updateSourceMethod": "patch",
+        "version": "1.59.1",
+        "workers": 4,
+        "webServer": null
+    },
+    "suites": [
+        {
+            "title": "login.spec.js",
+            "file": "login.spec.js",
+            "column": 0,
+            "line": 0,
+            "specs": [],
+            "suites": [
+                {
+                    "title": "SPRIN Login Tests",
+                    "file": "login.spec.js",
+                    "line": 4,
+                    "column": 6,
+                    "specs": [
+                        {
+                            "title": "should display login page correctly",
+                            "ok": true,
+                            "tags": [],
+                            "tests": [
+                                {
+                                    "timeout": 30000,
+                                    "annotations": [],
+                                    "expectedStatus": "passed",
+                                    "projectId": "chromium",
+                                    "projectName": "chromium",
+                                    "results": [
+                                        {
+                                            "workerIndex": 0,
+                                            "parallelIndex": 0,
+                                            "status": "passed",
+                                            "duration": 3776,
+                                            "errors": [],
+                                            "stdout": [],
+                                            "stderr": [],
+                                            "retry": 0,
+                                            "startTime": "2026-04-05T17:16:38.861Z",
+                                            "annotations": [],
+                                            "attachments": []
+                                        }
+                                    ],
+                                    "status": "expected"
+                                }
+                            ],
+                            "id": "badc1754af1944f68b2b-489cb28b27fa87e9bfdb",
+                            "file": "login.spec.js",
+                            "line": 11,
+                            "column": 3
+                        },
+                        {
+                            "title": "should show error with invalid credentials",
+                            "ok": true,
+                            "tags": [],
+                            "tests": [
+                                {
+                                    "timeout": 30000,
+                                    "annotations": [],
+                                    "expectedStatus": "passed",
+                                    "projectId": "chromium",
+                                    "projectName": "chromium",
+                                    "results": [
+                                        {
+                                            "workerIndex": 1,
+                                            "parallelIndex": 1,
+                                            "status": "passed",
+                                            "duration": 4461,
+                                            "errors": [],
+                                            "stdout": [],
+                                            "stderr": [],
+                                            "retry": 0,
+                                            "startTime": "2026-04-05T17:16:38.695Z",
+                                            "annotations": [],
+                                            "attachments": []
+                                        }
+                                    ],
+                                    "status": "expected"
+                                }
+                            ],
+                            "id": "badc1754af1944f68b2b-5e90ce55012d80eb78d5",
+                            "file": "login.spec.js",
+                            "line": 27,
+                            "column": 3
+                        },
+                        {
+                            "title": "should login successfully with valid credentials",
+                            "ok": false,
+                            "tags": [],
+                            "tests": [
+                                {
+                                    "timeout": 30000,
+                                    "annotations": [],
+                                    "expectedStatus": "passed",
+                                    "projectId": "chromium",
+                                    "projectName": "chromium",
+                                    "results": [
+                                        {
+                                            "workerIndex": 2,
+                                            "parallelIndex": 2,
+                                            "status": "failed",
+                                            "duration": 13134,
+                                            "error": {
+                                                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    13 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n",
+                                                "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    13 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n\n    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:45:24",
+                                                "location": {
+                                                    "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                    "column": 24,
+                                                    "line": 45
+                                                },
+                                                "snippet": "\u001b[0m \u001b[90m 43 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 44 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 45 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/main\\.php/\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 46 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'body'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 47 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 48 |\u001b[39m\u001b[0m"
+                                            },
+                                            "errors": [
+                                                {
+                                                    "location": {
+                                                        "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                        "column": 24,
+                                                        "line": 45
+                                                    },
+                                                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    13 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 43 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 44 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 45 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/main\\.php/\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 46 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'body'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 47 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 48 |\u001b[39m\u001b[0m\n\u001b[2m    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:45:24\u001b[22m"
+                                                }
+                                            ],
+                                            "stdout": [],
+                                            "stderr": [],
+                                            "retry": 0,
+                                            "startTime": "2026-04-05T17:16:38.655Z",
+                                            "annotations": [],
+                                            "attachments": [
+                                                {
+                                                    "name": "screenshot",
+                                                    "contentType": "image/png",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium/test-failed-1.png"
+                                                },
+                                                {
+                                                    "name": "video",
+                                                    "contentType": "video/webm",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium/video.webm"
+                                                },
+                                                {
+                                                    "name": "error-context",
+                                                    "contentType": "text/markdown",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium/error-context.md"
+                                                }
+                                            ],
+                                            "errorLocation": {
+                                                "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                "column": 24,
+                                                "line": 45
+                                            }
+                                        },
+                                        {
+                                            "workerIndex": 6,
+                                            "parallelIndex": 2,
+                                            "status": "failed",
+                                            "duration": 12205,
+                                            "error": {
+                                                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    13 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n",
+                                                "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    13 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n\n    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:45:24",
+                                                "location": {
+                                                    "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                    "column": 24,
+                                                    "line": 45
+                                                },
+                                                "snippet": "\u001b[0m \u001b[90m 43 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 44 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 45 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/main\\.php/\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 46 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'body'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 47 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 48 |\u001b[39m\u001b[0m"
+                                            },
+                                            "errors": [
+                                                {
+                                                    "location": {
+                                                        "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                        "column": 24,
+                                                        "line": 45
+                                                    },
+                                                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    13 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 43 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 44 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 45 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/main\\.php/\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 46 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'body'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 47 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 48 |\u001b[39m\u001b[0m\n\u001b[2m    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:45:24\u001b[22m"
+                                                }
+                                            ],
+                                            "stdout": [],
+                                            "stderr": [],
+                                            "retry": 1,
+                                            "startTime": "2026-04-05T17:16:53.405Z",
+                                            "annotations": [],
+                                            "attachments": [
+                                                {
+                                                    "name": "screenshot",
+                                                    "contentType": "image/png",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/test-failed-1.png"
+                                                },
+                                                {
+                                                    "name": "video",
+                                                    "contentType": "video/webm",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/video.webm"
+                                                },
+                                                {
+                                                    "name": "error-context",
+                                                    "contentType": "text/markdown",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/error-context.md"
+                                                },
+                                                {
+                                                    "name": "trace",
+                                                    "contentType": "application/zip",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-bd3a7-ully-with-valid-credentials-chromium-retry1/trace.zip"
+                                                }
+                                            ],
+                                            "errorLocation": {
+                                                "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                "column": 24,
+                                                "line": 45
+                                            }
+                                        }
+                                    ],
+                                    "status": "unexpected"
+                                }
+                            ],
+                            "id": "badc1754af1944f68b2b-77fd51687a14520ef826",
+                            "file": "login.spec.js",
+                            "line": 40,
+                            "column": 3
+                        },
+                        {
+                            "title": "should work with Quick Login feature",
+                            "ok": false,
+                            "tags": [],
+                            "tests": [
+                                {
+                                    "timeout": 30000,
+                                    "annotations": [],
+                                    "expectedStatus": "passed",
+                                    "projectId": "chromium",
+                                    "projectName": "chromium",
+                                    "results": [
+                                        {
+                                            "workerIndex": 3,
+                                            "parallelIndex": 3,
+                                            "status": "failed",
+                                            "duration": 14620,
+                                            "error": {
+                                                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    14 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n",
+                                                "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    14 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n\n    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:56:26",
+                                                "location": {
+                                                    "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                    "column": 26,
+                                                    "line": 56
+                                                },
+                                                "snippet": "\u001b[0m \u001b[90m 54 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[36mawait\u001b[39m quickLoginButton\u001b[33m.\u001b[39misVisible()) {\n \u001b[90m 55 |\u001b[39m       \u001b[36mawait\u001b[39m quickLoginButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 56 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/main\\.php/\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 57 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'body'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 58 |\u001b[39m     } \u001b[36melse\u001b[39m {\n \u001b[90m 59 |\u001b[39m       }\u001b[0m"
+                                            },
+                                            "errors": [
+                                                {
+                                                    "location": {
+                                                        "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                        "column": 26,
+                                                        "line": 56
+                                                    },
+                                                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    14 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 54 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[36mawait\u001b[39m quickLoginButton\u001b[33m.\u001b[39misVisible()) {\n \u001b[90m 55 |\u001b[39m       \u001b[36mawait\u001b[39m quickLoginButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 56 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/main\\.php/\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 57 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'body'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 58 |\u001b[39m     } \u001b[36melse\u001b[39m {\n \u001b[90m 59 |\u001b[39m       }\u001b[0m\n\u001b[2m    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:56:26\u001b[22m"
+                                                }
+                                            ],
+                                            "stdout": [],
+                                            "stderr": [],
+                                            "retry": 0,
+                                            "startTime": "2026-04-05T17:16:38.712Z",
+                                            "annotations": [],
+                                            "attachments": [
+                                                {
+                                                    "name": "screenshot",
+                                                    "contentType": "image/png",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium/test-failed-1.png"
+                                                },
+                                                {
+                                                    "name": "video",
+                                                    "contentType": "video/webm",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium/video.webm"
+                                                },
+                                                {
+                                                    "name": "error-context",
+                                                    "contentType": "text/markdown",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium/error-context.md"
+                                                }
+                                            ],
+                                            "errorLocation": {
+                                                "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                "column": 26,
+                                                "line": 56
+                                            }
+                                        },
+                                        {
+                                            "workerIndex": 7,
+                                            "parallelIndex": 3,
+                                            "status": "failed",
+                                            "duration": 13434,
+                                            "error": {
+                                                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    14 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n",
+                                                "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    14 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n\n    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:56:26",
+                                                "location": {
+                                                    "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                    "column": 26,
+                                                    "line": 56
+                                                },
+                                                "snippet": "\u001b[0m \u001b[90m 54 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[36mawait\u001b[39m quickLoginButton\u001b[33m.\u001b[39misVisible()) {\n \u001b[90m 55 |\u001b[39m       \u001b[36mawait\u001b[39m quickLoginButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 56 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/main\\.php/\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 57 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'body'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 58 |\u001b[39m     } \u001b[36melse\u001b[39m {\n \u001b[90m 59 |\u001b[39m       }\u001b[0m"
+                                            },
+                                            "errors": [
+                                                {
+                                                    "location": {
+                                                        "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                        "column": 26,
+                                                        "line": 56
+                                                    },
+                                                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 10000ms\u001b[22m\n\u001b[2m    14 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 54 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[36mawait\u001b[39m quickLoginButton\u001b[33m.\u001b[39misVisible()) {\n \u001b[90m 55 |\u001b[39m       \u001b[36mawait\u001b[39m quickLoginButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 56 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/main\\.php/\u001b[39m\u001b[33m,\u001b[39m { timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                          \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 57 |\u001b[39m       \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'body'\u001b[39m))\u001b[33m.\u001b[39mtoContainText(\u001b[32m'Dashboard'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 58 |\u001b[39m     } \u001b[36melse\u001b[39m {\n \u001b[90m 59 |\u001b[39m       }\u001b[0m\n\u001b[2m    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:56:26\u001b[22m"
+                                                }
+                                            ],
+                                            "stdout": [],
+                                            "stderr": [],
+                                            "retry": 1,
+                                            "startTime": "2026-04-05T17:16:55.217Z",
+                                            "annotations": [],
+                                            "attachments": [
+                                                {
+                                                    "name": "screenshot",
+                                                    "contentType": "image/png",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/test-failed-1.png"
+                                                },
+                                                {
+                                                    "name": "video",
+                                                    "contentType": "video/webm",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/video.webm"
+                                                },
+                                                {
+                                                    "name": "error-context",
+                                                    "contentType": "text/markdown",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/error-context.md"
+                                                },
+                                                {
+                                                    "name": "trace",
+                                                    "contentType": "application/zip",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-work-with-Quick-Login-feature-chromium-retry1/trace.zip"
+                                                }
+                                            ],
+                                            "errorLocation": {
+                                                "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                "column": 26,
+                                                "line": 56
+                                            }
+                                        }
+                                    ],
+                                    "status": "unexpected"
+                                }
+                            ],
+                            "id": "badc1754af1944f68b2b-c904dc19bd3257226314",
+                            "file": "login.spec.js",
+                            "line": 49,
+                            "column": 3
+                        },
+                        {
+                            "title": "should redirect to login when accessing protected pages without auth",
+                            "ok": false,
+                            "tags": [],
+                            "tests": [
+                                {
+                                    "timeout": 30000,
+                                    "annotations": [],
+                                    "expectedStatus": "passed",
+                                    "projectId": "chromium",
+                                    "projectName": "chromium",
+                                    "results": [
+                                        {
+                                            "workerIndex": 0,
+                                            "parallelIndex": 0,
+                                            "status": "failed",
+                                            "duration": 4837,
+                                            "error": {
+                                                "message": "Error: page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at http://localhost/sprint/pages/personil.php\nCall log:\n\u001b[2m  - navigating to \"http://localhost/sprint/pages/personil.php\", waiting until \"load\"\u001b[22m\n",
+                                                "stack": "Error: page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at http://localhost/sprint/pages/personil.php\nCall log:\n\u001b[2m  - navigating to \"http://localhost/sprint/pages/personil.php\", waiting until \"load\"\u001b[22m\n\n    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:74:18",
+                                                "location": {
+                                                    "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                    "column": 18,
+                                                    "line": 74
+                                                },
+                                                "snippet": "\u001b[0m \u001b[90m 72 |\u001b[39m\n \u001b[90m 73 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m pageUrl \u001b[36mof\u001b[39m protectedPages) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 74 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(pageUrl)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 75 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m2000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 76 |\u001b[39m\n \u001b[90m 77 |\u001b[39m       \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\u001b[0m"
+                                            },
+                                            "errors": [
+                                                {
+                                                    "location": {
+                                                        "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                        "column": 18,
+                                                        "line": 74
+                                                    },
+                                                    "message": "Error: page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at http://localhost/sprint/pages/personil.php\nCall log:\n\u001b[2m  - navigating to \"http://localhost/sprint/pages/personil.php\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 72 |\u001b[39m\n \u001b[90m 73 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m pageUrl \u001b[36mof\u001b[39m protectedPages) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 74 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(pageUrl)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 75 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m2000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 76 |\u001b[39m\n \u001b[90m 77 |\u001b[39m       \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:74:18\u001b[22m"
+                                                }
+                                            ],
+                                            "stdout": [],
+                                            "stderr": [],
+                                            "retry": 0,
+                                            "startTime": "2026-04-05T17:16:43.270Z",
+                                            "annotations": [],
+                                            "attachments": [
+                                                {
+                                                    "name": "screenshot",
+                                                    "contentType": "image/png",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium/test-failed-1.png"
+                                                },
+                                                {
+                                                    "name": "video",
+                                                    "contentType": "video/webm",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium/video.webm"
+                                                },
+                                                {
+                                                    "name": "error-context",
+                                                    "contentType": "text/markdown",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium/error-context.md"
+                                                }
+                                            ],
+                                            "errorLocation": {
+                                                "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                "column": 18,
+                                                "line": 74
+                                            }
+                                        },
+                                        {
+                                            "workerIndex": 4,
+                                            "parallelIndex": 0,
+                                            "status": "failed",
+                                            "duration": 5771,
+                                            "error": {
+                                                "message": "Error: page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at http://localhost/sprint/pages/personil.php\nCall log:\n\u001b[2m  - navigating to \"http://localhost/sprint/pages/personil.php\", waiting until \"load\"\u001b[22m\n",
+                                                "stack": "Error: page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at http://localhost/sprint/pages/personil.php\nCall log:\n\u001b[2m  - navigating to \"http://localhost/sprint/pages/personil.php\", waiting until \"load\"\u001b[22m\n\n    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:74:18",
+                                                "location": {
+                                                    "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                    "column": 18,
+                                                    "line": 74
+                                                },
+                                                "snippet": "\u001b[0m \u001b[90m 72 |\u001b[39m\n \u001b[90m 73 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m pageUrl \u001b[36mof\u001b[39m protectedPages) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 74 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(pageUrl)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 75 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m2000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 76 |\u001b[39m\n \u001b[90m 77 |\u001b[39m       \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\u001b[0m"
+                                            },
+                                            "errors": [
+                                                {
+                                                    "location": {
+                                                        "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                        "column": 18,
+                                                        "line": 74
+                                                    },
+                                                    "message": "Error: page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at http://localhost/sprint/pages/personil.php\nCall log:\n\u001b[2m  - navigating to \"http://localhost/sprint/pages/personil.php\", waiting until \"load\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 72 |\u001b[39m\n \u001b[90m 73 |\u001b[39m     \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m pageUrl \u001b[36mof\u001b[39m protectedPages) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 74 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(pageUrl)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 75 |\u001b[39m       \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m2000\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 76 |\u001b[39m\n \u001b[90m 77 |\u001b[39m       \u001b[36mconst\u001b[39m currentUrl \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39murl()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:74:18\u001b[22m"
+                                                }
+                                            ],
+                                            "stdout": [],
+                                            "stderr": [],
+                                            "retry": 1,
+                                            "startTime": "2026-04-05T17:16:48.761Z",
+                                            "annotations": [],
+                                            "attachments": [
+                                                {
+                                                    "name": "screenshot",
+                                                    "contentType": "image/png",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/test-failed-1.png"
+                                                },
+                                                {
+                                                    "name": "video",
+                                                    "contentType": "video/webm",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/video.webm"
+                                                },
+                                                {
+                                                    "name": "error-context",
+                                                    "contentType": "text/markdown",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/error-context.md"
+                                                },
+                                                {
+                                                    "name": "trace",
+                                                    "contentType": "application/zip",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-sh-dbab0-rotected-pages-without-auth-chromium-retry1/trace.zip"
+                                                }
+                                            ],
+                                            "errorLocation": {
+                                                "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                "column": 18,
+                                                "line": 74
+                                            }
+                                        }
+                                    ],
+                                    "status": "unexpected"
+                                }
+                            ],
+                            "id": "badc1754af1944f68b2b-7bcb17eab074a4bffdd0",
+                            "file": "login.spec.js",
+                            "line": 62,
+                            "column": 3
+                        },
+                        {
+                            "title": "should maintain session after login",
+                            "ok": false,
+                            "tags": [],
+                            "tests": [
+                                {
+                                    "timeout": 30000,
+                                    "annotations": [],
+                                    "expectedStatus": "passed",
+                                    "projectId": "chromium",
+                                    "projectName": "chromium",
+                                    "results": [
+                                        {
+                                            "workerIndex": 1,
+                                            "parallelIndex": 1,
+                                            "status": "failed",
+                                            "duration": 6137,
+                                            "error": {
+                                                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n",
+                                                "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n\n    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:91:24",
+                                                "location": {
+                                                    "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                    "column": 24,
+                                                    "line": 91
+                                                },
+                                                "snippet": "\u001b[0m \u001b[90m 89 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 90 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 91 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/main\\.php/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 92 |\u001b[39m\n \u001b[90m 93 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(urlHelper\u001b[33m.\u001b[39mgetPersonilUrl())\u001b[33m;\u001b[39m\n \u001b[90m 94 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m2000\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                                            },
+                                            "errors": [
+                                                {
+                                                    "location": {
+                                                        "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                        "column": 24,
+                                                        "line": 91
+                                                    },
+                                                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 89 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 90 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 91 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/main\\.php/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 92 |\u001b[39m\n \u001b[90m 93 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(urlHelper\u001b[33m.\u001b[39mgetPersonilUrl())\u001b[33m;\u001b[39m\n \u001b[90m 94 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m2000\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:91:24\u001b[22m"
+                                                }
+                                            ],
+                                            "stdout": [],
+                                            "stderr": [],
+                                            "retry": 0,
+                                            "startTime": "2026-04-05T17:16:43.911Z",
+                                            "annotations": [],
+                                            "attachments": [
+                                                {
+                                                    "name": "screenshot",
+                                                    "contentType": "image/png",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium/test-failed-1.png"
+                                                },
+                                                {
+                                                    "name": "video",
+                                                    "contentType": "video/webm",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium/video.webm"
+                                                },
+                                                {
+                                                    "name": "error-context",
+                                                    "contentType": "text/markdown",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium/error-context.md"
+                                                }
+                                            ],
+                                            "errorLocation": {
+                                                "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                "column": 24,
+                                                "line": 91
+                                            }
+                                        },
+                                        {
+                                            "workerIndex": 5,
+                                            "parallelIndex": 1,
+                                            "status": "failed",
+                                            "duration": 6351,
+                                            "error": {
+                                                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n",
+                                                "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n\n    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:91:24",
+                                                "location": {
+                                                    "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                    "column": 24,
+                                                    "line": 91
+                                                },
+                                                "snippet": "\u001b[0m \u001b[90m 89 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 90 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 91 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/main\\.php/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 92 |\u001b[39m\n \u001b[90m 93 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(urlHelper\u001b[33m.\u001b[39mgetPersonilUrl())\u001b[33m;\u001b[39m\n \u001b[90m 94 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m2000\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                                            },
+                                            "errors": [
+                                                {
+                                                    "location": {
+                                                        "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                        "column": 24,
+                                                        "line": 91
+                                                    },
+                                                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/main\\.php/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost/sprint/login.php\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 \u00d7 unexpected value \"http://localhost/sprint/login.php\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 89 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button[type=\"submit\"]'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 90 |\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 91 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/main\\.php/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 92 |\u001b[39m\n \u001b[90m 93 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(urlHelper\u001b[33m.\u001b[39mgetPersonilUrl())\u001b[33m;\u001b[39m\n \u001b[90m 94 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m2000\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /opt/lampp/htdocs/sprint/tests/playwright/login.spec.js:91:24\u001b[22m"
+                                                }
+                                            ],
+                                            "stdout": [],
+                                            "stderr": [],
+                                            "retry": 1,
+                                            "startTime": "2026-04-05T17:16:50.737Z",
+                                            "annotations": [],
+                                            "attachments": [
+                                                {
+                                                    "name": "screenshot",
+                                                    "contentType": "image/png",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/test-failed-1.png"
+                                                },
+                                                {
+                                                    "name": "video",
+                                                    "contentType": "video/webm",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/video.webm"
+                                                },
+                                                {
+                                                    "name": "error-context",
+                                                    "contentType": "text/markdown",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/error-context.md"
+                                                },
+                                                {
+                                                    "name": "trace",
+                                                    "contentType": "application/zip",
+                                                    "path": "/opt/lampp/htdocs/sprint/test-results/login-SPRIN-Login-Tests-should-maintain-session-after-login-chromium-retry1/trace.zip"
+                                                }
+                                            ],
+                                            "errorLocation": {
+                                                "file": "/opt/lampp/htdocs/sprint/tests/playwright/login.spec.js",
+                                                "column": 24,
+                                                "line": 91
+                                            }
+                                        }
+                                    ],
+                                    "status": "unexpected"
+                                }
+                            ],
+                            "id": "badc1754af1944f68b2b-5a9cf21f6ffd137b72ca",
+                            "file": "login.spec.js",
+                            "line": 85,
+                            "column": 3
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "errors": [],
+    "stats": {
+        "startTime": "2026-04-05T17:16:37.801Z",
+        "duration": 31737.383,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 4,
+        "flaky": 0
+    }
+}

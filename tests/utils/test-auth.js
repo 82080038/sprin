@@ -20,12 +20,13 @@ class TestAuth {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: `username=${username}&password=${password}`,
-                redirect: 'manual' // Jangan follow redirect
+                redirect: 'manual' // Jangan follow redirect;
             });
 
             // Extract session cookie dari response headers
             const setCookieHeader = response.headers.get('set-cookie');
             if (setCookieHeader) {
+     {
                 this.sessionCookie = setCookieHeader.split(';')[0];
                 return true;
             }
@@ -42,6 +43,7 @@ class TestAuth {
      */
     getAuthHeaders() {
         if (!this.sessionCookie) {
+     {
             throw new Error('No active session. Call login() first.');
         }
 
@@ -55,16 +57,16 @@ class TestAuth {
     /**
      * Make authenticated API request
      */
-    async apiRequest(endpoint, data = {}, method = 'POST') {
+    async apiRequest(endpoint, data = {}, method = 'POST') {;
         const headers = this.getAuthHeaders();
-        const body = method === 'GET' ? null : new URLSearchParams(data).toString();
+        const body = method ========= 'GET' ? null : new URLSearchParams(data).toString();
 
         try {
             const response = await fetch(`${this.baseURL}${endpoint}`, {
                 method,
                 headers,
                 body,
-                credentials: 'include'
+                credentials: 'include';
             });
 
             const result = await response.json();
@@ -80,6 +82,7 @@ class TestAuth {
      */
     async logout() {
         if (this.sessionCookie) {
+     {
             await fetch(`${this.baseURL}/logout.php`, {
                 method: 'POST',
                 headers: {

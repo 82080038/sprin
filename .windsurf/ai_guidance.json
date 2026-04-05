@@ -1,0 +1,44 @@
+{
+    "application_purpose": "SPRIN is a comprehensive police personnel and organizational management system for POLRES Samosir",
+    "core_functionality": {
+        "personnel_management": "Manage police personnel data, assignments, and career progression",
+        "organizational_structure": "Manage police units, departments, and hierarchical structure",
+        "calendar_system": "Schedule and manage police duties, events, and activities",
+        "reporting": "Generate reports and analytics for management decisions"
+    },
+    "technical_architecture": {
+        "authentication": "Session-based authentication using AuthHelper class",
+        "database": "MySQL database accessed via PDO with prepared statements",
+        "api": "RESTful API endpoints returning JSON responses",
+        "frontend": "Bootstrap 5 responsive design with custom CSS",
+        "error_handling": "Comprehensive error reporting system with development/production modes"
+    },
+    "development_guidelines": {
+        "code_standards": "Follow PSR-12 coding standards, use strict typing, implement proper error handling",
+        "security": "Always validate user input, use prepared statements, implement proper authentication checks",
+        "performance": "Optimize database queries, implement caching where appropriate, minimize API calls",
+        "testing": "Use Puppeteer for E2E testing, test API endpoints, validate responsive design"
+    },
+    "critical_files": {
+        "core/config.php": "Main application configuration and constants",
+        "core/SessionManager.php": "Session management and security",
+        "core/auth_helper.php": "Authentication validation and user management",
+        "pages/main.php": "Main dashboard and navigation",
+        "api/personil.php": "Personnel data CRUD operations",
+        "login.php": "User authentication interface"
+    },
+    "common_issues": [
+        "PHP syntax errors with declare(strict_types=1)",
+        "Database connection issues",
+        "Session management problems",
+        "API endpoint routing",
+        "Responsive design breakpoints"
+    ],
+    "ai_assistance_focus": [
+        "Debug PHP syntax and runtime errors",
+        "Optimize database queries and connections",
+        "Enhance responsive design and user experience",
+        "Implement security best practices",
+        "Maintain code quality and standards"
+    ]
+}

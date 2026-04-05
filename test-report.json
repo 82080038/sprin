@@ -1,0 +1,53 @@
+{
+    "timestamp": "2026-04-05T17:20:40.210Z",
+    "baseURL": "http://localhost/sprint",
+    "summary": {
+        "total": 4,
+        "passed": 3,
+        "failed": 1
+    },
+    "tests": [
+        {
+            "test": "Login Page Load",
+            "status": "PASS",
+            "details": "Title: Login - Sistem Manajemen POLRES Samosir, Form elements: true"
+        },
+        {
+            "test": "Valid Login",
+            "status": "PASS",
+            "details": "Redirected to: http://localhost/sprint/main.php"
+        },
+        {
+            "test": "Dashboard Access",
+            "status": "PASS",
+            "details": "URL: http://localhost/sprint/pages/main.php, Has content: true"
+        },
+        {
+            "test": "Personil Page",
+            "status": "FAIL",
+            "details": "URL: chrome-error://chromewebdata/, Has content: false"
+        }
+    ],
+    "screenshots": [
+        {
+            "file": "screenshots/login-page-loaded-2026-04-05T17-20-32-578Z.png",
+            "description": "Login page loaded successfully"
+        },
+        {
+            "file": "screenshots/login-form-filled-2026-04-05T17-20-34-973Z.png",
+            "description": "Login form filled with credentials"
+        },
+        {
+            "file": "screenshots/after-login-2026-04-05T17-20-37-309Z.png",
+            "description": "Successfully logged in"
+        },
+        {
+            "file": "screenshots/dashboard-access-2026-04-05T17-20-37-993Z.png",
+            "description": "Dashboard accessible"
+        },
+        {
+            "file": "screenshots/personil-page-2026-04-05T17-20-40-142Z.png",
+            "description": "Personil page failed"
+        }
+    ]
+}

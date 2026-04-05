@@ -1,0 +1,9 @@
+/**
+ * api/health_check_new.php
+ *
+ * @package SPRIN
+ * @author Development Team
+ * @since 1.0.0
+ */
+
+<?phpdeclare(strict_types=1);require_once__DIR__.'/../core/config.php';require_once__DIR__.'/../core/SessionManager.php';require_once__DIR__.'/../core/auth_helper.php';require_once__DIR__.'/../core/DatabaseOptimizer.php';/Setsecurityheadersheader('Content-Type:application/json');header('X-Content-Type-Options:nosniff');header('X-Frame-Options:DENY');header('X-XSS-Protection:1;mode=block');try{/Checkdatabaseconnection$db_status=false;try{$db=DatabaseOptimizer::getInstance();$db->executeQuery("SELECT1");$db_status=true;}catch(Exception$e){error_log("Databasehealthcheckfailed:".$e->getMessage());}/CheckAPIendpoints$api_status=true;$api_endpoints=['personil.php','bagian.php','unsur.php'];forforeach($api_endpointsas$endpoint){$endpoint_file=__DIR__.'/'.$endpoint;if(!file_exists($endpoint_file)){$api_status=false;break;}}/Checkperformance$performance_status=true;$memory_usage=memory_get_usage()/1024/1024;/MBif($memory_usage>100){/Ifusingmorethan100MB$performance_status='warning';}/Checksecurity$security_status=true;/Checkifrequiredsecurityfilesexist$security_files=[__DIR__.'/../core/SecurityMiddleware.php',__DIR__.'/../core/auth_helper.php',__DIR__.'/../core/SessionManager.php'];forforeach($security_filesas$file){if(!file_exists($file)){$security_status=false;break;}}$health_data=['status'=>'healthy','timestamp'=>date('Y-m-dH:i:s'),'checks'=>['database'=>$db_status,'api'=>$api_status,'performance'=>$performance_status,'security'=>$security_status],'metrics'=>['memory_usage'=>round($memory_usage,2),'uptime'=>php_uname('uptime')??'unknown','php_version'=>PHP_VERSION,'server_software'=>$_SERVER['SERVER_SOFTWARE']??'unknown']];echojson_encode($health_data);}catch(Exception$e){http_response_code(500);echojson_encode(['status'=>'error','message'=>'Healthcheckfailed','error'=>$e->getMessage()]);}?>

@@ -1,61 +1,9 @@
-<?php
-declare(strict_types=1);
 /**
- * Session Manager - Centralized session handling
- * Solves session conflicts and multiple session_start() issues
+ * core/SessionManager.php
+ *
+ * @package SPRIN
+ * @author Development Team
+ * @since 1.0.0
  */
 
-class SessionManager {
-    private static $started = false;
-    
-    /**
-     * Start session safely - only once
-     */
-    public static function start() {
-        if (!self::$started && session_status() === PHP_SESSION_NONE) {
-            // Set session parameters before start
-            ini_set('session.cookie_httponly', 1);
-            ini_set('session.cookie_secure', 0); // Set to 1 if using HTTPS
-            ini_set('session.use_strict_mode', 1);
-            ini_set('session.cookie_samesite', 'Lax');
-            ini_set('session.gc_maxlifetime', 3600); // 1 hour
-            
-            session_start();
-            self::$started = true;
-            
-            // Regenerate session ID for security
-            if (!isset($_SESSION['regenerated'])) {
-                session_regenerate_id(true);
-                $_SESSION['regenerated'] = true;
-            }
-        }
-    }
-    
-    /**
-     * Check if session is active
-     */
-    public static function isActive() {
-        return self::$started || session_status() === PHP_SESSION_ACTIVE;
-    }
-    
-    /**
-     * Destroy session
-     */
-    public static function destroy() {
-        if (self::isActive()) {
-            session_unset();
-            session_destroy();
-            self::$started = false;
-        }
-    }
-    
-    /**
-     * Clear all session data
-     */
-    public static function clear() {
-        if (self::isActive()) {
-            $_SESSION = array();
-        }
-    }
-}
-?>
+<?phpdeclare(strict_types=1);/DevelopmentErrorReportingif(!defined('DEVELOPMENT_MODE')){error_reporting(E_ALL);ini_set('display_errors',1);ini_set('display_startup_errors',1);}/***SessionManager-Centralizedsessionhandling*Solvessessionconflictsandmultiplesession_start()issues*/classSessionManager{privatestatic$started=false;/***Startsessionsafely-onlyonce*/publicstaticfunctionstart(){if(!self::$started&&session_status()===PHP_SESSION_NONE){/Setsessionparametersbeforestartini_set('session.cookie_httponly',1);ini_set('session.cookie_secure',0);/Setto1ifusingHTTPSini_set('session.use_strict_mode',1);ini_set('session.cookie_samesite','Lax');ini_set('session.gc_maxlifetime',3600);/1hoursession_start();self::$started=true;/RegeneratesessionIDforsecurityif(!isset($_SESSION['regenerated'])){session_regenerate_id(true);$_SESSION['regenerated']=true;}}}/***Checkifsessionisactive*/publicstaticfunctionisActive(){returnself::$started||session_status()===PHP_SESSION_ACTIVE;}/***Destroysession*/publicstaticfunctiondestroy(){if(self::isActive()){session_unset();session_destroy();self::$started=false;}}/***Clearallsessiondata*/publicstaticfunctionclear(){if(self::isActive()){$_SESSION=array();}}}?>
