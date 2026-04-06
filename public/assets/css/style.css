@@ -1,0 +1,101 @@
+/* SPRIN Application - Main Style CSS */
+/* This file complements responsive.css */
+
+/* Additional custom styles */
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-primary {
+    background-color: var(--primary-color, #1a237e);
+    border-color: var(--primary-color, #1a237e);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color, #3949ab);
+    border-color: var(--secondary-color, #3949ab);
+}
+
+.sidebar {
+    background-color: var(--primary-color, #1a237e);
+    min-height: 100vh;
+}
+
+.sidebar .nav-link {
+    color: rgba(255,255,255,0.8);
+    transition: color 0.3s;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    color: white;
+    background-color: rgba(255,255,255,0.1);
+}
+
+.main-content {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(26, 35, 126, 0.05);
+}
+
+.modal-header {
+    background-color: var(--primary-color, #1a237e);
+    color: white;
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+.form-control:focus {
+    border-color: var(--primary-color, #1a237e);
+    box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.25);
+}
+
+.alert {
+    border: none;
+    border-radius: 8px;
+}
+
+.badge {
+    font-size: 0.75em;
+}
+
+/* Loading spinner */
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Print styles */
+@media print {
+    .sidebar,
+    .btn,
+    .modal {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}

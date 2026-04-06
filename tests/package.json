@@ -1,0 +1,66 @@
+{
+  "name": "sprin-e2e-tests",
+  "version": "1.0.0",
+  "description": "End-to-end tests for SPRIN application",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:e2e": "jest --config jest.e2e.config.js",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:unsur": "jest --testNamePattern=Unsur",
+    "test:bagian": "jest --testNamePattern=Bagian",
+    "test:jabatan": "jest --testNamePattern=Jabatan",
+    "test:personil": "jest --testNamePattern=Personil",
+    "test:auth": "jest --testNamePattern=Auth",
+    "test:api": "jest --testNamePattern=API",
+    "test:performance": "jest --testNamePattern=Performance",
+    "test:mobile": "jest --testNamePattern=Mobile",
+    "test:all": "npm run test:e2e && npm run test:api && npm run test:performance",
+    "report": "jest --reporters=default --reporters=jest-html-reporters",
+    "lint": "eslint tests/",
+    "puppeteer-install": "node node_modules/puppeteer/install.js"
+  },
+  "keywords": [
+    "e2e",
+    "testing",
+    "puppeteer",
+    "selenium",
+    "automation",
+    "sprin",
+    "polres"
+  ],
+  "author": "SPRIN Development Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.22.0",
+    "@babel/preset-env": "^7.22.0",
+    "babel-jest": "^29.5.0",
+    "eslint": "^8.42.0",
+    "jest": "^29.5.0",
+    "jest-html-reporters": "^3.1.4",
+    "puppeteer": "^20.7.0",
+    "expect-puppeteer": "^6.1.0",
+    "jest-environment-node": "^29.5.0"
+  },
+  "dependencies": {
+    "axios": "^1.4.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": ["<rootDir>/setup.js"],
+    "testMatch": [
+      "<rootDir>/**/*.test.js"
+    ],
+    "collectCoverageFrom": [
+      "../pages/**/*.php",
+      "../api/**/*.php",
+      "../public/assets/js/**/*.js"
+    ],
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ]
+  }
+}
