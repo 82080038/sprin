@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPRIN Personil Data Viewer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .container-fluid {
+            padding: 20px;
+        }
+        
+        .header-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .table-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+        
+        .table-responsive {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .data-table {
+            font-size: 14px;
+        }
+        
+        .data-table thead {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            z-index: 10;
+        }
+        
+        .data-table th {
+            border: none;
+            padding: 12px 8px;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .data-table td {
+            padding: 10px 8px;
+            vertical-align: middle;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: #f8f9fa;
+            transition: background-color 0.3s ease;
+        }
+        
+        .badge-unit {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge-jabatan {
+            background: linear-gradient(135deg, #007bff 0%, #6f42c1 100%);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge-pangkat {
+            background: linear-gradient(135deg, #fd7e14 0%, #dc3545 100%);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge-nrp {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            border-radius: 25px;
+            padding-left: 45px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+        }
+        
+        .filter-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-select {
+            border-radius: 20px;
+            border: 2px solid #e0e0e0;
+            padding: 8px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .error-message {
+            display: none;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .export-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(135deg, #007bff 0%, #6f42c1 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+        
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .pagination .page-link {
+            border-radius: 10px;
+            margin: 0 2px;
+            border: none;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .pagination .page-item.active .page-link {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .personil-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .status-badge {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+        
+        .status-active {
+            background-color: #28a745;
+        }
+        
+        .status-inactive {
+            background-color: #dc3545;
+        }
+        
+        @media (max-width: 768px) {
+            .data-table {
+                font-size: 12px;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 8px 4px;
+            }
+            
+            .badge-unit,
+            .badge-jabatan,
+            .badge-pangkat,
+            .badge-nrp {
+                font-size: 9px;
+                padding: 2px 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="header-card">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-3">
+                        <i class="fas fa-users me-3"></i>
+                        SPRIN Personil Data Viewer
+                    </h1>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-database me-2"></i>
+                        Visualisasi Data Personil Complete JSON
+                    </p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn export-btn me-2" onclick="exportToCSV()">
+                        <i class="fas fa-download me-2"></i>Export CSV
+                    </button>
+                    <button class="btn refresh-btn" onclick="loadData()">
+                        <i class="fas fa-sync-alt me-2"></i>Refresh
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row" id="statsContainer">
+            <!-- Stats will be populated here -->
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <span id="errorText">Error loading data</span>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Memuat data personil...</p>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="table-container">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="form-control search-input" id="searchInput" 
+                       placeholder="Cari berdasarkan nama, NRP, unit, atau jabatan...">
+            </div>
+            
+            <div class="filter-container">
+                <select class="form-select filter-select" id="unitFilter">
+                    <option value="">Semua Unit</option>
+                </select>
+                
+                <select class="form-select filter-select" id="jabatanFilter">
+                    <option value="">Semua Jabatan</option>
+                </select>
+                
+                <select class="form-select filter-select" id="pangkatFilter">
+                    <option value="">Semua Pangkat</option>
+                </select>
+                
+                <select class="form-select filter-select" id="statusFilter">
+                    <option value="">Semua Status</option>
+                    <option value="active">Aktif</option>
+                    <option value="inactive">Tidak Aktif</option>
+                </select>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-responsive">
+                <table class="table table-hover data-table" id="personilTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>NRP</th>
+                            <th>Pangkat</th>
+                            <th>Unit</th>
+                            <th>Jabatan</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination" id="pagination">
+                        <!-- Pagination will be populated here -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let personilData = [];
+        let filteredData = [];
+        let currentPage = 1;
+        const itemsPerPage = 25;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            
+            // Event listeners
+            document.getElementById('searchInput').addEventListener('input', filterData);
+            document.getElementById('unitFilter').addEventListener('change', filterData);
+            document.getElementById('jabatanFilter').addEventListener('change', filterData);
+            document.getElementById('pangkatFilter').addEventListener('change', filterData);
+            document.getElementById('statusFilter').addEventListener('change', filterData);
+        });
+
+        // Load data from JSON file
+        async function loadData() {
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            loadingSpinner.style.display = 'block';
+            errorMessage.style.display = 'none';
+            
+            try {
+                const response = await fetch('file/personil_complete_data.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                personilData = data.personil_data || [];
+                filteredData = [...personilData];
+                
+                updateStatistics(data.metadata);
+                populateFilters();
+                renderTable();
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('errorText').textContent = `Gagal memuat data: ${error.message}`;
+                errorMessage.style.display = 'block';
+            } finally {
+                loadingSpinner.style.display = 'none';
+            }
+        }
+
+        // Update statistics
+        function updateStatistics(metadata) {
+            const statsContainer = document.getElementById('statsContainer');
+            
+            const units = [...new Set(personilData.map(p => p.unit))].length;
+            const jabatans = [...new Set(personilData.map(p => p.jabatan))].length;
+            const pangkats = [...new Set(personilData.map(p => p.pangkat))].length;
+            const activeCount = personilData.filter(p => p.is_active).length;
+            
+            statsContainer.innerHTML = `
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <h5><i class="fas fa-users me-2"></i>Total Personil</h5>
+                        <h2>${personilData.length}</h2>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <h5><i class="fas fa-building me-2"></i>Total Unit</h5>
+                        <h2>${units}</h2>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <h5><i class="fas fa-briefcase me-2"></i>Total Jabatan</h5>
+                        <h2>${jabatans}</h2>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <h5><i class="fas fa-star me-2"></i>Aktif</h5>
+                        <h2>${activeCount}</h2>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Populate filter options
+        function populateFilters() {
+            const units = [...new Set(personilData.map(p => p.unit))].sort();
+            const jabatans = [...new Set(personilData.map(p => p.jabatan))].sort();
+            const pangkats = [...new Set(personilData.map(p => p.pangkat))].sort();
+            
+            const unitFilter = document.getElementById('unitFilter');
+            const jabatanFilter = document.getElementById('jabatanFilter');
+            const pangkatFilter = document.getElementById('pangkatFilter');
+            
+            unitFilter.innerHTML = '<option value="">Semua Unit</option>';
+            units.forEach(unit => {
+                unitFilter.innerHTML += `<option value="${unit}">${unit}</option>`;
+            });
+            
+            jabatanFilter.innerHTML = '<option value="">Semua Jabatan</option>';
+            jabatans.forEach(jabatan => {
+                jabatanFilter.innerHTML += `<option value="${jabatan}">${jabatan}</option>`;
+            });
+            
+            pangkatFilter.innerHTML = '<option value="">Semua Pangkat</option>';
+            pangkats.forEach(pangkat => {
+                pangkatFilter.innerHTML += `<option value="${pangkat}">${pangkat}</option>`;
+            });
+        }
+
+        // Filter data
+        function filterData() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const unitFilter = document.getElementById('unitFilter').value;
+            const jabatanFilter = document.getElementById('jabatanFilter').value;
+            const pangkatFilter = document.getElementById('pangkatFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            
+            filteredData = personilData.filter(personil => {
+                const matchesSearch = !searchTerm || 
+                    personil.nama.toLowerCase().includes(searchTerm) ||
+                    personil.nrp.toString().includes(searchTerm) ||
+                    personil.unit.toLowerCase().includes(searchTerm) ||
+                    personil.jabatan.toLowerCase().includes(searchTerm);
+                
+                const matchesUnit = !unitFilter || personil.unit === unitFilter;
+                const matchesJabatan = !jabatanFilter || personil.jabatan === jabatanFilter;
+                const matchesPangkat = !pangkatFilter || personil.pangkat === pangkatFilter;
+                const matchesStatus = !statusFilter || 
+                    (statusFilter === 'active' && personil.is_active) ||
+                    (statusFilter === 'inactive' && !personil.is_active);
+                
+                return matchesSearch && matchesUnit && matchesJabatan && matchesPangkat && matchesStatus;
+            });
+            
+            currentPage = 1;
+            renderTable();
+        }
+
+        // Render table
+        function renderTable() {
+            const tableBody = document.getElementById('tableBody');
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageData = filteredData.slice(startIndex, endIndex);
+            
+            tableBody.innerHTML = '';
+            
+            pageData.forEach((personil, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${startIndex + index + 1}</td>
+                    <td class="personil-name">${personil.nama}</td>
+                    <td><span class="badge badge-nrp">${personil.nrp}</span></td>
+                    <td><span class="badge badge-pangkat">${personil.pangkat}</span></td>
+                    <td><span class="badge badge-unit">${personil.unit}</span></td>
+                    <td><span class="badge badge-jabatan">${personil.jabatan}</span></td>
+                    <td>
+                        <span class="status-badge ${personil.is_active ? 'status-active' : 'status-inactive'}"></span>
+                        ${personil.is_active ? 'Aktif' : 'Tidak Aktif'}
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            renderPagination();
+        }
+
+        // Render pagination
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            pagination.innerHTML = '';
+            
+            // Previous button
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Previous</a>`;
+            pagination.appendChild(prevLi);
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    const li = document.createElement('li');
+                    li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                    li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+                    pagination.appendChild(li);
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    const li = document.createElement('li');
+                    li.className = 'page-item disabled';
+                    li.innerHTML = `<a class="page-link" href="#">...</a>`;
+                    pagination.appendChild(li);
+                }
+            }
+            
+            // Next button
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Next</a>`;
+            pagination.appendChild(nextLi);
+        }
+
+        // Change page
+        function changePage(page) {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                renderTable();
+            }
+            return false;
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            const headers = ['No', 'Nama', 'NRP', 'Pangkat', 'Unit', 'Jabatan', 'Status'];
+            const rows = filteredData.map((personil, index) => [
+                index + 1,
+                personil.nama,
+                personil.nrp,
+                personil.pangkat,
+                personil.unit,
+                personil.jabatan,
+                personil.is_active ? 'Aktif' : 'Tidak Aktif'
+            ]);
+            
+            let csv = headers.join(',') + '\n';
+            rows.forEach(row => {
+                csv += row.map(cell => `"${cell}"`).join(',') + '\n';
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `personil_data_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
