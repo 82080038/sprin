@@ -1,0 +1,18 @@
+{
+  "database": {
+    "mysql_password": "root",
+    "mysql_user": "root",
+    "mysql_socket": "/opt/lampp/var/mysql/mysql.sock",
+    "database_name": "bagops"
+  },
+  "system": {
+    "sudo_password": "8208",
+    "xampp_path": "/opt/lampp"
+  },
+  "project": {
+    "name": "SPRIN",
+    "description": "Sistem Manajemen Personil & Schedule Management POLRES Samosir",
+    "version": "1.2.0-dev",
+    "last_updated": "2026-04-08"
+  }
+}
