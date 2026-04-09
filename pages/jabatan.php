@@ -95,107 +95,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
-    if ($action === 'create_jabatan') {
-        $namaJabatan = $_POST['nama_jabatan'] ?? '';
-        $idUnsur = $_POST['id_unsur'] ?? '';
-        $kodeJabatan = $_POST['kode_jabatan'] ?? '';
-        
-        if (empty($namaJabatan) || empty($idUnsur)) {
-            echo json_encode(['success' => false, 'message' => 'Nama jabatan dan unsur harus diisi']);
-            exit;
-        }
-        
-        // Generate kode jabatan if not provided
-        if (empty($kodeJabatan)) {
-            $kodeJabatan = strtoupper(preg_replace('/[^a-zA-Z0-9]/', '', $namaJabatan));
-        }
-        
-        try {
-            $stmt = $pdo->prepare("INSERT INTO jabatan (kode_jabatan, nama_jabatan, id_unsur) VALUES (?, ?, ?)");
-            $stmt->execute([$kodeJabatan, $namaJabatan, $idUnsur]);
-            
-            echo json_encode(['success' => true, 'message' => 'Jabatan berhasil ditambahkan']);
-        } catch (PDOException $e) {
-            echo json_encode(['success' => false, 'message' => 'Gagal menambahkan jabatan: ' . $e->getMessage()]);
-        }
-        exit;
-    }
-    
-    if ($action === 'update_order') {
-        $orders = $_POST['orders'] ?? [];
-        
-        // Decode JSON if it's a string
-        if (is_string($orders)) {
-            $orders = json_decode($orders, true);
-        }
-        
-        if (!is_array($orders)) {
-            echo json_encode(['success' => false, 'message' => 'Invalid orders data']);
-            exit;
-        }
-        
-        try {
-            $pdo->beginTransaction();
-            
-            foreach ($orders as $order) {
-                $stmt = $pdo->prepare("UPDATE jabatan SET urutan = ?, id_unsur = ?, id_bagian = ? WHERE id = ?");
-                $stmt->execute([$order['urutan'], $order['id_unsur'], $order['id_bagian'], $order['id']]);
-            }
-            
-            $pdo->commit();
-            
-            header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'message' => 'Urutan jabatan berhasil diperbarui!']);
-            exit;
-        } catch (Exception $e) {
-            $pdo->rollback();
-            
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'Gagal memperbarui urutan: ' . $e->getMessage()]);
-            exit;
-        }
-    }
-    
-    if ($action === 'update_jabatan') {
-        $jabatanId = $_POST['id'] ?? '';
-        $namaJabatan = $_POST['nama_jabatan'] ?? '';
-        $idUnsur = $_POST['id_unsur'] ?? '';
-        $kodeJabatan = $_POST['kode_jabatan'] ?? '';
-        
-        if (empty($jabatanId) || empty($namaJabatan) || empty($idUnsur)) {
-            echo json_encode(['success' => false, 'message' => 'Semua field harus diisi']);
-            exit;
-        }
-        
-        try {
-            $stmt = $pdo->prepare("UPDATE jabatan SET nama_jabatan = ?, id_unsur = ?, kode_jabatan = ? WHERE id = ?");
-            $stmt->execute([$namaJabatan, $idUnsur, $kodeJabatan, $jabatanId]);
-            
-            echo json_encode(['success' => true, 'message' => 'Jabatan berhasil diperbarui']);
-        } catch (PDOException $e) {
-            echo json_encode(['success' => false, 'message' => 'Gagal memperbarui jabatan: ' . $e->getMessage()]);
-        }
-        exit;
-    }
-    
-    if ($action === 'delete_jabatan') {
-        $jabatanId = $_POST['id'] ?? '';
-        
-        if (empty($jabatanId)) {
-            echo json_encode(['success' => false, 'message' => 'ID jabatan harus diisi']);
-            exit;
-        }
-        
-        try {
-            $stmt = $pdo->prepare("DELETE FROM jabatan WHERE id = ?");
-            $stmt->execute([$jabatanId]);
-            
-            echo json_encode(['success' => true, 'message' => 'Jabatan berhasil dihapus']);
-        } catch (PDOException $e) {
-            echo json_encode(['success' => false, 'message' => 'Gagal menghapus jabatan: ' . $e->getMessage()]);
-        }
-        exit;
-    }
+    // All other CRUD operations are now handled by the API
+    // Redirect to API for all other actions
+    exit;
 }
 
 // Get data for display
@@ -225,7 +127,6 @@ $unsurStmt = $pdo->query("SELECT * FROM unsur ORDER BY urutan ASC");
 $unsurData = $unsurStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!-- Debug: Ensure we're not in a frame -->
 <script>
 if (window.top !== window.self) {
     window.top.location = window.self.location;
@@ -701,8 +602,6 @@ function handleJabatanMove(evt) {
     
     // Update counts
     updateJabatanCounts();
-    
-    console.log('Jabatan moved:', change);
 }
 
 // Show save/cancel buttons
@@ -737,10 +636,12 @@ function saveOrder() {
         });
     });
     
+    const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
     fetch('../api/jabatan_api.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRF-TOKEN': csrfToken
         },
         body: new URLSearchParams({
             action: 'update_order',
@@ -781,11 +682,6 @@ function restoreOriginalOrder() {
 }
 
 function updateJabatanCounts() {
-    console.log('=== DEBUG ===');
-    console.log('unsurData:', unsurData);
-    console.log('bagianData:', bagianData);
-    console.log('jabatanData:', jabatanData);
-    
     // Group jabatan by unsur, then by bagian
     const jabatanByUnsur = {};
     
@@ -808,8 +704,6 @@ function updateJabatanCounts() {
             }
         });
     });
-    
-    console.log('jabatanByUnsur after initialization:', jabatanByUnsur);
     
     // Group jabatan by unsur and bagian
     jabatanData.forEach(jabatan => {
@@ -847,15 +741,11 @@ function updateJabatanCounts() {
         jabatanByUnsur[unsurId].bagians[bagianId].jabatans.push(jabatan);
     });
     
-    console.log('jabatanByUnsur after jabatan grouping:', jabatanByUnsur);
-    
     // Count total bagians
     let totalBagians = 0;
     Object.values(jabatanByUnsur).forEach(unsur => {
         totalBagians += Object.keys(unsur.bagians).length;
     });
-    console.log('Total bagians to display:', totalBagians);
-    
     // Sort unsur by order, then bagian by order, then jabatan by order
     const sortedUnsurIds = Object.keys(jabatanByUnsur).sort((a, b) => {
         return jabatanByUnsur[a].urutan - jabatanByUnsur[b].urutan;
@@ -947,7 +837,6 @@ function updateJabatanCounts() {
     });
     
     document.getElementById('jabatanContainer').innerHTML = html;
-    console.log('=== END DEBUG ===');
 }
 
 function filterByUnsur() {
@@ -1019,10 +908,12 @@ function openAddModal() {
 }
 
 function editJabatan(jabatanId) {
+    const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
     fetch('../api/jabatan_api.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRF-TOKEN': csrfToken
         },
         body: new URLSearchParams({
             action: 'get_jabatan_detail',
@@ -1053,10 +944,12 @@ function editJabatan(jabatanId) {
 
 function deleteJabatan(jabatanId) {
     if (confirm('Apakah Anda yakin ingin menghapus jabatan ini?')) {
+        const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
         fetch('../api/jabatan_api.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRF-TOKEN': csrfToken
             },
             body: new URLSearchParams({
                 action: 'delete_jabatan',
@@ -1205,9 +1098,12 @@ document.getElementById('jabatanForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     const formData = new FormData(this);
-    
+    const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
+    formData.append('csrf_token', csrfToken);
+
     fetch('../api/jabatan_api.php', {
         method: 'POST',
+        headers: { 'X-CSRF-TOKEN': csrfToken },
         body: formData
     })
     .then(response => response.json())

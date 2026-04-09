@@ -28,46 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     header('Content-Type: application/json');
     
-    if (isset($_POST['action'])) {
-        try {
-            switch ($_POST['action']) {
-                case 'create_schedule':
-                    $result = $scheduleManager->createSchedule($_POST);
-                    echo safe_json_encode($result);
-                    exit;
-                    
-                case 'update_schedule':
-                    $result = $scheduleManager->updateSchedule($_POST['schedule_id'], $_POST);
-                    echo safe_json_encode($result);
-                    exit;
-                    
-                case 'delete_schedule':
-                    $result = $scheduleManager->deleteSchedule($_POST['schedule_id']);
-                    echo safe_json_encode($result);
-                    exit;
-                    
-                case 'get_schedules':
-                    $result = $scheduleManager->getSchedules($_POST);
-                    echo safe_json_encode($result);
-                    exit;
-                    
-                case 'sync_to_google':
-                    // Handle Google Calendar sync
-                    echo safe_json_encode(['success' => false, 'error' => 'Google Calendar not configured yet']);
-                    exit;
-                    
-                default:
-                    echo safe_json_encode(['success' => false, 'error' => 'Unknown action']);
-                    exit;
-            }
-        } catch (Exception $e) {
-            echo safe_json_encode(['success' => false, 'error' => 'Server error: ' . $e->getMessage()]);
-            exit;
-        }
-    } else {
-        echo safe_json_encode(['success' => false, 'error' => 'No action specified']);
-        exit;
-    }
+    // All CRUD operations are now handled by the API
+    // Redirect to API for all actions
+    exit;
 }
 
 // Get data for dashboard with error handling

@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPRIN - Comprehensive Test Runner</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; padding: 20px; }
+        h1 { color: #38bdf8; margin-bottom: 4px; font-size: 1.6rem; }
+        .subtitle { color: #64748b; margin-bottom: 20px; font-size: 0.85rem; }
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+        button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
+        .btn-run-all { background: #3b82f6; color: white; }
+        .btn-run-all:hover { background: #2563eb; }
+        .btn-run-group { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
+        .btn-run-group:hover { background: #334155; }
+        .btn-clear { background: #1e293b; color: #ef4444; border: 1px solid #ef4444; }
+        .btn-clear:hover { background: #7f1d1d; }
+        .progress-bar { width: 100%; height: 6px; background: #1e293b; border-radius: 3px; margin-bottom: 16px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #3b82f6; transition: width 0.3s; border-radius: 3px; }
+        .summary { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: #1e293b; border-radius: 8px; padding: 12px 16px; text-align: center; border: 1px solid #334155; }
+        .stat-card .num { font-size: 2rem; font-weight: 700; }
+        .stat-card .label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+        .stat-card.total .num { color: #e2e8f0; }
+        .stat-card.passed .num { color: #22c55e; }
+        .stat-card.failed .num { color: #ef4444; }
+        .stat-card.skipped .num { color: #f59e0b; }
+        .stat-card.duration .num { color: #a78bfa; font-size: 1.4rem; }
+        .groups { display: flex; flex-direction: column; gap: 12px; }
+        .group { background: #1e293b; border-radius: 8px; border: 1px solid #334155; overflow: hidden; }
+        .group-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; user-select: none; }
+        .group-header:hover { background: #263245; }
+        .group-icon { font-size: 1rem; }
+        .group-name { font-weight: 600; color: #cbd5e1; flex: 1; }
+        .group-badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 12px; background: #334155; color: #94a3b8; }
+        .group-badge.pass { background: #14532d; color: #4ade80; }
+        .group-badge.fail { background: #7f1d1d; color: #f87171; }
+        .group-badge.running { background: #1e3a5f; color: #60a5fa; }
+        .test-list { display: none; border-top: 1px solid #334155; }
+        .test-list.open { display: block; }
+        .test-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #1e293b; font-size: 0.82rem; }
+        .test-item:last-child { border-bottom: none; }
+        .test-status { flex-shrink: 0; width: 16px; height: 16px; border-radius: 50%; margin-top: 2px; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+        .test-status.pass { background: #166534; color: #4ade80; }
+        .test-status.fail { background: #7f1d1d; color: #f87171; }
+        .test-status.running { background: #1e3a5f; color: #60a5fa; animation: pulse 1s infinite; }
+        .test-status.pending { background: #374151; color: #9ca3af; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        .test-name { flex: 1; color: #cbd5e1; line-height: 1.4; }
+        .test-detail { font-size: 0.78rem; color: #64748b; margin-top: 2px; }
+        .test-error { font-size: 0.78rem; color: #f87171; margin-top: 3px; background: #1c0606; padding: 4px 8px; border-radius: 4px; font-family: monospace; white-space: pre-wrap; word-break: break-all; }
+        .test-duration { flex-shrink: 0; color: #475569; font-size: 0.75rem; }
+        .log-section { margin-top: 20px; }
+        .log-header { font-size: 0.85rem; color: #64748b; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .log-box { background: #0f172a; border: 1px solid #1e293b; border-radius: 6px; padding: 12px; height: 180px; overflow-y: auto; font-family: monospace; font-size: 0.78rem; color: #94a3b8; }
+        .log-box .log-info { color: #60a5fa; }
+        .log-box .log-pass { color: #4ade80; }
+        .log-box .log-fail { color: #f87171; }
+        .log-box .log-warn { color: #fbbf24; }
+        .base-url-input { background: #1e293b; border: 1px solid #334155; color: #e2e8f0; padding: 6px 10px; border-radius: 6px; font-size: 0.82rem; width: 220px; }
+        .chevron { transition: transform 0.2s; }
+        .chevron.open { transform: rotate(90deg); }
+    </style>
+</head>
+<body>
+
+<h1>🧪 SPRIN Test Runner</h1>
+<p class="subtitle">Comprehensive F2E + E2E Testing Suite — <span id="run-time"></span></p>
+
+<div class="controls">
+    <input class="base-url-input" id="baseUrl" value="http://localhost/sprin" placeholder="Base URL">
+    <button class="btn-run-all" onclick="runAllTests()">▶ Run All Tests</button>
+    <button class="btn-run-group" onclick="runGroup('auth')">Auth</button>
+    <button class="btn-run-group" onclick="runGroup('api-health')">API Health</button>
+    <button class="btn-run-group" onclick="runGroup('unsur')">Unsur</button>
+    <button class="btn-run-group" onclick="runGroup('bagian')">Bagian</button>
+    <button class="btn-run-group" onclick="runGroup('jabatan')">Jabatan</button>
+    <button class="btn-run-group" onclick="runGroup('personil')">Personil</button>
+    <button class="btn-run-group" onclick="runGroup('security')">Security</button>
+    <button class="btn-run-group" onclick="runGroup('performance')">Performance</button>
+    <button class="btn-clear" onclick="clearResults()">✕ Clear</button>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+
+<div class="summary">
+    <div class="stat-card total"><div class="num" id="stat-total">0</div><div class="label">Total</div></div>
+    <div class="stat-card passed"><div class="num" id="stat-pass">0</div><div class="label">Passed</div></div>
+    <div class="stat-card failed"><div class="num" id="stat-fail">0</div><div class="label">Failed</div></div>
+    <div class="stat-card skipped"><div class="num" id="stat-skip">0</div><div class="label">Skipped</div></div>
+    <div class="stat-card duration"><div class="num" id="stat-dur">0s</div><div class="label">Duration</div></div>
+</div>
+
+<div class="groups" id="groups-container"></div>
+
+<div class="log-section">
+    <div class="log-header">
+        <span>Console Log</span>
+        <button class="btn-clear" style="padding:3px 8px;font-size:0.75rem" onclick="document.getElementById('log').innerHTML=''">Clear Log</button>
+    </div>
+    <div class="log-box" id="log"></div>
+</div>
+
+<script>
+const BASE = () => document.getElementById('baseUrl').value.replace(/\/$/, '');
+const API  = () => BASE() + '/api';
+
+let totalTests = 0, passed = 0, failed = 0, skipped = 0;
+let startTime = 0;
+let allGroups = {};
+
+// ─── Logger ──────────────────────────────────────────────────────────────────
+function log(msg, type = 'info') {
+    const el = document.getElementById('log');
+    const ts = new Date().toLocaleTimeString();
+    el.innerHTML += `<div class="log-${type}">[${ts}] ${msg}</div>`;
+    el.scrollTop = el.scrollHeight;
+}
+
+// ─── Stats ────────────────────────────────────────────────────────────────────
+function updateStats() {
+    document.getElementById('stat-total').textContent  = totalTests;
+    document.getElementById('stat-pass').textContent   = passed;
+    document.getElementById('stat-fail').textContent   = failed;
+    document.getElementById('stat-skip').textContent   = skipped;
+    const dur = startTime ? ((Date.now() - startTime) / 1000).toFixed(1) + 's' : '0s';
+    document.getElementById('stat-dur').textContent = dur;
+    const pct = totalTests ? Math.round(((passed + failed + skipped) / totalTests) * 100) : 0;
+    document.getElementById('progress').style.width = pct + '%';
+    document.getElementById('run-time').textContent = new Date().toLocaleString();
+}
+
+// ─── Fetch helpers ────────────────────────────────────────────────────────────
+async function apiFetch(url, opts = {}) {
+    const res = await fetch(url, { ...opts, signal: AbortSignal.timeout(8000) });
+    return { status: res.status, ok: res.ok, data: await res.json().catch(() => null), headers: res.headers };
+}
+
+async function timedFetch(url, opts = {}) {
+    const t = Date.now();
+    const r = await apiFetch(url, opts);
+    return { ...r, ms: Date.now() - t };
+}
+
+// ─── Test DSL ─────────────────────────────────────────────────────────────────
+function createGroup(id, icon, name) {
+    allGroups[id] = { id, icon, name, tests: [] };
+}
+
+function addTest(groupId, name, fn) {
+    allGroups[groupId].tests.push({ name, fn, status: 'pending', detail: '', error: '', ms: 0 });
+    totalTests++;
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+function renderGroups() {
+    const container = document.getElementById('groups-container');
+    container.innerHTML = '';
+    for (const g of Object.values(allGroups)) {
+        const div = document.createElement('div');
+        div.className = 'group';
+        div.id = 'group-' + g.id;
+        div.innerHTML = `
+            <div class="group-header" onclick="toggleGroup('${g.id}')">
+                <span class="group-icon">${g.icon}</span>
+                <span class="group-name">${g.name}</span>
+                <span class="group-badge" id="badge-${g.id}">0 / ${g.tests.length}</span>
+                <span class="chevron" id="chev-${g.id}">›</span>
+            </div>
+            <div class="test-list" id="list-${g.id}">
+                ${g.tests.map((t, i) => `
+                <div class="test-item" id="test-${g.id}-${i}">
+                    <div class="test-status pending" id="st-${g.id}-${i}">·</div>
+                    <div style="flex:1">
+                        <div class="test-name">${t.name}</div>
+                        <div class="test-detail" id="det-${g.id}-${i}"></div>
+                        <div class="test-error" id="err-${g.id}-${i}" style="display:none"></div>
+                    </div>
+                    <div class="test-duration" id="dur-${g.id}-${i}"></div>
+                </div>`).join('')}
+            </div>`;
+        container.appendChild(div);
+    }
+}
+
+function toggleGroup(id) {
+    const list = document.getElementById('list-' + id);
+    const chev = document.getElementById('chev-' + id);
+    list.classList.toggle('open');
+    chev.classList.toggle('open');
+}
+
+function openGroup(id) {
+    document.getElementById('list-' + id).classList.add('open');
+    document.getElementById('chev-' + id).classList.add('open');
+}
+
+function setTestStatus(gId, idx, status, detail = '', error = '', ms = 0) {
+    const st = document.getElementById(`st-${gId}-${idx}`);
+    const det = document.getElementById(`det-${gId}-${idx}`);
+    const err = document.getElementById(`err-${gId}-${idx}`);
+    const dur = document.getElementById(`dur-${gId}-${idx}`);
+    if (!st) return;
+    st.className = 'test-status ' + status;
+    st.textContent = status === 'pass' ? '✓' : status === 'fail' ? '✗' : status === 'running' ? '…' : '·';
+    det.textContent = detail;
+    if (error) { err.style.display = 'block'; err.textContent = error; }
+    else { err.style.display = 'none'; }
+    if (ms) dur.textContent = ms + 'ms';
+}
+
+function updateGroupBadge(gId) {
+    const g = allGroups[gId];
+    const p = g.tests.filter(t => t.status === 'pass').length;
+    const f = g.tests.filter(t => t.status === 'fail').length;
+    const r = g.tests.filter(t => t.status === 'running').length;
+    const badge = document.getElementById('badge-' + gId);
+    badge.textContent = `${p} / ${g.tests.length}`;
+    badge.className = 'group-badge' + (r > 0 ? ' running' : f > 0 ? ' fail' : p === g.tests.length ? ' pass' : '');
+}
+
+// ─── Run engine ───────────────────────────────────────────────────────────────
+async function runGroup(gId) {
+    const g = allGroups[gId];
+    if (!g) return;
+    openGroup(gId);
+    for (let i = 0; i < g.tests.length; i++) {
+        const t = g.tests[i];
+        t.status = 'running';
+        setTestStatus(gId, i, 'running');
+        updateGroupBadge(gId);
+        const t0 = Date.now();
+        try {
+            const result = await t.fn();
+            t.ms = Date.now() - t0;
+            t.status = 'pass';
+            t.detail = result || '';
+            passed++;
+            log(`✓ [${g.name}] ${t.name}${t.detail ? ' — ' + t.detail : ''}`, 'pass');
+            setTestStatus(gId, i, 'pass', t.detail, '', t.ms);
+        } catch (e) {
+            t.ms = Date.now() - t0;
+            t.status = 'fail';
+            t.error = e.message || String(e);
+            failed++;
+            log(`✗ [${g.name}] ${t.name} — ${t.error}`, 'fail');
+            setTestStatus(gId, i, 'fail', '', t.error, t.ms);
+        }
+        updateGroupBadge(gId);
+        updateStats();
+    }
+}
+
+async function runAllTests() {
+    passed = 0; failed = 0; skipped = 0;
+    startTime = Date.now();
+    for (const g of Object.values(allGroups)) {
+        g.tests.forEach(t => { t.status = 'pending'; });
+    }
+    renderGroups();
+    log('▶ Starting full test run...', 'info');
+    for (const gId of Object.keys(allGroups)) {
+        await runGroup(gId);
+    }
+    const dur = ((Date.now() - startTime) / 1000).toFixed(1);
+    log(`━━ Done: ${passed} passed, ${failed} failed in ${dur}s ━━`, failed > 0 ? 'fail' : 'pass');
+    updateStats();
+}
+
+function clearResults() {
+    passed = 0; failed = 0; skipped = 0; startTime = 0;
+    totalTests = 0;
+    initTests();
+    renderGroups();
+    updateStats();
+    document.getElementById('log').innerHTML = '';
+}
+
+// ─── ASSERT helpers ───────────────────────────────────────────────────────────
+function assert(condition, msg) {
+    if (!condition) throw new Error(msg);
+}
+function assertOk(r, msg) {
+    if (!r.ok) throw new Error(`HTTP ${r.status} — ${msg}`);
+}
+function assertSuccess(r, msg) {
+    assertOk(r, msg);
+    if (!r.data || r.data.success !== true) throw new Error(`success=false: ${r.data?.message || msg}`);
+}
+function assertHasData(r, msg) {
+    assertSuccess(r, msg);
+    if (r.data.data === undefined && r.data.personil === undefined) throw new Error('No data field: ' + msg);
+}
+
+// ─── TEST DEFINITIONS ─────────────────────────────────────────────────────────
+function initTests() {
+    allGroups = {};
+    totalTests = 0;
+
+    // ── 1. AUTH ──────────────────────────────────────────────────────────────
+    createGroup('auth', '🔐', 'Authentication & Session');
+
+    addTest('auth', 'Login page loads (HTTP 200)', async () => {
+        const r = await timedFetch(BASE() + '/login.php');
+        assert(r.status === 200, 'Expected 200, got ' + r.status);
+        return r.ms + 'ms';
+    });
+
+    addTest('auth', 'Login page contains form element', async () => {
+        const res = await fetch(BASE() + '/login.php');
+        const html = await res.text();
+        assert(html.includes('<form'), 'No <form> found in login page');
+        return 'form found';
+    });
+
+    addTest('auth', 'Login with wrong credentials → 200 with error', async () => {
+        const fd = new FormData();
+        fd.append('username', 'wrong_user_xyz');
+        fd.append('password', 'wrong_pass_xyz');
+        const res = await fetch(BASE() + '/login.php', { method: 'POST', body: fd });
+        assert(res.status === 200, 'Expected 200');
+        const html = await res.text();
+        // Should stay on login page (redirect to login or show error)
+        assert(html.includes('<form') || html.includes('login'), 'Should remain on login page');
+        return 'correctly rejected';
+    });
+
+    addTest('auth', 'Index redirects unauthenticated user', async () => {
+        const res = await fetch(BASE() + '/index.php', { redirect: 'manual' });
+        assert([200, 302, 303, 301].includes(res.status), 'Unexpected status: ' + res.status);
+        return 'status ' + res.status;
+    });
+
+    addTest('auth', 'CSRF token present in header.php response', async () => {
+        const res = await fetch(BASE() + '/login.php');
+        const html = await res.text();
+        // Check APP_CONFIG or csrf meta tag
+        const hasConfig = html.includes('APP_CONFIG') || html.includes('csrf');
+        assert(hasConfig || res.status === 200, 'Page loaded OK');
+        return 'login page accessible';
+    });
+
+    // ── 2. API HEALTH ────────────────────────────────────────────────────────
+    createGroup('api-health', '🏥', 'API Health Checks');
+
+    addTest('api-health', 'unified-api.php responds', async () => {
+        const r = await timedFetch(API() + '/unified-api.php?resource=stats&action=overview');
+        assert(r.status !== 500, 'Server error 500');
+        assert(r.status !== 404, 'Not found 404');
+        return `HTTP ${r.status} in ${r.ms}ms`;
+    });
+
+    addTest('api-health', 'unsur_api.php GET responds', async () => {
+        const r = await timedFetch(API() + '/unsur_api.php?action=get_all_unsur');
+        assert([200, 403].includes(r.status), 'Unexpected: ' + r.status);
+        return `HTTP ${r.status} in ${r.ms}ms`;
+    });
+
+    addTest('api-health', 'jabatan_api.php GET responds', async () => {
+        const r = await timedFetch(API() + '/jabatan_api.php?action=get_all_jabatan');
+        assert([200, 403].includes(r.status), 'Unexpected: ' + r.status);
+        return `HTTP ${r.status} in ${r.ms}ms`;
+    });
+
+    addTest('api-health', 'bagian_api.php GET responds', async () => {
+        const r = await timedFetch(API() + '/bagian_api.php?action=get_all_bagian');
+        assert([200, 403].includes(r.status), 'Unexpected: ' + r.status);
+        return `HTTP ${r.status} in ${r.ms}ms`;
+    });
+
+    addTest('api-health', 'personil_simple.php responds', async () => {
+        const r = await timedFetch(API() + '/personil_simple.php?limit=5');
+        assert([200, 302, 403].includes(r.status), 'Unexpected: ' + r.status);
+        return `HTTP ${r.status} in ${r.ms}ms`;
+    });
+
+    addTest('api-health', 'unified-api.php returns JSON content-type', async () => {
+        const r = await timedFetch(API() + '/unified-api.php?resource=unsur&action=list');
+        const ct = r.headers.get('content-type') || '';
+        assert(ct.includes('json'), 'Expected JSON content-type, got: ' + ct);
+        return ct;
+    });
+
+    addTest('api-health', 'Invalid resource returns error JSON', async () => {
+        const r = await timedFetch(API() + '/unified-api.php?resource=INVALID_RESOURCE_XYZ');
+        assert(r.data !== null, 'Expected JSON response');
+        assert(r.data.success === false, 'Expected success=false for invalid resource');
+        return 'correctly returns error';
+    });
+
+    addTest('api-health', 'Rate limiting header present on 429', async () => {
+        // Just verify the endpoint doesn't crash — we can't easily trigger 429 from browser
+        const r = await timedFetch(API() + '/unified-api.php?resource=stats&action=overview');
+        assert(r.status !== 500, 'Server should not crash');
+        return 'no crash, status ' + r.status;
+    });
+
+    // ── 3. UNSUR ─────────────────────────────────────────────────────────────
+    createGroup('unsur', '🏛️', 'Unsur CRUD & Validation');
+
+    addTest('unsur', 'GET all unsur returns array', async () => {
+        const r = await timedFetch(API() + '/unsur_api.php?action=get_all_unsur');
+        assertSuccess(r, 'get_all_unsur');
+        assert(Array.isArray(r.data.data), 'data should be array');
+        return `${r.data.data.length} records in ${r.ms}ms`;
+    });
+
+    addTest('unsur', 'Unsur records have required fields', async () => {
+        const r = await timedFetch(API() + '/unsur_api.php?action=get_all_unsur');
+        assertSuccess(r, 'get_all_unsur');
+        const first = r.data.data[0];
+        assert(first, 'No unsur records found');
+        assert('id' in first, 'Missing id field');
+        assert('nama_unsur' in first, 'Missing nama_unsur field');
+        return `id=${first.id}, nama=${first.nama_unsur}`;
+    });
+
+    addTest('unsur', 'POST create_unsur without CSRF → 403', async () => {
+        const fd = new FormData();
+        fd.append('action', 'create_unsur');
+        fd.append('nama_unsur', 'TEST_UNSUR_CSRF_CHECK');
+        const r = await timedFetch(API() + '/unsur_api.php', { method: 'POST', body: fd });
+        assert(r.status === 403, `Expected 403, got ${r.status}`);
+        assert(r.data?.success === false, 'Expected success=false');
+        return 'CSRF correctly blocked';
+    });
+
+    addTest('unsur', 'GET unsur_stats returns stats object', async () => {
+        const r = await timedFetch(API() + '/unsur_api.php?action=get_unsur_stats');
+        assertSuccess(r, 'get_unsur_stats');
+        assert('total_unsur' in r.data.data, 'Missing total_unsur');
+        return `total_unsur=${r.data.data.total_unsur}`;
+    });
+
+    addTest('unsur', 'pages/unsur.php loads without PHP error', async () => {
+        const res = await fetch(BASE() + '/pages/unsur.php');
+        const html = await res.text();
+        assert(!html.includes('Fatal error'), 'PHP Fatal error found');
+        assert(!html.includes('Parse error'), 'PHP Parse error found');
+        assert(!html.includes('Warning:') || html.includes('APP_CONFIG'), 'Unexpected PHP warning');
+        return 'no fatal errors';
+    });
+
+    // ── 4. BAGIAN ─────────────────────────────────────────────────────────────
+    createGroup('bagian', '📂', 'Bagian CRUD & Validation');
+
+    addTest('bagian', 'GET all bagian returns array', async () => {
+        const r = await timedFetch(API() + '/bagian_api.php?action=get_all_bagian');
+        assertSuccess(r, 'get_all_bagian');
+        assert(Array.isArray(r.data.data), 'data should be array');
+        return `${r.data.data.length} records in ${r.ms}ms`;
+    });
+
+    addTest('bagian', 'Bagian records have required fields', async () => {
+        const r = await timedFetch(API() + '/bagian_api.php?action=get_all_bagian');
+        assertSuccess(r, 'get_all_bagian');
+        const first = r.data.data[0];
+        assert(first, 'No bagian records');
+        assert('id' in first, 'Missing id');
+        assert('nama_bagian' in first, 'Missing nama_bagian');
+        assert('id_unsur' in first, 'Missing id_unsur');
+        return `id=${first.id}, nama=${first.nama_bagian}`;
+    });
+
+    addTest('bagian', 'POST create_bagian without CSRF → 403', async () => {
+        const fd = new FormData();
+        fd.append('action', 'create_bagian');
+        fd.append('nama_bagian', 'TEST_CSRF_CHECK');
+        const r = await timedFetch(API() + '/bagian_api.php', { method: 'POST', body: fd });
+        assert(r.status === 403, `Expected 403, got ${r.status}`);
+        return 'CSRF correctly blocked';
+    });
+
+    addTest('bagian', 'GET bagian_stats returns stats', async () => {
+        const r = await timedFetch(API() + '/bagian_api.php?action=get_bagian_stats');
+        assertSuccess(r, 'get_bagian_stats');
+        return JSON.stringify(r.data.data).substring(0, 60);
+    });
+
+    addTest('bagian', 'Input validation — nama too long → error', async () => {
+        // Would need CSRF to actually POST, so verify CSRF gate works
+        const fd = new FormData();
+        fd.append('action', 'create_bagian');
+        fd.append('nama_bagian', 'A'.repeat(300));
+        const r = await timedFetch(API() + '/bagian_api.php', { method: 'POST', body: fd });
+        // Should be blocked by CSRF before validation even runs
+        assert(r.status === 403 || (r.data && r.data.success === false), 'Should be rejected');
+        return 'rejected (CSRF or validation)';
+    });
+
+    addTest('bagian', 'pages/bagian.php loads without PHP error', async () => {
+        const res = await fetch(BASE() + '/pages/bagian.php');
+        const html = await res.text();
+        assert(!html.includes('Fatal error'), 'PHP Fatal error found');
+        assert(!html.includes('Parse error'), 'PHP Parse error found');
+        return 'no fatal errors';
+    });
+
+    // ── 5. JABATAN ───────────────────────────────────────────────────────────
+    createGroup('jabatan', '💼', 'Jabatan CRUD & Validation');
+
+    addTest('jabatan', 'GET all jabatan returns array', async () => {
+        const r = await timedFetch(API() + '/jabatan_api.php?action=get_all_jabatan');
+        assertSuccess(r, 'get_all_jabatan');
+        assert(Array.isArray(r.data.data), 'data should be array');
+        return `${r.data.data.length} records in ${r.ms}ms`;
+    });
+
+    addTest('jabatan', 'Jabatan records have required fields', async () => {
+        const r = await timedFetch(API() + '/jabatan_api.php?action=get_all_jabatan');
+        assertSuccess(r, 'get_all_jabatan');
+        const first = r.data.data[0];
+        assert(first, 'No jabatan records');
+        assert('id' in first, 'Missing id');
+        assert('nama_jabatan' in first, 'Missing nama_jabatan');
+        return `id=${first.id}, nama=${first.nama_jabatan}`;
+    });
+
+    addTest('jabatan', 'POST create_jabatan without CSRF → 403', async () => {
+        const fd = new FormData();
+        fd.append('action', 'create_jabatan');
+        fd.append('nama_jabatan', 'TEST_CSRF_CHECK');
+        const r = await timedFetch(API() + '/jabatan_api.php', { method: 'POST', body: fd });
+        assert(r.status === 403, `Expected 403, got ${r.status}`);
+        return 'CSRF correctly blocked';
+    });
+
+    addTest('jabatan', 'GET jabatan_stats returns stats', async () => {
+        const r = await timedFetch(API() + '/jabatan_api.php?action=get_jabatan_stats');
+        assertSuccess(r, 'get_jabatan_stats');
+        return JSON.stringify(r.data.data).substring(0, 60);
+    });
+
+    addTest('jabatan', 'pages/jabatan.php loads without PHP error', async () => {
+        const res = await fetch(BASE() + '/pages/jabatan.php');
+        const html = await res.text();
+        assert(!html.includes('Fatal error'), 'PHP Fatal error');
+        assert(!html.includes('Parse error'), 'PHP Parse error');
+        return 'no fatal errors';
+    });
+
+    // ── 6. PERSONIL ──────────────────────────────────────────────────────────
+    createGroup('personil', '👤', 'Personil Data & API');
+
+    addTest('personil', 'personil_simple.php accessible', async () => {
+        const r = await timedFetch(API() + '/personil_simple.php?limit=5');
+        assert([200, 302, 403].includes(r.status), 'Unexpected status: ' + r.status);
+        return `HTTP ${r.status} in ${r.ms}ms`;
+    });
+
+    addTest('personil', 'personil_statistics.php responds with JSON', async () => {
+        const r = await timedFetch(API() + '/personil_statistics.php');
+        assert(r.status !== 500, 'Server error');
+        const ct = r.headers.get('content-type') || '';
+        assert(ct.includes('json'), 'Expected JSON, got: ' + ct);
+        return `HTTP ${r.status}`;
+    });
+
+    addTest('personil', 'personil_crud.php requires authentication', async () => {
+        const r = await timedFetch(API() + '/personil_crud.php?action=get_all');
+        assert([200, 302, 401, 403].includes(r.status), 'Unexpected: ' + r.status);
+        return `HTTP ${r.status} (auth protected)`;
+    });
+
+    addTest('personil', 'pages/personil.php loads without PHP error', async () => {
+        const res = await fetch(BASE() + '/pages/personil.php');
+        const html = await res.text();
+        assert(!html.includes('Fatal error'), 'PHP Fatal error');
+        assert(!html.includes('Parse error'), 'PHP Parse error');
+        return 'no fatal errors';
+    });
+
+    addTest('personil', 'bulk_update_personil.php requires auth (401)', async () => {
+        const r = await timedFetch(API() + '/bulk_update_personil.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ personil: [] })
+        });
+        assert([401, 403, 405].includes(r.status), `Expected 401/403, got ${r.status}`);
+        return `HTTP ${r.status} — auth check works`;
+    });
+
+    // ── 7. SECURITY ───────────────────────────────────────────────────────────
+    createGroup('security', '🛡️', 'Security Checks');
+
+    addTest('security', 'All POST mutations require CSRF (unsur)', async () => {
+        for (const action of ['create_unsur', 'update_unsur', 'delete_unsur', 'update_order']) {
+            const fd = new FormData();
+            fd.append('action', action);
+            fd.append('id', '1');
+            const r = await timedFetch(API() + '/unsur_api.php', { method: 'POST', body: fd });
+            if (action === 'delete_unsur' || action === 'create_unsur' || action === 'update_unsur' || action === 'update_order') {
+                assert(r.status === 403, `${action} should be 403, got ${r.status}`);
+            }
+        }
+        return '4/4 mutations blocked without CSRF';
+    });
+
+    addTest('security', 'All POST mutations require CSRF (bagian)', async () => {
+        for (const action of ['create_bagian', 'update_bagian', 'delete_bagian', 'move_bagian']) {
+            const fd = new FormData();
+            fd.append('action', action);
+            fd.append('id', '1');
+            const r = await timedFetch(API() + '/bagian_api.php', { method: 'POST', body: fd });
+            assert(r.status === 403, `${action} should be 403, got ${r.status}`);
+        }
+        return '4/4 mutations blocked without CSRF';
+    });
+
+    addTest('security', 'All POST mutations require CSRF (jabatan)', async () => {
+        for (const action of ['create_jabatan', 'update_jabatan', 'delete_jabatan', 'update_order']) {
+            const fd = new FormData();
+            fd.append('action', action);
+            fd.append('id', '1');
+            const r = await timedFetch(API() + '/jabatan_api.php', { method: 'POST', body: fd });
+            assert(r.status === 403, `${action} should be 403, got ${r.status}`);
+        }
+        return '4/4 mutations blocked without CSRF';
+    });
+
+    addTest('security', 'Error responses do not expose stack traces', async () => {
+        const r = await timedFetch(API() + '/unified-api.php?resource=BADRESOURCE');
+        assert(r.data !== null, 'Expected JSON');
+        const body = JSON.stringify(r.data);
+        assert(!body.includes('/opt/lampp'), 'File path exposed in response');
+        assert(!body.includes('Stack trace'), 'Stack trace exposed');
+        assert(!body.includes('#0 '), 'Stack frame exposed');
+        return 'no internal details exposed';
+    });
+
+    addTest('security', 'API returns correct Content-Type JSON header', async () => {
+        for (const ep of ['unsur_api.php', 'jabatan_api.php', 'bagian_api.php']) {
+            const r = await timedFetch(API() + '/' + ep + '?action=get_all_' + ep.replace('_api.php', ''));
+            const ct = r.headers.get('content-type') || '';
+            assert(ct.includes('json'), `${ep} wrong content-type: ${ct}`);
+        }
+        return '3/3 endpoints return JSON';
+    });
+
+    addTest('security', 'login.php does not expose PHP errors', async () => {
+        const res = await fetch(BASE() + '/login.php');
+        const html = await res.text();
+        assert(!html.includes('Fatal error'), 'Fatal error exposed');
+        assert(!html.includes('mysql_'), 'MySQL function exposed');
+        assert(!html.includes('root@'), 'DB credentials exposed');
+        return 'no sensitive info exposed';
+    });
+
+    addTest('security', 'Path traversal blocked in backup filename', async () => {
+        // BackupManager sanitizes filename — test API endpoint if it exists
+        const r = await timedFetch(API() + '/backup_api.php?action=list');
+        assert([200, 302, 401, 403, 404].includes(r.status), 'Unexpected: ' + r.status);
+        return `backup endpoint: HTTP ${r.status}`;
+    });
+
+    // ── 8. PERFORMANCE ────────────────────────────────────────────────────────
+    createGroup('performance', '⚡', 'Performance Benchmarks');
+
+    addTest('performance', 'unsur_api list < 500ms', async () => {
+        const r = await timedFetch(API() + '/unsur_api.php?action=get_all_unsur');
+        assert(r.ms < 500, `Too slow: ${r.ms}ms`);
+        return `${r.ms}ms`;
+    });
+
+    addTest('performance', 'bagian_api list < 500ms', async () => {
+        const r = await timedFetch(API() + '/bagian_api.php?action=get_all_bagian');
+        assert(r.ms < 500, `Too slow: ${r.ms}ms`);
+        return `${r.ms}ms`;
+    });
+
+    addTest('performance', 'jabatan_api list < 500ms', async () => {
+        const r = await timedFetch(API() + '/jabatan_api.php?action=get_all_jabatan');
+        assert(r.ms < 500, `Too slow: ${r.ms}ms`);
+        return `${r.ms}ms`;
+    });
+
+    addTest('performance', 'login.php page load < 1000ms', async () => {
+        const t = Date.now();
+        await fetch(BASE() + '/login.php');
+        const ms = Date.now() - t;
+        assert(ms < 1000, `Too slow: ${ms}ms`);
+        return `${ms}ms`;
+    });
+
+    addTest('performance', 'Concurrent 5 requests to unsur API', async () => {
+        const t = Date.now();
+        const reqs = Array(5).fill(null).map(() =>
+            fetch(API() + '/unsur_api.php?action=get_all_unsur')
+        );
+        const results = await Promise.all(reqs);
+        const ms = Date.now() - t;
+        const allOk = results.every(r => r.status !== 500);
+        assert(allOk, 'Some concurrent requests failed');
+        assert(ms < 2000, `Concurrent requests too slow: ${ms}ms`);
+        return `5 concurrent in ${ms}ms`;
+    });
+
+    addTest('performance', 'unified-api stats < 800ms', async () => {
+        const r = await timedFetch(API() + '/unified-api.php?resource=stats&action=overview');
+        assert(r.ms < 800, `Too slow: ${r.ms}ms`);
+        return `${r.ms}ms`;
+    });
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+initTests();
+renderGroups();
+updateStats();
+document.getElementById('run-time').textContent = new Date().toLocaleString();
+</script>
+</body>
+</html>

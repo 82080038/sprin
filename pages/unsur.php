@@ -25,7 +25,6 @@ require_once __DIR__ . '/../core/Database.php';
 $pdo = Database::getInstance()->getConnection();
 ?>
 
-<!-- Debug: Ensure we're not in a frame -->
 <script>
 if (window.top !== window.self) {
     window.top.location = window.self.location;
@@ -128,64 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
-    if ($action === 'update_order') {
-        $orders = $_POST['orders'] ?? [];
-        
-        // Decode JSON if it's a string
-        if (is_string($orders)) {
-            $orders = json_decode($orders, true);
-        }
-        
-        if (!is_array($orders)) {
-            echo json_encode(['success' => false, 'message' => 'Invalid orders data']);
-            exit;
-        }
-        
-        try {
-            $pdo->beginTransaction();
-            
-            foreach ($orders as $order) {
-                $stmt = $pdo->prepare("UPDATE unsur SET urutan = ? WHERE id = ?");
-                $stmt->execute([$order['urutan'], $order['id']]);
-            }
-            
-            $pdo->commit();
-            
-            header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'message' => 'Urutan unsur berhasil diperbarui!']);
-            exit;
-        } catch (Exception $e) {
-            $pdo->rollback();
-            
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'Gagal memperbarui urutan: ' . $e->getMessage()]);
-            exit;
-        }
-    }
-    
-    if ($action === 'create_unsur') {
-        // Auto-generate kode_unsur from nama_unsur
-        $nama_unsur = $_POST['nama_unsur'];
-        $kode_unsur = preg_replace('/[^a-zA-Z0-9_]/', '_', strtoupper($nama_unsur));
-        
-        // Get the highest current urutan and add 1
-        $stmt = $pdo->query("SELECT MAX(urutan) as max_urutan FROM unsur");
-        $maxUrutan = $stmt->fetch()['max_urutan'];
-        $newUrutan = ($maxUrutan ?? 0) + 1;
-        
-        $stmt = $pdo->prepare("INSERT INTO unsur (kode_unsur, nama_unsur, deskripsi, urutan) VALUES (?, ?, ?, ?)");
-        $stmt->execute([
-            $kode_unsur,
-            $nama_unsur,
-            $_POST['deskripsi'] ?? '',
-            $newUrutan
-        ]);
-        
-        header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'message' => 'Unsur berhasil ditambahkan!']);
-        exit;
-    }
-    
     if ($action === 'get_unsur_detail') {
         $id = $_POST['id'] ?? 0;
         $stmt = $pdo->prepare("SELECT * FROM unsur WHERE id = ?");
@@ -210,142 +151,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
-    if ($action === 'update_unsur') {
-        try {
-            // Debug: Log received data
-            error_log("UPDATE UNSUR DEBUG: " . print_r($_POST, true));
-            
-            // Get current urutan from database (don't change it)
-            $stmt = $pdo->prepare("SELECT urutan FROM unsur WHERE id = ?");
-            $stmt->execute([$_POST['id']]);
-            $currentUrutan = $stmt->fetchColumn();
-            
-            $stmt = $pdo->prepare("UPDATE unsur SET kode_unsur = ?, nama_unsur = ?, deskripsi = ?, urutan = ? WHERE id = ?");
-            $result = $stmt->execute([
-                $_POST['kode_unsur'],
-                $_POST['nama_unsur'],
-                $_POST['deskripsi'] ?? '',
-                $currentUrutan, // Use existing urutan
-                $_POST['id']
-            ]);
-            
-            error_log("UPDATE RESULT: " . ($result ? 'SUCCESS' : 'FAILED'));
-            
-            // Update pimpinan assignment
-            if (!empty($_POST['nama_pimpinan'])) {
-                // Remove existing assignments
-                $delStmt = $pdo->prepare("DELETE FROM unsur_pimpinan WHERE unsur_id = ? AND tanggal_selesai IS NULL");
-                $delStmt->execute([$_POST['id']]);
-                
-                // Add new assignment
-                $pimpinanStmt = $pdo->prepare("SELECT id FROM personil WHERE nama = ?");
-                $pimpinanStmt->execute([$_POST['nama_pimpinan']]);
-                $pimpinanId = $pimpinanStmt->fetchColumn();
-                
-                if ($pimpinanId) {
-                    $relStmt = $pdo->prepare("INSERT INTO unsur_pimpinan (unsur_id, personil_id) VALUES (?, ?)");
-                    $relStmt->execute([$_POST['id'], $pimpinanId]);
-                }
-            }
-            
-            header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'message' => 'Unsur berhasil diperbarui!']);
-            exit;
-        } catch (Exception $e) {
-            error_log("UPDATE UNSUR ERROR: " . $e->getMessage());
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
-            exit;
-        }
-    }
-    
-    if ($action === 'delete_unsur') {
-        // Check if unsur has bagian
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM bagian WHERE id_unsur = ?");
-        $stmt->execute([$_POST['id']]);
-        $bagianCount = $stmt->fetchColumn();
-        
-        if ($bagianCount > 0) {
-            // Get details for better error message
-            $stmt = $pdo->prepare("SELECT nama_unsur FROM unsur WHERE id = ?");
-            $stmt->execute([$_POST['id']]);
-            $unsurName = $stmt->fetchColumn();
-            
-            // Get bagian details
-            $stmt = $pdo->prepare("SELECT nama_bagian FROM bagian WHERE id_unsur = ? LIMIT 5");
-            $stmt->execute([$_POST['id']]);
-            $bagianList = $stmt->fetchAll(PDO::FETCH_COLUMN);
-            
-            header('Content-Type: application/json');
-            echo json_encode([
-                'success' => false, 
-                'message' => "Tidak dapat menghapus unsur '$unsurName' karena masih memiliki $bagianCount bagian!", 
-                'details' => [
-                    'unsur_name' => $unsurName,
-                    'bagian_count' => $bagianCount,
-                    'bagian_list' => $bagianList,
-                    'suggestion' => 'Pindahkan atau hapus semua bagian terlebih dahulu'
-                ]
-            ]);
-            exit;
-        }
-        
-        $stmt = $pdo->prepare("DELETE FROM unsur WHERE id = ?");
-        $stmt->execute([$_POST['id']]);
-        
-        header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'message' => 'Unsur berhasil dihapus!']);
-        exit;
-    }
-    
-    if ($action === 'force_delete_unsur') {
-        try {
-            $pdo->beginTransaction();
-            
-            $unsurId = $_POST['id'];
-            $reassignToUnsurId = $_POST['reassign_to_unsur_id'] ?? null;
-            
-            // Get unsur name for logging
-            $stmt = $pdo->prepare("SELECT nama_unsur FROM unsur WHERE id = ?");
-            $stmt->execute([$unsurId]);
-            $unsurName = $stmt->fetchColumn();
-            
-            // If reassign_to_unsur_id is provided, move bagian to that unsur
-            if ($reassignToUnsurId) {
-                $stmt = $pdo->prepare("UPDATE bagian SET id_unsur = ? WHERE id_unsur = ?");
-                $stmt->execute([$reassignToUnsurId, $unsurId]);
-                
-                // Get reassign unsur name
-                $stmt = $pdo->prepare("SELECT nama_unsur FROM unsur WHERE id = ?");
-                $stmt->execute([$reassignToUnsurId]);
-                $reassignUnsurName = $stmt->fetchColumn();
-                
-                $message = "Unsur '$unsurName' berhasil dihapus dan $stmt->rowCount() bagian dipindahkan ke '$reassignUnsurName'!";
-            } else {
-                // Delete all bagian in this unsur
-                $stmt = $pdo->prepare("DELETE FROM bagian WHERE id_unsur = ?");
-                $deletedBagians = $stmt->rowCount();
-                
-                $message = "Unsur '$unsurName' berhasil dihapus beserta $deletedBagians bagian terkait!";
-            }
-            
-            // Now delete the unsur
-            $stmt = $pdo->prepare("DELETE FROM unsur WHERE id = ?");
-            $stmt->execute([$unsurId]);
-            
-            $pdo->commit();
-            
-            header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'message' => $message]);
-            exit;
-            
-        } catch (Exception $e) {
-            $pdo->rollback();
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'Gagal menghapus unsur: ' . $e->getMessage()]);
-            exit;
-        }
-    }
+    // All other CRUD operations are now handled by the API
+    // Redirect to API for all other actions
+    exit;
 }
 
 // Get current unsur data only (simple and clean)
@@ -626,14 +434,17 @@ function saveOrder() {
         });
     });
     
-    fetch('unsur.php', {
+    const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
+    fetch('../api/unsur_api.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRF-TOKEN': csrfToken
         },
         body: new URLSearchParams({
             action: 'update_order',
-            orders: JSON.stringify(orders)
+            orders: JSON.stringify(orders),
+            csrf_token: csrfToken
         })
     })
     .then(response => response.json())
@@ -723,8 +534,6 @@ function openAddModal() {
 
 function editUnsur(id) {
     try {
-        console.log('Editing unsur with ID:', id);
-        
         // Get unsur data from database using new API
         fetch('../api/unsur_api.php', {
             method: 'POST',
@@ -737,14 +546,11 @@ function editUnsur(id) {
             })
         })
         .then(response => {
-            console.log('Response status:', response.status);
             return response.json();
         })
         .then(data => {
-            console.log('Response data:', data);
             if (data.success && data.data) {
                 const unsur = data.data;
-                console.log('Unsur data:', unsur);
                 
                 // Get form elements safely
                 const modalTitle = document.getElementById('modalTitle');
@@ -800,15 +606,17 @@ function editUnsur(id) {
 }
 
 function deleteUnsur(id, nama) {
-    // First check if unsur has bagian
-    fetch('unsur.php', {
+    const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
+    fetch('../api/unsur_api.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRF-TOKEN': csrfToken
         },
         body: new URLSearchParams({
             action: 'delete_unsur',
-            id: id
+            id: id,
+            csrf_token: csrfToken
         })
     })
     .then(response => response.json())
@@ -856,14 +664,14 @@ function deleteUnsur(id, nama) {
 }
 
 function showForceDeleteOptions(unsurId, details) {
-    // Get all other unsur options for reassigning
-    fetch('unsur.php', {
+    // Get all other unsur options for reassigning (read-only, no CSRF needed)
+    fetch('../api/unsur_api.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-            action: 'get_unsur_list'
+            action: 'get_all_unsur'
         })
     })
     .then(response => response.json())
@@ -919,16 +727,19 @@ function showForceDeleteOptions(unsurId, details) {
 }
 
 function forceDeleteUnsur(unsurId, reassignToUnsurId) {
+    const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
     const formData = new FormData();
     formData.append('action', 'force_delete_unsur');
     formData.append('id', unsurId);
+    formData.append('csrf_token', csrfToken);
     
     if (reassignToUnsurId) {
         formData.append('reassign_to_unsur_id', reassignToUnsurId);
     }
     
-    fetch('unsur.php', {
+    fetch('../api/unsur_api.php', {
         method: 'POST',
+        headers: { 'X-CSRF-TOKEN': csrfToken },
         body: formData
     })
     .then(response => response.json())
@@ -964,23 +775,18 @@ document.getElementById('unsurForm').addEventListener('submit', function(e) {
         
         const formData = new FormData(this);
         const action = formData.get('action');
+        const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
+        formData.append('csrf_token', csrfToken);
         
-        // Debug: Log form data
-        console.log('Form Data:');
-        for (let [key, value] of formData.entries()) {
-            console.log(key + ':', value);
-        }
-        
-        fetch('unsur.php', {
+        fetch('../api/unsur_api.php', {
             method: 'POST',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
             body: formData
         })
         .then(response => {
-            console.log('Response status:', response.status);
             return response.json();
         })
         .then(data => {
-            console.log('Response data:', data);
             if (data.success) {
                 alert(data.message);
                 location.reload();

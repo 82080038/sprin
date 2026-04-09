@@ -480,10 +480,19 @@ $current_page = basename($_SERVER['PHP_SELF']);
         // Start loading
         window.globalDropdownData.loading = true;
         
-        return fetch('<?php echo API_BASE_URL; ?>/personil_crud.php', {
+        const APP_CONFIG = {
+            baseUrl: '<?php echo BASE_URL; ?>',
+            apiUrl: '<?php echo API_BASE_URL; ?>',
+            apiVersion: '<?php echo API_VERSION; ?>',
+            csrfToken: '<?php echo \AuthHelper::generateCSRFToken(); ?>',
+            debugMode: false
+        };
+
+        return fetch(APP_CONFIG.apiUrl + '/personil_crud.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRF-TOKEN': APP_CONFIG.csrfToken
             },
             body: 'action=get_dropdown_data'
         })

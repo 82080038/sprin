@@ -91,6 +91,11 @@ class ApiClient {
             'Accept': 'application/json'
         };
         
+        // Add CSRF token if available
+        if (window.APP_CONFIG && window.APP_CONFIG.csrfToken) {
+            headers['X-CSRF-TOKEN'] = window.APP_CONFIG.csrfToken;
+        }
+        
         // Add application headers if available
         if (window.ApiConfig && window.ApiConfig.headers) {
             Object.assign(headers, window.ApiConfig.headers);

@@ -10,15 +10,14 @@ header('Access-Control-Allow-Methods: GET, POST');
 
 require_once __DIR__ . '/../core/config.php';
 require_once __DIR__ . '/../core/Database.php';
+require_once __DIR__ . '/../core/SessionManager.php';
 require_once __DIR__ . '/../core/auth_helper.php';
+SessionManager::start();
 
 // Check authentication
 if (!AuthHelper::validateSession()) {
-    echo json_encode([
-        'success' => false,
-        'message' => 'Unauthorized access',
-        'timestamp' => date('c')
-    ]);
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized', 'timestamp' => date('c')]);
     exit;
 }
 
@@ -128,15 +127,13 @@ try {
             break;
             
         default:
-            throw new Exception('Invalid action: ' . $action);
+            throw new Exception('Invalid action');
     }
     
 } catch (Exception $e) {
-    echo json_encode([
-        'success' => false,
-        'message' => $e->getMessage(),
-        'timestamp' => date('c')
-    ]);
+    error_log('[report_api] ' . $e->getMessage());
+    $msg = (defined('DEBUG_MODE') && DEBUG_MODE) ? $e->getMessage() : 'Terjadi kesalahan. Silakan coba lagi.';
+    echo json_encode(['success' => false, 'message' => $msg, 'timestamp' => date('c')]);
 }
 
 // Helper functions

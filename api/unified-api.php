@@ -5,9 +5,10 @@
  * Provides consistent interface and error handling
  */
 
-// Enable error reporting for debugging
+// Error reporting controlled by config
+require_once __DIR__ . '/../core/config.php';
 error_reporting(E_ALL);
-ini_set('display_errors', 0);
+ini_set('display_errors', defined('DEBUG_MODE') && DEBUG_MODE ? 1 : 0);
 ini_set('log_errors', 1);
 
 // Set headers
@@ -19,6 +20,40 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-W
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
+}
+
+// Load authentication helper for CSRF validation
+require_once __DIR__ . '/../core/auth_helper.php';
+
+// Rate limiting (60 requests per minute per IP)
+function checkRateLimit($limit = 60, $windowSeconds = 60) {
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    $key = sys_get_temp_dir() . '/rate_' . md5($ip) . '.json';
+    $now = time();
+
+    $data = file_exists($key) ? json_decode(file_get_contents($key), true) : ['count' => 0, 'start' => $now];
+    if (!is_array($data)) $data = ['count' => 0, 'start' => $now];
+
+    if (($now - $data['start']) >= $windowSeconds) {
+        $data = ['count' => 1, 'start' => $now];
+    } else {
+        $data['count']++;
+    }
+
+    file_put_contents($key, json_encode($data), LOCK_EX);
+
+    if ($data['count'] > $limit) {
+        http_response_code(429);
+        header('Retry-After: ' . ($windowSeconds - ($now - $data['start'])));
+        echo json_encode(['success' => false, 'message' => 'Too many requests. Please slow down.']);
+        exit;
+    }
+}
+checkRateLimit();
+
+// Validate CSRF token for POST/PUT/DELETE requests
+if (in_array($_SERVER['REQUEST_METHOD'], ['POST', 'PUT', 'DELETE'])) {
+    AuthHelper::requireCSRFToken();
 }
 
 // Database connection
@@ -58,7 +93,8 @@ try {
             send_error('Invalid resource', 404);
     }
 } catch (Exception $e) {
-    send_error('Internal server error', 500, $e->getMessage());
+    error_log('[unified-api] ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+    send_error('Internal server error', 500);
 }
 
 // Response helper functions
@@ -87,7 +123,8 @@ function send_error($message, $code = 400, $details = null) {
         'timestamp' => date('Y-m-d H:i:s')
     ];
     
-    if ($details !== null) {
+    // Only expose details in debug mode, never internal PHP errors
+    if ($details !== null && defined('DEBUG_MODE') && DEBUG_MODE === true) {
         $response['details'] = $details;
     }
     

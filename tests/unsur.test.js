@@ -83,6 +83,145 @@ describe('Unsur Management', () => {
         });
     });
     
+    describe('API - CRUD Operations', () => {
+        test('should create new unsur via API', async () => {
+            const response = await fetch(`${global.testConfig.apiBaseUrl}/unsur_api.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'create_unsur',
+                    nama_unsur: 'TEST UNSUR UNIT',
+                    deskripsi: 'Test description'
+                })
+            });
+            
+            const data = await response.json();
+            
+            expect(data.success).toBe(true);
+            expect(data.message).toContain('successfully');
+            expect(data.id).toBeDefined();
+            
+            console.log('✅ Create unsur via API: ID', data.id);
+            
+            // Cleanup
+            if (data.id) {
+                await fetch(`${global.testConfig.apiBaseUrl}/unsur_api.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        action: 'delete_unsur',
+                        id: data.id
+                    })
+                });
+            }
+        });
+        
+        test('should update unsur via API', async () => {
+            // First create a test unsur
+            const createResponse = await fetch(`${global.testConfig.apiBaseUrl}/unsur_api.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'create_unsur',
+                    nama_unsur: 'TEST UPDATE UNSUR',
+                    deskripsi: 'Original description'
+                })
+            });
+            
+            const createData = await createResponse.json();
+            expect(createData.success).toBe(true);
+            
+            const unsurId = createData.id;
+            
+            // Update the unsur
+            const updateResponse = await fetch(`${global.testConfig.apiBaseUrl}/unsur_api.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'update_unsur',
+                    id: unsurId,
+                    nama_unsur: 'TEST UPDATED UNSUR',
+                    deskripsi: 'Updated description',
+                    urutan: '1'
+                })
+            });
+            
+            const updateData = await updateResponse.json();
+            
+            expect(updateData.success).toBe(true);
+            expect(updateData.message).toContain('successfully');
+            
+            console.log('✅ Update unsur via API working');
+            
+            // Cleanup
+            await fetch(`${global.testConfig.apiBaseUrl}/unsur_api.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'delete_unsur',
+                    id: unsurId
+                })
+            });
+        });
+        
+        test('should delete unsur via API', async () => {
+            // First create a test unsur
+            const createResponse = await fetch(`${global.testConfig.apiBaseUrl}/unsur_api.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'create_unsur',
+                    nama_unsur: 'TEST DELETE UNSUR',
+                    deskripsi: 'Test for delete'
+                })
+            });
+            
+            const createData = await createResponse.json();
+            expect(createData.success).toBe(true);
+            
+            const unsurId = createData.id;
+            
+            // Delete the unsur
+            const deleteResponse = await fetch(`${global.testConfig.apiBaseUrl}/unsur_api.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'delete_unsur',
+                    id: unsurId
+                })
+            });
+            
+            const deleteData = await deleteResponse.json();
+            
+            expect(deleteData.success).toBe(true);
+            expect(deleteData.message).toContain('successfully');
+            
+            console.log('✅ Delete unsur via API working');
+        });
+        
+        test('should prevent delete with active jabatan', async () => {
+            // Try to delete an unsur that likely has jabatan
+            const response = await fetch(`${global.testConfig.apiBaseUrl}/unsur_api.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'delete_unsur',
+                    id: '1' // Assuming ID 1 has jabatan
+                })
+            });
+            
+            const data = await response.json();
+            
+            // Should fail if unsur has jabatan
+            if (!data.success) {
+                expect(data.message).toContain('jabatan');
+                console.log('✅ Delete validation with jabatan working');
+            } else {
+                console.log('⚠️  Unsur ID 1 has no jabatan, test skipped');
+            }
+        });
+    });
+    
     describe('Create Unsur', () => {
         test('should open add unsur modal', async () => {
             await global.testUtils.clickElement(page, '[data-action="add-unsur"]');

@@ -23,32 +23,10 @@ SessionManager::start();
 
 // Check authentication using AuthHelper
 if (!AuthHelper::validateSession()) {
-    // Development bypass - remove in production
-    if (ENVIRONMENT === 'development' && isset($_GET['dev_bypass'])) {
-        error_log("JABATAN CRUD - Development bypass enabled");
-    } else {
-        // Debug info for development
-        if (ENVIRONMENT === 'development') {
-            error_log("JABATAN CRUD AUTH FAILED - Session: " . print_r($_SESSION, true) . " Cookies: " . print_r($_COOKIE, true));
-            http_response_code(401);
-            echo json_encode([
-                'success' => false, 
-                'message' => 'Unauthorized - Session not valid',
-                'debug' => [
-                    'session_status' => session_status(),
-                    'session_data' => $_SESSION,
-                    'cookie_data' => $_COOKIE,
-                    'auth_helper_result' => AuthHelper::validateSession(),
-                    'current_user' => AuthHelper::getCurrentUser()
-                ],
-                'timestamp' => date('c')
-            ]);
-        } else {
-            http_response_code(401);
-            echo json_encode(['success' => false, 'message' => 'Unauthorized']);
-        }
-        exit;
-    }
+    error_log('[jabatan_crud] Unauthorized access attempt from ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+    exit;
 }
 
 // Only accept POST requests
@@ -81,8 +59,7 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     
-    // Debug: Log action and data
-    error_log("JABATAN CRUD - Action: " . $action . ", Data: " . print_r($_POST, true));
+    // Log action (no POST data to avoid leaking sensitive info in logs)
     
     switch ($action) {
         case 'get_jabatan_list':
@@ -276,9 +253,8 @@ try {
     }
     
 } catch (Exception $e) {
+    error_log('[jabatan_crud] ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
     http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Database error: ' . $e->getMessage()
-    ]);
+    $msg = (defined('DEBUG_MODE') && DEBUG_MODE) ? $e->getMessage() : 'Terjadi kesalahan. Silakan coba lagi.';
+    echo json_encode(['success' => false, 'message' => $msg]);
 }

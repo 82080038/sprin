@@ -1,10 +1,14 @@
 <?php
-session_start();
 require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/SessionManager.php';
+require_once __DIR__ . '/../core/auth_helper.php';
+SessionManager::start();
+
+header('Content-Type: application/json');
 
 // Check authentication
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header('Content-Type: application/json');
+if (!AuthHelper::validateSession()) {
+    http_response_code(401);
     echo json_encode(['success' => false, 'message' => 'Unauthorized']);
     exit;
 }
@@ -20,8 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $json_input = file_get_contents('php://input');
 $data = json_decode($json_input, true);
 
-if (!isset($data['id']) || empty($data['id'])) {
-    header('Content-Type: application/json');
+$id = filter_var($data['id'] ?? 0, FILTER_VALIDATE_INT);
+if (!$id) {
     echo json_encode(['success' => false, 'message' => 'ID personil tidak valid']);
     exit;
 }
@@ -33,8 +37,8 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     // Soft delete personil (set is_deleted = TRUE)
-    $stmt = $pdo->prepare("UPDATE personil SET is_deleted = TRUE, updated_at = NOW() WHERE id = ?");
-    $stmt->execute([$data['id']]);
+    $stmt = $pdo->prepare("UPDATE personil SET is_deleted = TRUE, updated_at = NOW() WHERE id = ? AND is_deleted = FALSE");
+    $stmt->execute([$id]);
     
     if ($stmt->rowCount() > 0) {
         header('Content-Type: application/json');
@@ -45,7 +49,8 @@ try {
     }
     
 } catch (Exception $e) {
-    header('Content-Type: application/json');
-    echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+    error_log('[personil_delete] ' . $e->getMessage());
+    $msg = (defined('DEBUG_MODE') && DEBUG_MODE) ? $e->getMessage() : 'Terjadi kesalahan. Silakan coba lagi.';
+    echo json_encode(['success' => false, 'message' => $msg]);
 }
 ?>

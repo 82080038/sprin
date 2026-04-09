@@ -3,9 +3,10 @@
  * Bagian API - Separate API endpoints for bagian operations
  */
 
-// Enable error reporting for debugging
+// Error reporting controlled by config
+require_once __DIR__ . '/../core/config.php';
 error_reporting(E_ALL);
-ini_set('display_errors', 0);
+ini_set('display_errors', defined('DEBUG_MODE') && DEBUG_MODE ? 1 : 0);
 ini_set('log_errors', 1);
 
 // Set headers
@@ -17,6 +18,22 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
+}
+
+// CSRF validation for mutating requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $csrfToken = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+    if (empty($csrfToken)) {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'CSRF token required']);
+        exit;
+    }
+    session_start();
+    if (!isset($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $csrfToken)) {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);
+        exit;
+    }
 }
 
 // Database connection
@@ -71,16 +88,19 @@ try {
             break;
             
         case 'update_bagian':
-            $id = $_POST['id'] ?? 0;
-            $nama_bagian = $_POST['nama_bagian'] ?? '';
-            $keterangan = $_POST['keterangan'] ?? '';
+            $id = filter_var($_POST['id'] ?? 0, FILTER_VALIDATE_INT);
+            $nama_bagian = trim(strip_tags($_POST['nama_bagian'] ?? ''));
+            $id_unsur = filter_var($_POST['id_unsur'] ?? null, FILTER_VALIDATE_INT) ?: null;
             
             if (!$id || !$nama_bagian) {
                 throw new Exception('ID and nama bagian are required');
             }
+            if (strlen($nama_bagian) > 255) {
+                throw new Exception('Nama bagian terlalu panjang (maks 255 karakter)');
+            }
             
-            $stmt = $pdo->prepare("UPDATE bagian SET nama_bagian = ?, keterangan = ? WHERE id = ?");
-            $stmt->execute([$nama_bagian, $keterangan, $id]);
+            $stmt = $pdo->prepare("UPDATE bagian SET nama_bagian = ?, id_unsur = ? WHERE id = ?");
+            $stmt->execute([$nama_bagian, $id_unsur, $id]);
             
             echo json_encode([
                 'success' => true,
@@ -89,15 +109,28 @@ try {
             break;
             
         case 'create_bagian':
-            $nama_bagian = $_POST['nama_bagian'] ?? '';
-            $keterangan = $_POST['keterangan'] ?? '';
+            $nama_bagian = trim(strip_tags($_POST['nama_bagian'] ?? ''));
+            $id_unsur = filter_var($_POST['id_unsur'] ?? null, FILTER_VALIDATE_INT) ?: null;
             
             if (!$nama_bagian) {
                 throw new Exception('Nama bagian is required');
             }
+            if (strlen($nama_bagian) > 255) {
+                throw new Exception('Nama bagian terlalu panjang (maks 255 karakter)');
+            }
             
-            $stmt = $pdo->prepare("INSERT INTO bagian (nama_bagian, keterangan) VALUES (?, ?)");
-            $stmt->execute([$nama_bagian, $keterangan]);
+            // Get next urutan if id_unsur is provided
+            if ($id_unsur) {
+                $stmt = $pdo->prepare("SELECT COALESCE(MAX(urutan), 0) + 1 as next_urutan FROM bagian WHERE id_unsur = ?");
+                $stmt->execute([$id_unsur]);
+                $nextUrutan = $stmt->fetchColumn();
+                
+                $stmt = $pdo->prepare("INSERT INTO bagian (nama_bagian, id_unsur, urutan) VALUES (?, ?, ?)");
+                $stmt->execute([$nama_bagian, $id_unsur, $nextUrutan]);
+            } else {
+                $stmt = $pdo->prepare("INSERT INTO bagian (nama_bagian) VALUES (?)");
+                $stmt->execute([$nama_bagian]);
+            }
             
             echo json_encode([
                 'success' => true,
@@ -107,7 +140,7 @@ try {
             break;
             
         case 'delete_bagian':
-            $id = $_POST['id'] ?? 0;
+            $id = filter_var($_POST['id'] ?? 0, FILTER_VALIDATE_INT);
             
             if (!$id) {
                 throw new Exception('ID is required');
@@ -150,6 +183,60 @@ try {
             ]);
             break;
             
+        case 'move_bagian':
+            $bagianId = filter_var($_POST['bagian_id'] ?? 0, FILTER_VALIDATE_INT);
+            $newUnsurId = filter_var($_POST['new_unsur_id'] ?? 0, FILTER_VALIDATE_INT);
+            $newUrutan = filter_var($_POST['new_urutan'] ?? 0, FILTER_VALIDATE_INT);
+            
+            if (!$bagianId) {
+                throw new Exception('Bagian ID is required');
+            }
+            
+            try {
+                $pdo->beginTransaction();
+                
+                // Check if urutan column exists
+                $columnCheck = $pdo->query("SHOW COLUMNS FROM bagian LIKE 'urutan'");
+                $hasUrutanColumn = $columnCheck->rowCount() > 0;
+                
+                if ($hasUrutanColumn) {
+                    // Update bagian's unsur and urutan
+                    $stmt = $pdo->prepare("UPDATE bagian SET id_unsur = ?, urutan = ? WHERE id = ?");
+                    $stmt->execute([$newUnsurId, $newUrutan, $bagianId]);
+                    
+                    // Reorder other bagian in the same unsur to maintain sequence
+                    $stmt = $pdo->prepare("SELECT id, urutan FROM bagian WHERE id_unsur = ? AND id != ? ORDER BY urutan");
+                    $stmt->execute([$newUnsurId, $bagianId]);
+                    $otherBagians = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    
+                    $urutan = 1;
+                    foreach ($otherBagians as $other) {
+                        if ($urutan == $newUrutan) $urutan++; // Skip the moved position
+                        $updateStmt = $pdo->prepare("UPDATE bagian SET urutan = ? WHERE id = ?");
+                        $updateStmt->execute([$urutan, $other['id']]);
+                        $urutan++;
+                    }
+                    
+                    $message = 'Bagian berhasil dipindahkan dan urutan diperbarui!';
+                } else {
+                    // Fallback: only update unsur if urutan column doesn't exist
+                    $stmt = $pdo->prepare("UPDATE bagian SET id_unsur = ? WHERE id = ?");
+                    $stmt->execute([$newUnsurId, $bagianId]);
+                    $message = 'Bagian berhasil dipindahkan (urutan tidak disimpan karena column tidak ada)';
+                }
+                
+                $pdo->commit();
+                
+                echo json_encode([
+                    'success' => true,
+                    'message' => $message
+                ]);
+            } catch (Exception $e) {
+                $pdo->rollback();
+                throw $e;
+            }
+            break;
+            
         case 'get_bagian_stats':
             $stmt = $pdo->query("
                 SELECT 
@@ -171,10 +258,13 @@ try {
     }
     
 } catch (Exception $e) {
-    echo json_encode([
-        'success' => false,
-        'message' => $e->getMessage(),
-        'error' => $e->getMessage()
-    ]);
+    error_log('[bagian_api] ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+    $safeMessage = in_array($e->getMessage(), [
+        'ID is required', 'ID and nama bagian are required',
+        'Nama bagian is required', 'Nama bagian terlalu panjang (maks 255 karakter)',
+        'Bagian ID is required', 'Invalid action'
+    ]) ? $e->getMessage() : 'Terjadi kesalahan. Silakan coba lagi.';
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => $safeMessage]);
 }
 ?>

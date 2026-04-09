@@ -54,110 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
-    if ($action === 'move_bagian') {
-        $bagianId = $_POST['bagian_id'] ?? 0;
-        $newUnsurId = $_POST['new_unsur_id'] ?? 0;
-        $newUrutan = $_POST['new_urutan'] ?? 0;
-        
-        try {
-            $pdo->beginTransaction();
-            
-            // Check if urutan column exists
-            $columnCheck = $pdo->query("SHOW COLUMNS FROM bagian LIKE 'urutan'");
-            $hasUrutanColumn = $columnCheck->rowCount() > 0;
-            
-            if ($hasUrutanColumn) {
-                // Update bagian's unsur and urutan
-                $stmt = $pdo->prepare("UPDATE bagian SET id_unsur = ?, urutan = ? WHERE id = ?");
-                $stmt->execute([$newUnsurId, $newUrutan, $bagianId]);
-                
-                // Reorder other bagian in the same unsur to maintain sequence
-                $stmt = $pdo->prepare("SELECT id, urutan FROM bagian WHERE id_unsur = ? AND id != ? ORDER BY urutan");
-                $stmt->execute([$newUnsurId, $bagianId]);
-                $otherBagians = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                
-                $urutan = 1;
-                foreach ($otherBagians as $other) {
-                    if ($urutan == $newUrutan) $urutan++; // Skip the moved position
-                    $updateStmt = $pdo->prepare("UPDATE bagian SET urutan = ? WHERE id = ?");
-                    $updateStmt->execute([$urutan, $other['id']]);
-                    $urutan++;
-                }
-                
-                $message = 'Bagian berhasil dipindahkan dan urutan diperbarui!';
-            } else {
-                // Fallback: only update unsur if urutan column doesn't exist
-                $stmt = $pdo->prepare("UPDATE bagian SET id_unsur = ? WHERE id = ?");
-                $stmt->execute([$newUnsurId, $bagianId]);
-                $message = 'Bagian berhasil dipindahkan (urutan tidak disimpan karena column tidak ada)';
-            }
-            
-            $pdo->commit();
-            
-            header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'message' => $message]);
-            exit;
-        } catch (Exception $e) {
-            $pdo->rollback();
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'Gagal memindahkan bagian: ' . $e->getMessage()]);
-            exit;
-        }
-    }
-    
-    if ($action === 'get_bagian_detail') {
-        $id = $_POST['id'] ?? 0;
-        $stmt = $pdo->prepare("SELECT * FROM bagian WHERE id = ?");
-        $stmt->execute([$id]);
-        $bagian = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'data' => $bagian]);
-        exit;
-    }
-    
-    if ($action === 'create_bagian') {
-        // Get next urutan for the unsur
-        $stmt = $pdo->prepare("SELECT COALESCE(MAX(urutan), 0) + 1 as next_urutan FROM bagian WHERE id_unsur = ?");
-        $stmt->execute([$_POST['id_unsur']]);
-        $nextUrutan = $stmt->fetchColumn();
-        
-        $stmt = $pdo->prepare("INSERT INTO bagian (nama_bagian, id_unsur, urutan) VALUES (?, ?, ?)");
-        $stmt->execute([$_POST['nama_bagian'], $_POST['id_unsur'], $nextUrutan]);
-        
-        header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'message' => 'Bagian berhasil ditambahkan!']);
-        exit;
-    }
-    
-    if ($action === 'update_bagian') {
-        $stmt = $pdo->prepare("UPDATE bagian SET nama_bagian = ?, id_unsur = ? WHERE id = ?");
-        $stmt->execute([$_POST['nama_bagian'], $_POST['id_unsur'], $_POST['id']]);
-        
-        header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'message' => 'Bagian berhasil diperbarui!']);
-        exit;
-    }
-    
-    if ($action === 'delete_bagian') {
-        // Check if bagian has personil
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM personil WHERE id_bagian = ?");
-        $stmt->execute([$_POST['id']]);
-        $personilCount = $stmt->fetchColumn();
-        
-        if ($personilCount > 0) {
-            header('Content-Type: application/json');
-            echo json_encode(['success' => false, 'message' => 'Tidak dapat menghapus bagian yang masih memiliki personil!']);
-            exit;
-        }
-        
-        $stmt = $pdo->prepare("DELETE FROM bagian WHERE id = ?");
-        $stmt->execute([$_POST['id']]);
-        
-        header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'message' => 'Bagian berhasil dihapus!']);
-        exit;
-    }
+    // All other CRUD operations are now handled by the API
+    // Redirect to API for all other actions
+    exit;
 }
 
 // Get data from database
@@ -187,14 +86,6 @@ try {
         ");
     }
     $bagianData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // DEBUG: Output data loading ke HTML
-    echo "<!-- DEBUG: Total bagian records loaded: " . count($bagianData) . " -->";
-    foreach ($bagianData as $bagian) {
-        if ($bagian['nama_bagian'] === 'BKO') {
-            echo "<!-- DEBUG: BKO found in bagianData: " . htmlspecialchars(json_encode($bagian)) . " -->";
-        }
-    }
     
     // Add type field based on bagian name - FIXED VERSION
     $bagianDataWithType = [];
@@ -537,15 +428,6 @@ try {
             <!-- Bagian Container -->
             <div class="bagian-container">
                 <div class="bagian-list sortable-bagian" data-unsur-id="<?php echo $unsur['id']; ?>">
-                    <?php 
-                    // DEBUG: Output langsung ke HTML untuk UNSUR LAINNYA
-                    if ($unsur['nama_unsur'] === 'UNSUR LAINNYA') {
-                        echo "<!-- DEBUG: UNSUR LAINNYA ID={$unsur['id']}, isset=" . (isset($bagianByUnsur[$unsur['id']]) ? 'true' : 'false') . ", count=" . (isset($bagianByUnsur[$unsur['id']]) ? count($bagianByUnsur[$unsur['id']]) : 'N/A') . " -->";
-                        if (isset($bagianByUnsur[$unsur['id']])) {
-                            echo "<!-- DEBUG: bagians=" . htmlspecialchars(json_encode($bagianByUnsur[$unsur['id']])) . " -->";
-                        }
-                    }
-                    ?>
                     <?php if (isset($bagianByUnsur[$unsur['id']]) && is_array($bagianByUnsur[$unsur['id']]) && count($bagianByUnsur[$unsur['id']]) > 0): ?>
                         <?php foreach ($bagianByUnsur[$unsur['id']] as $bagian): ?>
                         <div class="bagian-item" data-id="<?php echo isset($bagian['id']) ? $bagian['id'] : ''; ?>" data-urutan="<?php echo isset($bagian['urutan']) ? $bagian['urutan'] : 0; ?>" data-unsur-id="<?php echo isset($bagian['id_unsur']) ? $bagian['id_unsur'] : ''; ?>">
@@ -610,33 +492,12 @@ try {
                     
                     <div class="mb-3">
                         <label for="id_unsur" class="form-label">Unsur</label>
-                        <select class="form-select" id="id_unsur" name="id_unsur" required onchange="onUnsurChange()">
+                        <select class="form-select" id="id_unsur" name="id_unsur" required>
                             <option value="">-- Pilih Unsur --</option>
                             <?php foreach ($unsurData as $unsur): ?>
                             <option value="<?php echo $unsur['id']; ?>"><?php echo htmlspecialchars($unsur['nama_unsur']); ?></option>
                             <?php endforeach; ?>
                         </select>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="type" class="form-label">Type</label>
-                        <select class="form-select" id="type" name="type" required>
-                            <option value="BAG/SAT/SIE">BAG/SAT/SIE</option>
-                            <option value="POLSEK">POLSEK</option>
-                            <option value="SPKT">SPKT</option>
-                            <option value="SIUM">SIUM</option>
-                            <option value="SIKEU">SIKEU</option>
-                            <option value="SIDOKKES">SIDOKKES</option>
-                            <option value="SIWAS">SIWAS</option>
-                            <option value="SITIK">SITIK</option>
-                            <option value="SIKUM">SIKUM</option>
-                            <option value="SIPROPAM">SIPROPAM</option>
-                            <option value="SIHUMAS">SIHUMAS</option>
-                            <option value="BKO">BKO</option>
-                        </select>
-                        <div class="form-text">
-                            <i class="fas fa-info-circle me-1"></i>Type akan otomatis disesuaikan berdasarkan unsur yang dipilih
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -798,7 +659,6 @@ function handleBagianMove(evt) {
     // Update counts
     updateBagianCounts();
     
-    console.log('Bagian moved:', change);
 }
 
 // Show save/cancel buttons
@@ -824,12 +684,14 @@ function saveAllChanges() {
         return;
     }
     
-    console.log('Saving changes:', changes);
-    
+    const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
     const savePromises = changes.map(change => {
         return fetch('../api/bagian_api.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRF-TOKEN': csrfToken
+            },
             body: new URLSearchParams({
                 action: 'move_bagian',
                 bagian_id: change.bagian_id,
@@ -842,7 +704,6 @@ function saveAllChanges() {
     Promise.all(savePromises)
         .then(responses => Promise.all(responses.map(r => r.json())))
         .then(results => {
-            console.log('Save results:', results);
             const allSuccess = results.every(r => r.success);
             if (allSuccess) {
                 try {
@@ -907,7 +768,6 @@ function openAddModal() {
     document.getElementById('formId').value = '';
     document.getElementById('nama_bagian').value = '';
     document.getElementById('id_unsur').value = '';
-    document.getElementById('type').value = 'BAG/SAT/SIE';
     
     const modal = new bootstrap.Modal(document.getElementById('bagianModal'));
     modal.show();
@@ -920,66 +780,18 @@ function openAddModalForUnsur(unsurId, unsurName) {
     document.getElementById('nama_bagian').value = '';
     document.getElementById('id_unsur').value = unsurId;
     
-    // Auto-set type based on unsur
-    const autoType = getBagianTypeByUnsur(unsurId, unsurName);
-    document.getElementById('type').value = autoType;
-    
     const modal = new bootstrap.Modal(document.getElementById('bagianModal'));
     modal.show();
 }
 
-function getBagianTypeByUnsur(unsurId, unsurName) {
-    // Mapping unsur ke default bagian type
-    const unsurTypeMapping = {
-        // UNSUR PIMPINAN
-        '1': 'PIMPINAN',
-        'UNSUR PIMPINAN': 'PIMPINAN',
-        
-        // PEMBANTU PIMPINAN DAN STAFF
-        '8': 'BAG',
-        'PEMBANTU PIMPINAN DAN STAFF': 'BAG',
-        
-        // UNSUR PELAKSANA TUGAS POKOK
-        '3': 'SAT',
-        'UNSUR PELAKSANA TUGAS POKOK': 'SAT',
-        
-        // UNSUR PELAKSANA KEWILAYAHAN  
-        '4': 'POLSEK',
-        'UNSUR PELAKSANA KEWILAYAHAN': 'POLSEK',
-        
-        // UNSUR PENDUKUNG
-        '5': 'SIUM',
-        'UNSUR PENDUKUNG': 'SIUM',
-        
-        // UNSUR LAINNYA
-        '6': 'BKO',
-        'UNSUR LAINNYA': 'BKO'
-    };
-    
-    // Try to find by ID first, then by name
-    return unsurTypeMapping[unsurId] || 
-           unsurTypeMapping[unsurName] || 
-           'BAG/SAT/SIE'; // Default fallback
-}
-
-function onUnsurChange() {
-    const unsurSelect = document.getElementById('id_unsur');
-    const typeSelect = document.getElementById('type');
-    
-    if (unsurSelect.value) {
-        const selectedOption = unsurSelect.options[unsurSelect.selectedIndex];
-        const unsurName = selectedOption.textContent;
-        const unsurId = unsurSelect.value;
-        
-        const autoType = getBagianTypeByUnsur(unsurId, unsurName);
-        typeSelect.value = autoType;
-    }
-}
-
 function editBagian(id) {
+    const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
     fetch('../api/bagian_api.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRF-TOKEN': csrfToken
+        },
         body: new URLSearchParams({ action: 'get_bagian_detail', id: id })
     })
     .then(response => response.json())
@@ -991,7 +803,6 @@ function editBagian(id) {
             document.getElementById('formId').value = bagian.id;
             document.getElementById('nama_bagian').value = bagian.nama_bagian;
             document.getElementById('id_unsur').value = bagian.id_unsur;
-            document.getElementById('type').value = bagian.type;
             
             const modal = new bootstrap.Modal(document.getElementById('bagianModal'));
             modal.show();
@@ -1038,9 +849,12 @@ document.getElementById('bagianForm').addEventListener('submit', function(e) {
     
     const formData = new FormData(this);
     const action = formData.get('action');
+    const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
+    formData.append('csrf_token', csrfToken);
     
     fetch('../api/bagian_api.php', {
         method: 'POST',
+        headers: { 'X-CSRF-TOKEN': csrfToken },
         body: formData
     })
     .then(response => response.json())

@@ -17,11 +17,11 @@ define('INCLUDES_PATH', ROOT_PATH . '/includes');
 define('ASSETS_PATH', ROOT_PATH . '/public/assets');
 define('DOCS_PATH', ROOT_PATH . '/docs');
 
-// Database Configuration
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'bagops');
-define('DB_USER', 'root');
-define('DB_PASS', 'root');
+// Database Configuration - Use environment variables with fallback
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_NAME', getenv('DB_NAME') ?: 'bagops');
+define('DB_USER', getenv('DB_USER') ?: 'root');
+define('DB_PASS', getenv('DB_PASS') ?: 'root');
 
 // Application Configuration
 define('APP_NAME', 'POLRES Samosir Management System');
@@ -29,7 +29,7 @@ define('APP_VERSION', '1.0.0');
 define('ENVIRONMENT', 'development');
 
 // Security Configuration
-define('JWT_SECRET', 'your-secret-key-here');
+define('JWT_SECRET', bin2hex(random_bytes(32)));
 define('SESSION_LIFETIME', 3600); // 1 hour
 
 // Session security settings - Handled by SessionManager
@@ -39,8 +39,10 @@ define('SESSION_LIFETIME', 3600); // 1 hour
 define('API_RATE_LIMIT', 100); // requests per hour
 define('API_TIMEOUT', 30); // seconds
 
-// Debug Configuration - ON for development
-define('DEBUG_MODE', true);
+// Debug Configuration - Use environment variable
+$debugMode = getenv('DEBUG_MODE') === 'true' || ENVIRONMENT === 'development';
+define('DEBUG_MODE', $debugMode);
+
 if (DEBUG_MODE && session_status() === PHP_SESSION_NONE) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);

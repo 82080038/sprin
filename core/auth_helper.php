@@ -174,11 +174,11 @@ class AuthHelper {
     }
     
     /**
-     * Generate CSRF token (for future implementation)
+     * Generate CSRF token
      */
     public static function generateCSRFToken() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
+        if (!SessionManager::isActive()) {
+            SessionManager::start();
         }
         
         if (!isset($_SESSION['csrf_token'])) {
@@ -186,5 +186,36 @@ class AuthHelper {
         }
         
         return $_SESSION['csrf_token'];
+    }
+    
+    /**
+     * Validate CSRF token
+     */
+    public static function validateCSRFToken($token) {
+        if (!SessionManager::isActive()) {
+            return false;
+        }
+        
+        if (!isset($_SESSION['csrf_token'])) {
+            return false;
+        }
+        
+        return hash_equals($_SESSION['csrf_token'], $token);
+    }
+    
+    /**
+     * Require CSRF token validation
+     */
+    public static function requireCSRFToken() {
+        $token = $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+        
+        if (!self::validateCSRFToken($token)) {
+            http_response_code(403);
+            echo json_encode([
+                'success' => false,
+                'message' => 'CSRF token validation failed'
+            ]);
+            exit;
+        }
     }
 }

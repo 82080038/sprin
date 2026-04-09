@@ -94,6 +94,92 @@ try {
             ], JSON_PRETTY_PRINT);
             break;
             
+        case 'get_schedules':
+            $start_date = $_GET['start_date'] ?? date('Y-m-01');
+            $end_date = $_GET['end_date'] ?? date('Y-m-t');
+            
+            $stmt = $pdo->prepare("
+                SELECT * FROM jadwal 
+                WHERE tanggal BETWEEN ? AND ? AND is_deleted = FALSE
+                ORDER BY tanggal ASC, waktu_mulai ASC
+            ");
+            $stmt->execute([$start_date, $end_date]);
+            $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            echo json_encode([
+                'success' => true,
+                'data' => $schedules
+            ]);
+            break;
+            
+        case 'create_schedule':
+            $tanggal = $_POST['tanggal'] ?? '';
+            $waktu_mulai = $_POST['waktu_mulai'] ?? '';
+            $waktu_selesai = $_POST['waktu_selesai'] ?? '';
+            $kegiatan = $_POST['kegiatan'] ?? '';
+            $personil_id = $_POST['personil_id'] ?? null;
+            $lokasi = $_POST['lokasi'] ?? '';
+            
+            if (!$tanggal || !$waktu_mulai || !$kegiatan) {
+                throw new Exception('Tanggal, waktu mulai, dan kegiatan harus diisi');
+            }
+            
+            $stmt = $pdo->prepare("
+                INSERT INTO jadwal (tanggal, waktu_mulai, waktu_selesai, kegiatan, personil_id, lokasi, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, NOW())
+            ");
+            $stmt->execute([$tanggal, $waktu_mulai, $waktu_selesai, $kegiatan, $personil_id, $lokasi]);
+            
+            echo json_encode([
+                'success' => true,
+                'message' => 'Jadwal berhasil ditambahkan',
+                'id' => $pdo->lastInsertId()
+            ]);
+            break;
+            
+        case 'update_schedule':
+            $schedule_id = $_POST['schedule_id'] ?? 0;
+            $tanggal = $_POST['tanggal'] ?? '';
+            $waktu_mulai = $_POST['waktu_mulai'] ?? '';
+            $waktu_selesai = $_POST['waktu_selesai'] ?? '';
+            $kegiatan = $_POST['kegiatan'] ?? '';
+            $personil_id = $_POST['personil_id'] ?? null;
+            $lokasi = $_POST['lokasi'] ?? '';
+            
+            if (!$schedule_id) {
+                throw new Exception('Schedule ID is required');
+            }
+            
+            $stmt = $pdo->prepare("
+                UPDATE jadwal 
+                SET tanggal = ?, waktu_mulai = ?, waktu_selesai = ?, kegiatan = ?, personil_id = ?, lokasi = ?, updated_at = NOW()
+                WHERE id = ?
+            ");
+            $stmt->execute([$tanggal, $waktu_mulai, $waktu_selesai, $kegiatan, $personil_id, $lokasi, $schedule_id]);
+            
+            echo json_encode([
+                'success' => true,
+                'message' => 'Jadwal berhasil diperbarui'
+            ]);
+            break;
+            
+        case 'delete_schedule':
+            $schedule_id = $_POST['schedule_id'] ?? 0;
+            
+            if (!$schedule_id) {
+                throw new Exception('Schedule ID is required');
+            }
+            
+            // Soft delete
+            $stmt = $pdo->prepare("UPDATE jadwal SET is_deleted = TRUE, deleted_at = NOW() WHERE id = ?");
+            $stmt->execute([$schedule_id]);
+            
+            echo json_encode([
+                'success' => true,
+                'message' => 'Jadwal berhasil dihapus'
+            ]);
+            break;
+            
         default:
             throw new Exception("Invalid action: $action");
     }

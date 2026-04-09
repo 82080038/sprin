@@ -671,17 +671,7 @@ function editPersonil(id) {
                     // Set jabatan (after longer delay to ensure jabatan dropdown is fully populated)
                     setTimeout(function() {
                         if (p.id_jabatan) {
-                            console.log('Setting jabatan ID:', p.id_jabatan);
                             $('#id_jabatan').val(p.id_jabatan);
-                            
-                            // Debug: Check if jabatan was set
-                            setTimeout(function() {
-                                const selectedJabatan = $('#id_jabatan').val();
-                                console.log('Jabatan selected:', selectedJabatan);
-                                if (!selectedJabatan) {
-                                    console.log('Available jabatan options:', $('#id_jabatan option').map(function() { return {value: $(this).val(), text: $(this).text()}; }).get());
-                                }
-                            }, 100);
                         }
                     }, 300); // Increased delay
                 }, 200); // Increased delay

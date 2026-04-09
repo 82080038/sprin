@@ -4,9 +4,10 @@
  * Returns detailed statistics for personil data (no auth required for testing)
  */
 
-// Enable error reporting for debugging
+// Error reporting controlled by config
+require_once __DIR__ . '/../core/config.php';
 error_reporting(E_ALL);
-ini_set('display_errors', 0); // Don't display errors in output
+ini_set('display_errors', defined('DEBUG_MODE') && DEBUG_MODE ? 1 : 0);
 ini_set('log_errors', 1);
 
 // Set headers

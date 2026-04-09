@@ -36,20 +36,28 @@ class BackupManager {
      */
     public function createDatabaseBackup($filename = null) {
         $timestamp = date('Y-m-d_H-i-s');
+        // Sanitize filename - only allow safe characters
         $filename = $filename ?? "db_backup_{$timestamp}.sql";
-        $filepath = $this->backupPath . $filename;
+        $filename = preg_replace('/[^a-zA-Z0-9_\-\.]/', '_', basename($filename));
+        $filepath = realpath($this->backupPath) . DIRECTORY_SEPARATOR . $filename;
         
-        // Build mysqldump command
+        // Prevent path traversal
+        if (strpos($filepath, realpath($this->backupPath)) !== 0) {
+            throw new Exception('Invalid backup path');
+        }
+        
+        // Build mysqldump command using MYSQL_PWD env var to avoid password in command
+        putenv('MYSQL_PWD=' . $this->dbConfig['password']);
         $command = sprintf(
-            'mysqldump -h %s -u %s -p%s %s --single-transaction --routines --triggers > %s 2>&1',
+            'mysqldump -h %s -u %s %s --single-transaction --routines --triggers > %s 2>/dev/null',
             escapeshellarg($this->dbConfig['host']),
             escapeshellarg($this->dbConfig['user']),
-            escapeshellarg($this->dbConfig['password']),
             escapeshellarg($this->dbConfig['database']),
             escapeshellarg($filepath)
         );
         
         exec($command, $output, $returnCode);
+        putenv('MYSQL_PWD');
         
         if ($returnCode !== 0) {
             // Try alternative: PDO backup

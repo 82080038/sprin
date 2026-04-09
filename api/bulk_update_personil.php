@@ -8,19 +8,27 @@ require_once __DIR__ . '/../core/config.php';
 
 header("Content-Type: application/json");
 
-// Enable error reporting
+// Error reporting controlled by config
 error_reporting(E_ALL);
-ini_set("display_errors", 1);
+ini_set("display_errors", defined('DEBUG_MODE') && DEBUG_MODE ? 1 : 0);
+ini_set("log_errors", 1);
 
 try {
     // Connect to database
     $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PASS);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    // Get method
+    // Only allow POST from authenticated sessions
     $method = $_SERVER["REQUEST_METHOD"];
     
     if ($method === "POST") {
+        // Basic auth check
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        if (empty($_SESSION['user_id'])) {
+            http_response_code(401);
+            echo json_encode(["success" => false, "message" => "Unauthorized"]);
+            exit;
+        }
         // Get JSON data
         $json_data = file_get_contents("php://input");
         $personil_data = json_decode($json_data, true);

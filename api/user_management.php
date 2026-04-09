@@ -165,6 +165,9 @@ try {
             }
             
             if (isset($_POST['role'])) {
+                if (!in_array($_POST['role'], ['admin', 'operator', 'viewer'])) {
+                    throw new Exception('Invalid role value');
+                }
                 $updates[] = "role = ?";
                 $params[] = $_POST['role'];
             }

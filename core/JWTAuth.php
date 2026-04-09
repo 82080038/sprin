@@ -15,7 +15,7 @@ class JWTAuth {
      */
     public static function init() {
         if (!defined('JWT_SECRET')) {
-            define('JWT_SECRET', 'sprin-secret-key-' . date('Y-m-d'));
+            throw new RuntimeException('JWT_SECRET is not defined. Load core/config.php first.');
         }
         self::$secretKey = JWT_SECRET;
     }

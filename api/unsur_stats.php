@@ -241,12 +241,10 @@ try {
     exit;
     
 } catch(Exception $e) {
+    error_log('[unsur_stats] ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
     header('Content-Type: application/json; charset=UTF-8');
-    echo json_encode([
-        'success' => false,
-        'message' => 'Database error: ' . $e->getMessage(),
-        'timestamp' => date('c')
-    ]);
+    $msg = (defined('DEBUG_MODE') && DEBUG_MODE) ? $e->getMessage() : 'Terjadi kesalahan. Silakan coba lagi.';
+    echo json_encode(['success' => false, 'message' => $msg, 'timestamp' => date('c')]);
     exit;
 }
 ?>
