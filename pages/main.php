@@ -60,6 +60,28 @@ include __DIR__ . '/../includes/components/header.php';
             </div>
         </div>
 
+        <!-- Piket Hari Ini Widget -->
+        <div id="piketWidget" class="mb-4" style="display:none;">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0"><i class="fa-solid fa-shield-halved me-2 text-primary"></i>Piket Hari Ini — <span id="piketTanggal"></span></h5>
+            <a href="jadwal_piket.php" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-calendar-week me-1"></i>Jadwal Lengkap</a>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-sm table-hover align-middle bg-white rounded shadow-sm">
+              <thead class="table-primary small">
+                <tr><th>Satuan</th><th>Nama</th><th>Pangkat</th><th>Shift</th><th>Jam</th><th>Status</th></tr>
+              </thead>
+              <tbody id="piketTodayBody">
+                <tr><td colspan="6" class="text-center text-muted">Memuat...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div id="piketEmptyMsg" class="alert alert-info" style="display:none;">
+          <i class="fa-solid fa-info-circle me-2"></i>Tidak ada jadwal piket terdaftar hari ini.
+          <a href="tim_piket.php" class="alert-link">Generate jadwal dari Tim Piket.</a>
+        </div>
+
         <div class="stats-section">
             <div class="row">
                 <div class="col-md-3 col-sm-6">
@@ -156,6 +178,8 @@ include __DIR__ . '/../includes/components/header.php';
             
         // Load schedule statistics (existing functionality)
         loadScheduleStatistics();
+        // Load piket hari ini
+        loadPiketHariIni();
     }
     
     function loadDetailedStatistics() {
@@ -279,4 +303,34 @@ include __DIR__ . '/../includes/components/header.php';
     
     // Trigger animation after statistics are loaded
     setTimeout(animateStatistics, 500);
+
+    function loadPiketHariIni() {
+        const today = new Date();
+        const hariNm = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'][today.getDay()];
+        const tglFmt = today.toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+        document.getElementById('piketTanggal').textContent = hariNm + ', ' + tglFmt;
+        fetch('../api/tim_piket_api.php?action=get_piket_hari_ini')
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success || !data.data || !data.data.length) {
+                    document.getElementById('piketEmptyMsg').style.display = 'block';
+                    return;
+                }
+                document.getElementById('piketWidget').style.display = 'block';
+                const shiftColors = {PAGI:'#fff3cd',SIANG:'#cfe2ff',MALAM:'#d1ecf1',FULL_DAY:'#d4edda',ROTASI:'#f8d7da'};
+                const rows = data.data.map(r => `
+                    <tr>
+                        <td><small class="fw-bold">${r.nama_bagian||'-'}</small></td>
+                        <td>${r.personil_name||r.personil_id}</td>
+                        <td><small class="text-muted">${r.nama_pangkat||'-'}</small></td>
+                        <td><span style="background:${shiftColors[r.shift_type]||'#eee'};padding:2px 8px;border-radius:20px;font-size:.75rem;font-weight:600">${r.shift_type}</span></td>
+                        <td><small>${(r.start_time||'').substring(0,5)} – ${(r.end_time||'').substring(0,5)}</small></td>
+                        <td><small>${r.nama_tim||'-'}</small></td>
+                    </tr>`);
+                document.getElementById('piketTodayBody').innerHTML = rows.join('');
+            })
+            .catch(() => {
+                document.getElementById('piketEmptyMsg').style.display = 'block';
+            });
+    }
 </script>

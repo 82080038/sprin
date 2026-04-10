@@ -1,188 +1,126 @@
-# 🚀 SPRIN v1.3.0 - Development Version
-
-## ⚠️ IMPORTANT NOTICE
-**This is a DEVELOPMENT version, not production-ready!**
-
-## 📋 Current Status
-
-### 🎯 Development Phase
-- **Version**: v1.3.0 Development
-- **Status**: Active Development
-- **Last Updated**: 2026-04-10
-- **Branch**: kantor
-- **Stability**: Testing Phase
-- **Production**: ❌ NOT READY
-
-### 🚧 What's Working (v1.3.0)
-- ✅ Basic CRUD operations
-- ✅ Manajemen Operasi Kepolisian (CRUD lengkap)
-- ✅ Auto-detect status operasi dari tanggal
-- ✅ Kalender FullCalendar v6 (view Tahun/Bulan/Minggu/Hari/Agenda)
-- ✅ Manajemen Tim / Regu Piket per bagian/fungsi
-- ✅ Kelola anggota tim (dual-list)
-- ✅ Generate jadwal berulang dari tim (harian/mingguan/bulanan/tahunan)
-- ✅ Database recurrence di schedules & operations
-- ✅ Navbar Operasional: Schedule / Daftar Operasi / Tim Piket
-
-### ⚠️ What's In Progress / Next
-- 🔄 Recurrence di modal jadwal kalender
-- 🔄 Recurrence di modal operasi
-- 🔄 Badge 🔁 event berulang di kalender
-- 🔄 Halaman jadwal piket per tim
-- 🔄 Dashboard piket hari ini
-- 🔄 Absensi/konfirmasi kehadiran piket
-
-## 🧪 For Testing Only
-
-### 📋 Requirements for Testers
-- **PHP 8.0+**
-- **MySQL 5.7+ / MariaDB 10.3+**
-- **Apache Web Server**
-- **Development environment** (NOT production)
-
-### ⚡ Test Installation
-
-```bash
-# 1. Clone Development Version
-git clone https://github.com/82080038/sprin.git
-cd sprin
-
-# 2. Database Setup (Testing)
-mysql -u root -p
-CREATE DATABASE bagops_test;
-mysql -u root -p bagops_test < database/bagops.sql
-
-# 3. Run Migrations (Testing)
-mysql -u root -p bagops_test < database/migrations/create_users_table.sql
-mysql -u root -p bagops_test < database/migrations/create_backup_tables.sql
-
-# 4. Configure for Development
-cp core/config.php.example core/config.php
-# Edit for TEST database
-
-# 5. Test Environment Setup
-mkdir -p backups logs cache
-chmod 755 backups logs cache
-
-# 6. Access Test Application
-# http://localhost/sprint
-# Login: bagops / admin123
-```
-
-## 🚫 NOT FOR PRODUCTION USE
-
-### ⚠️ Development Warnings
-- **Security**: Not fully hardened
-- **Performance**: Not optimized
-- **Backup**: System in testing
-- **Multi-user**: Features in development
-- **Error Handling**: Still being improved
-
-### 📝 Known Issues
-- Some edge cases in error handling
-- Performance issues with large datasets
-- Backup system needs more testing
-- Multi-user session management needs validation
-
-## 🧪 Testing Guidelines
-
-### ✅ Safe to Test
-- Basic CRUD operations
-- UI/UX features
-- Modal functionality
-- Form validations
-- Export features
-
-### ⚠️ Test with Caution
-- Multi-user features
-- Backup/restore operations
-- User management
-- Report generation
-- Calendar integration
-
-### 🚫 Do NOT Test in Production
-- Any security features
-- Real personnel data
-- Production database
-- Live systems
-
-## 📊 Development Progress
-
-### 🎯 Completed Features (v1.2.0)
-- [x] Modal consistency
-- [x] Auto-generation features
-- [x] Card-based layouts
-- [x] Basic CRUD operations
-- [x] Export functionality
-
-### 🔄 In Progress
-- [ ] Performance optimization
-- [ ] Security hardening
-- [ ] Error handling improvements
-- [ ] Multi-user testing
-- [ ] Backup system validation
-
-### 📋 Planned for v1.3.0
-- [ ] Production security audit
-- [ ] Performance optimization
-- [ ] Advanced error handling
-- [ ] Production deployment guide
-- [ ] Stability testing
-
-## 🔧 Development Configuration
-
-### 📁 Development Structure
-```
-📁 sprin/
-├── 📄 README.md               # Main documentation
-├── 📄 DEVELOPMENT_README.md   # This file
-├── 📁 pages/                  # Application pages
-├── 📁 api/                    # API endpoints
-├── 📁 core/                   # Core system files
-├── 📁 database/               # Database files
-├── 📁 tests/                  # Test files
-└── 📁 docs/                   # Documentation
-```
-
-### 🧪 Testing Environment
-- Use separate test database
-- Enable debug mode
-- Monitor error logs
-- Test with sample data only
-
-## 📚 Documentation
-
-- **[Complete Documentation](docs/README.md)**
-- **[Development Summary](docs/DEVELOPMENT_SUMMARY.md)**
-- **[Folder Structure](docs/STRUKTUR_FOLDER.md)**
-
-## 🆘 Development Support
-
-### 📋 Default Test Credentials
-- **Username**: `bagops`
-- **Password**: `admin123`
-
-### 🐛 Reporting Issues
-- Create issues in GitHub
-- Describe development environment
-- Include error logs
-- Provide steps to reproduce
-
-## 📅 Development Timeline
-
-### 🎯 Current Sprint: v1.2.0 Development
-- **Focus**: UI/UX improvements
-- **Status**: Testing phase
-- **Next**: Stability improvements
-
-### 📅 Planned Releases
-- **v1.2.1**: Bug fixes and stability
-- **v1.3.0**: Performance optimization
-- **v1.4.0**: Production readiness
+# 🚀 SPRIN v1.4.1-dev — Development README
+**Last Updated**: 2026-04-10 | **Branch**: kantor | **Status**: Active Development
 
 ---
 
-**⚠️ DEVELOPMENT VERSION - FOR TESTING ONLY**
-**🚫 NOT PRODUCTION READY - DO NOT DEPLOY TO LIVE SYSTEMS**
+## 📋 Versi & Status
 
-For production deployment, wait for official stable release.
+| Item | Detail |
+|------|--------|
+| Versi | **v1.4.1-dev** |
+| Branch | `kantor` |
+| PHP | 8.0+ (XAMPP) |
+| DB | MySQL 5.7+ · Nama: `bagops` |
+| Stability | Testing / Development |
+
+---
+
+## ✅ Fitur yang Sudah Berjalan
+
+### 👤 Manajemen Personil
+- CRUD personil: NRP, pangkat, jabatan, bagian, unsur
+- Filter & pencarian
+- **256 personil aktif** terdaftar
+
+### 🎯 Manajemen Operasi (`/pages/operasi.php`)
+- CRUD operasi kepolisian lengkap
+- Field: tingkat_operasi, jenis_operasi, dukgra (terbilang otomatis)
+- Auto-detect status dari tanggal (Selesai/Berlangsung/Agenda)
+- Badge visual berdasarkan status & tingkat
+
+### 📅 Kalender Jadwal (`/pages/calendar_dashboard.php`)
+- FullCalendar **v6.1.15** (upgrade dari 5.11.3)
+- View: Tahun / Bulan / Minggu / Hari / Agenda Tahun
+- Locale Indonesia (bundled)
+- CRUD jadwal dari kalender
+
+### 🛡️ Manajemen Tim Piket (`/pages/tim_piket.php`)
+- Filter cerdas: **Unsur Tugas Pokok + Kewilayahan + SPKT** (15 satuan)
+- Form Tambah Tim: Unsur → Bagian → Nama → Jenis → Fase → Jam+Durasi
+- **Papan Siklus Kanban** per satuan — visualisasi fase sebagai kolom
+- **Drag & drop** kartu tim antar kolom fase
+- Modal **Atur Siklus**: definisi fase, durasi, jam mulai auto/manual
+- Kelola anggota tim (dual-list: tersedia ↔ anggota)
+- Generate jadwal berulang dari tim (harian/mingguan/bulanan/tahunan)
+
+### 📋 Jadwal Piket (`/pages/jadwal_piket.php`) — **BARU v1.4.1**
+- View jadwal per tim per bulan/tahun
+- Tabel per tanggal: nama, pangkat, shift, jam, lokasi
+- Input absensi (hadir/tidak_hadir/sakit/ijin/terlambat) + jam hadir
+- Hapus jadwal series per bulan
+- Cetak (print CSS)
+
+### 🏠 Dashboard Piket Hari Ini (`/pages/main.php`) — **BARU v1.4.1**
+- Widget otomatis tampil jika ada jadwal dari tim piket hari ini
+- Tabel: Satuan | Nama | Pangkat | Shift | Jam | Tim
+- Link langsung ke Jadwal Lengkap
+
+---
+
+## 🗃️ Status Database
+
+| Tabel | Status | Keterangan |
+|-------|--------|------------|
+| `personil` | ✅ | 256 record |
+| `tim_piket` | ✅ | 15 kolom (fase, jam, durasi) |
+| `tim_piket_anggota` | ✅ | |
+| `siklus_piket_fase` | ✅ | Definisi fase per bagian |
+| `piket_absensi` | ✅ | **BARU v1.4.1** — absensi harian |
+| `schedules` | ✅ | + recurrence + tim_id |
+| `operations` | ✅ | + tingkat/jenis + recurrence |
+
+---
+
+## 📁 File Utama
+
+```
+pages/
+├── main.php               # Dashboard + widget piket hari ini
+├── tim_piket.php          # Papan siklus + manajemen tim
+├── jadwal_piket.php       # Jadwal per tim + absensi   ← BARU
+├── calendar_dashboard.php # Kalender FullCalendar 6.1.15
+├── operasi.php            # Daftar & manajemen operasi
+api/
+├── tim_piket_api.php      # get_piket_hari_ini, save_absensi, delete_jadwal_series ← BARU
+├── calendar_api_public.php
+cron/
+└── migrate_tim_piket.php  # Migration DB (termasuk piket_absensi)
+```
+
+---
+
+## 🔄 Selanjutnya (Fase 1 sisa)
+
+- [ ] Recurrence di modal jadwal kalender (pilih tim + pengulangan)
+- [ ] Badge 🔁 di kalender untuk event berulang
+- [ ] Recurrence di modal Tambah/Edit Operasi
+
+## 🟠 Fase 2 — Sistem Piket Lengkap
+
+- [ ] Cover Management — substitusi personil absen
+- [ ] Rekap Absensi per bulan per satuan
+
+## 🟡 Fase 3 — Laporan & Cetak
+
+- [ ] Laporan Operasi (rekap bulanan + grafik)
+- [ ] Cetak Surat Perintah Tugas (ST)
+
+---
+
+## 🔧 Setup Development
+
+```bash
+# Start XAMPP
+sudo /opt/lampp/lampp start
+
+# Run Migration (jika tabel belum ada)
+# Browser: http://localhost/sprin/cron/migrate_tim_piket.php
+
+# Akses aplikasi
+# http://localhost/sprin/pages/main.php
+```
+
+**DB**: host=localhost, name=bagops, user=root, pass=root
+
+---
+**⚠️ DEVELOPMENT VERSION — SAMPLE DATA ONLY**

@@ -1,199 +1,141 @@
-# Rencana Pengembangan Selanjutnya — SPRIN v1.3.x
-**Dibuat**: 2026-04-10  
+# Rencana Pengembangan SPRIN v1.4.x
+**Diperbarui**: 2026-04-10  
 **Branch**: kantor  
 **Status**: Aktif dikerjakan
 
 ---
 
-## ✅ Sudah Selesai (Sesi Ini)
+## ✅ SELESAI — v1.3.x
 
-### Modul Operasi Kepolisian
-- [x] Halaman `operasi.php` — daftar operasi dengan filter, stat cards, tabel lengkap
-- [x] Modal View detail operasi (semua field + badge)
-- [x] Modal Edit operasi (form lengkap pre-filled)
-- [x] Modal Tambah Operasi dipindah dari `calendar_dashboard.php` ke `operasi.php`
-- [x] Tombol Hapus operasi dengan konfirmasi
-- [x] API: `create_operation`, `update_operation`, `delete_operation`
-- [x] Auto-detect status dari tanggal (Selesai / Sedang Berlangsung / Agenda)
-- [x] Terbilang (angka → kata Indonesia) untuk field Dukgra
-- [x] Field `tingkat_operasi`, `jenis_operasi`, `operation_date_end` di DB dan form
-- [x] Navbar dropdown "Operasional" (Schedule / Daftar Operasi / Tim Piket)
+- [x] Modul Operasi Kepolisian — CRUD + auto-detect status + terbilang dukgra
+- [x] Kalender FullCalendar 6.1.15 — view Tahun/Bulan/Minggu/Hari/Agenda
+- [x] Tim Piket Foundation — DB tabel, API CRUD, generate jadwal
 
-### Kalender
-- [x] Upgrade FullCalendar 5.11.3 → 6.1.15
-- [x] Tambah view Tahunan (`multiMonthYear`) dan Agenda Tahun (`listYear`)
-- [x] Tombol navigasi: Tahun | Bulan | Minggu | Hari | Agenda Tahun
+## ✅ SELESAI — v1.4.0-dev
 
-### Tim Piket & Jadwal Berulang
-- [x] Migration DB: tabel `tim_piket`, `tim_piket_anggota`
-- [x] Kolom recurrence di `schedules` dan `operations`
-- [x] Halaman `tim_piket.php` — CRUD tim per bagian/unsur
-- [x] Kelola anggota tim (dual-list panel)
-- [x] Generate jadwal dari tim dengan pola berulang (harian/mingguan/bulanan/tahunan)
-- [x] API `tim_piket_api.php` lengkap
+- [x] DB: tabel `siklus_piket_fase`, kolom baru di `tim_piket`
+- [x] Filter cerdas bagian: Unsur 3+4 + SPKT (id=20), **15 satuan**
+- [x] Form Tambah Tim baru: Unsur→Bagian→Nama→Jenis→Fase→Jam+Durasi
+- [x] Papan Siklus Kanban per satuan + Drag & Drop
+- [x] Modal Atur Siklus: fase, durasi, jam, mode Auto/Manual, propagasi
+- [x] API: `get_siklus`, `save_siklus`, `geser_fase`
+- [x] Dokumentasi MD diperbarui + `piket.md` workflow
 
----
+## ✅ SELESAI — v1.4.1-dev (Sesi Ini)
 
-## 🔲 Prioritas Tinggi — Kerjakan Selanjutnya
-
-### 1. Update `openScheduleModal` dengan Tim & Recurrence
-**File**: `pages/calendar_dashboard.php`  
-**Estimasi**: 2–3 jam  
-
-Tambahkan ke modal jadwal:
-- [ ] Section "Dari Tim Piket" — dropdown pilih tim → auto-fill personil
-- [ ] Section "Pengulangan" — pilih jenis + interval + hari (weekly)
-- [ ] Preview teks pengulangan real-time
-- [ ] Kirim ke API dengan field recurrence
-
-```
-Kolom baru yang dikirim ke API:
-- tim_id (opsional)
-- recurrence_type
-- recurrence_interval
-- recurrence_days
-- recurrence_end
-```
+- [x] **DB: tabel `piket_absensi`** — absensi harian dengan status + jam hadir
+- [x] **Halaman `jadwal_piket.php`** — view jadwal per tim/bulan + input absensi + hapus series
+- [x] **Widget Piket Hari Ini** di `main.php` — tabel otomatis dari schedules hari ini
+- [x] **Navbar** — link "Jadwal Piket" di dropdown Operasional
+- [x] **API**: `get_piket_hari_ini`, `save_absensi`, `delete_jadwal_series`
+- [x] `TODO.md` dibuat di root project
+- [x] Semua MD files diperbarui
+- [x] `cron/migrate_tim_piket.php` diperbarui dengan `piket_absensi`
 
 ---
 
-### 2. Update Modal Operasi dengan Recurrence
-**File**: `pages/operasi.php` (modal Tambah & Edit)  
-**Estimasi**: 1–2 jam  
+## 🎯 PRIORITAS TINGGI — Kerjakan Selanjutnya
 
-Tambahkan ke kedua modal:
-- [ ] Section "Pengulangan Operasi" (operasi rutin mingguan/bulanan)
-- [ ] Kirim field recurrence ke API `create_operation` / `update_operation`
+### 1. Kalender — Pilih Tim & Recurrence di Modal Jadwal
+**File**: `pages/calendar_dashboard.php`
 
----
+- [ ] Tab **"Dari Tim Piket"**: dropdown tim → personil auto-fill
+- [ ] Section **Pengulangan**: type + interval + hari (weekly) + tanggal akhir
+- [ ] Kirim `tim_id`, `recurrence_type`, `recurrence_interval`, `recurrence_days`, `recurrence_end`
 
-### 3. Kalender — Badge 🔁 untuk Event Berulang
-**File**: `pages/calendar_dashboard.php`  
-**Estimasi**: 1 jam  
+### 2. Kalender — Badge Event Berulang
+**File**: `pages/calendar_dashboard.php`
 
-- [ ] Tampilkan ikon 🔁 pada event di kalender yang punya `recurrence_type != 'none'`
-- [ ] Warna berbeda untuk event dari tim piket vs jadwal manual
-- [ ] Tooltip: "Berulang setiap X hari/minggu/bulan"
+- [ ] Icon 🔁 pada event `recurrence_type != 'none'`
+- [ ] Warna beda: tim piket vs jadwal manual
 
----
+### 3. Recurrence di Modal Operasi
+**File**: `pages/operasi.php`
 
-### 4. Halaman Jadwal Piket — View per Tim
-**File baru**: `pages/jadwal_piket.php`  
-**Estimasi**: 3–4 jam  
-
-- [ ] Tabel jadwal per tim, filter bulan/tahun
-- [ ] Tampilkan semua jadwal yang dihasilkan dari tim tertentu
-- [ ] Tombol "Hapus Series" — hapus semua jadwal dari 1 batch generate
-- [ ] Print / export PDF jadwal piket
+- [ ] Section "Pengulangan" di modal Tambah & Edit
+- [ ] Kirim ke API operasi
 
 ---
 
-## 🔲 Prioritas Sedang
+## 🔲 PRIORITAS SEDANG
 
-### 5. Manajemen Shift Rotasi Otomatis
-**Konsep**: Tim dengan `shift_default = ROTASI` otomatis berganti shift per periode  
-- [ ] Logic rotasi: hitung posisi shift berdasarkan nomor minggu/bulan
-- [ ] Tampilkan shift aktif tim saat ini di halaman tim_piket
-- [ ] Notifikasi / alert jika shift akan berganti
+### 4. Cover Management — Substitusi Personil
+- [ ] Jika personil absen → tampilkan pengganti dari satuan yang sama
+- [ ] Log: siapa menggantikan siapa, tanggal
 
----
-
-### 6. Dashboard Piket Hari Ini
-**File**: update `index.php` atau buat `pages/dashboard_piket.php`  
-- [ ] Widget: siapa piket hari ini per fungsi
-- [ ] Tabel: nama, pangkat, bagian, shift, jam
-- [ ] Status: hadir / belum hadir / ijin
-
----
-
-### 7. Absensi / Konfirmasi Kehadiran Piket
-**Tabel baru**: `piket_absensi`  
-- [ ] Personil piket bisa konfirmasi kehadiran
-- [ ] Admin bisa input status kehadiran (hadir/tidak hadir/sakit/ijin)
-- [ ] Laporan rekap absensi piket per bulan
-
----
-
-### 8. Laporan Operasi
-**File baru**: `pages/laporan_operasi.php`  
-- [ ] Rekap operasi per bulan/tahun
-- [ ] Total dukgra per jenis operasi
+### 5. Rekap Absensi Piket
+**File baru**: `pages/laporan_piket.php`
+- [ ] Rekap per personil per bulan
+- [ ] Rekap per satuan: % kehadiran
 - [ ] Export Excel/PDF
-- [ ] Grafik: operasi per tingkat, per jenis
 
 ---
 
-## 🔲 Prioritas Rendah / Future
+## 🔲 PRIORITAS RENDAH / FUTURE
 
-### 9. Notifikasi & Pengingat
-- [ ] Notifikasi H-1 sebelum jadwal piket
-- [ ] Pengingat operasi yang akan dimulai
-- [ ] Sistem notifikasi in-app (badge di navbar)
+### 6. Laporan Operasi (`pages/laporan_operasi.php`)
+- [ ] Rekap per bulan/tahun + grafik + export
 
-### 10. Laporan Lengkap Personil
-- [ ] Rekap kehadiran personil
-- [ ] Riwayat penugasan operasi per personil
-- [ ] Kartu Tanda Tugas digital
+### 7. Cetak Surat Perintah Tugas (ST)
+- [ ] Generate dokumen ST dari data tim + jadwal
 
-### 11. Multi-Level User
-- [ ] Role: Admin, Operator, Viewer
-- [ ] Operator hanya bisa input, tidak bisa hapus
-- [ ] Viewer hanya bisa lihat
+### 8. Rotasi Shift Otomatis
+- [ ] Tim `ROTASI` ganti fase siklus otomatis tiap X hari
+
+### 9. Notifikasi In-App
+- [ ] Badge navbar jadwal hari ini
+- [ ] Pengingat H-1 operasi
+
+### 10. Multi-Level User
+- [ ] Role: Admin / Operator / Viewer
+- [ ] Guard akses per role
 
 ---
 
-## 📁 Struktur File Baru (Sesi Ini)
+## 📁 Struktur File Saat Ini
 
 ```
 sprin/
+├── TODO.md                  ← ⭐ BARU — todo list lengkap semua fase
 ├── pages/
-│   ├── operasi.php          ← BARU: daftar & manajemen operasi
-│   └── tim_piket.php        ← BARU: manajemen tim piket
+│   ├── main.php             ← Dashboard + widget Piket Hari Ini ⭐
+│   ├── tim_piket.php        ← Tim + Papan Siklus Piket
+│   ├── jadwal_piket.php     ← Jadwal per Tim + Absensi ⭐ BARU
+│   ├── calendar_dashboard.php
+│   ├── operasi.php
+│   └── ...
 ├── api/
-│   └── tim_piket_api.php    ← BARU: API tim piket
+│   ├── tim_piket_api.php    ← +get_piket_hari_ini, save_absensi, delete_jadwal_series ⭐
+│   └── calendar_api_public.php
 └── cron/
-    └── migrate_tim_piket.php ← BARU: migration DB
+    └── migrate_tim_piket.php  ← +piket_absensi table ⭐
 ```
 
 ---
 
-## 🗃️ Perubahan Database (Sesi Ini)
+## 🗃️ Status Database
 
-```sql
--- Tabel baru
-CREATE TABLE tim_piket (...)
-CREATE TABLE tim_piket_anggota (...)
-
--- Kolom baru di schedules
-ALTER TABLE schedules ADD COLUMN tim_id INT NULL;
-ALTER TABLE schedules ADD COLUMN recurrence_type ENUM('none','daily','weekly','monthly','yearly');
-ALTER TABLE schedules ADD COLUMN recurrence_interval INT DEFAULT 1;
-ALTER TABLE schedules ADD COLUMN recurrence_days VARCHAR(20);
-ALTER TABLE schedules ADD COLUMN recurrence_end DATE;
-ALTER TABLE schedules ADD COLUMN recurrence_parent_id INT NULL;
-
--- Kolom baru di operations
-ALTER TABLE operations ADD COLUMN tingkat_operasi ENUM(...);
-ALTER TABLE operations ADD COLUMN jenis_operasi ENUM(...);
-ALTER TABLE operations ADD COLUMN operation_date_end DATE;
-ALTER TABLE operations ADD COLUMN recurrence_type ENUM(...);
-ALTER TABLE operations ADD COLUMN recurrence_interval INT DEFAULT 1;
-ALTER TABLE operations ADD COLUMN recurrence_days VARCHAR(20);
-ALTER TABLE operations ADD COLUMN recurrence_end DATE;
-ALTER TABLE operations ADD COLUMN recurrence_parent_id INT NULL;
-```
+| Tabel | Status |
+|-------|--------|
+| `tim_piket` | ✅ fase_siklus_id, jam_mulai_aktif, durasi_jam |
+| `tim_piket_anggota` | ✅ |
+| `siklus_piket_fase` | ✅ |
+| `piket_absensi` | ✅ **BARU** — schedule_id, status, jam_hadir |
+| `schedules` | ✅ tim_id, recurrence_* |
+| `operations` | ✅ tingkat, jenis, recurrence_* |
 
 ---
 
 ## 🔧 Catatan Teknis
 
-- **FullCalendar**: v6.1.15 (upgrade dari 5.11.3) — view tahunan `multiMonthYear` 
-- **PHP**: FullCalendar locale `id` sudah bundled dalam `index.global.min.js`
-- **API base**: semua API di `/api/`, auth via `$_SESSION['user_id']`
-- **Status auto-detect**: logika ada di JS (frontend) DAN PHP API (backend safety net)
-- **Recurrence limit**: max 365 hari ke depan per generate (safety limit di API)
-- **Terbilang**: fungsi JS di `operasi.php`, konversi angka → kata Bahasa Indonesia hingga triliun
+| Komponen | Detail |
+|----------|--------|
+| **Filter Piket** | Unsur id=3+4 + bagian id=20 (SPKT) |
+| **Satuan Piket** | 15 satuan: 9 SAT + 5 POLSEK + SPKT |
+| **FullCalendar** | v6.1.15 — locale id bundled |
+| **Auth** | Semua API: cek `$_SESSION['user_id']` |
+| **Migration** | `cron/migrate_tim_piket.php` (jalankan 1x) |
 
 ---
 
-*File ini diupdate otomatis setiap sesi pengembangan.*
+*Diupdate: 2026-04-10 — v1.4.1-dev*

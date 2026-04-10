@@ -15,6 +15,24 @@ try {
 
     $steps = [];
 
+    // ── 0. Tabel siklus_piket_fase ──────────────────────────────────────────
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `siklus_piket_fase` (
+        `id`                INT(11) NOT NULL AUTO_INCREMENT,
+        `id_bagian`         INT(11) NOT NULL,
+        `nama_fase`         VARCHAR(100) NOT NULL COMMENT 'Piket Fungsi, Lepas Piket, Piket Cadangan',
+        `urutan`            INT(11) NOT NULL DEFAULT 1,
+        `durasi_jam`        DECIMAL(4,1) NOT NULL DEFAULT 8.0,
+        `jam_mulai_default` TIME NOT NULL DEFAULT '07:00:00',
+        `jam_mulai_mode`    ENUM('auto','manual') NOT NULL DEFAULT 'auto' COMMENT 'auto=hitung dari fase sebelumnya',
+        `is_wajib`          TINYINT(1) NOT NULL DEFAULT 1 COMMENT '0=opsional seperti Piket Cadangan',
+        `keterangan`        TEXT DEFAULT NULL,
+        `created_at`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        `updated_at`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`),
+        KEY `idx_bagian_urutan` (`id_bagian`, `urutan`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Definisi fase siklus piket per bagian'");
+    $steps[] = ['✔', 'Tabel siklus_piket_fase dibuat / sudah ada'];
+
     // ── 1. Tabel tim_piket ──────────────────────────────────────────────────
     $pdo->exec("CREATE TABLE IF NOT EXISTS `tim_piket` (
         `id`            INT(11) NOT NULL AUTO_INCREMENT,
@@ -55,6 +73,21 @@ try {
         return count($r) > 0;
     };
 
+    // ── 2b. Tambah kolom fase ke tim_piket ─────────────────────────────────
+    $timPiketCols = [
+        'fase_siklus_id'  => "INT(11) DEFAULT NULL COMMENT 'FK siklus_piket_fase — tim ini sedang di fase mana'",
+        'jam_mulai_aktif' => "TIME DEFAULT NULL COMMENT 'Override jam mulai aktual tim'",
+        'durasi_jam'      => "DECIMAL(4,1) DEFAULT NULL COMMENT 'Durasi tugas dalam jam'",
+    ];
+    foreach ($timPiketCols as $col => $def) {
+        if (!$colExists('tim_piket', $col)) {
+            $pdo->exec("ALTER TABLE `tim_piket` ADD COLUMN `$col` $def");
+            $steps[] = ['✔', "tim_piket.$col ditambahkan"];
+        } else {
+            $steps[] = ['–', "tim_piket.$col sudah ada"];
+        }
+    }
+
     // ── 3. Tambah kolom recurrence ke schedules ─────────────────────────────
     $schedCols = [
         'tim_id'               => "INT(11) DEFAULT NULL COMMENT 'FK tim_piket'",
@@ -89,6 +122,28 @@ try {
             $steps[] = ['–', "operations.$col sudah ada"];
         }
     }
+
+    // ── 5. Tabel piket_absensi ──────────────────────────────────────────────
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `piket_absensi` (
+        `id`            INT(11) NOT NULL AUTO_INCREMENT,
+        `schedule_id`   INT(11) NOT NULL COMMENT 'FK schedules.id',
+        `personil_id`   VARCHAR(20) NOT NULL COMMENT 'NRP personil',
+        `tim_id`        INT(11) DEFAULT NULL COMMENT 'FK tim_piket.id',
+        `tanggal`       DATE NOT NULL,
+        `status`        ENUM('hadir','tidak_hadir','sakit','ijin','terlambat') NOT NULL DEFAULT 'hadir',
+        `jam_hadir`     TIME DEFAULT NULL COMMENT 'Jam clock-in aktual',
+        `jam_pulang`    TIME DEFAULT NULL COMMENT 'Jam clock-out aktual',
+        `catatan`       TEXT DEFAULT NULL,
+        `input_oleh`    INT(11) DEFAULT NULL COMMENT 'FK users.id',
+        `created_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        `updated_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`),
+        UNIQUE KEY `uq_schedule_personil` (`schedule_id`, `personil_id`),
+        KEY `idx_personil`  (`personil_id`),
+        KEY `idx_tanggal`   (`tanggal`),
+        KEY `idx_tim`       (`tim_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Absensi/konfirmasi kehadiran piket'");
+    $steps[] = ['✔', 'Tabel piket_absensi dibuat / sudah ada'];
 
     $pdo->exec("SET FOREIGN_KEY_CHECKS=1");
     $success = true;

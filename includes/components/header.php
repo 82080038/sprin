@@ -630,6 +630,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <li><a class="dropdown-item <?php echo $current_page == 'tim_piket.php' ? 'active' : ''; ?>" href="<?php echo url('pages/tim_piket.php'); ?>">
                                 <i class="fa-solid fa-users-gear"></i> Tim / Regu Piket
                             </a></li>
+                            <li><a class="dropdown-item <?php echo $current_page == 'jadwal_piket.php' ? 'active' : ''; ?>" href="<?php echo url('pages/jadwal_piket.php'); ?>">
+                                <i class="fa-solid fa-calendar-week"></i> Jadwal Piket
+                            </a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
