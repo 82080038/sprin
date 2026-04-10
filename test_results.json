@@ -1,0 +1,96 @@
+{
+  "timestamp": "2026-04-10 12:21:21",
+  "summary": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "success_rate": 100.0
+  },
+  "results": [
+    {
+      "name": "API Health: jabatan_api.php?action=get_all_jabatan",
+      "status": "PASS",
+      "message": "Response time: 0.06s",
+      "duration": 0.06478381156921387
+    },
+    {
+      "name": "API Health: unsur_api.php?action=get_all_unsur",
+      "status": "PASS",
+      "message": "Response time: 0.01s",
+      "duration": 0.009218931198120117
+    },
+    {
+      "name": "API Health: bagian_api.php?action=get_all_bagian",
+      "status": "PASS",
+      "message": "Response time: 0.01s",
+      "duration": 0.012196779251098633
+    },
+    {
+      "name": "CSRF Token Generation",
+      "status": "PASS",
+      "message": "Token generated: be4afb67a9cca7d0e026...",
+      "duration": 0.00923776626586914
+    },
+    {
+      "name": "Auth: Redirect to login",
+      "status": "PASS",
+      "message": "Unauthenticated users redirected to login",
+      "duration": 0.005196809768676758
+    },
+    {
+      "name": "Jabatan: Create",
+      "status": "PASS",
+      "message": "Created with ID: 139",
+      "duration": 0.011707305908203125
+    },
+    {
+      "name": "Jabatan: Delete",
+      "status": "PASS",
+      "message": "Deleted ID: 139",
+      "duration": 0.011888980865478516
+    },
+    {
+      "name": "Unsur: Get All",
+      "status": "PASS",
+      "message": "Retrieved 6 unsur records",
+      "duration": 0.048282623291015625
+    },
+    {
+      "name": "Bagian: Get All",
+      "status": "PASS",
+      "message": "Retrieved 30 bagian records",
+      "duration": 0.03516387939453125
+    },
+    {
+      "name": "Page Load: login.php",
+      "status": "PASS",
+      "message": "Load time: 0.01s, Size: 9409 bytes",
+      "duration": 0.0063931941986083984
+    },
+    {
+      "name": "Page Load: index.php",
+      "status": "PASS",
+      "message": "Load time: 0.01s, Size: 9409 bytes",
+      "duration": 0.008864641189575195
+    },
+    {
+      "name": "JS File: api-client.js",
+      "status": "PASS",
+      "message": "Size: 15945 bytes",
+      "duration": 0.003472566604614258
+    },
+    {
+      "name": "JS File: sprin-core.js",
+      "status": "PASS",
+      "message": "Size: 22058 bytes",
+      "duration": 0.0034623146057128906
+    },
+    {
+      "name": "JS File: realtime-client.js",
+      "status": "PASS",
+      "message": "Size: 5208 bytes",
+      "duration": 0.002804279327392578
+    }
+  ]
+}

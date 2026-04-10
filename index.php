@@ -1,6 +1,7 @@
 <?php
+require_once __DIR__ . '/core/SessionManager.php';
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    SessionManager::start();
 }
 
 require_once __DIR__ . '/core/config.php';
@@ -19,7 +20,8 @@ $page_title = 'SPRIN - Sistem Manajemen Personil & Jadwal';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($page_title); ?></title>
+    <title><?php
+require_once __DIR__ . '/core/SessionManager.php'; echo htmlspecialchars($page_title); ?></title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -253,7 +255,8 @@ $page_title = 'SPRIN - Sistem Manajemen Personil & Jadwal';
                 <div class="user-menu">
                     <div class="user-info">
                         <i class="fa-solid fa-user"></i>
-                        <span><?php echo htmlspecialchars($_SESSION['username'] ?? 'User'); ?></span>
+                        <span><?php
+require_once __DIR__ . '/core/SessionManager.php'; echo htmlspecialchars($_SESSION['username'] ?? 'User'); ?></span>
                     </div>
                     <a href="core/logout.php" class="nav-link logout-btn">
                         <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
@@ -274,7 +277,8 @@ $page_title = 'SPRIN - Sistem Manajemen Personil & Jadwal';
     <footer class="bg-light text-center py-3 mt-5">
         <div class="container">
             <p class="text-muted mb-0">
-                &copy; <?php echo date('Y'); ?> POLRES Samosir - Sistem Manajemen Personil & Jadwal (SPRIN)
+                &copy; <?php
+require_once __DIR__ . '/core/SessionManager.php'; echo date('Y'); ?> POLRES Samosir - Sistem Manajemen Personil & Jadwal (SPRIN)
             </p>
         </div>
     </footer>

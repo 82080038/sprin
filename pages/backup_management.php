@@ -487,8 +487,13 @@ function formatBytes(bytes) {
     return Math.round(bytes * 100) / 100 + ' ' + units[unitIndex];
 }
 
+// showAlert now uses global showToast from footer
 function showAlert(type, message) {
-    alert(message);
+    if (typeof showToast === 'function') {
+        showToast(type, message);
+    } else {
+        alert(message);
+    }
 }
 </script>
 

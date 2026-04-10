@@ -46,14 +46,29 @@ echo "8208" | sudo -S chmod -R 755 /opt/lampp/htdocs/sprin
 ## Project Information
 - **Project Name**: SPRIN
 - **Description**: Sistem Manajemen Personil & Schedule Management POLRES Samosir
-- **Version**: 1.2.0-dev
-- **Last Updated**: 2026-04-08
+- **Version**: 1.3.0-dev
+- **Last Updated**: 2026-04-10
+- **Branch**: kantor
 
 ## Access URLs
 - **Main Application**: http://localhost/sprin
 - **PHPMyAdmin**: http://localhost/phpmyadmin
+- **Daftar Operasi**: http://localhost/sprin/pages/operasi.php
+- **Tim Piket**: http://localhost/sprin/pages/tim_piket.php
+- **Calendar**: http://localhost/sprin/pages/calendar_dashboard.php
 
 ## Development Notes
 - Use the provided credentials when prompted for passwords
 - Database operations should use the XAMPP MySQL socket
 - Always backup database before major updates
+- Migration script: http://localhost/sprin/cron/migrate_tim_piket.php (jalankan sekali saja)
+
+## Key Pages
+| URL | Deskripsi |
+|-----|-----------|
+| `/pages/calendar_dashboard.php` | Kalender jadwal (FullCalendar 6) |
+| `/pages/operasi.php` | Daftar & manajemen operasi kepolisian |
+| `/pages/tim_piket.php` | Manajemen tim/regu piket per fungsi |
+| `/api/calendar_api_public.php` | API jadwal & operasi |
+| `/api/tim_piket_api.php` | API tim piket & generate jadwal |
+| `/cron/migrate_tim_piket.php` | Migration DB tim piket & recurrence |

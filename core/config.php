@@ -39,8 +39,9 @@ define('SESSION_LIFETIME', 3600); // 1 hour
 define('API_RATE_LIMIT', 100); // requests per hour
 define('API_TIMEOUT', 30); // seconds
 
-// Debug Configuration - Use environment variable
-$debugMode = getenv('DEBUG_MODE') === 'true' || ENVIRONMENT === 'development';
+// Debug Configuration - FORCE ON for development (set to false for production)
+// $debugMode = getenv('DEBUG_MODE') === 'true' || ENVIRONMENT === 'development';
+$debugMode = true; // FORCE DEBUG ON - Change to false for production
 define('DEBUG_MODE', $debugMode);
 
 if (DEBUG_MODE && session_status() === PHP_SESSION_NONE) {

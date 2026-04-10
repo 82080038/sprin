@@ -406,6 +406,7 @@ async function saveUser() {
     
     try {
         const response = await fetch('../api/user_management.php', {
+            credentials: 'same-origin',
             method: 'POST',
             body: formData
         });
@@ -462,6 +463,7 @@ async function updateUser() {
     
     try {
         const response = await fetch('../api/user_management.php', {
+            credentials: 'same-origin',
             method: 'POST',
             body: formData
         });
@@ -493,6 +495,7 @@ async function deleteUser(userId, username) {
     
     try {
         const response = await fetch('../api/user_management.php', {
+            credentials: 'same-origin',
             method: 'POST',
             body: formData
         });

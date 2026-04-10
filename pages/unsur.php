@@ -201,9 +201,10 @@ if ($unsurData === false) {
         <div class="card-body">
             <!-- Table Header -->
             <div class="row mb-3 text-muted">
-                <div class="col-md-5"><strong>Nama Unsur</strong></div>
-                <div class="col-md-3"><strong>Kode</strong></div>
-                <div class="col-md-4"><strong>Aksi</strong></div>
+                <div class="col-md-3"><strong>Nama Unsur</strong></div>
+                <div class="col-md-4"><strong>Keterangan</strong></div>
+                <div class="col-md-3"><strong>Dasar Hukum</strong></div>
+                <div class="col-md-2"><strong>Aksi</strong></div>
             </div>
             
             <div id="sortable-container" class="sortable-list">
@@ -215,15 +216,18 @@ if ($unsurData === false) {
                         </div>
                         <div class="flex-grow-1">
                             <div class="row align-items-center">
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <strong><?php echo htmlspecialchars($unsur['nama_unsur']); ?></strong>
                                     <br>
                                     <small class="text-muted">Urutan: <?php echo $unsur['urutan']; ?></small>
                                 </div>
-                                <div class="col-md-3">
-                                    <code><?php echo htmlspecialchars($unsur['kode_unsur']); ?></code>
-                                </div>
                                 <div class="col-md-4">
+                                    <small class="text-muted"><?php echo htmlspecialchars($unsur['deskripsi'] ?? '-'); ?></small>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="text-primary"><i class="fas fa-gavel me-1"></i><?php echo htmlspecialchars($unsur['dasar_hukum'] ?? '-'); ?></small>
+                                </div>
+                                <div class="col-md-2">
                                     <div class="btn-group" role="group">
                                         <button class="btn btn-sm btn-outline-primary" onclick="editUnsur(<?php echo $unsur['id']; ?>)">
                                             <i class="fas fa-edit"></i>
@@ -276,9 +280,17 @@ if ($unsurData === false) {
                     
                     <div class="mb-3">
                         <label for="deskripsi" class="form-label">Deskripsi</label>
-                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="3"></textarea>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" rows="2"></textarea>
                         <div class="form-text">
                             Deskripsi atau penjelasan singkat tentang unsur (opsional)
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="dasar_hukum" class="form-label">Dasar Hukum</label>
+                        <input type="text" class="form-control" id="dasar_hukum" name="dasar_hukum" placeholder="Contoh: PERKAP No. 23 Tahun 2010">
+                        <div class="form-text">
+                            Peraturan yang menjadi dasar pembentukan unsur ini (opsional). Contoh: PERKAP, Perpol, atau Perpres.
                         </div>
                     </div>
                 </div>
@@ -378,15 +390,18 @@ function restoreOriginalOrder() {
                     </div>
                     <div class="flex-grow-1">
                         <div class="row align-items-center">
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <strong>${unsur.nama_unsur}</strong>
                                 <br>
                                 <small class="text-muted">Urutan: ${unsur.urutan}</small>
                             </div>
-                            <div class="col-md-3">
-                                <code>${unsur.kode_unsur}</code>
-                            </div>
                             <div class="col-md-4">
+                                <small class="text-muted">${unsur.deskripsi || '-'}</small>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-primary"><i class="fas fa-gavel me-1"></i>${unsur.dasar_hukum || '-'}</small>
+                            </div>
+                            <div class="col-md-2">
                                 <div class="btn-group" role="group">
                                     <button class="btn btn-sm btn-outline-primary" onclick="editUnsur(${unsur.id})">
                                         <i class="fas fa-edit"></i>
@@ -450,7 +465,7 @@ function saveOrder() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert(data.message);
+            showToast('success', '✅ Urutan unsur berhasil disimpan!');
             
             // Update original order to reflect saved changes
             const container = document.getElementById('sortable-container');
@@ -460,20 +475,21 @@ function saveOrder() {
                 originalOrder.push({
                     id: item.dataset.id,
                     urutan: index + 1,
-                    nama_unsur: item.querySelector('.col-md-5 strong').textContent,
-                    kode_unsur: item.querySelector('.col-md-3 code').textContent
+                    nama_unsur: item.querySelector('.col-md-3 strong').textContent,
+                    deskripsi: item.querySelector('.col-md-4 small').textContent,
+                    dasar_hukum: item.querySelector('.col-md-3 small.text-primary').textContent.replace('🗝', '').trim()
                 });
             });
             
             // Reset buttons to initial state
             resetButtons();
         } else {
-            alert('Error: ' + data.message);
+            showToast('danger', '❌ Gagal menyimpan urutan: ' + data.message);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error: Terjadi kesalahan saat menyimpan urutan');
+        showToast('danger', '❌ Terjadi kesalahan saat menyimpan urutan');
     });
 }
 
@@ -495,11 +511,12 @@ function openAddModal() {
         const formId = document.getElementById('formId');
         const namaUnsur = document.getElementById('nama_unsur');
         const deskripsi = document.getElementById('deskripsi');
+        const dasarHukum = document.getElementById('dasar_hukum');
         const kodeUnsur = document.getElementById('kode_unsur');
         
-        if (!modalTitle || !formAction || !formId || !namaUnsur || !deskripsi || !kodeUnsur) {
+        if (!modalTitle || !formAction || !formId || !namaUnsur || !deskripsi || !dasarHukum || !kodeUnsur) {
             console.error('Modal form elements not found');
-            alert('Error: Form elements not found');
+            showToast('danger', '❌ Error: Form elements not found');
             return;
         }
         
@@ -508,13 +525,14 @@ function openAddModal() {
         formId.value = '';
         namaUnsur.value = '';
         deskripsi.value = '';
+        dasarHukum.value = '';
         kodeUnsur.value = '';
         
         // Show modal with proper handling
         const modalElement = document.getElementById('unsurModal');
         if (!modalElement) {
             console.error('Modal element not found');
-            alert('Error: Modal not found');
+            showToast('danger', '❌ Error: Modal not found');
             return;
         }
         
@@ -528,7 +546,7 @@ function openAddModal() {
         modal.show();
     } catch (error) {
         console.error('Error opening add modal:', error);
-        alert('Error: Failed to open modal - ' + error.message);
+        showToast('danger', '❌ Failed to open modal: ' + error.message);
     }
 }
 
@@ -558,9 +576,10 @@ function editUnsur(id) {
                 const formId = document.getElementById('formId');
                 const namaUnsur = document.getElementById('nama_unsur');
                 const deskripsi = document.getElementById('deskripsi');
+                const dasarHukum = document.getElementById('dasar_hukum');
                 const kodeUnsur = document.getElementById('kode_unsur');
                 
-                if (!modalTitle || !formAction || !formId || !namaUnsur || !deskripsi || !kodeUnsur) {
+                if (!modalTitle || !formAction || !formId || !namaUnsur || !deskripsi || !dasarHukum || !kodeUnsur) {
                     console.error('Modal form elements not found');
                     alert('Error: Form elements not found');
                     return;
@@ -572,6 +591,7 @@ function editUnsur(id) {
                 formId.value = unsur.id;
                 namaUnsur.value = unsur.nama_unsur;
                 deskripsi.value = unsur.deskripsi || '';
+                dasarHukum.value = unsur.dasar_hukum || '';
                 kodeUnsur.value = unsur.kode_unsur;
                 
                 // Show modal with proper handling
@@ -592,16 +612,16 @@ function editUnsur(id) {
                 modal.show();
             } else {
                 console.error('Error in response:', data);
-                alert('Error: Unsur tidak ditemukan');
+                showToast('danger', '❌ Unsur tidak ditemukan');
             }
         })
         .catch(error => {
             console.error('Fetch error:', error);
-            alert('Error: ' + error.message);
+            showToast('danger', '❌ ' + error.message);
         });
     } catch (error) {
         console.error('Error in editUnsur:', error);
-        alert('Error: Failed to edit unsur - ' + error.message);
+        showToast('danger', '❌ Failed to edit unsur: ' + error.message);
     }
 }
 
@@ -623,10 +643,8 @@ function deleteUnsur(id, nama) {
     .then(data => {
         if (data.success) {
             // Unsur deleted successfully
-            if (data.message) {
-                alert(data.message);
-            }
-            location.reload();
+            showToast('success', '✅ ' + (data.message || 'Unsur berhasil dihapus'));
+            setTimeout(() => location.reload(), 1500);
         } else {
             // Unsur has bagian, show detailed error and options
             if (data.details) {
@@ -653,13 +671,13 @@ function deleteUnsur(id, nama) {
                     showForceDeleteOptions(id, details);
                 }
             } else {
-                alert(data.message || 'Gagal menghapus unsur');
+                showToast('danger', '❌ ' + (data.message || 'Gagal menghapus unsur'));
             }
         }
     })
     .catch(error => {
         console.error('Delete error:', error);
-        alert('Error: ' + error.message);
+        showToast('danger', '❌ ' + error.message);
     });
 }
 
@@ -712,17 +730,17 @@ function showForceDeleteOptions(unsurId, details) {
                             forceDeleteUnsur(unsurId, null);
                         }
                     } else {
-                        alert('Pilihan tidak valid');
+                        showToast('warning', '⚠️ Pilihan tidak valid');
                     }
                 }
             }
         } else {
-            alert('Gagal mengambil data unsur');
+            showToast('danger', '❌ Gagal mengambil data unsur');
         }
     })
     .catch(error => {
         console.error('Get unsur list error:', error);
-        alert('Error: ' + error.message);
+        showToast('danger', '❌ ' + error.message);
     });
 }
 
@@ -745,15 +763,15 @@ function forceDeleteUnsur(unsurId, reassignToUnsurId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert(data.message);
-            location.reload();
+            showToast('success', '✅ ' + data.message);
+            setTimeout(() => location.reload(), 1500);
         } else {
-            alert('Gagal menghapus unsur: ' + (data.message || 'Unknown error'));
+            showToast('danger', '❌ Gagal menghapus: ' + (data.message || 'Unknown error'));
         }
     })
     .catch(error => {
         console.error('Force delete error:', error);
-        alert('Error: ' + error.message);
+        showToast('danger', '❌ ' + error.message);
     });
 }
 
@@ -788,19 +806,19 @@ document.getElementById('unsurForm').addEventListener('submit', function(e) {
         })
         .then(data => {
             if (data.success) {
-                alert(data.message);
-                location.reload();
+                showToast('success', '✅ ' + data.message);
+                setTimeout(() => location.reload(), 1500);
             } else {
-                alert('Error: ' + data.message);
+                showToast('danger', '❌ Error: ' + data.message);
             }
         })
         .catch(error => {
             console.error('Form submission error:', error);
-            alert('Error: ' + error.message);
+            showToast('danger', '❌ ' + error.message);
         });
     } catch (error) {
         console.error('Form submission handler error:', error);
-        alert('Error: Failed to submit form - ' + error.message);
+        showToast('danger', '❌ Failed to submit form: ' + error.message);
     }
     
     return false;

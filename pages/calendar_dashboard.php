@@ -72,7 +72,7 @@ function safe_json_encode($data) {
     <title>Schedule Management - BAGOPS Polres Samosir</title>
     
     <!-- FullCalendar CSS -->
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css' rel='stylesheet' />
     
     <!-- Bootstrap CSS -->
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
@@ -160,6 +160,31 @@ function safe_json_encode($data) {
         .shift-full_day { background-color: #34A853 !important; border-color: #34A853 !important; }
         .shift-cuti { background-color: #FF6F00 !important; border-color: #FF6F00 !important; }
         .shift-lebur { background-color: #9E9E9E !important; border-color: #9E9E9E !important; }
+        
+        .fc-event { cursor: pointer; }
+
+        /* ── View Tahunan (multiMonthYear) ── */
+        .fc-multimonth-header-table { font-size: 0.8rem; }
+        .fc-multimonth-title { font-weight: 700; font-size: 0.9rem; color: #1a237e; }
+        .fc-multimonth-daygrid-table .fc-daygrid-day-number { font-size: 0.75rem; }
+        .fc .fc-multimonth { border: none; }
+        .fc .fc-multimonth-month { border: 1px solid #dee2e6; border-radius: 6px; margin: 4px; }
+
+        /* ── Toolbar buttons ── */
+        .fc .fc-button { font-size: 0.82rem; padding: 4px 10px; }
+        .fc .fc-button-primary { background-color: #1a237e; border-color: #1a237e; }
+        .fc .fc-button-primary:hover { background-color: #3949ab; border-color: #3949ab; }
+        .fc .fc-button-primary:not(:disabled).fc-button-active { background-color: #0d47a1; border-color: #0d47a1; }
+        
+        .detail-badge {
+            font-size: 0.85rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        
+        .operation-card {
+            border-left: 4px solid var(--primary-color);
+        }
         
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -403,8 +428,59 @@ function safe_json_encode($data) {
         </div>
     </div>
 
+    <!-- Schedule Detail Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-info-circle me-2"></i> Detail Jadwal
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 id="detailTitle" class="fw-bold mb-3"></h6>
+                    <div class="mb-2" id="detailShift"></div>
+                    <table class="table table-sm table-borderless">
+                        <tbody>
+                            <tr>
+                                <td class="text-muted" style="width:120px"><i class="fas fa-calendar me-1"></i>Tanggal</td>
+                                <td id="detailDate" class="fw-semibold"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted"><i class="fas fa-clock me-1"></i>Waktu</td>
+                                <td id="detailTime"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>Lokasi</td>
+                                <td id="detailLocation"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted"><i class="fas fa-align-left me-1"></i>Deskripsi</td>
+                                <td id="detailDescription"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted"><i class="fas fa-tag me-1"></i>Status</td>
+                                <td id="detailStatus"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-warning" id="detailEditBtn">
+                        <i class="fas fa-edit me-1"></i> Edit
+                    </button>
+                    <button type="button" class="btn btn-danger" id="detailDeleteBtn">
+                        <i class="fas fa-trash me-1"></i> Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
     
     <script>
@@ -442,6 +518,7 @@ function safe_json_encode($data) {
             populatePersonilSelect();
             loadUpcomingSchedules();
             initializeShiftChart();
+            refreshLiveStats();
         });
         
         function initializeStats() {
@@ -468,10 +545,26 @@ function safe_json_encode($data) {
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    right: 'multiMonthYear,dayGridMonth,timeGridWeek,timeGridDay,listYear'
+                },
+                views: {
+                    multiMonthYear: {
+                        buttonText: 'Tahun',
+                        multiMonthMaxColumns: 3
+                    },
+                    dayGridMonth: { buttonText: 'Bulan' },
+                    timeGridWeek: { buttonText: 'Minggu' },
+                    timeGridDay:  { buttonText: 'Hari' },
+                    listYear:     { buttonText: 'Agenda Tahun' }
                 },
                 locale: 'id',
                 timeZone: 'Asia/Jakarta',
+                editable: true,
+                eventDidMount: function(info) {
+                    info.el.setAttribute('title',
+                        info.event.title + (info.event.extendedProps.location ? '\nLokasi: ' + info.event.extendedProps.location : '')
+                    );
+                },
                 events: function(fetchInfo, successCallback, failureCallback) {
                     fetch('../api/calendar_api_public.php', {
                         method: 'POST',
@@ -516,7 +609,9 @@ function safe_json_encode($data) {
                                         bagian: schedule.bagian,
                                         location: schedule.location,
                                         description: schedule.description,
-                                        google_event_id: schedule.google_event_id
+                                        google_event_id: schedule.google_event_id,
+                                        shift_type: schedule.shift_type,
+                                        status: schedule.status
                                     }
                                 };
                             });
@@ -646,31 +741,17 @@ function safe_json_encode($data) {
         
         function saveSchedule() {
             const form = document.getElementById('scheduleForm');
+            if (!form.checkValidity()) { form.reportValidity(); return; }
             const formData = new FormData(form);
             
-            // Get personil details
             const personilSelect = document.getElementById('personilSelect');
             const selectedOption = personilSelect.options[personilSelect.selectedIndex];
             
-            formData.append('action', 'create_schedule');
-            formData.append('personil_name', selectedOption.dataset.name);
-            formData.append('bagian', selectedOption.dataset.bagian);
-            
-            // Set times based on shift type
-            const shiftType = formData.get('shift_type');
-            const shiftTimes = {
-                'PAGI': ['06:00', '14:00'],
-                'SIANG': ['14:00', '22:00'],
-                'MALAM': ['22:00', '06:00'],
-                'FULL_DAY': ['00:00', '23:59'],
-                'CUTI': ['00:00', '23:59'],
-                'LEBUR': ['18:00', '23:59']
-            };
-            
-            if (shiftTimes[shiftType]) {
-                formData.append('start_time', shiftTimes[shiftType][0]);
-                formData.append('end_time', shiftTimes[shiftType][1]);
-            }
+            const scheduleId = document.getElementById('scheduleId').value;
+            formData.append('action', scheduleId ? 'update_schedule' : 'create_schedule');
+            if (scheduleId) formData.append('schedule_id', scheduleId);
+            formData.append('personil_name', selectedOption.dataset.name || '');
+            formData.append('bagian', selectedOption.dataset.bagian || '');
             
             fetch('../api/calendar_api_public.php', {
                 method: 'POST',
@@ -681,11 +762,10 @@ function safe_json_encode($data) {
                 if (data.success) {
                     bootstrap.Modal.getInstance(document.getElementById('scheduleModal')).hide();
                     calendar.refetchEvents();
-                    loadUpcomingSchedules();
-                    initializeStats();
-                    showAlert('success', 'Jadwal berhasil disimpan!');
+                    refreshLiveStats();
+                    showAlert('success', scheduleId ? 'Jadwal berhasil diupdate!' : 'Jadwal berhasil disimpan!');
                 } else {
-                    showAlert('danger', 'Error: ' + data.error);
+                    showAlert('danger', 'Error: ' + (data.error || data.message));
                 }
             })
             .catch(error => {
@@ -694,21 +774,150 @@ function safe_json_encode($data) {
         }
         
         function showScheduleDetails(event) {
-            // Implement schedule details modal
-            console.log('Show details for:', event.title);
+            const props = event.extendedProps;
+            const shiftColors = {
+                'PAGI': '#4285F4', 'SIANG': '#EA4335', 'MALAM': '#FBBC04',
+                'FULL_DAY': '#34A853', 'CUTI': '#FF6F00', 'LEBUR': '#9E9E9E'
+            };
+            const shiftType = props.shift_type || event.title.split(' - ').pop();
+            const color = shiftColors[shiftType] || '#4285F4';
+
+            document.getElementById('detailTitle').textContent = event.title;
+            document.getElementById('detailShift').innerHTML =
+                `<span class="badge detail-badge" style="background:${color}">${shiftType}</span>`;
+            document.getElementById('detailDate').textContent =
+                new Date(event.start).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+            document.getElementById('detailTime').textContent =
+                event.start.toTimeString().slice(0,5) + ' - ' + (event.end ? event.end.toTimeString().slice(0,5) : '-');
+            document.getElementById('detailLocation').textContent = props.location || '-';
+            document.getElementById('detailDescription').textContent = event.extendedProps.description || '-';
+            document.getElementById('detailStatus').textContent = props.status || 'scheduled';
+
+            const editBtn = document.getElementById('detailEditBtn');
+            const deleteBtn = document.getElementById('detailDeleteBtn');
+            editBtn.onclick = function() {
+                bootstrap.Modal.getInstance(document.getElementById('detailModal')).hide();
+                openEditScheduleModal(event.id);
+            };
+            deleteBtn.onclick = function() {
+                if (confirm('Hapus jadwal "' + event.title + '"?')) {
+                    deleteSchedule(event.id);
+                    bootstrap.Modal.getInstance(document.getElementById('detailModal')).hide();
+                }
+            };
+
+            new bootstrap.Modal(document.getElementById('detailModal')).show();
         }
-        
+
+        function openEditScheduleModal(scheduleId) {
+            fetch('../api/calendar_api_public.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: new URLSearchParams({action: 'get_schedule', schedule_id: scheduleId})
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success) { showAlert('danger', data.error || 'Gagal memuat data'); return; }
+                const s = data.schedule;
+                document.getElementById('scheduleModalTitle').textContent = 'Edit Jadwal';
+                document.getElementById('scheduleId').value = s.id;
+                document.getElementById('personilSelect').value = s.personil_id;
+                document.getElementById('shiftType').value = s.shift_type;
+                document.getElementById('scheduleDate').value = s.shift_date;
+                document.getElementById('location').value = s.location || '';
+                document.getElementById('description').value = s.description || '';
+                new bootstrap.Modal(document.getElementById('scheduleModal')).show();
+            })
+            .catch(() => showAlert('danger', 'Gagal memuat data jadwal'));
+        }
+
+        function deleteSchedule(scheduleId) {
+            fetch('../api/calendar_api_public.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: new URLSearchParams({action: 'delete_schedule', schedule_id: scheduleId})
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    calendar.refetchEvents();
+                    refreshLiveStats();
+                    showAlert('success', 'Jadwal berhasil dihapus');
+                } else {
+                    showAlert('danger', 'Gagal menghapus: ' + (data.error || data.message));
+                }
+            });
+        }
+
         function updateScheduleDate(event) {
-            // Implement schedule date update
-            console.log('Update schedule date:', event.id, event.start);
+            const newDate = event.start.toISOString().split('T')[0];
+            fetch('../api/calendar_api_public.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: new URLSearchParams({
+                    action: 'update_schedule',
+                    schedule_id: event.id,
+                    shift_date: newDate
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('success', 'Jadwal dipindahkan ke ' + new Date(newDate).toLocaleDateString('id-ID'));
+                    refreshLiveStats();
+                } else {
+                    showAlert('danger', 'Gagal memindahkan jadwal: ' + (data.error || data.message));
+                    calendar.refetchEvents();
+                }
+            })
+            .catch(() => { showAlert('danger', 'Terjadi kesalahan jaringan'); calendar.refetchEvents(); });
         }
-        
+
+        function openOperationModal() {
+            window.location.href = '../pages/operasi.php?tambah=1';
+        }
+
         function syncWithGoogle() {
             showAlert('info', 'Google Calendar sync akan segera tersedia...');
         }
-        
+
         function exportSchedule() {
-            showAlert('info', 'Export fitur akan segera tersedia...');
+            const now = new Date();
+            const firstDay = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-01';
+            const lastDay  = new Date(now.getFullYear(), now.getMonth()+1, 0).toISOString().split('T')[0];
+
+            fetch('../api/calendar_api_public.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: new URLSearchParams({action: 'export_csv', date_from: firstDay, date_to: lastDay})
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success) { showAlert('danger', 'Gagal export: ' + (data.error || data.message)); return; }
+                const blob = new Blob([data.csv], {type: 'text/csv;charset=utf-8;'});
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = data.filename;
+                link.click();
+                URL.revokeObjectURL(link.href);
+                showAlert('success', 'Export berhasil: ' + data.filename);
+            })
+            .catch(err => showAlert('danger', 'Error export: ' + err));
+        }
+
+        function refreshLiveStats() {
+            fetch('../api/calendar_api_public.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: new URLSearchParams({action: 'get_live_stats'})
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('schedulesToday').textContent = data.stats.today_schedules;
+                    document.getElementById('schedulesWeek').textContent  = data.stats.week_schedules;
+                }
+            });
         }
         
         function showAlert(type, message) {

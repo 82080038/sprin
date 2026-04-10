@@ -139,10 +139,14 @@ if (window.top !== window.self) {
 /* Card-based Jabatan Management Styles */
 .jabatan-card {
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
     height: 100%;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    overflow: hidden; /* Prevent overflow */
 }
 
 .jabatan-card:hover {
@@ -152,19 +156,29 @@ if (window.top !== window.self) {
 
 .unsur-header {
     background: linear-gradient(135deg, var(--primary-color, #1a237e), var(--secondary-color, #3949ab));
-    color: white;
-    padding: 1rem 1.5rem;
+    color: #ffffff;
+    padding: 0.5rem 0.75rem;
     border-radius: 12px 12px 0 0;
+}
+
+.unsur-header h5 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
 .unsur-header h6 {
     margin: 0;
     font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .unsur-header small {
-    opacity: 0.8;
+    opacity: 1;
     font-size: 0.8rem;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .bagian-container {
@@ -177,19 +191,27 @@ if (window.top !== window.self) {
 .bagian-item {
     background: white;
     border: 1px solid #e9ecef;
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.5rem;
-    cursor: move;
-    transition: all 0.3s ease;
+    border-radius: 4px;
+    padding: 0.25rem 0.35rem;
+    margin-bottom: 0.15rem;
+    cursor: grab;
+    transition: all 0.2s ease;
     position: relative;
+    font-size: 0.8rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.bagian-item strong {
+    display: block;
+    font-size: 0.8rem;
+    line-height: 1.2;
 }
 
 .bagian-item::before {
     content: '---';
     position: absolute;
-    left: -1.5rem;
-    color: #6c757d;
+    left: -1rem;
     font-size: 0.8rem;
 }
 
@@ -206,20 +228,6 @@ if (window.top !== window.self) {
 .bagian-item.drag-over {
     background: #fff3cd;
     border-color: #ffc107;
-}
-
-.drag-handle {
-    color: #6c757d;
-    margin-right: 0.75rem;
-    cursor: grab;
-}
-
-.drag-handle:active {
-    cursor: grabbing;
-}
-
-.bagian-item:hover .drag-handle {
-    opacity: 1;
 }
 
 .sortable-ghost {
@@ -239,15 +247,47 @@ if (window.top !== window.self) {
 
 .bagian-actions {
     display: flex;
-    gap: 0.25rem;
+    gap: 0.15rem;
+}
+
+.bagian-actions .btn-sm {
+    padding: 0.15rem 0.3rem;
+    font-size: 0.75rem;
+}
+
+.drag-handle {
+    display: inline-flex;
+    align-items: center;
+    cursor: grab;
+    opacity: 0.4;
+    transition: opacity 0.2s, color 0.2s;
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    padding: 0.15rem;
+    border-radius: 3px;
+}
+
+.drag-handle:hover {
+    opacity: 1;
+    color: #007bff;
+    background: rgba(0,123,255,0.1);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.bagian-item:hover .drag-handle {
+    opacity: 0.7;
 }
 
 .jabatan-count {
     background: var(--primary-color, #1a237e);
     color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
     font-weight: 600;
 }
 
@@ -308,50 +348,37 @@ if (window.top !== window.self) {
     color: var(--primary-color);
 }
 
-.unsur-header {
-    background: linear-gradient(135deg, var(--primary-color, #1a237e), var(--secondary-color, #3949ab));
-    color: white;
-    padding: 1rem 1.5rem;
-    border-radius: 12px 12px 0 0;
-}
-
-.unsur-header h5 {
-    margin: 0;
-    font-weight: 600;
-}
-
-.unsur-header small {
-    opacity: 0.8;
-    font-size: 0.9rem;
-}
+/* Styles moved above - see first unsur-header definition */
 
 .unsur-container {
     background: #f8f9fa;
-    min-height: 200px;
-    padding: 1rem;
-    border-radius: 0 0 12px 12px;
+    min-height: 100px;
+    max-height: 400px; /* Limit height */
+    overflow-y: auto; /* Scroll if too many items */
+    padding: 0.35rem;
+    border-radius: 0 0 10px 10px;
 }
 
 .bagian-section {
     background: white;
-    border-radius: 8px;
-    padding: 0.5rem;
-    margin-bottom: 0.5rem;
+    border-radius: 6px;
+    padding: 0.25rem;
+    margin-bottom: 0.25rem;
     border: 1px solid #e9ecef;
 }
 
 .bagian-header {
     background: linear-gradient(135deg, #6c757d, #5a6268);
     color: white;
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
-    margin-bottom: 0.5rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.25rem;
 }
 
 .bagian-header h6 {
     margin: 0;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .jabatan-list {
@@ -361,29 +388,55 @@ if (window.top !== window.self) {
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .bagian-item {
-        padding: 0.5rem;
+        padding: 0.35rem;
         flex-direction: column;
     }
     
     .bagian-item::before {
-        left: -1rem;
-        font-size: 0.8rem;
+        left: -0.8rem;
+        font-size: 0.7rem;
     }
     
     .bagian-actions {
         align-self: flex-end;
-        margin-top: 0.25rem;
+        margin-top: 0.15rem;
     }
     
     .bagian-container {
         max-height: 300px;
     }
+    
+    .drag-handle {
+        font-size: 1rem;
+        padding: 0.25rem;
+        opacity: 0.8;
+    }
 }
 
-@media (max-width: 576px) {
-    .col-md-6.col-lg-4 {
-        flex: 0 0 100%;
-        max-width: 100%;
+/* FORCE 2 CARDS PER ROW - Grid layout */
+#jabatanContainer > .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -6px;
+}
+
+#jabatanContainer > .row > .col-lg-6,
+#jabatanContainer > .row > .col-md-6 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    width: 50% !important;
+    padding: 6px;
+    box-sizing: border-box;
+}
+
+/* Mobile: 1 column */
+@media (max-width: 767px) {
+    #jabatanContainer > .row > .col-lg-6,
+    #jabatanContainer > .row > .col-md-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 5px;
     }
 }
 </style>
@@ -422,36 +475,28 @@ if (window.top !== window.self) {
 </div>
 
 <!-- Action Buttons -->
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <button class="btn btn-primary" onclick="openAddModal()">
-                    <i class="fas fa-plus me-2"></i>Tambah Jabatan
-                </button>
-                <button class="btn btn-success" id="saveOrderBtn" onclick="saveOrder()" style="display: none;">
-                    <i class="fas fa-save me-2"></i>Simpan Urutan
-                </button>
-                <button class="btn btn-warning" id="cancelOrderBtn" onclick="cancelOrder()" style="display: none;">
-                    <i class="fas fa-times me-2"></i>Batal
-                </button>
-                <button class="btn btn-info" onclick="refreshData()">
-                    <i class="fas fa-sync-alt me-2"></i>Refresh
-                </button>
-                <button class="btn btn-success" onclick="exportData()">
-                    <i class="fas fa-download me-2"></i>Export
-                </button>
-            </div>
-            <div class="d-flex align-items-center">
-                <select class="form-select me-2" id="unsurFilter" onchange="filterByUnsur()">
-                    <option value="">Semua Unsur</option>
-                    <?php foreach ($unsurData as $unsur): ?>
-                        <option value="<?php echo $unsur['id']; ?>"><?php echo htmlspecialchars($unsur['nama_unsur']); ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-        </div>
-    </div>
+<div class="d-flex flex-wrap gap-2 align-items-center mb-4">
+    <button class="btn btn-primary" onclick="openAddModal()">
+        <i class="fas fa-plus me-2"></i>Tambah Jabatan
+    </button>
+    <button class="btn btn-success" id="saveOrderBtn" onclick="saveOrder()" style="display: none;">
+        <i class="fas fa-save me-2"></i>Simpan Urutan
+    </button>
+    <button class="btn btn-warning" id="cancelOrderBtn" onclick="cancelOrder()" style="display: none;">
+        <i class="fas fa-times me-2"></i>Batal
+    </button>
+    <button class="btn btn-info" onclick="refreshData()">
+        <i class="fas fa-sync-alt me-2"></i>Refresh
+    </button>
+    <button class="btn btn-success" onclick="exportData()">
+        <i class="fas fa-download me-2"></i>Export
+    </button>
+    <select class="form-select" id="unsurFilter" onchange="filterByUnsur()" style="width: auto;">
+        <option value="">Semua Unsur</option>
+        <?php foreach ($unsurData as $unsur): ?>
+            <option value="<?php echo $unsur['id']; ?>"><?php echo htmlspecialchars($unsur['nama_unsur']); ?></option>
+        <?php endforeach; ?>
+    </select>
 </div>
 
 <!-- Jabatan Container -->
@@ -475,21 +520,25 @@ if (window.top !== window.self) {
                     <div class="mb-3">
                         <label for="nama_jabatan" class="form-label">Nama Jabatan</label>
                         <input type="text" class="form-control" id="nama_jabatan" name="nama_jabatan" required>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="kode_jabatan" class="form-label">Kode Jabatan</label>
-                        <input type="text" class="form-control" id="kode_jabatan" name="kode_jabatan">
+                        <div class="form-text">Kode jabatan akan dibuat otomatis dari nama jabatan</div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="id_unsur" class="form-label">Unsur</label>
-                        <select class="form-select" id="id_unsur" name="id_unsur" required>
+                        <select class="form-select" id="id_unsur" name="id_unsur" required onchange="updateBagianOptions()">
                             <option value="">Pilih Unsur</option>
                             <?php foreach ($unsurData as $unsur): ?>
                                 <option value="<?php echo $unsur['id']; ?>"><?php echo htmlspecialchars($unsur['nama_unsur']); ?></option>
                             <?php endforeach; ?>
                         </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_bagian" class="form-label">Bagian</label>
+                        <select class="form-select" id="id_bagian" name="id_bagian">
+                            <option value="">Pilih Unsur terlebih dahulu</option>
+                        </select>
+                        <div class="form-text">Pilih bagian dalam unsur (opsional)</div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -530,6 +579,16 @@ if (window.top !== window.self) {
 <?php include __DIR__ . '/../includes/components/footer.php'; ?>
 
 <script>
+// Ensure window.APP_CONFIG exists (fallback if header.php doesn't define it)
+if (!window.APP_CONFIG) {
+    window.APP_CONFIG = {
+        baseUrl: '<?php echo BASE_URL; ?>',
+        apiUrl: '<?php echo API_BASE_URL; ?>',
+        csrfToken: '',
+        debugMode: true
+    };
+}
+
 let jabatanData = <?php echo json_encode($jabatanData); ?>;
 let bagianData = <?php echo json_encode($bagianData); ?>;
 let unsurData = <?php echo json_encode($unsurData); ?>;
@@ -538,7 +597,18 @@ let sortableInstances = [];
 let changes = [];
 
 // Update jabatan counts on page load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    // Initialize CSRF token if not set
+    if (!window.APP_CONFIG.csrfToken) {
+        showToast('info', '⏳ Inisialisasi session...', 3000);
+        const token = await refreshCSRFToken();
+        if (token) {
+            showToast('success', '✅ Session siap!', 2000);
+        } else {
+            showToast('warning', '⚠️ Gagal inisialisasi session. Refresh halaman.', 5000);
+        }
+    }
+    
     updateJabatanCounts();
     initializeSortable();
 });
@@ -552,15 +622,37 @@ function initializeSortable() {
     // Initialize new instances for each jabatan container
     document.querySelectorAll('.sortable-container').forEach(container => {
         const sortable = new Sortable(container, {
-            group: 'jabatan', // Allow dragging between containers
+            group: {
+                name: 'jabatan', // Allow dragging between all containers
+                pull: true,
+                put: true
+            },
             animation: 150,
             ghostClass: 'sortable-ghost',
             chosenClass: 'sortable-chosen',
             dragClass: 'sortable-dragging',
-            handle: '.drag-handle',
+            handle: '.drag-handle', // Only drag via handle
+            delay: 0,
+            touchStartThreshold: 5, // Better touch support
+            
+            onStart: function(evt) {
+                // Visual feedback when dragging starts
+                evt.item.classList.add('dragging');
+                document.body.style.cursor = 'grabbing';
+            },
             
             onEnd: function(evt) {
+                // Remove visual feedback
+                evt.item.classList.remove('dragging');
+                document.body.style.cursor = '';
+                
+                // Handle the move
                 handleJabatanMove(evt);
+            },
+            
+            onAdd: function(evt) {
+                // When item is added to a new container (different bagian)
+                console.log('Jabatan moved to new bagian:', evt.to.dataset.bagianId);
             }
         });
         
@@ -578,6 +670,21 @@ function handleJabatanMove(evt) {
     const newUnsurId = evt.to.dataset.unsurId;
     const newIndex = evt.newIndex;
     
+    // Check if moved to different bagian
+    const isCrossBagianMove = oldBagianId !== newBagianId;
+    
+    // Visual feedback for cross-bagian move
+    if (isCrossBagianMove) {
+        jabatanElement.style.border = '2px dashed #007bff';
+        setTimeout(() => {
+            jabatanElement.style.border = '';
+        }, 1000);
+        
+        // Show toast notification
+        const bagianName = evt.to.closest('.bagian-section')?.querySelector('.bagian-header h6')?.textContent || 'Bagian baru';
+        showToast('info', `📦 Jabatan dipindahkan ke ${bagianName}`, 3000);
+    }
+    
     // Update visual state
     jabatanElement.dataset.bagianId = newBagianId;
     jabatanElement.dataset.unsurId = newUnsurId;
@@ -590,7 +697,8 @@ function handleJabatanMove(evt) {
         old_unsur_id: oldUnsurId,
         new_bagian_id: newBagianId,
         new_unsur_id: newUnsurId,
-        new_urutan: newIndex + 1
+        new_urutan: newIndex + 1,
+        is_cross_bagian: isCrossBagianMove
     };
     
     // Remove existing change for this jabatan if any
@@ -617,9 +725,10 @@ function hideSaveButton() {
 }
 
 // Save order function
-function saveOrder() {
+async function saveOrder() {
     const containers = document.querySelectorAll('.sortable-container');
     const orders = [];
+    let crossBagianCount = 0;
     
     containers.forEach(container => {
         const bagianId = container.dataset.bagianId;
@@ -636,8 +745,11 @@ function saveOrder() {
         });
     });
     
+    // Check if any cross-bagian moves
+    crossBagianCount = changes.filter(c => c.is_cross_bagian).length;
+    
     const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
-    fetch('../api/jabatan_api.php', {
+    const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -645,26 +757,32 @@ function saveOrder() {
         },
         body: new URLSearchParams({
             action: 'update_order',
-            orders: JSON.stringify(orders)
+            orders: JSON.stringify(orders),
+            csrf_token: csrfToken
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showAlert('success', data.message);
-            hideSaveButton();
-            changes = [];
-            
-            // Update original order to reflect saved changes
-            originalOrder = [...jabatanData];
-        } else {
-            showAlert('danger', data.message);
+    };
+    
+    // Show loading toast
+    showToast('info', '⏳ Menyimpan urutan jabatan...', 3000);
+    
+    const { data } = await apiCallWithTokenRefresh('../api/jabatan_api.php', options);
+    
+    if (data.success) {
+        let message = '✅ Urutan jabatan berhasil disimpan!';
+        if (crossBagianCount > 0) {
+            message += `<br><small>(${crossBagianCount} jabatan dipindahkan antar bagian)</small>`;
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showAlert('danger', 'Terjadi kesalahan saat menyimpan urutan');
-    });
+        showToast('success', message, 8000);
+        hideSaveButton();
+        changes = [];
+        originalOrder = [...jabatanData];
+    } else {
+        if (data.csrf_expired && !data.retry_with_fresh_token) {
+            showToast('warning', '⚠️ Session expired. Please refresh the page.', 5000);
+        } else {
+            showPersistentToast('danger', '❌ ' + (data.message || 'Gagal menyimpan urutan'));
+        }
+    }
 }
 
 // Cancel order function
@@ -760,15 +878,14 @@ function updateJabatanCounts() {
             sum + bagian.jabatans.reduce((sum2, jabatan) => sum2 + jabatan.personil_count, 0), 0);
         
         html += `
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="jabatan-card">
-                        <div class="unsur-header">
-                            <h5><i class="fas fa-sitemap me-2"></i>${unsur.nama_unsur}</h5>
-                            <small>${totalJabatan} jabatan</small>
-                            <span class="jabatan-count float-end">${totalPersonil} personil</span>
-                        </div>
-                        <div class="unsur-container">
+            <div class="col-lg-6 col-md-6">
+                <div class="jabatan-card">
+                    <div class="unsur-header">
+                        <h5><i class="fas fa-sitemap me-2"></i>${unsur.nama_unsur}</h5>
+                        <small>${totalJabatan} jabatan</small>
+                        <span class="jabatan-count float-end">${totalPersonil} personil</span>
+                    </div>
+                    <div class="unsur-container">
         `;
         
         // Sort bagian by order, then by name
@@ -825,16 +942,20 @@ function updateJabatanCounts() {
                         `).join('') : '<div class="text-muted text-center p-3">Belum ada jabatan</div>'}
                     </div>
                 </div>
-            `;
+            </div>
+        </div>
+        `;
         });
         
         html += `
-                        </div>
-                    </div>
                 </div>
             </div>
+        </div>
         `;
     });
+    
+    // Wrap in row
+    html = `<div class="row">${html}</div>`;
     
     document.getElementById('jabatanContainer').innerHTML = html;
 }
@@ -901,19 +1022,43 @@ function openAddModal() {
     document.getElementById('formAction').value = 'create_jabatan';
     document.getElementById('formId').value = '';
     document.getElementById('nama_jabatan').value = '';
-    document.getElementById('kode_jabatan').value = '';
     document.getElementById('id_unsur').value = '';
+    document.getElementById('id_bagian').innerHTML = '<option value="">Pilih Unsur terlebih dahulu</option>';
     
     new bootstrap.Modal(document.getElementById('jabatanModal')).show();
 }
 
+// Update bagian options based on selected unsur
+function updateBagianOptions() {
+    const unsurId = document.getElementById('id_unsur').value;
+    const bagianSelect = document.getElementById('id_bagian');
+    
+    if (!unsurId) {
+        bagianSelect.innerHTML = '<option value="">Pilih Unsur terlebih dahulu</option>';
+        return;
+    }
+    
+    // Filter bagian data by unsur
+    const filteredBagian = bagianData.filter(b => b.id_unsur == unsurId);
+    
+    if (filteredBagian.length === 0) {
+        bagianSelect.innerHTML = '<option value="">Tidak ada bagian untuk unsur ini</option>';
+        return;
+    }
+    
+    let html = '<option value="">-- Pilih Bagian (Opsional) --</option>';
+    filteredBagian.forEach(bagian => {
+        html += `<option value="${bagian.id}">${bagian.nama_bagian}</option>`;
+    });
+    
+    bagianSelect.innerHTML = html;
+}
+
 function editJabatan(jabatanId) {
-    const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
     fetch('../api/jabatan_api.php', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRF-TOKEN': csrfToken
+            'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: new URLSearchParams({
             action: 'get_jabatan_detail',
@@ -928,8 +1073,15 @@ function editJabatan(jabatanId) {
             document.getElementById('formAction').value = 'update_jabatan';
             document.getElementById('formId').value = jabatan.id;
             document.getElementById('nama_jabatan').value = jabatan.nama_jabatan || '';
-            document.getElementById('kode_jabatan').value = jabatan.kode_jabatan || '';
             document.getElementById('id_unsur').value = jabatan.id_unsur || '';
+            
+            // Update bagian options based on selected unsur
+            updateBagianOptions();
+            
+            // Set bagian value after options are populated
+            setTimeout(() => {
+                document.getElementById('id_bagian').value = jabatan.id_bagian || '';
+            }, 100);
             
             new bootstrap.Modal(document.getElementById('jabatanModal')).show();
         } else {
@@ -942,10 +1094,10 @@ function editJabatan(jabatanId) {
     });
 }
 
-function deleteJabatan(jabatanId) {
+async function deleteJabatan(jabatanId) {
     if (confirm('Apakah Anda yakin ingin menghapus jabatan ini?')) {
         const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
-        fetch('../api/jabatan_api.php', {
+        const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -953,24 +1105,28 @@ function deleteJabatan(jabatanId) {
             },
             body: new URLSearchParams({
                 action: 'delete_jabatan',
-                id: jabatanId
+                id: jabatanId,
+                csrf_token: csrfToken
             })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showAlert('success', data.message);
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
+        };
+        
+        // Show loading toast
+        showToast('info', '⏳ Menghapus jabatan...', 3000);
+        
+        const { data } = await apiCallWithTokenRefresh('../api/jabatan_api.php', options);
+        
+        if (data.success) {
+            showToast('success', '✅ Jabatan berhasil dihapus!', 8000);
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        } else {
+            if (data.csrf_expired && !data.retry_with_fresh_token) {
+                showToast('warning', '⚠️ Session expired. Please refresh the page.', 5000);
             } else {
-                showAlert('danger', data.message);
+                showPersistentToast('danger', '❌ ' + (data.message || 'Gagal menghapus jabatan'));
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showAlert('danger', 'Terjadi kesalahan saat menghapus data');
-        });
+        }
     }
 }
 
@@ -981,7 +1137,7 @@ function viewJabatan(jabatanId) {
     document.getElementById('viewJabatanUnsur').textContent = jabatan ? jabatan.nama_unsur : '';
     
     // Get personil data for this jabatan
-    fetch('<?php echo API_BASE_URL; ?>/personil_simple.php?limit=1000')
+    fetch('../api/personil_api.php?action=get_all&limit=1000')
         .then(response => response.json())
         .then(data => {
             if (data.success && data.data) {
@@ -1093,33 +1249,119 @@ function showAlert(type, message) {
     }, 5000);
 }
 
+// Auto-refresh CSRF token utility
+async function refreshCSRFToken() {
+    try {
+        const response = await fetch('../api/jabatan_api.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            credentials: 'same-origin', // Important: send cookies
+            body: new URLSearchParams({
+                action: 'get_csrf_token'
+            })
+        });
+        const data = await response.json();
+        if (data.success && data.csrf_token) {
+            // Ensure window.APP_CONFIG exists before setting
+            if (!window.APP_CONFIG) {
+                window.APP_CONFIG = {};
+            }
+            window.APP_CONFIG.csrfToken = data.csrf_token;
+            return data.csrf_token;
+        }
+        throw new Error('Failed to get new token');
+    } catch (error) {
+        console.error('Error refreshing CSRF token:', error);
+        return null;
+    }
+}
+
+// Helper to make API calls with auto-refresh token
+async function apiCallWithTokenRefresh(url, options, maxRetries = 1) {
+    let retries = 0;
+    
+    // Ensure credentials are sent
+    if (!options.credentials) {
+        options.credentials = 'same-origin';
+    }
+    
+    while (retries <= maxRetries) {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        
+        // Check if CSRF token expired
+        if (response.status === 403 && data.csrf_expired && retries < maxRetries) {
+            console.log('CSRF token expired, refreshing...');
+            const newToken = await refreshCSRFToken();
+            
+            if (newToken) {
+                // Update token in request body if it's FormData/URLSearchParams
+                if (options.body instanceof URLSearchParams) {
+                    options.body.set('csrf_token', newToken);
+                }
+                // Update header
+                if (options.headers && options.headers['X-CSRF-TOKEN']) {
+                    options.headers['X-CSRF-TOKEN'] = newToken;
+                }
+                retries++;
+                continue;
+            }
+        }
+        
+        return { response, data };
+    }
+    
+    return { response: { status: 403 }, data: { success: false, message: 'Max retries exceeded' } };
+}
+
 // Handle form submission
-document.getElementById('jabatanForm').addEventListener('submit', function(e) {
+document.getElementById('jabatanForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    const formData = new FormData(this);
     const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
+    const formData = new URLSearchParams(new FormData(this));
     formData.append('csrf_token', csrfToken);
 
-    fetch('../api/jabatan_api.php', {
+    const options = {
         method: 'POST',
-        headers: { 'X-CSRF-TOKEN': csrfToken },
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRF-TOKEN': csrfToken
+        },
         body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
+    };
+
+    // Show loading toast (short duration for loading)
+    const actionType = formData.get('formAction') === 'create_jabatan' ? 'menambah' : 'memperbarui';
+    showToast('info', `⏳ Sedang ${actionType} jabatan...`, 3000);
+    
+    try {
+        const { data } = await apiCallWithTokenRefresh('../api/jabatan_api.php', options);
+        
         if (data.success) {
-            showAlert('success', data.message);
+            const action = formData.get('formAction') === 'create_jabatan' ? 'ditambahkan' : 'diperbarui';
+            const kodeInfo = data.kode_jabatan ? `<br><small>Kode: <strong>${data.kode_jabatan}</strong></small>` : '';
+            // Success toast stays longer so user can see the result
+            showToast('success', `✅ Jabatan berhasil ${action}!${kodeInfo}`, 8000);
             setTimeout(() => {
                 window.location.reload();
-            }, 1500);
+            }, 2000);
         } else {
-            showAlert('danger', data.message);
+            console.error('API Error:', data);
+            if (data.csrf_expired) {
+                showToast('warning', '⚠️ Session expired. Refreshing page...', 5000);
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                // Error toast - persistent (user must click X to close)
+                showPersistentToast('danger', '❌ ' + (data.message || 'Gagal menyimpan data jabatan'));
+            }
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showAlert('danger', 'Terjadi kesalahan saat menyimpan data');
-    });
+    } catch (error) {
+        console.error('Fetch Error:', error);
+        // Network error - persistent so user can read and retry
+        showPersistentToast('danger', '❌ Network error. Check connection and try again.');
+    }
 });
 </script>

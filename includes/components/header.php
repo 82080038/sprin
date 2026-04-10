@@ -615,10 +615,22 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             <i class="fa-solid fa-users me-1"></i> Data Personil
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo $current_page == 'calendar_dashboard.php' ? 'active' : ''; ?>" href="<?php echo url('pages/calendar_dashboard.php'); ?>">
-                            <i class="fa-solid fa-calendar-days me-1"></i> Schedule
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['calendar_dashboard.php','operasi.php','tim_piket.php']) ? 'active' : ''; ?>" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-calendar-days me-1"></i> Operasional
                         </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item <?php echo $current_page == 'calendar_dashboard.php' ? 'active' : ''; ?>" href="<?php echo url('pages/calendar_dashboard.php'); ?>">
+                                <i class="fa-solid fa-calendar-alt"></i> Schedule / Jadwal
+                            </a></li>
+                            <li><a class="dropdown-item <?php echo $current_page == 'operasi.php' ? 'active' : ''; ?>" href="<?php echo url('pages/operasi.php'); ?>">
+                                <i class="fa-solid fa-tasks"></i> Daftar Operasi
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item <?php echo $current_page == 'tim_piket.php' ? 'active' : ''; ?>" href="<?php echo url('pages/tim_piket.php'); ?>">
+                                <i class="fa-solid fa-users-gear"></i> Tim / Regu Piket
+                            </a></li>
+                        </ul>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['export_personil.php', 'report_api.php']) ? 'active' : ''; ?>" href="#" role="button" data-bs-toggle="dropdown">

@@ -4,8 +4,12 @@
  */
 
 // Enable error reporting for debugging
+require_once __DIR__ . '/../core/config.php';
+
+// Error reporting controlled by config
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', defined('DEBUG_MODE') && DEBUG_MODE ? 1 : 0);
+ini_set('log_errors', 1);
 
 // Set headers
 header("Content-Type: application/json; charset=UTF-8");

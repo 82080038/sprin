@@ -3,11 +3,38 @@
  * Jabatan API - Separate API endpoints for jabatan operations
  */
 
-// Error reporting controlled by config
+// Error reporting - FORCE ON for development debugging
 require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/SessionManager.php';
+require_once __DIR__ . '/../core/auth_helper.php';
+
+// Force error reporting ON for debugging (remove in production)
 error_reporting(E_ALL);
-ini_set('display_errors', defined('DEBUG_MODE') && DEBUG_MODE ? 1 : 0);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 ini_set('log_errors', 1);
+ini_set('error_log', '/opt/lampp/logs/php_error_log');
+
+// Capture all errors and warnings
+$phpErrors = [];
+set_error_handler(function($errno, $errstr, $errfile, $errline) use (&$phpErrors) {
+    $phpErrors[] = "[$errno] $errstr in $errfile:$errline";
+    return true; // Don't execute PHP internal error handler
+});
+
+// Capture fatal errors
+register_shutdown_function(function() use (&$phpErrors) {
+    $error = error_get_last();
+    if ($error && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        $phpErrors[] = "[FATAL] {$error['message']} in {$error['file']}:{$error['line']}";
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => 'Fatal error occurred',
+            'php_errors' => $phpErrors
+        ]);
+    }
+});
 
 // Set headers
 header("Content-Type: application/json; charset=UTF-8");
@@ -20,18 +47,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-// CSRF validation for mutating requests
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// CSRF validation for mutating requests only (skip for read-only actions)
+$readOnlyActions = ['get_jabatan_detail', 'get_all_jabatan', 'get_csrf_token'];
+$action = $_POST['action'] ?? $_GET['action'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !in_array($action, $readOnlyActions)) {
     $csrfToken = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+    
+    // Always start session first
+    SessionManager::start();
+    
+    // Debug info for troubleshooting
+    $debugInfo = [
+        'action' => $action,
+        'token_received' => !empty($csrfToken) ? substr($csrfToken, 0, 10) . '...' : 'EMPTY',
+        'session_active' => SessionManager::isActive(),
+        'session_id' => session_id(),
+        'has_csrf_in_session' => isset($_SESSION['csrf_token']),
+        'session_csrf_preview' => isset($_SESSION['csrf_token']) ? substr($_SESSION['csrf_token'], 0, 10) . '...' : 'NONE',
+        'cookies_received' => isset($_COOKIE) ? array_keys($_COOKIE) : [],
+        'php_session_cookie' => isset($_COOKIE['PHPSESSID']) ? 'YES' : 'NO'
+    ];
+    
+    error_log("[JABATAN API CSRF DEBUG] " . json_encode($debugInfo));
+    
     if (empty($csrfToken)) {
         http_response_code(403);
-        echo json_encode(['success' => false, 'message' => 'CSRF token required']);
+        echo json_encode([
+            'success' => false, 
+            'message' => 'CSRF token required',
+            'debug' => $debugInfo,
+            'csrf_expired' => true
+        ]);
         exit;
     }
-    session_start();
-    if (!isset($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $csrfToken)) {
+    
+    if (!isset($_SESSION['csrf_token'])) {
         http_response_code(403);
-        echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);
+        echo json_encode([
+            'success' => false, 
+            'message' => 'CSRF token not found in session. Try refreshing the page.',
+            'debug' => $debugInfo,
+            'csrf_expired' => true
+        ]);
+        exit;
+    }
+    
+    if (!hash_equals($_SESSION['csrf_token'], $csrfToken)) {
+        http_response_code(403);
+        echo json_encode([
+            'success' => false, 
+            'message' => 'Invalid CSRF token',
+            'debug' => $debugInfo,
+            'csrf_expired' => true,
+            'retry_with_fresh_token' => true
+        ]);
         exit;
     }
 }
@@ -55,6 +124,15 @@ $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
 try {
     switch ($action) {
+        case 'get_csrf_token':
+            SessionManager::start();
+            $token = \AuthHelper::generateCSRFToken();
+            echo json_encode([
+                'success' => true,
+                'csrf_token' => $token
+            ]);
+            break;
+            
         case 'get_jabatan_detail':
             $id = $_POST['id'] ?? $_GET['id'] ?? 0;
             if (!$id) {
@@ -107,12 +185,28 @@ try {
                 throw new Exception('Nama jabatan terlalu panjang (maks 255 karakter)');
             }
             
+            // Auto-regenerate kode_jabatan if nama_jabatan changed
+            $kode_jabatan = strtoupper(preg_replace('/[^a-zA-Z0-9]/', '', $nama_jabatan));
+            
+            // Check for duplicate kode_jabatan (excluding current record)
+            $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM jabatan WHERE kode_jabatan = ? AND id != ?");
+            $checkStmt->execute([$kode_jabatan, $id]);
+            if ($checkStmt->fetchColumn() > 0) {
+                $counter = 1;
+                do {
+                    $new_kode = $kode_jabatan . $counter;
+                    $checkStmt->execute([$new_kode, $id]);
+                    $counter++;
+                } while ($checkStmt->fetchColumn() > 0);
+                $kode_jabatan = $new_kode;
+            }
+            
             $stmt = $pdo->prepare("
                 UPDATE jabatan 
-                SET nama_jabatan = ?, id_unsur = ?, id_bagian = ? 
+                SET nama_jabatan = ?, kode_jabatan = ?, id_unsur = ?, id_bagian = ? 
                 WHERE id = ?
             ");
-            $stmt->execute([$nama_jabatan, $id_unsur, $id_bagian, $id]);
+            $stmt->execute([$nama_jabatan, $kode_jabatan, $id_unsur, $id_bagian, $id]);
             
             echo json_encode([
                 'success' => true,
@@ -132,16 +226,33 @@ try {
                 throw new Exception('Nama jabatan terlalu panjang (maks 255 karakter)');
             }
             
+            // Auto-generate kode_jabatan from nama_jabatan
+            $kode_jabatan = strtoupper(preg_replace('/[^a-zA-Z0-9]/', '', $nama_jabatan));
+            
+            // Check for duplicate kode_jabatan and append number if needed
+            $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM jabatan WHERE kode_jabatan = ?");
+            $checkStmt->execute([$kode_jabatan]);
+            if ($checkStmt->fetchColumn() > 0) {
+                $counter = 1;
+                do {
+                    $new_kode = $kode_jabatan . $counter;
+                    $checkStmt->execute([$new_kode]);
+                    $counter++;
+                } while ($checkStmt->fetchColumn() > 0);
+                $kode_jabatan = $new_kode;
+            }
+            
             $stmt = $pdo->prepare("
-                INSERT INTO jabatan (nama_jabatan, id_unsur, id_bagian) 
-                VALUES (?, ?, ?)
+                INSERT INTO jabatan (kode_jabatan, nama_jabatan, id_unsur, id_bagian) 
+                VALUES (?, ?, ?, ?)
             ");
-            $stmt->execute([$nama_jabatan, $id_unsur, $id_bagian]);
+            $stmt->execute([$kode_jabatan, $nama_jabatan, $id_unsur, $id_bagian]);
             
             echo json_encode([
                 'success' => true,
-                'message' => 'Jabatan created successfully',
-                'id' => $pdo->lastInsertId()
+                'message' => 'Jabatan created successfully with code: ' . $kode_jabatan,
+                'id' => $pdo->lastInsertId(),
+                'kode_jabatan' => $kode_jabatan
             ]);
             break;
             
@@ -249,12 +360,15 @@ try {
     
 } catch (Exception $e) {
     error_log('[jabatan_api] ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
-    $safeMessage = in_array($e->getMessage(), [
-        'ID is required', 'ID and nama jabatan are required',
-        'Nama jabatan is required', 'Nama jabatan terlalu panjang (maks 255 karakter)',
-        'Unsur ID is required', 'Invalid action', 'Orders data is required'
-    ]) ? $e->getMessage() : 'Terjadi kesalahan. Silakan coba lagi.';
     http_response_code(400);
-    echo json_encode(['success' => false, 'message' => $safeMessage]);
+    echo json_encode([
+        'success' => false, 
+        'message' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine(),
+        'php_errors' => $phpErrors,
+        'session_id' => session_id(),
+        'has_session' => isset($_SESSION)
+    ]);
 }
 ?>

@@ -519,50 +519,16 @@ if (!window.SPRINT) {
             try {
                 if (typeof toastr !== 'undefined' && toastr.success) {
                     toastr.success(message);
-                } else {
-                    console.log('SUCCESS: ' + message);
-                    // Create a simple notification div
-                    const notification = document.createElement('div');
-                    notification.className = 'alert alert-success alert-dismissible fade show position-fixed';
-                    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
-                    notification.innerHTML = `
-                        ${message}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    `;
-                    document.body.appendChild(notification);
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
-                        }
-                    }, 3000);
-                }
-            } catch (error) {
                 console.log('SUCCESS: ' + message);
                 alert(message);
             }
         },
         showError: function(message) {
-            try {
-                if (typeof toastr !== 'undefined' && toastr.error) {
-                    toastr.error(message);
-                } else {
-                    console.error('ERROR: ' + message);
-                    // Create a simple notification div
-                    const notification = document.createElement('div');
-                    notification.className = 'alert alert-danger alert-dismissible fade show position-fixed';
-                    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
-                    notification.innerHTML = `
-                        ${message}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    `;
-                    document.body.appendChild(notification);
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
-                        }
-                    }, 5000);
-                }
-            } catch (error) {
+            if (typeof showToast === 'function') {
+                showToast('danger', '❌ ' + message);
+            } else if (window.SPRINT && window.SPRINT.showToast) {
+                window.SPRINT.showToast(message, 'error');
+            } else {
                 console.error('ERROR: ' + message);
                 alert('Error: ' + message);
             }
@@ -687,6 +653,7 @@ function saveAllChanges() {
     const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
     const savePromises = changes.map(change => {
         return fetch('../api/bagian_api.php', {
+            credentials: 'same-origin',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -706,24 +673,14 @@ function saveAllChanges() {
         .then(results => {
             const allSuccess = results.every(r => r.success);
             if (allSuccess) {
-                try {
-                    window.SPRINT.showSuccess('Semua perubahan berhasil disimpan!');
-                } catch (error) {
-                    console.log('Semua perubahan berhasil disimpan!');
-                    alert('Semua perubahan berhasil disimpan!');
-                }
+                window.SPRINT.showSuccess('Semua perubahan berhasil disimpan!');
                 changes = [];
                 hideSaveButtons();
                 refreshData();
             } else {
                 const failed = results.filter(r => !r.success);
                 const errorMessage = 'Beberapa perubahan gagal: ' + failed.map(r => r.message).join(', ');
-                try {
-                    window.SPRINT.showError(errorMessage);
-                } catch (error) {
-                    console.error(errorMessage);
-                    alert(errorMessage);
-                }
+                window.SPRINT.showError(errorMessage);
             }
         })
         .catch(error => {
@@ -734,7 +691,7 @@ function saveAllChanges() {
             } catch (notificationError) {
                 console.error('Notification error:', notificationError);
                 console.error('Original error:', error);
-                alert(errorMessage + ' Check console for details.');
+                showToast('danger', '❌ ' + errorMessage);
             }
         });
 }
@@ -787,6 +744,7 @@ function openAddModalForUnsur(unsurId, unsurName) {
 function editBagian(id) {
     const csrfToken = window.APP_CONFIG ? window.APP_CONFIG.csrfToken : '';
     fetch('../api/bagian_api.php', {
+            credentials: 'same-origin',
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -809,10 +767,6 @@ function editBagian(id) {
         } else {
             try {
                 window.SPRINT.showError('Error: Bagian tidak ditemukan');
-            } catch (error) {
-                console.error('Error: Bagian tidak ditemukan');
-                alert('Error: Bagian tidak ditemukan');
-            }
         }
     })
     .catch(error => {
@@ -821,7 +775,7 @@ function editBagian(id) {
             window.SPRINT.showError('Error: ' + error.message);
         } catch (notificationError) {
             console.error('Error: ' + error.message);
-            alert('Error: ' + error.message);
+            showToast('danger', '❌ ' + error.message);
         }
     });
 }
@@ -853,6 +807,7 @@ document.getElementById('bagianForm').addEventListener('submit', function(e) {
     formData.append('csrf_token', csrfToken);
     
     fetch('../api/bagian_api.php', {
+            credentials: 'same-origin',
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': csrfToken },
         body: formData
@@ -870,10 +825,6 @@ document.getElementById('bagianForm').addEventListener('submit', function(e) {
         } else {
             try {
                 window.SPRINT.showError('Error: ' + data.message);
-            } catch (error) {
-                console.error('Error: ' + data.message);
-                alert('Error: ' + data.message);
-            }
         }
     })
     .catch(error => {
@@ -882,7 +833,7 @@ document.getElementById('bagianForm').addEventListener('submit', function(e) {
             window.SPRINT.showError('Error: Terjadi kesalahan saat menyimpan data');
         } catch (notificationError) {
             console.error('Error: Terjadi kesalahan saat menyimpan data');
-            alert('Error: Terjadi kesalahan saat menyimpan data');
+            showToast('danger', '❌ Terjadi kesalahan saat menyimpan data');
         }
     });
 });

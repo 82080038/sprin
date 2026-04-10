@@ -5,6 +5,7 @@
 
 // Error reporting controlled by config
 require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/SessionManager.php';
 error_reporting(E_ALL);
 ini_set('display_errors', defined('DEBUG_MODE') && DEBUG_MODE ? 1 : 0);
 ini_set('log_errors', 1);
@@ -28,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => false, 'message' => 'CSRF token required']);
         exit;
     }
-    session_start();
+    SessionManager::start();
     if (!isset($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $csrfToken)) {
         http_response_code(403);
         echo json_encode(['success' => false, 'message' => 'Invalid CSRF token']);

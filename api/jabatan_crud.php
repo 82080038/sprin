@@ -197,8 +197,24 @@ try {
                 exit;
             }
             
-            $stmt = $pdo->prepare("UPDATE jabatan SET nama_jabatan = ?, id_unsur = ? WHERE id = ?");
-            $stmt->execute([$nama_jabatan, $id_unsur, $id]);
+            // Auto-regenerate kode_jabatan from nama_jabatan
+            $kode_jabatan = strtoupper(preg_replace('/[^a-zA-Z0-9]/', '', $nama_jabatan));
+            
+            // Check for duplicate kode_jabatan (excluding current record)
+            $checkKodeStmt = $pdo->prepare("SELECT COUNT(*) FROM jabatan WHERE kode_jabatan = ? AND id != ?");
+            $checkKodeStmt->execute([$kode_jabatan, $id]);
+            if ($checkKodeStmt->fetchColumn() > 0) {
+                $counter = 1;
+                do {
+                    $new_kode = $kode_jabatan . $counter;
+                    $checkKodeStmt->execute([$new_kode, $id]);
+                    $counter++;
+                } while ($checkKodeStmt->fetchColumn() > 0);
+                $kode_jabatan = $new_kode;
+            }
+            
+            $stmt = $pdo->prepare("UPDATE jabatan SET nama_jabatan = ?, kode_jabatan = ?, id_unsur = ? WHERE id = ?");
+            $stmt->execute([$nama_jabatan, $kode_jabatan, $id_unsur, $id]);
             
             echo json_encode([
                 'success' => true, 

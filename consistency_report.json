@@ -1,0 +1,217 @@
+{
+  "error_reporting": [
+    {
+      "file": "/opt/lampp/htdocs/sprin/core/config.php",
+      "issue": "Uses old ENVIRONMENT check instead of DEBUG_MODE",
+      "severity": "low"
+    }
+  ],
+  "csrf": [
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/unified-api.php",
+      "issue": "CSRF check without session_start",
+      "severity": "high"
+    }
+  ],
+  "session": [
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/personil_statistics.php",
+      "issue": "Uses direct session_start() instead of SessionManager",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/bulk_update_personil.php",
+      "issue": "Uses direct session_start() instead of SessionManager",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/unsur_api.php",
+      "issue": "Uses direct session_start() instead of SessionManager",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/reporting.php",
+      "issue": "Uses direct session_start() instead of SessionManager",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/user_management.php",
+      "issue": "Uses direct session_start() instead of SessionManager",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/calendar_dashboard.php",
+      "issue": "Uses direct session_start() instead of SessionManager",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/personil.php",
+      "issue": "Uses direct session_start() instead of SessionManager",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/backup.php",
+      "issue": "Uses direct session_start() instead of SessionManager",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/backup_management.php",
+      "issue": "Uses direct session_start() instead of SessionManager",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/includes/components/header.php",
+      "issue": "Uses direct session_start() instead of SessionManager",
+      "severity": "medium"
+    }
+  ],
+  "api_format": [
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/personil_api.php",
+      "issue": "Exception handler without standardized error response",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/unsur_terminal.php",
+      "issue": "Exception handler without standardized error response",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/export_personil.php",
+      "issue": "JSON response without success field",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/export_personil.php",
+      "issue": "Exception handler without standardized error response",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/bulk_update_personil.php",
+      "issue": "JSON response without success field",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/bulk_update_personil.php",
+      "issue": "Exception handler without standardized error response",
+      "severity": "medium"
+    }
+  ],
+  "database": [
+    {
+      "file": "/opt/lampp/htdocs/sprin/create_default_user.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/test_api.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/bagian_api.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/personil_stats_public.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/unsur_terminal.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/personil_detail.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/personil_delete.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/unified-api.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/personil_statistics.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/bulk_update_personil.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/calendar_api_public.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/jabatan_api.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/api/unsur_api.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/tests/cli-test-runner.php",
+      "issue": "Uses direct PDO instead of Database class",
+      "severity": "low"
+    }
+  ],
+  "includes": [],
+  "javascript": [
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/reporting.php",
+      "line": 384,
+      "issue": "Uses alert() instead of showToast()",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/reporting.php",
+      "line": 393,
+      "issue": "Uses alert() instead of showToast()",
+      "severity": "low"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/reporting.php",
+      "issue": "fetch() without credentials option",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/calendar_dashboard.php",
+      "issue": "fetch() without credentials option",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/backup.php",
+      "issue": "fetch() without credentials option",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/main.php",
+      "issue": "fetch() without credentials option",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/unsur.php",
+      "issue": "fetch() without credentials option",
+      "severity": "medium"
+    },
+    {
+      "file": "/opt/lampp/htdocs/sprin/pages/backup_management.php",
+      "issue": "fetch() without credentials option",
+      "severity": "medium"
+    }
+  ]
+}

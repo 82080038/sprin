@@ -14,18 +14,17 @@ class SessionManager {
         if (!self::$started && session_status() === PHP_SESSION_NONE) {
             // Set session parameters before start
             ini_set('session.cookie_httponly', 1);
-            ini_set('session.cookie_secure', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on');
-            ini_set('session.use_strict_mode', 1);
-            ini_set('session.cookie_samesite', 'Lax');
+            ini_set('session.cookie_secure', 0); // Allow non-HTTPS for development
+            ini_set('session.use_strict_mode', 0); // Disable strict mode for compatibility
+            ini_set('session.cookie_samesite', ''); // Empty for maximum compatibility
             ini_set('session.gc_maxlifetime', 3600); // 1 hour
             
             session_start();
             self::$started = true;
             
-            // Regenerate session ID for security
-            if (!isset($_SESSION['regenerated'])) {
-                session_regenerate_id(true);
-                $_SESSION['regenerated'] = true;
+            // Only regenerate if needed (not on every request)
+            if (!isset($_SESSION['created'])) {
+                $_SESSION['created'] = time();
             }
         }
     }

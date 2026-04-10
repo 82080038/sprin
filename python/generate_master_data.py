@@ -151,13 +151,36 @@ def insert_pangkat_data(cursor, pangkats):
     
     print(f"Inserted {len(pangkats)} pangkat records")
 
+def generate_kode_jabatan(nama_jabatan, cursor=None):
+    """Generate kode_jabatan from nama_jabatan (PHP-compatible logic)"""
+    import re
+    # Remove non-alphanumeric and convert to uppercase
+    kode = re.sub(r'[^a-zA-Z0-9]', '', nama_jabatan).upper()
+    
+    if cursor:
+        # Check for duplicates and append number if needed
+        check_sql = "SELECT COUNT(*) FROM jabatan WHERE kode_jabatan = %s"
+        counter = 1
+        original_kode = kode
+        while True:
+            cursor.execute(check_sql, (kode,))
+            if cursor.fetchone()[0] == 0:
+                break
+            kode = f"{original_kode}{counter}"
+            counter += 1
+    
+    return kode
+
 def insert_jabatan_data(cursor, jabatans):
     """Insert jabatan data"""
     print("Inserting jabatan data...")
     
     for i, jabatan in enumerate(jabatans, 1):
+        # Auto-generate kode_jabatan from nama_jabatan
+        kode_jabatan = generate_kode_jabatan(jabatan, cursor)
+        
         sql = "INSERT INTO jabatan (kode_jabatan, nama_jabatan, urutan, is_active, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s)"
-        values = (f"JB{i:03d}", jabatan, i, 1, datetime.now(), datetime.now())
+        values = (kode_jabatan, jabatan, i, 1, datetime.now(), datetime.now())
         cursor.execute(sql, values)
     
     print(f"Inserted {len(jabatans)} jabatan records")

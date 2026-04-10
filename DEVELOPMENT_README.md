@@ -1,4 +1,4 @@
-# 🚀 SPRIN v1.2.0 - Development Version
+# 🚀 SPRIN v1.3.0 - Development Version
 
 ## ⚠️ IMPORTANT NOTICE
 **This is a DEVELOPMENT version, not production-ready!**
@@ -6,24 +6,31 @@
 ## 📋 Current Status
 
 ### 🎯 Development Phase
-- **Version**: v1.2.0 Development
+- **Version**: v1.3.0 Development
 - **Status**: Active Development
+- **Last Updated**: 2026-04-10
+- **Branch**: kantor
 - **Stability**: Testing Phase
 - **Production**: ❌ NOT READY
 
-### 🚧 What's Working
+### 🚧 What's Working (v1.3.0)
 - ✅ Basic CRUD operations
-- ✅ UI consistency improvements
-- ✅ Modal standardization
-- ✅ Auto-generation features
-- ✅ Database structure
+- ✅ Manajemen Operasi Kepolisian (CRUD lengkap)
+- ✅ Auto-detect status operasi dari tanggal
+- ✅ Kalender FullCalendar v6 (view Tahun/Bulan/Minggu/Hari/Agenda)
+- ✅ Manajemen Tim / Regu Piket per bagian/fungsi
+- ✅ Kelola anggota tim (dual-list)
+- ✅ Generate jadwal berulang dari tim (harian/mingguan/bulanan/tahunan)
+- ✅ Database recurrence di schedules & operations
+- ✅ Navbar Operasional: Schedule / Daftar Operasi / Tim Piket
 
-### ⚠️ What's Testing
-- 🔄 Multi-user system stability
-- 🔄 Backup system reliability
-- 🔄 Performance optimization
-- 🔄 Security validation
-- 🔄 Error handling completeness
+### ⚠️ What's In Progress / Next
+- 🔄 Recurrence di modal jadwal kalender
+- 🔄 Recurrence di modal operasi
+- 🔄 Badge 🔁 event berulang di kalender
+- 🔄 Halaman jadwal piket per tim
+- 🔄 Dashboard piket hari ini
+- 🔄 Absensi/konfirmasi kehadiran piket
 
 ## 🧪 For Testing Only
 

@@ -357,13 +357,28 @@ function handle_jabatan_request($pdo, $method, $action, $id) {
             
         case 'create':
             $nama_jabatan = $_POST['nama_jabatan'] ?? '';
-            $kode_jabatan = $_POST['kode_jabatan'] ?? '';
             $deskripsi = $_POST['deskripsi'] ?? '';
             $id_unsur = $_POST['id_unsur'] ?? null;
             $id_bagian = $_POST['id_bagian'] ?? null;
             $urutan = $_POST['urutan'] ?? 1;
             
             if (!$nama_jabatan) send_error('Nama jabatan is required');
+            
+            // Auto-generate kode_jabatan from nama_jabatan
+            $kode_jabatan = strtoupper(preg_replace('/[^a-zA-Z0-9]/', '', $nama_jabatan));
+            
+            // Check for duplicate kode_jabatan and append number if needed
+            $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM jabatan WHERE kode_jabatan = ?");
+            $checkStmt->execute([$kode_jabatan]);
+            if ($checkStmt->fetchColumn() > 0) {
+                $counter = 1;
+                do {
+                    $new_kode = $kode_jabatan . $counter;
+                    $checkStmt->execute([$new_kode]);
+                    $counter++;
+                } while ($checkStmt->fetchColumn() > 0);
+                $kode_jabatan = $new_kode;
+            }
             
             $stmt = $pdo->prepare("
                 INSERT INTO jabatan (nama_jabatan, kode_jabatan, deskripsi, id_unsur, id_bagian, urutan) 
@@ -371,19 +386,34 @@ function handle_jabatan_request($pdo, $method, $action, $id) {
             ");
             $stmt->execute([$nama_jabatan, $kode_jabatan, $deskripsi, $id_unsur, $id_bagian, $urutan]);
             
-            send_success(['id' => $pdo->lastInsertId()], 'Jabatan created successfully');
+            send_success(['id' => $pdo->lastInsertId(), 'kode_jabatan' => $kode_jabatan], 'Jabatan created successfully with code: ' . $kode_jabatan);
             
         case 'update':
             if (!$id) send_error('ID is required');
             
             $nama_jabatan = $_POST['nama_jabatan'] ?? '';
-            $kode_jabatan = $_POST['kode_jabatan'] ?? '';
             $deskripsi = $_POST['deskripsi'] ?? '';
             $id_unsur = $_POST['id_unsur'] ?? null;
             $id_bagian = $_POST['id_bagian'] ?? null;
             $urutan = $_POST['urutan'] ?? 1;
             
             if (!$nama_jabatan) send_error('Nama jabatan is required');
+            
+            // Auto-regenerate kode_jabatan if nama_jabatan changed
+            $kode_jabatan = strtoupper(preg_replace('/[^a-zA-Z0-9]/', '', $nama_jabatan));
+            
+            // Check for duplicate kode_jabatan (excluding current record)
+            $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM jabatan WHERE kode_jabatan = ? AND id != ?");
+            $checkStmt->execute([$kode_jabatan, $id]);
+            if ($checkStmt->fetchColumn() > 0) {
+                $counter = 1;
+                do {
+                    $new_kode = $kode_jabatan . $counter;
+                    $checkStmt->execute([$new_kode, $id]);
+                    $counter++;
+                } while ($checkStmt->fetchColumn() > 0);
+                $kode_jabatan = $new_kode;
+            }
             
             $stmt = $pdo->prepare("
                 UPDATE jabatan 

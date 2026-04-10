@@ -111,6 +111,7 @@ try {
         case 'create_unsur':
             $nama_unsur = trim(strip_tags($_POST['nama_unsur'] ?? ''));
             $deskripsi = trim(strip_tags($_POST['deskripsi'] ?? ''));
+            $dasar_hukum = trim(strip_tags($_POST['dasar_hukum'] ?? ''));
             
             if (!$nama_unsur) {
                 throw new Exception('Nama unsur is required');
@@ -127,8 +128,8 @@ try {
             $maxUrutan = $stmt->fetch()['max_urutan'];
             $newUrutan = ($maxUrutan ?? 0) + 1;
             
-            $stmt = $pdo->prepare("INSERT INTO unsur (kode_unsur, nama_unsur, deskripsi, urutan) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$kode_unsur, $nama_unsur, $deskripsi, $newUrutan]);
+            $stmt = $pdo->prepare("INSERT INTO unsur (kode_unsur, nama_unsur, deskripsi, dasar_hukum, urutan) VALUES (?, ?, ?, ?, ?)");
+            $stmt->execute([$kode_unsur, $nama_unsur, $deskripsi, $dasar_hukum, $newUrutan]);
             
             echo json_encode([
                 'success' => true,
@@ -141,6 +142,7 @@ try {
             $id = filter_var($_POST['id'] ?? 0, FILTER_VALIDATE_INT);
             $nama_unsur = trim(strip_tags($_POST['nama_unsur'] ?? ''));
             $deskripsi = trim(strip_tags($_POST['deskripsi'] ?? ''));
+            $dasar_hukum = trim(strip_tags($_POST['dasar_hukum'] ?? ''));
             $urutan = filter_var($_POST['urutan'] ?? null, FILTER_VALIDATE_INT) ?: null;
             
             if (!$id || !$nama_unsur) {
@@ -153,8 +155,8 @@ try {
             // Auto-generate kode_unsur from nama_unsur
             $kode_unsur = preg_replace('/[^a-zA-Z0-9_]/', '_', strtoupper($nama_unsur));
             
-            $stmt = $pdo->prepare("UPDATE unsur SET nama_unsur = ?, kode_unsur = ?, deskripsi = ?, urutan = ? WHERE id = ?");
-            $stmt->execute([$nama_unsur, $kode_unsur, $deskripsi, $urutan, $id]);
+            $stmt = $pdo->prepare("UPDATE unsur SET nama_unsur = ?, kode_unsur = ?, deskripsi = ?, dasar_hukum = ?, urutan = ? WHERE id = ?");
+            $stmt->execute([$nama_unsur, $kode_unsur, $deskripsi, $dasar_hukum, $urutan, $id]);
             
             echo json_encode([
                 'success' => true,

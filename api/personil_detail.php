@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . '/core/SessionManager.php';
+SessionManager::start();
 require_once __DIR__ . '/../core/config.php';
 
 // Check authentication

@@ -43,6 +43,26 @@ def extract_distinct_jabatan(data):
     
     return sorted(jabatan_set)
 
+def generate_kode_jabatan(nama_jabatan, cursor=None):
+    """Generate kode_jabatan from nama_jabatan (PHP-compatible logic)"""
+    import re
+    # Remove non-alphanumeric and convert to uppercase
+    kode = re.sub(r'[^a-zA-Z0-9]', '', nama_jabatan).upper()
+    
+    if cursor:
+        # Check for duplicates and append number if needed
+        check_sql = "SELECT COUNT(*) FROM jabatan WHERE kode_jabatan = %s"
+        counter = 1
+        original_kode = kode
+        while True:
+            cursor.execute(check_sql, (kode,))
+            if cursor.fetchone()[0] == 0:
+                break
+            kode = f"{original_kode}{counter}"
+            counter += 1
+    
+    return kode
+
 def insert_master_jabatan():
     """Insert distinct jabatan ke master jabatan table"""
     print("=== Insert Master Jabatan ===")
@@ -80,8 +100,8 @@ def insert_master_jabatan():
         
         for i, jabatan in enumerate(distinct_jabatan, 1):
             try:
-                # Generate kode jabatan
-                kode_jabatan = f"JB{i:03d}"
+                # Auto-generate kode jabatan from nama_jabatan
+                kode_jabatan = generate_kode_jabatan(jabatan, cursor)
                 
                 # Insert jabatan
                 sql = """
