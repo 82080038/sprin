@@ -364,6 +364,38 @@ function fmtRupiah($n) {
                         <div class="form-text text-muted">Status otomatis terdeteksi dari tanggal awal &amp; akhir. Anda tetap bisa ubah manual.</div>
                     </div>
 
+                    <hr>
+                    <!-- Pengulangan Operasi -->
+                    <div class="border rounded p-3" style="background:#f8f9ff;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-bold small"><i class="fa-solid fa-repeat me-1 text-primary"></i>Pengulangan Operasi</span>
+                            <span class="badge" id="t_recPreview" style="background:#6c757d;">Tidak Berulang</span>
+                        </div>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-md-4">
+                                <select class="form-select form-select-sm" id="t_recType" name="recurrence_type" onchange="updateOpRecUI('t')">
+                                    <option value="none">Tidak Berulang</option>
+                                    <option value="daily">Harian</option>
+                                    <option value="weekly">Mingguan</option>
+                                    <option value="monthly">Bulanan</option>
+                                    <option value="yearly">Tahunan</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3" id="t_colInterval" style="display:none;">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">Setiap</span>
+                                    <input type="number" class="form-control" id="t_recInterval" name="recurrence_interval" value="1" min="1" max="30">
+                                </div>
+                            </div>
+                            <div class="col-md-5" id="t_colEnd" style="display:none;">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">s/d</span>
+                                    <input type="date" class="form-control" id="t_recEnd" name="recurrence_end">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">
@@ -527,6 +559,38 @@ function fmtRupiah($n) {
                         </div>
                         <div id="edit_statusAutoInfo" class="form-text mt-1"></div>
                         <div class="form-text text-muted">Status otomatis terdeteksi dari tanggal awal &amp; akhir. Anda tetap bisa ubah manual.</div>
+                    </div>
+
+                    <hr>
+                    <!-- Pengulangan Operasi Edit -->
+                    <div class="border rounded p-3" style="background:#f8f9ff;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-bold small"><i class="fa-solid fa-repeat me-1 text-primary"></i>Pengulangan Operasi</span>
+                            <span class="badge" id="edit_recPreview" style="background:#6c757d;">Tidak Berulang</span>
+                        </div>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-md-4">
+                                <select class="form-select form-select-sm" id="edit_recType" name="recurrence_type" onchange="updateOpRecUI('edit')">
+                                    <option value="none">Tidak Berulang</option>
+                                    <option value="daily">Harian</option>
+                                    <option value="weekly">Mingguan</option>
+                                    <option value="monthly">Bulanan</option>
+                                    <option value="yearly">Tahunan</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3" id="edit_colInterval" style="display:none;">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">Setiap</span>
+                                    <input type="number" class="form-control" id="edit_recInterval" name="recurrence_interval" value="1" min="1" max="30">
+                                </div>
+                            </div>
+                            <div class="col-md-5" id="edit_colEnd" style="display:none;">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text">s/d</span>
+                                    <input type="date" class="form-control" id="edit_recEnd" name="recurrence_end">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -811,6 +875,12 @@ function fmtRupiah($n) {
         document.getElementById('edit_dateInfo').textContent = '';
         autoDetectStatusEdit(op.operation_date || '', op.operation_date_end || '');
 
+        // Fill recurrence fields
+        document.getElementById('edit_recType').value     = op.recurrence_type     || 'none';
+        document.getElementById('edit_recInterval').value = op.recurrence_interval || 1;
+        document.getElementById('edit_recEnd').value      = op.recurrence_end       || '';
+        updateOpRecUI('edit');
+
         new bootstrap.Modal(document.getElementById('editModal')).show();
     }
 
@@ -890,6 +960,20 @@ function fmtRupiah($n) {
                 }
             })
             .catch(err => alert('Error: ' + err));
+    }
+
+    function updateOpRecUI(prefix) {
+        const type     = document.getElementById(prefix + '_recType').value;
+        const interval = document.getElementById(prefix + '_recInterval').value || 1;
+        const endDate  = document.getElementById(prefix + '_recEnd').value;
+        document.getElementById(prefix + '_colInterval').style.display = type !== 'none' ? '' : 'none';
+        document.getElementById(prefix + '_colEnd').style.display      = type !== 'none' ? '' : 'none';
+        const badge    = document.getElementById(prefix + '_recPreview');
+        if (type === 'none') { badge.textContent = 'Tidak Berulang'; badge.style.background = '#6c757d'; return; }
+        const labels   = {daily:'Hari',weekly:'Minggu',monthly:'Bulan',yearly:'Tahun'};
+        const until    = endDate ? ' s/d ' + new Date(endDate).toLocaleDateString('id-ID',{day:'numeric',month:'short'}) : '';
+        badge.textContent  = 'Setiap ' + interval + ' ' + labels[type] + until;
+        badge.style.background = '#1a237e';
     }
 
     function hapusOperasi(id, nama) {

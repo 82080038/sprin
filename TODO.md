@@ -25,33 +25,37 @@
 
 ## 🔴 FASE 1 — Segera (Langsung Terasa Manfaatnya)
 
-- [ ] **Dashboard Piket Hari Ini** — widget di `index.php` atau `pages/dashboard_piket.php`
+- [x] **Dashboard Piket Hari Ini** — widget di `index.php` atau `pages/dashboard_piket.php`
   - Tabel per satuan: Nama | Pangkat | Fase | Jam Mulai | Jam Selesai | Status
   - Sumber: `JOIN schedules + personil WHERE shift_date = CURDATE()`
   - Estimasi: 1 hari
 
-- [ ] **Halaman Jadwal Piket per Tim** — `pages/jadwal_piket.php`
+- [x] **Halaman Jadwal Piket per Tim** — `pages/jadwal_piket.php`
   - Pilih tim → tabel jadwal bulan/tahun
   - Filter: bulan, tahun, shift
   - Tombol Hapus Series + Cetak/Print
   - Estimasi: 1 hari
 
-- [ ] **Kalender — Modal Jadwal + Tim Piket**
+- [x] **Kalender — Modal Jadwal + Tim Piket**
   - Tab "Dari Tim Piket": dropdown tim → auto-fill anggota
   - Section Pengulangan: type + interval + hari + tanggal akhir
   - Kirim `tim_id`, `recurrence_*` ke API
-  - Estimasi: 2 hari
 
-- [ ] **Kalender — Badge Event Berulang**
+- [x] **Kalender — Badge Event Berulang**
   - Icon 🔁 pada event berulang
-  - Warna berbeda: tim piket vs jadwal manual
-  - Estimasi: 0.5 hari
+  - Warna berbeda: tim piket (biru tua) vs jadwal manual
+
+---
+
+- [x] **Recurrence di Modal Operasi** — `pages/operasi.php`
+  - Section Pengulangan di modal Tambah & Edit
+  - Preview badge dinamis
 
 ---
 
 ## 🟠 FASE 2 — Piket Jadi Sistem
 
-- [ ] **Absensi & Konfirmasi Kehadiran** — tabel `piket_absensi`
+- [x] **Absensi & Konfirmasi Kehadiran** — tabel `piket_absensi`
   - DB: schedule_id, personil_id, status (hadir/tidak_hadir/sakit/ijin/terlambat), jam_hadir, catatan
   - UI: per shift, centang kehadiran per personil
   - Rekap per bulan

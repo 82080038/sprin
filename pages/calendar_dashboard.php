@@ -371,36 +371,67 @@ function safe_json_encode($data) {
                 <div class="modal-body">
                     <form id="scheduleForm">
                         <input type="hidden" id="scheduleId" name="schedule_id">
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="personilSelect" class="form-label">Personil</label>
-                                    <select class="form-select" id="personilSelect" name="personil_id" required>
-                                        <option value="">Pilih Personil</option>
-                                    </select>
+                        <input type="hidden" id="scheduleTimId" name="tim_id">
+
+                        <!-- Sumber Jadwal -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Sumber Jadwal</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="sumber_jadwal" id="sumberPersonil" value="personil" checked onchange="toggleSumber('personil')">
+                                    <label class="form-check-label" for="sumberPersonil"><i class="fa-solid fa-user me-1"></i>Personil Manual</label>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="shiftType" class="form-label">Shift</label>
-                                    <select class="form-select" id="shiftType" name="shift_type" required>
-                                        <option value="">Pilih Shift</option>
-                                        <option value="PAGI">Pagi (06:00-14:00)</option>
-                                        <option value="SIANG">Siang (14:00-22:00)</option>
-                                        <option value="MALAM">Malam (22:00-06:00)</option>
-                                        <option value="FULL_DAY">Full Day</option>
-                                        <option value="CUTI">Cuti</option>
-                                        <option value="LEBUR">Lembur</option>
-                                    </select>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="sumber_jadwal" id="sumberTim" value="tim" onchange="toggleSumber('tim')">
+                                    <label class="form-check-label" for="sumberTim"><i class="fa-solid fa-users-gear me-1"></i>Dari Tim Piket</label>
                                 </div>
                             </div>
                         </div>
-                        
+
+                        <!-- Bagian Personil Manual -->
+                        <div id="sectionPersonil">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="personilSelect" class="form-label">Personil</label>
+                                        <select class="form-select" id="personilSelect" name="personil_id">
+                                            <option value="">Pilih Personil</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="shiftType" class="form-label">Shift</label>
+                                        <select class="form-select" id="shiftType" name="shift_type">
+                                            <option value="">Pilih Shift</option>
+                                            <option value="PAGI">Pagi (06:00-14:00)</option>
+                                            <option value="SIANG">Siang (14:00-22:00)</option>
+                                            <option value="MALAM">Malam (22:00-06:00)</option>
+                                            <option value="FULL_DAY">Full Day</option>
+                                            <option value="CUTI">Cuti</option>
+                                            <option value="LEBUR">Lembur</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bagian Tim Piket -->
+                        <div id="sectionTim" style="display:none;">
+                            <div class="mb-3">
+                                <label for="timSelect" class="form-label">Tim / Regu Piket</label>
+                                <select class="form-select" id="timSelect" onchange="onTimChange(this.value)">
+                                    <option value="">-- Pilih Tim --</option>
+                                </select>
+                                <div id="timAnggotaInfo" class="mt-1 text-muted small"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tanggal & Lokasi -->
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="scheduleDate" class="form-label">Tanggal</label>
+                                    <label for="scheduleDate" class="form-label">Tanggal Mulai <span class="text-danger">*</span></label>
                                     <input type="date" class="form-control" id="scheduleDate" name="shift_date" required>
                                 </div>
                             </div>
@@ -411,10 +442,53 @@ function safe_json_encode($data) {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="description" class="form-label">Deskripsi</label>
-                            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Catatan tambahan..."></textarea>
+                            <textarea class="form-control" id="description" name="description" rows="2" placeholder="Catatan tambahan..."></textarea>
+                        </div>
+
+                        <!-- Pengulangan -->
+                        <div class="border rounded p-3" style="background:#f8f9ff;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold small"><i class="fa-solid fa-repeat me-1 text-primary"></i>Pengulangan</span>
+                                <span class="badge" id="recurrencePreview" style="background:#6c757d;">Tidak Berulang</span>
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <select class="form-select form-select-sm" id="recurrenceType" name="recurrence_type" onchange="updateRecurrenceUI()">
+                                        <option value="none">Tidak Berulang</option>
+                                        <option value="daily">Harian</option>
+                                        <option value="weekly">Mingguan</option>
+                                        <option value="monthly">Bulanan</option>
+                                        <option value="yearly">Tahunan</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3" id="colInterval" style="display:none;">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">Setiap</span>
+                                        <input type="number" class="form-control" id="recurrenceInterval" name="recurrence_interval" value="1" min="1" max="30">
+                                    </div>
+                                </div>
+                                <div class="col-md-5" id="colEnd" style="display:none;">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text">s/d</span>
+                                        <input type="date" class="form-control" id="recurrenceEnd" name="recurrence_end">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Hari (weekly) -->
+                            <div id="colDays" class="mt-2" style="display:none;">
+                                <label class="form-label small mb-1">Hari</label>
+                                <div class="d-flex gap-1 flex-wrap">
+                                    <?php foreach(['1'=>'Sen','2'=>'Sel','3'=>'Rab','4'=>'Kam','5'=>'Jum','6'=>'Sab','0'=>'Min'] as $val=>$lbl): ?>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="recurrence_days[]" value="<?= $val ?>" id="day<?= $val ?>" onchange="updateRecurrencePreview()">
+                                        <label class="form-check-label small" for="day<?= $val ?>"><?= $lbl ?></label>
+                                    </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -462,6 +536,14 @@ function safe_json_encode($data) {
                             <tr>
                                 <td class="text-muted"><i class="fas fa-tag me-1"></i>Status</td>
                                 <td id="detailStatus"></td>
+                            </tr>
+                            <tr id="rowRecurrence" style="display:none;">
+                                <td class="text-muted"><i class="fa-solid fa-repeat me-1"></i>Pengulangan</td>
+                                <td id="detailRecurrence"></td>
+                            </tr>
+                            <tr id="rowTim" style="display:none;">
+                                <td class="text-muted"><i class="fa-solid fa-users-gear me-1"></i>Tim</td>
+                                <td id="detailTim"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -561,9 +643,24 @@ function safe_json_encode($data) {
                 timeZone: 'Asia/Jakarta',
                 editable: true,
                 eventDidMount: function(info) {
+                    const ep = info.event.extendedProps;
                     info.el.setAttribute('title',
-                        info.event.title + (info.event.extendedProps.location ? '\nLokasi: ' + info.event.extendedProps.location : '')
+                        info.event.title
+                        + (ep.location ? '\nLokasi: ' + ep.location : '')
+                        + (ep.recurrence_type && ep.recurrence_type !== 'none' ? '\n🔁 Berulang: ' + ep.recurrence_type : '')
+                        + (ep.nama_tim ? '\nTim: ' + ep.nama_tim : '')
                     );
+                    if (ep.recurrence_type && ep.recurrence_type !== 'none') {
+                        const badge = document.createElement('span');
+                        badge.textContent = '🔁';
+                        badge.style.cssText = 'margin-left:3px;font-size:.7em;';
+                        const titleEl = info.el.querySelector('.fc-event-title') || info.el.querySelector('.fc-list-event-title');
+                        if (titleEl) titleEl.appendChild(badge);
+                    }
+                    if (ep.tim_id) {
+                        info.el.style.borderLeft = '3px solid #fff';
+                        info.el.style.opacity = '0.95';
+                    }
                 },
                 events: function(fetchInfo, successCallback, failureCallback) {
                     fetch('../api/calendar_api_public.php', {
@@ -598,12 +695,15 @@ function safe_json_encode($data) {
                                     endDateTime = endDate.toISOString().split('T')[0] + 'T' + (schedule.end_time || '23:59');
                                 }
                                 
+                                const isRecurring = schedule.recurrence_type && schedule.recurrence_type !== 'none';
+                                const isTim = !!schedule.tim_id;
                                 return {
                                     id: schedule.id || Date.now(),
                                     title: (schedule.personil_name || 'Unknown') + ' - ' + (schedule.shift_type || 'Unknown'),
                                     start: startDateTime,
                                     end: endDateTime,
-                                    backgroundColor: getShiftColor(schedule.shift_type),
+                                    backgroundColor: isTim ? '#1a237e' : getShiftColor(schedule.shift_type),
+                                    borderColor: isRecurring ? '#ff9800' : undefined,
                                     extendedProps: {
                                         personil_id: schedule.personil_id,
                                         bagian: schedule.bagian,
@@ -611,7 +711,11 @@ function safe_json_encode($data) {
                                         description: schedule.description,
                                         google_event_id: schedule.google_event_id,
                                         shift_type: schedule.shift_type,
-                                        status: schedule.status
+                                        status: schedule.status,
+                                        recurrence_type: schedule.recurrence_type || 'none',
+                                        recurrence_end: schedule.recurrence_end,
+                                        tim_id: schedule.tim_id,
+                                        nama_tim: schedule.nama_tim
                                     }
                                 };
                             });
@@ -624,6 +728,9 @@ function safe_json_encode($data) {
                         console.error('Calendar fetch error:', error);
                         failureCallback(error.message || 'Failed to load calendar data');
                     });
+                },
+                dateClick: function(info) {
+                    openScheduleModal(info.dateStr);
                 },
                 eventClick: function(info) {
                     showScheduleDetails(info.event);
@@ -727,50 +834,152 @@ function safe_json_encode($data) {
             });
         }
         
-        function openScheduleModal() {
+        function openScheduleModal(date) {
             document.getElementById('scheduleModalTitle').textContent = 'Tambah Jadwal';
             document.getElementById('scheduleForm').reset();
             document.getElementById('scheduleId').value = '';
-            
-            // Set default date to today
-            document.getElementById('scheduleDate').value = new Date().toISOString().split('T')[0];
-            
+            document.getElementById('scheduleTimId').value = '';
+            document.getElementById('scheduleDate').value = date || new Date().toISOString().split('T')[0];
+            document.getElementById('recurrenceType').value = 'none';
+            document.getElementById('recurrenceEnd').value = '';
+            document.getElementById('sumberPersonil').checked = true;
+            toggleSumber('personil');
+            updateRecurrenceUI();
+            if (!document.getElementById('timSelect').options.length > 1) loadTimList();
             const modal = new bootstrap.Modal(document.getElementById('scheduleModal'));
             modal.show();
         }
+
+        function toggleSumber(mode) {
+            document.getElementById('sectionPersonil').style.display = mode === 'personil' ? '' : 'none';
+            document.getElementById('sectionTim').style.display      = mode === 'tim' ? '' : 'none';
+            document.getElementById('personilSelect').required = mode === 'personil';
+            document.getElementById('shiftType').required      = mode === 'personil';
+        }
+
+        async function loadTimList() {
+            try {
+                const r    = await fetch('../api/tim_piket_api.php?action=get_all_tim');
+                const data = await r.json();
+                if (!data.success) return;
+                const sel = document.getElementById('timSelect');
+                sel.innerHTML = '<option value="">-- Pilih Tim --</option>';
+                let lastBagian = '';
+                data.data.forEach(t => {
+                    if (t.nama_bagian !== lastBagian) {
+                        if (lastBagian) sel.appendChild(document.createElement('option').constructor.call(new Option('', '', false, false), '--'));
+                        const og = document.createElement('optgroup');
+                        og.label = t.nama_bagian;
+                        sel.appendChild(og);
+                        lastBagian = t.nama_bagian;
+                    }
+                    const opt = document.createElement('option');
+                    opt.value = t.id;
+                    opt.textContent = t.nama_tim;
+                    opt.dataset.anggota = t.jml_anggota || 0;
+                    opt.dataset.shift   = t.shift_default || 'PAGI';
+                    sel.lastElementChild.appendChild(opt);
+                });
+            } catch(e) { console.error('loadTimList:', e); }
+        }
+
+        async function onTimChange(timId) {
+            document.getElementById('scheduleTimId').value = timId;
+            const info = document.getElementById('timAnggotaInfo');
+            if (!timId) { info.textContent = ''; return; }
+            const opt = document.querySelector('#timSelect option[value="'+timId+'"]');
+            const jml = opt ? opt.dataset.anggota : '?';
+            info.innerHTML = '<i class="fa-solid fa-users me-1"></i>' + jml + ' anggota terdaftar';
+        }
+
+        function updateRecurrenceUI() {
+            const type = document.getElementById('recurrenceType').value;
+            document.getElementById('colInterval').style.display = type !== 'none' ? '' : 'none';
+            document.getElementById('colEnd').style.display      = type !== 'none' ? '' : 'none';
+            document.getElementById('colDays').style.display     = type === 'weekly' ? '' : 'none';
+            updateRecurrencePreview();
+        }
+
+        function updateRecurrencePreview() {
+            const type     = document.getElementById('recurrenceType').value;
+            const interval = document.getElementById('recurrenceInterval').value;
+            const endDate  = document.getElementById('recurrenceEnd').value;
+            const badge    = document.getElementById('recurrencePreview');
+            if (type === 'none') { badge.textContent = 'Tidak Berulang'; badge.style.background = '#6c757d'; return; }
+            const labels = {daily:'Hari',weekly:'Minggu',monthly:'Bulan',yearly:'Tahun'};
+            let days = '';
+            if (type === 'weekly') {
+                const checked = [...document.querySelectorAll('input[name="recurrence_days[]"]')].filter(c=>c.checked);
+                const nm = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+                days = checked.length ? ' · ' + checked.map(c=>nm[c.value]).join(',') : '';
+            }
+            const until = endDate ? ' s/d ' + new Date(endDate).toLocaleDateString('id-ID',{day:'numeric',month:'short'}) : '';
+            badge.textContent = 'Setiap ' + interval + ' ' + labels[type] + days + until;
+            badge.style.background = '#1a237e';
+        }
         
-        function saveSchedule() {
-            const form = document.getElementById('scheduleForm');
+        async function saveSchedule() {
+            const form      = document.getElementById('scheduleForm');
+            const scheduleId = document.getElementById('scheduleId').value;
+            const sumber     = document.querySelector('input[name="sumber_jadwal"]:checked').value;
+            const timId      = document.getElementById('scheduleTimId').value;
+            const date       = document.getElementById('scheduleDate').value;
+            const recType    = document.getElementById('recurrenceType').value;
+            const recEnd     = document.getElementById('recurrenceEnd').value;
+            const recInt     = document.getElementById('recurrenceInterval').value || 1;
+
+            if (!date) { showAlert('danger', 'Tanggal wajib diisi'); return; }
+
+            // Mode Tim Piket
+            if (!scheduleId && sumber === 'tim') {
+                if (!timId) { showAlert('danger', 'Pilih tim terlebih dahulu'); return; }
+                const fd = new FormData();
+                fd.append('action',               'generate_jadwal_tim');
+                fd.append('tim_id',               timId);
+                fd.append('shift',                'PAGI');
+                fd.append('start_date',           date);
+                fd.append('end_date',             recEnd || date);
+                fd.append('recurrence_type',      recType);
+                fd.append('recurrence_interval',  recInt);
+                const days = [...document.querySelectorAll('input[name="recurrence_days[]"]:checked')].map(c=>c.value);
+                if (days.length) fd.append('recurrence_days', days.join(','));
+                fd.append('recurrence_end',       recEnd || date);
+                try {
+                    const r    = await fetch('../api/tim_piket_api.php', {method:'POST', body:fd});
+                    const data = await r.json();
+                    if (data.success) {
+                        bootstrap.Modal.getInstance(document.getElementById('scheduleModal')).hide();
+                        calendar.refetchEvents(); refreshLiveStats();
+                        showAlert('success', (data.count||'') + ' jadwal berhasil dibuat dari tim!');
+                    } else { showAlert('danger', 'Error: ' + (data.error || data.message)); }
+                } catch(e) { showAlert('danger', 'Network error'); }
+                return;
+            }
+
+            // Mode Personil Manual
             if (!form.checkValidity()) { form.reportValidity(); return; }
-            const formData = new FormData(form);
-            
             const personilSelect = document.getElementById('personilSelect');
             const selectedOption = personilSelect.options[personilSelect.selectedIndex];
-            
-            const scheduleId = document.getElementById('scheduleId').value;
+            const formData = new FormData(form);
             formData.append('action', scheduleId ? 'update_schedule' : 'create_schedule');
             if (scheduleId) formData.append('schedule_id', scheduleId);
             formData.append('personil_name', selectedOption.dataset.name || '');
-            formData.append('bagian', selectedOption.dataset.bagian || '');
-            
-            fetch('../api/calendar_api_public.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
+            formData.append('bagian',         selectedOption.dataset.bagian || '');
+            formData.append('recurrence_type',     recType);
+            formData.append('recurrence_interval', recInt);
+            formData.append('recurrence_end',      recEnd);
+            const days = [...document.querySelectorAll('input[name="recurrence_days[]"]:checked')].map(c=>c.value);
+            if (days.length) formData.append('recurrence_days', days.join(','));
+
+            try {
+                const r    = await fetch('../api/calendar_api_public.php', {method:'POST', body:formData});
+                const data = await r.json();
                 if (data.success) {
                     bootstrap.Modal.getInstance(document.getElementById('scheduleModal')).hide();
-                    calendar.refetchEvents();
-                    refreshLiveStats();
-                    showAlert('success', scheduleId ? 'Jadwal berhasil diupdate!' : 'Jadwal berhasil disimpan!');
-                } else {
-                    showAlert('danger', 'Error: ' + (data.error || data.message));
-                }
-            })
-            .catch(error => {
-                showAlert('danger', 'Error: ' + error);
-            });
+                    calendar.refetchEvents(); refreshLiveStats();
+                    showAlert('success', scheduleId ? 'Jadwal berhasil diupdate!' : ((data.count||1)+' jadwal berhasil disimpan!'));
+                } else { showAlert('danger', 'Error: ' + (data.error || data.message)); }
+            } catch(e) { showAlert('danger', 'Error: ' + e); }
         }
         
         function showScheduleDetails(event) {
@@ -792,6 +1001,20 @@ function safe_json_encode($data) {
             document.getElementById('detailLocation').textContent = props.location || '-';
             document.getElementById('detailDescription').textContent = event.extendedProps.description || '-';
             document.getElementById('detailStatus').textContent = props.status || 'scheduled';
+            const recEl = document.getElementById('detailRecurrence');
+            if (recEl) {
+                if (props.recurrence_type && props.recurrence_type !== 'none') {
+                    recEl.textContent = '🔁 ' + props.recurrence_type + (props.recurrence_end ? ' s/d ' + new Date(props.recurrence_end).toLocaleDateString('id-ID') : '');
+                    recEl.closest('tr').style.display = '';
+                } else {
+                    recEl.closest('tr').style.display = 'none';
+                }
+            }
+            const timEl = document.getElementById('detailTim');
+            if (timEl) {
+                if (props.nama_tim) { timEl.textContent = props.nama_tim; timEl.closest('tr').style.display = ''; }
+                else { timEl.closest('tr').style.display = 'none'; }
+            }
 
             const editBtn = document.getElementById('detailEditBtn');
             const deleteBtn = document.getElementById('detailDeleteBtn');
@@ -821,11 +1044,18 @@ function safe_json_encode($data) {
                 const s = data.schedule;
                 document.getElementById('scheduleModalTitle').textContent = 'Edit Jadwal';
                 document.getElementById('scheduleId').value = s.id;
+                document.getElementById('scheduleTimId').value = s.tim_id || '';
+                document.getElementById('sumberPersonil').checked = true;
+                toggleSumber('personil');
                 document.getElementById('personilSelect').value = s.personil_id;
                 document.getElementById('shiftType').value = s.shift_type;
                 document.getElementById('scheduleDate').value = s.shift_date;
                 document.getElementById('location').value = s.location || '';
                 document.getElementById('description').value = s.description || '';
+                document.getElementById('recurrenceType').value = s.recurrence_type || 'none';
+                document.getElementById('recurrenceInterval').value = s.recurrence_interval || 1;
+                document.getElementById('recurrenceEnd').value = s.recurrence_end || '';
+                updateRecurrenceUI();
                 new bootstrap.Modal(document.getElementById('scheduleModal')).show();
             })
             .catch(() => showAlert('danger', 'Gagal memuat data jadwal'));

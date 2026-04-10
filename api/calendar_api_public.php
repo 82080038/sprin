@@ -56,16 +56,17 @@ try {
             $date_to   = $_POST['date_to']   ?? $_GET['date_to']   ?? date('Y-m-t');
 
             $stmt = $pdo->prepare("
-                SELECT s.*, p.nama as personil_nama
+                SELECT s.*, p.nama as personil_nama,
+                       t.nama_tim
                 FROM schedules s
                 LEFT JOIN personil p ON s.personil_id = p.nrp
+                LEFT JOIN tim_piket t ON t.id = s.tim_id
                 WHERE s.shift_date >= ? AND s.shift_date <= ?
                 ORDER BY s.shift_date ASC, s.start_time ASC
             ");
             $stmt->execute([$date_from, $date_to]);
             $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Merge personil_nama into personil_name for consistency
             foreach ($schedules as &$s) {
                 $s['personil_name'] = $s['personil_nama'] ?: $s['personil_name'];
             }
@@ -83,31 +84,73 @@ try {
             $shift_date    = $_POST['shift_date']     ?? '';
             $location      = $_POST['location']       ?? '';
             $description   = $_POST['description']    ?? '';
+            $recType       = $_POST['recurrence_type']     ?? 'none';
+            $recInterval   = max(1, (int)($_POST['recurrence_interval'] ?? 1));
+            $recEnd        = !empty($_POST['recurrence_end']) ? $_POST['recurrence_end'] : null;
+            $recDays       = trim($_POST['recurrence_days'] ?? '');
 
             if (!$personil_id || !$shift_type || !$shift_date) {
                 throw new Exception('personil_id, shift_type, dan shift_date wajib diisi');
             }
 
-            $times = $shiftTimes[$shift_type] ?? ['00:00:00', '23:59:00'];
+            $times      = $shiftTimes[$shift_type] ?? ['00:00:00', '23:59:00'];
             $start_time = $_POST['start_time'] ?? $times[0];
             $end_time   = $_POST['end_time']   ?? $times[1];
+
+            // Build list of dates
+            $dates   = [];
+            $current = new DateTime($shift_date);
+            $end     = $recType !== 'none' && $recEnd ? new DateTime($recEnd) : clone $current;
+            $limit   = 0;
+            $daysArr = $recDays !== '' ? explode(',', $recDays) : [];
+
+            while ($current <= $end && $limit < 365) {
+                $dayNum = (int)$current->format('w');
+                if ($recType === 'none' || $recType === '') {
+                    $dates[] = $current->format('Y-m-d'); break;
+                } elseif ($recType === 'daily') {
+                    $dates[] = $current->format('Y-m-d');
+                    $current->modify('+' . $recInterval . ' days');
+                } elseif ($recType === 'weekly') {
+                    if (empty($daysArr) || in_array((string)$dayNum, $daysArr)) {
+                        $dates[] = $current->format('Y-m-d');
+                    }
+                    $current->modify('+1 day');
+                    if ($current->format('w') == '1' && $recInterval > 1) {
+                        $current->modify('+' . ($recInterval - 1) . ' weeks');
+                    }
+                } elseif ($recType === 'monthly') {
+                    $dates[] = $current->format('Y-m-d');
+                    $current->modify('+' . $recInterval . ' months');
+                } elseif ($recType === 'yearly') {
+                    $dates[] = $current->format('Y-m-d');
+                    $current->modify('+' . $recInterval . ' years');
+                } else {
+                    $dates[] = $current->format('Y-m-d'); break;
+                }
+                $limit++;
+            }
 
             $stmt = $pdo->prepare("
                 INSERT INTO schedules
                     (personil_id, personil_name, bagian, shift_type, shift_date,
-                     start_time, end_time, location, description)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     start_time, end_time, location, description,
+                     recurrence_type, recurrence_interval, recurrence_days, recurrence_end)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
-            $stmt->execute([
-                $personil_id, $personil_name, $bagian,
-                $shift_type, $shift_date, $start_time, $end_time,
-                $location, $description
-            ]);
+            foreach ($dates as $d) {
+                $stmt->execute([
+                    $personil_id, $personil_name, $bagian,
+                    $shift_type, $d, $start_time, $end_time,
+                    $location, $description,
+                    $recType, $recInterval, $recDays ?: null, $recEnd
+                ]);
+            }
 
             echo json_encode([
                 'success' => true,
-                'message' => 'Jadwal berhasil disimpan',
-                'id'      => $pdo->lastInsertId()
+                'count'   => count($dates),
+                'message' => count($dates) . ' jadwal berhasil disimpan'
             ]);
             break;
 
@@ -174,6 +217,12 @@ try {
             if (!$schedule) throw new Exception('Jadwal tidak ditemukan');
 
             $schedule['personil_name'] = $schedule['personil_nama'] ?: $schedule['personil_name'];
+            // Fetch tim name if tim_id set
+            if (!empty($schedule['tim_id'])) {
+                $stT = $pdo->prepare('SELECT nama_tim FROM tim_piket WHERE id=?');
+                $stT->execute([$schedule['tim_id']]);
+                $schedule['nama_tim'] = $stT->fetchColumn() ?: null;
+            }
             echo json_encode(['success' => true, 'schedule' => $schedule]);
             break;
 

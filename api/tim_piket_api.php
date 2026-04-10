@@ -14,6 +14,26 @@ try {
 
     $action = $_REQUEST['action'] ?? '';
 
+    // ── GET: semua tim aktif (untuk dropdown kalender) ───────────────────────
+    if ($action === 'get_all_tim') {
+        $PIKET_UNSUR = [3, 4];
+        $PIKET_EXTRA = [20];
+        $uph = implode(',', array_fill(0, count($PIKET_UNSUR), '?'));
+        $eph = implode(',', array_fill(0, count($PIKET_EXTRA), '?'));
+        $stmt = $pdo->prepare("
+            SELECT t.id, t.nama_tim, t.shift_default, b.nama_bagian,
+                   COUNT(a.id) AS jml_anggota
+            FROM tim_piket t
+            LEFT JOIN bagian b ON b.id = t.id_bagian
+            LEFT JOIN tim_piket_anggota a ON a.tim_id = t.id
+            WHERE (b.id_unsur IN ($uph) OR b.id IN ($eph)) AND t.is_active = 1
+            GROUP BY t.id
+            ORDER BY b.urutan, t.nama_tim
+        ");
+        $stmt->execute(array_merge($PIKET_UNSUR, $PIKET_EXTRA));
+        echo json_encode(['success'=>true,'data'=>$stmt->fetchAll(PDO::FETCH_ASSOC)]); exit;
+    }
+
     // ── GET: jadwal piket hari ini ───────────────────────────────────────────
     if ($action === 'get_piket_hari_ini') {
         $today = date('Y-m-d');
