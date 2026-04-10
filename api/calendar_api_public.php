@@ -291,6 +291,15 @@ try {
                 $operation_month = substr($operation_date, 0, 7);
             }
 
+            // Auto-generate nomor_sprint
+            $bulanRomawi = ['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+            $sprintYear  = $operation_month ? substr($operation_month, 0, 4) : date('Y');
+            $sprintMonth = $operation_month ? (int)substr($operation_month, 5, 2) : (int)date('m');
+            $stmtSeq = $pdo->prepare("SELECT COUNT(*) FROM operations WHERE YEAR(created_at) = ?");
+            $stmtSeq->execute([$sprintYear]);
+            $seqNum = (int)$stmtSeq->fetchColumn() + 1;
+            $nomor_sprint = "Sprin / {$seqNum} / {$bulanRomawi[$sprintMonth]} / {$sprintYear} / OPS";
+
             // Auto-derive status from dates if both are provided
             if ($operation_date && $operation_date_end) {
                 $today = new DateTime('today');
@@ -307,13 +316,14 @@ try {
 
             $stmt = $pdo->prepare("
                 INSERT INTO operations
-                    (operation_name, tingkat_operasi, jenis_operasi,
+                    (nomor_sprint, operation_name, tingkat_operasi, jenis_operasi,
                      operation_month, operation_date, operation_date_end,
                      start_time, end_time,
                      location, description, required_personnel, kuat_personil, dukgra, status)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $stmt->execute([
+                $nomor_sprint,
                 $operation_name, $tingkat_operasi, $jenis_operasi,
                 $operation_month, $operation_date, $operation_date_end,
                 $start_time, $end_time,
@@ -323,7 +333,8 @@ try {
             echo json_encode([
                 'success'      => true,
                 'message'      => 'Operasi berhasil dibuat',
-                'operation_id' => $pdo->lastInsertId()
+                'operation_id' => $pdo->lastInsertId(),
+                'nomor_sprint' => $nomor_sprint
             ]);
             break;
 

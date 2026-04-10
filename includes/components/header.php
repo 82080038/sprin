@@ -23,12 +23,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
 // Badge: jumlah personil piket hari ini
 $_piketHariIni = 0;
 try {
-    if (!isset($pdo)) {
-        $_hPdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8mb4',
-            DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-    } else {
-        $_hPdo = $pdo;
-    }
+    require_once __DIR__ . '/../../core/Database.php';
+    $_hPdo = Database::getInstance()->getConnection();
     $_piketHariIni = (int)$_hPdo->query(
         "SELECT COUNT(*) FROM schedules WHERE shift_date='".date('Y-m-d')."' AND tim_id IS NOT NULL"
     )->fetchColumn();
@@ -619,7 +615,7 @@ try {
                             <li><a class="dropdown-item <?php echo $current_page == 'jabatan.php' ? 'active' : ''; ?>" href="<?php echo url('pages/jabatan.php'); ?>">
                                 <i class="fa-solid fa-user-tie"></i> Manajemen Jabatan
                             </a></li>
-                            <li><a class="dropdown-item" href="#" onclick="showStructure()">
+                            <li><a class="dropdown-item <?php echo $current_page == 'struktur_organisasi.php' ? 'active' : ''; ?>" href="<?php echo url('pages/struktur_organisasi.php'); ?>">
                                 <i class="fa-solid fa-sitemap"></i> Struktur Organisasi
                             </a></li>
                         </ul>
@@ -630,7 +626,7 @@ try {
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['calendar_dashboard.php','operasi.php','tim_piket.php']) ? 'active' : ''; ?>" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['calendar_dashboard.php','operasi.php','tim_piket.php','ekspedisi.php','apel_nominal.php']) ? 'active' : ''; ?>" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fa-solid fa-calendar-days me-1"></i> Operasional
                         </a>
                         <ul class="dropdown-menu">
@@ -653,10 +649,20 @@ try {
                             <li><a class="dropdown-item <?php echo $current_page == 'laporan_piket.php' ? 'active' : ''; ?>" href="<?php echo url('pages/laporan_piket.php'); ?>">
                                 <i class="fa-solid fa-clipboard-list"></i> Rekap Absensi
                             </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item <?php echo $current_page == 'ekspedisi.php' ? 'active' : ''; ?>" href="<?php echo url('pages/ekspedisi.php'); ?>">
+                                <i class="fa-solid fa-envelope-open-text"></i> Ekspedisi Surat
+                            </a></li>
+                            <li><a class="dropdown-item <?php echo $current_page == 'apel_nominal.php' ? 'active' : ''; ?>" href="<?php echo url('pages/apel_nominal.php'); ?>">
+                                <i class="fa-solid fa-flag"></i> Apel Nominal
+                            </a></li>
+                            <li><a class="dropdown-item <?php echo $current_page == 'pelatihan.php' ? 'active' : ''; ?>" href="<?php echo url('pages/pelatihan.php'); ?>">
+                                <i class="fa-solid fa-dumbbell"></i> Pelatihan
+                            </a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['export_personil.php', 'report_api.php','laporan_piket.php','laporan_operasi.php']) ? 'active' : ''; ?>" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['export_personil.php', 'report_api.php','laporan_piket.php','laporan_operasi.php','lhpt.php']) ? 'active' : ''; ?>" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fa-solid fa-chart-bar me-1"></i> Laporan
                         </a>
                         <ul class="dropdown-menu">
@@ -665,6 +671,9 @@ try {
                             </a></li>
                             <li><a class="dropdown-item <?php echo $current_page=='laporan_operasi.php'?'active':''; ?>" href="<?php echo url('pages/laporan_operasi.php'); ?>">
                                 <i class="fa-solid fa-chart-bar me-1"></i> Laporan Operasi
+                            </a></li>
+                            <li><a class="dropdown-item <?php echo $current_page=='lhpt.php'?'active':''; ?>" href="<?php echo url('pages/lhpt.php'); ?>">
+                                <i class="fa-solid fa-file-lines me-1"></i> LHPT
                             </a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#" onclick="generatePDF()">
@@ -675,26 +684,37 @@ try {
                             </a></li>
                         </ul>
                     </li>
+                    <?php if (AuthHelper::isAdmin()): ?>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['user_management.php','backup_management.php','pengaturan.php']) ? 'active' : ''; ?>" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fa-solid fa-cog me-1"></i> Pengaturan
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?php echo url('index.php'); ?>">
-                                <i class="fa-solid fa-home"></i> Dashboard Overview
+                            <li><a class="dropdown-item <?php echo $current_page == 'user_management.php' ? 'active' : ''; ?>" href="<?php echo url('pages/user_management.php'); ?>">
+                                <i class="fa-solid fa-users-cog"></i> Manajemen User
+                            </a></li>
+                            <li><a class="dropdown-item <?php echo $current_page == 'backup_management.php' ? 'active' : ''; ?>" href="<?php echo url('pages/backup_management.php'); ?>">
+                                <i class="fa-solid fa-database"></i> Manajemen Backup
                             </a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#" onclick="showSettings()">
-                                <i class="fa-solid fa-cog"></i> Pengaturan Sistem
+                            <li><a class="dropdown-item <?php echo $current_page == 'pengaturan.php' ? 'active' : ''; ?>" href="<?php echo url('pages/pengaturan.php'); ?>">
+                                <i class="fa-solid fa-sliders"></i> Pengaturan Sistem
                             </a></li>
                         </ul>
                     </li>
+                    <?php endif; ?>
                 </ul>
                 
                 <div class="user-menu">
                     <div class="user-info">
                         <i class="fa-solid fa-user"></i>
                         <span><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+                        <?php
+                        $roleBadges = ['admin'=>'bg-danger','operator'=>'bg-warning text-dark','viewer'=>'bg-secondary'];
+                        $roleLabel  = ['admin'=>'Admin','operator'=>'Operator','viewer'=>'Viewer'];
+                        $r = AuthHelper::getRole();
+                        ?>
+                        <span class="badge <?= $roleBadges[$r] ?? 'bg-secondary' ?> ms-1" style="font-size:.6rem"><?= $roleLabel[$r] ?? $r ?></span>
                     </div>
                     <a href="<?php echo url('core/logout.php'); ?>" class="nav-link logout-btn">
                         <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
@@ -705,30 +725,28 @@ try {
     </nav>
     
     <script>
+        // User role for client-side UI control
+        const SPRIN_USER_ROLE = '<?= AuthHelper::getRole() ?>';
+        const SPRIN_CAN_EDIT  = <?= AuthHelper::canEdit() ? 'true' : 'false' ?>;
+        const SPRIN_IS_ADMIN  = <?= AuthHelper::isAdmin() ? 'true' : 'false' ?>;
+
         // Report Functions
         function generatePDF() {
-            event.preventDefault();
+            if (event) event.preventDefault();
             window.print();
         }
         
         function generateExcel() {
-            event.preventDefault();
-            alert('Export Excel akan segera tersedia');
+            if (event) event.preventDefault();
+            window.location.href = '<?php echo url("api/export_personil.php"); ?>';
+            if (typeof showToast === 'function') {
+                showToast('info', 'Download CSV personil dimulai...');
+            }
         }
         
         function printReport() {
-            event.preventDefault();
+            if (event) event.preventDefault();
             window.print();
-        }
-        
-        function showStatistics() {
-            event.preventDefault();
-            alert('Statistik akan segera tersedia');
-        }
-        
-        function showStructure() {
-            event.preventDefault();
-            alert('Struktur Organisasi akan segera tersedia');
         }
     </script>
 

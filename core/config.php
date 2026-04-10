@@ -25,7 +25,7 @@ define('DB_PASS', getenv('DB_PASS') ?: 'root');
 
 // Application Configuration
 define('APP_NAME', 'POLRES Samosir Management System');
-define('APP_VERSION', '1.0.0');
+define('APP_VERSION', '1.7.0');
 define('ENVIRONMENT', 'development');
 
 // Security Configuration

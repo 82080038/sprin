@@ -17,7 +17,7 @@
                 </p>
                 <small class="text-muted">
                     <i class="fas fa-code me-1"></i>
-                    Version 1.0.0 | © 2026
+                    SPRIN v1.7.0-dev | 2026
                 </small>
             </div>
         </div>

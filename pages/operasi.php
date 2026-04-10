@@ -168,6 +168,7 @@ function fmtRupiah($n) {
                     <thead class="table-dark">
                         <tr>
                             <th style="width:40px">No</th>
+                            <th style="width:200px">No. Sprint</th>
                             <th>Nama Operasi</th>
                             <th style="width:160px">Tingkat</th>
                             <th style="width:180px">Jenis</th>
@@ -181,7 +182,7 @@ function fmtRupiah($n) {
                     </thead>
                     <tbody id="operasiBody">
                     <?php if (empty($operations)): ?>
-                        <tr><td colspan="10" class="text-center py-5 text-muted">
+                        <tr><td colspan="11" class="text-center py-5 text-muted">
                             <i class="fas fa-inbox fa-2x mb-2 d-block"></i>Belum ada data operasi.
                         </td></tr>
                     <?php else: ?>
@@ -201,6 +202,7 @@ function fmtRupiah($n) {
                             data-bulan="<?php echo htmlspecialchars($op['operation_month'] ?? ''); ?>"
                             data-nama="<?php echo strtolower(htmlspecialchars($op['operation_name'] ?? '')); ?>">
                             <td class="text-muted"><?php echo $i + 1; ?></td>
+                            <td class="small text-nowrap"><code><?php echo htmlspecialchars($op['nomor_sprint'] ?? '-'); ?></code></td>
                             <td>
                                 <div class="fw-semibold"><?php echo htmlspecialchars($op['operation_name']); ?></div>
                                 <?php if (!empty($op['description'])): ?>
@@ -424,6 +426,7 @@ function fmtRupiah($n) {
                     </div>
                     <div class="col-md-6">
                         <table class="table table-sm table-borderless mb-0">
+                            <tr><td class="text-muted" style="width:130px"><i class="fas fa-hashtag me-1"></i>No. Sprint</td><td id="vm_sprint" class="fw-semibold"></td></tr>
                             <tr><td class="text-muted" style="width:130px"><i class="fas fa-layer-group me-1"></i>Tingkat</td><td id="vm_tingkat"></td></tr>
                             <tr><td class="text-muted"><i class="fas fa-tag me-1"></i>Jenis</td><td id="vm_jenis"></td></tr>
                             <tr><td class="text-muted"><i class="fas fa-calendar me-1"></i>Bulan</td><td id="vm_bulan"></td></tr>
@@ -847,6 +850,7 @@ function fmtRupiah($n) {
     function viewOperasi(op) {
         _currentOp = op;
         document.getElementById('vm_nama').textContent    = op.operation_name;
+        document.getElementById('vm_sprint').textContent  = op.nomor_sprint || '-';
         document.getElementById('vm_tingkat').textContent = labelTingkat[op.tingkat_operasi] || op.tingkat_operasi || '-';
         document.getElementById('vm_jenis').textContent   = labelJenis[op.jenis_operasi]     || op.jenis_operasi   || '-';
         document.getElementById('vm_bulan').textContent   = fmtBulanJS(op.operation_month);
@@ -1025,7 +1029,7 @@ function fmtRupiah($n) {
             <div style="font-size:9pt;">Jl. ................................. No. .......</div>
           </div>
           <h4 style="text-align:center;text-decoration:underline;font-size:13pt;">SURAT PERINTAH TUGAS</h4>
-          <p style="text-align:center;">Nomor: Sprin / ......... / ${new Date().getMonth()+1} / ${new Date().getFullYear()} / OPS</p>
+          <p style="text-align:center;">Nomor: <strong>${op.nomor_sprint || '...................'}</strong></p>
           <p><strong>Dasar:</strong> Surat Perintah / Laporan Rencana Operasi Kepolisian</p>
           <table style="width:100%;font-size:11pt;">
             <tr><td style="width:30%">Nama Operasi</td><td>: <strong>${op.operation_name}</strong></td></tr>

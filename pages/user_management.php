@@ -15,6 +15,8 @@ if (!AuthHelper::validateSession()) {
 }
 
 // Check admin role (only admin can access)
+AuthHelper::requireRole('admin');
+
 // For now, allow all logged in users (role checking will be added after migration)
 
 $pageTitle = 'Manajemen User';

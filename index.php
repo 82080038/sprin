@@ -1,18 +1,19 @@
 <?php
-require_once __DIR__ . '/core/SessionManager.php';
-if (session_status() === PHP_SESSION_NONE) {
-    SessionManager::start();
-}
-
 require_once __DIR__ . '/core/config.php';
+require_once __DIR__ . '/core/SessionManager.php';
 require_once __DIR__ . '/core/auth_helper.php';
 
-// Check authentication
-if (!AuthHelper::validateSession()) {
-    header('Location: login.php');
-    exit;
-}
+SessionManager::start();
 
+// Redirect to main application entry point
+if (AuthHelper::validateSession()) {
+    header('Location: ' . url('pages/main.php'));
+} else {
+    header('Location: ' . url('login.php'));
+}
+exit;
+
+// Legacy SPA code below - kept for reference but no longer executed
 $page_title = 'SPRIN - Sistem Manajemen Personil & Jadwal';
 ?>
 <!DOCTYPE html>

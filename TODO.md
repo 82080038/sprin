@@ -1,5 +1,5 @@
 # TODO — SPRIN Development Roadmap
-**Diperbarui**: 2026-04-10 | **Branch**: kantor | **Versi**: 1.5.0-dev
+**Diperbarui**: 2026-04-10 | **Branch**: kantor | **Versi**: 1.7.0-dev
 
 > **Konteks Aplikasi**: SPRIN adalah sistem informasi operasional untuk **BAGOPS Polres Samosir**.
 > BAGOPS (Bagian Operasional) bertugas merencanakan & mengendalikan operasi kepolisian,
@@ -113,17 +113,17 @@
 - [x] **Notifikasi In-App**
   - Badge navbar jumlah piket hari ini
 
-- [ ] **Multi-Level User Role** 🔴 PRIORITAS TINGGI
+- [x] **Multi-Level User Role** 🔴 PRIORITAS TINGGI
   - Role: `admin` (Kabagops/IT) / `operator` (Staf input) / `viewer` (Kapolres/Waka)
-  - Middleware guard per halaman & per aksi
-  - Tabel: `user_roles`, kolom `role` di tabel `users`
-  - Estimasi: 3-4 hari
+  - `AuthHelper::requireRole()`, `canEdit()`, `canDelete()`, `isAdmin()`
+  - Guard diterapkan di `user_management.php`, `pengaturan.php`
+  - Badge role di navbar, `SPRIN_USER_ROLE` JS variable
+  - User sampel: bagops/admin, operator/operator123, viewer/viewer123
 
-- [ ] **Training Management** — Pelatihan Praoperasi 🟠
-  - Jadwal pelatihan per satuan (menembak, bela diri, SAR, dsb.)
-  - Rekap jam latihan per personil per tahun
-  - Halaman: `pages/pelatihan.php`
-  - Estimasi: 2-3 hari
+- [x] **Training Management** — Pelatihan Praoperasi 🟠
+  - CRUD: `pages/pelatihan.php` + `api/pelatihan_api.php`
+  - 6 jenis: menembak, bela diri, SAR, ketahanan, teknis, lainnya
+  - Stat cards + filter + role-based aksi
 
 ---
 
@@ -131,33 +131,31 @@
 
 > Lihat analisis lengkap: `.windsurf/BAGOPS_ANALYSIS.md`
 
-- [ ] **LHPT — Laporan Hasil Pelaksanaan Tugas** 🔴 KRITIS
-  - Setiap operasi `completed` wajib ada LHPT
-  - Form: tanggal, nomor LHPT, operasi_id (FK), isi laporan, kendala, hasil, rekomendasi
-  - Print format standar Polri
-  - Tabel baru: `lhpt`
-  - Halaman: tambah tab di `operasi.php` atau `pages/lhpt.php`
-  - Estimasi: 2-3 hari
+- [x] **LHPT — Laporan Hasil Pelaksanaan Tugas** 🔴 KRITIS
+  - CRUD lengkap: `pages/lhpt.php` + `api/lhpt_api.php`
+  - Nomor LHPT auto-generate: `LHPT / [urut] / [bulan-romawi] / [tahun] / OPS`
+  - Print format standar Polri (window.open)
+  - Tabel: `lhpt` (FK ke operations)
+  - Navigasi: di menu Laporan
 
-- [ ] **Nomor Sprint Otomatis** 🔴 KRITIS
-  - Format: `Sprin / [urut] / [bulan-romawi] / [tahun] / [jenis]`
-  - Urutan otomatis per bulan, reset tiap tahun
-  - Kolom baru: `nomor_sprint` di tabel `operations`
-  - Halaman: sudah ada di `operasi.php` (tinggal auto-generate)
-  - Estimasi: 1 hari
+- [x] **Nomor Sprint Otomatis** 🔴 KRITIS
+  - Format: `Sprin / [urut] / [bulan-romawi] / [tahun] / OPS`
+  - Urutan otomatis per tahun, auto-generate saat create
+  - Kolom: `nomor_sprint` di tabel `operations`
+  - Tampil di tabel, detail modal, dan Cetak ST
 
-- [ ] **Ekspedisi Surat Keluar/Masuk** 🟠
-  - Penomoran agenda surat masuk & keluar
-  - Field: nomor, tanggal, perihal, pengirim/tujuan, kategori, status
-  - Halaman: `pages/ekspedisi.php`
-  - Tabel baru: `surat_ekspedisi`
-  - Estimasi: 2 hari
+- [x] **Ekspedisi Surat Keluar/Masuk** 🟠
+  - CRUD lengkap: `pages/ekspedisi.php` + `api/ekspedisi_api.php`
+  - Nomor agenda auto: `SM/0001/2026` (masuk), `SK/0001/2026` (keluar)
+  - Field: nomor, tanggal, perihal, pengirim/tujuan, kategori, status, disposisi
+  - Tabel: `surat_ekspedisi`
+  - Role-based UI: edit hanya admin+operator, hapus hanya admin
 
-- [ ] **Dashboard Komandan (Real-time)** 🟠
-  - Ringkasan: operasi aktif, piket hari ini, personil bertugas, LHPT pending
-  - Target pengguna: Kapolres, Wakapolres, Kabagops
-  - Halaman: upgrade `pages/main.php` dengan role-based widgets
-  - Estimasi: 1-2 hari
+- [x] **Dashboard Komandan (Real-time)** 🟠
+  - Greeting role-based + 4 summary cards (ops aktif, rencana, LHPT draft, surat diproses)
+  - Piket hari ini widget + stats personil (8 cards)
+  - Sidebar: quick actions, rekap operasional, info sistem (admin)
+  - Target pengguna: semua role dengan widget yang sesuai
 
 - [ ] **WhatsApp Notification** 🟡
   - Notif H-1 jadwal piket via WA Gateway (Fonnte/Wablas API)
@@ -165,11 +163,12 @@
   - Butuh: API key WA Gateway + konfigurasi nomor HP di data personil
   - Estimasi: 2 hari
 
-- [ ] **Apel Nominal Digital** 🟡
-  - Absensi apel pagi/sore — berbeda dengan absensi piket
-  - Scope: semua personil (bukan hanya tim piket)
-  - Tabel baru: `apel_nominal`
-  - Estimasi: 2 hari
+- [x] **Apel Nominal Digital** 🟡
+  - CRUD: `pages/apel_nominal.php` + `api/apel_api.php`
+  - Input absensi pagi/sore per unsur/bagian
+  - 7 status: hadir, tidak hadir, sakit, ijin, cuti, dinas luar, tugas belajar
+  - Rekap bulanan per personil + persentase kehadiran
+  - Tabel: `apel_nominal` (UNIQUE per tanggal+jenis+personil)
 
 ---
 
@@ -184,9 +183,10 @@
 | `pages/operasi.php` | Operasi + Cetak ST | ✅ |
 | `pages/laporan_piket.php` | Rekap absensi per bulan | ✅ |
 | `pages/laporan_operasi.php` | Laporan operasi + grafik + CSV | ✅ |
-| `pages/lhpt.php` | LHPT pasca operasi | ❌ TODO |
-| `pages/ekspedisi.php` | Surat keluar/masuk | ❌ TODO |
-| `pages/pelatihan.php` | Training Management | ❌ TODO |
+| `pages/lhpt.php` | LHPT pasca operasi | ✅ |
+| `pages/ekspedisi.php` | Surat keluar/masuk | ✅ |
+| `pages/pelatihan.php` | Training Management | ✅ |
+| `pages/apel_nominal.php` | Apel Nominal Digital | ✅ |
 | `api/tim_piket_api.php` | get_all_tim, cover, rotasi | ✅ |
 | `api/calendar_api_public.php` | schedules + recurrence + konflik | ✅ |
 
@@ -203,10 +203,11 @@
 | `piket_absensi` | ✅ | Absensi harian + cover |
 | `schedules` | ✅ | + recurrence + tim_id |
 | `operations` | ✅ | + tingkat/jenis + recurrence |
-| `lhpt` | ❌ | TODO — Laporan Hasil Pelaksanaan Tugas |
-| `surat_ekspedisi` | ❌ | TODO — Nomor agenda surat |
-| `pelatihan` | ❌ | TODO — Training Management |
-| `users` / `user_roles` | ⚠️ | Ada tapi belum role-based guard |
+| `lhpt` | ✅ | LHPT — FK ke operations |
+| `surat_ekspedisi` | ✅ | Surat masuk/keluar + agenda otomatis |
+| `pelatihan` | ✅ | 6 jenis + stats |
+| `apel_nominal` | ✅ | Absensi apel pagi/sore |
+| `users` / `user_roles` | ✅ | 3 role: admin/operator/viewer + guard middleware |
 
 ---
 

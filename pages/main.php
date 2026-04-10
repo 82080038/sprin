@@ -20,123 +20,159 @@ if (!AuthHelper::validateSession()) {
 $page_title = 'Dashboard - Sistem Manajemen POLRES Samosir';
 include __DIR__ . '/../includes/components/header.php';
 ?>
-<div class="container">
-    <div class="hero-section">
-        <div class="container">
-            <h1>Sistem Manajemen Polres Samosir</h1>
-            <p>Platform terintegrasi untuk pengelolaan data personil dan penjadwalan operasional</p>
+<?php
+$user = AuthHelper::getCurrentUser();
+$role = $user['role'] ?? 'viewer';
+$roleLabels = ['admin'=>'Administrator','operator'=>'Operator','viewer'=>'Pimpinan'];
+$greetHour = (int)date('H');
+$greeting = $greetHour < 12 ? 'Selamat Pagi' : ($greetHour < 15 ? 'Selamat Siang' : ($greetHour < 18 ? 'Selamat Sore' : 'Selamat Malam'));
+
+// Fetch operational stats from DB
+require_once __DIR__ . '/../core/Database.php';
+$_db = Database::getInstance()->getConnection();
+$_opsActive    = (int)$_db->query("SELECT COUNT(*) FROM operations WHERE status='active'")->fetchColumn();
+$_opsPlanned   = (int)$_db->query("SELECT COUNT(*) FROM operations WHERE status='planned'")->fetchColumn();
+$_opsTotal     = (int)$_db->query("SELECT COUNT(*) FROM operations")->fetchColumn();
+$_lhptDraft    = (int)$_db->query("SELECT COUNT(*) FROM lhpt WHERE status_lhpt='draft'")->fetchColumn();
+$_lhptTotal    = (int)$_db->query("SELECT COUNT(*) FROM lhpt")->fetchColumn();
+$_suratMasuk   = (int)$_db->query("SELECT COUNT(*) FROM surat_ekspedisi WHERE jenis='masuk' AND MONTH(created_at)=MONTH(NOW()) AND YEAR(created_at)=YEAR(NOW())")->fetchColumn();
+$_suratKeluar  = (int)$_db->query("SELECT COUNT(*) FROM surat_ekspedisi WHERE jenis='keluar' AND MONTH(created_at)=MONTH(NOW()) AND YEAR(created_at)=YEAR(NOW())")->fetchColumn();
+$_suratProses  = (int)$_db->query("SELECT COUNT(*) FROM surat_ekspedisi WHERE status='diproses'")->fetchColumn();
+?>
+
+<div class="container-fluid py-4">
+    <!-- Hero / Greeting -->
+    <div class="card border-0 shadow-sm mb-4" style="background:linear-gradient(135deg,#1a237e 0%,#283593 100%);color:#fff;">
+        <div class="card-body py-4 px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="fw-bold mb-1"><?= $greeting ?>, <?= htmlspecialchars($user['username'] ?? 'User') ?></h4>
+                    <p class="mb-0 opacity-75"><?= $roleLabels[$role] ?? $role ?> — BAGOPS Polres Samosir | <?= date('l, d F Y') ?></p>
+                </div>
+                <div class="text-end d-none d-md-block">
+                    <div class="fs-1 fw-bold"><?= date('H:i') ?></div>
+                    <small class="opacity-75">SPRIN v<?= APP_VERSION ?></small>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="container">
-        <div class="row mb-5">
-            <div class="col-lg-6 mb-4">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3 class="feature-title">Data Personil</h3>
-                    <p class="feature-description">
-                        Kelola data personil POLRES Samosir secara lengkap, termasuk pimpinan, bagian, dan detail personil dengan sistem yang sudah terintegrasi.
-                    </p>
-                    <a href="personil.php" class="btn btn-feature">
-                        <i class="fas fa-arrow-right me-2"></i>Buka Data Personil
-                    </a>
+    <?php if (!empty($_SESSION['flash_error'])): ?>
+    <div class="alert alert-danger alert-dismissible fade show"><?= $_SESSION['flash_error'] ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+    <?php unset($_SESSION['flash_error']); endif; ?>
+
+    <!-- Operational Summary — 8 cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3"><div class="card border-0 shadow-sm h-100"><div class="card-body text-center py-3">
+            <i class="fas fa-bullhorn text-danger fs-4 mb-1"></i>
+            <div class="fs-2 fw-bold text-danger"><?= $_opsActive ?></div>
+            <div class="text-muted small">Operasi Aktif</div>
+        </div></div></div>
+        <div class="col-6 col-lg-3"><div class="card border-0 shadow-sm h-100"><div class="card-body text-center py-3">
+            <i class="fas fa-clipboard-list text-primary fs-4 mb-1"></i>
+            <div class="fs-2 fw-bold text-primary"><?= $_opsPlanned ?></div>
+            <div class="text-muted small">Operasi Rencana</div>
+        </div></div></div>
+        <div class="col-6 col-lg-3"><div class="card border-0 shadow-sm h-100"><div class="card-body text-center py-3">
+            <i class="fas fa-file-alt text-warning fs-4 mb-1"></i>
+            <div class="fs-2 fw-bold text-warning"><?= $_lhptDraft ?></div>
+            <div class="text-muted small">LHPT Draft</div>
+        </div></div></div>
+        <div class="col-6 col-lg-3"><div class="card border-0 shadow-sm h-100"><div class="card-body text-center py-3">
+            <i class="fas fa-envelope text-info fs-4 mb-1"></i>
+            <div class="fs-2 fw-bold text-info"><?= $_suratProses ?></div>
+            <div class="text-muted small">Surat Diproses</div>
+        </div></div></div>
+    </div>
+
+    <div class="row g-4">
+        <!-- LEFT: Piket + Quick Actions -->
+        <div class="col-lg-8">
+            <!-- Piket Hari Ini Widget -->
+            <div id="piketWidget" class="card border-0 shadow-sm mb-4" style="display:none;">
+              <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h6 class="fw-bold mb-0"><i class="fa-solid fa-shield-halved me-2 text-primary"></i>Piket Hari Ini — <span id="piketTanggal"></span></h6>
+                <a href="jadwal_piket.php" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-calendar-week me-1"></i>Lengkap</a>
+              </div>
+              <div class="card-body p-0">
+                <div class="table-responsive">
+                  <table class="table table-sm table-hover align-middle mb-0">
+                    <thead class="table-light small">
+                      <tr><th>Satuan</th><th>Nama</th><th>Pangkat</th><th>Shift</th><th>Jam</th><th>Tim</th></tr>
+                    </thead>
+                    <tbody id="piketTodayBody">
+                      <tr><td colspan="6" class="text-center text-muted py-3">Memuat...</td></tr>
+                    </tbody>
+                  </table>
                 </div>
+              </div>
             </div>
-            <div class="col-lg-6 mb-4">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-calendar-alt"></i>
+            <div id="piketEmptyMsg" class="alert alert-info" style="display:none;">
+              <i class="fa-solid fa-info-circle me-2"></i>Tidak ada jadwal piket terdaftar hari ini.
+              <a href="tim_piket.php" class="alert-link">Generate jadwal dari Tim Piket.</a>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white"><h6 class="fw-bold mb-0"><i class="fas fa-chart-bar me-2 text-primary"></i>Statistik Personil</h6></div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3 col-6"><div class="text-center p-2 rounded" style="background:#f0f4ff"><div class="fs-3 fw-bold text-primary" id="totalPersonil">-</div><small class="text-muted">Total Personil</small></div></div>
+                        <div class="col-md-3 col-6"><div class="text-center p-2 rounded" style="background:#f0f4ff"><div class="fs-3 fw-bold text-primary" id="polriCount">-</div><small class="text-muted">POLRI</small></div></div>
+                        <div class="col-md-3 col-6"><div class="text-center p-2 rounded" style="background:#f0f4ff"><div class="fs-3 fw-bold text-primary" id="asnCount">-</div><small class="text-muted">ASN/P3K</small></div></div>
+                        <div class="col-md-3 col-6"><div class="text-center p-2 rounded" style="background:#f0f4ff"><div class="fs-3 fw-bold text-primary" id="schedulesToday">-</div><small class="text-muted">Jadwal Hari Ini</small></div></div>
+                        <div class="col-md-3 col-6"><div class="text-center p-2 rounded" style="background:#f8f9fa"><div class="fs-4 fw-bold" id="maleCount">-</div><small class="text-muted">Laki-laki</small></div></div>
+                        <div class="col-md-3 col-6"><div class="text-center p-2 rounded" style="background:#f8f9fa"><div class="fs-4 fw-bold" id="femaleCount">-</div><small class="text-muted">Perempuan</small></div></div>
+                        <div class="col-md-3 col-6"><div class="text-center p-2 rounded" style="background:#f8f9fa"><div class="fs-4 fw-bold" id="withGelarCount">-</div><small class="text-muted">Bergelar</small></div></div>
+                        <div class="col-md-3 col-6"><div class="text-center p-2 rounded" style="background:#f8f9fa"><div class="fs-4 fw-bold" id="totalBagian">-</div><small class="text-muted">Bagian</small></div></div>
                     </div>
-                    <h3 class="feature-title">Schedule Management</h3>
-                    <p class="feature-description">
-                        Sistem penjadwalan modern untuk BAGOPS dengan kalender interaktif, integrasi Google Calendar, dan manajemen shift otomatis.
-                    </p>
-                    <a href="calendar_dashboard.php" class="btn btn-feature">
-                        <i class="fas fa-arrow-right me-2"></i>Buka Schedule
-                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Piket Hari Ini Widget -->
-        <div id="piketWidget" class="mb-4" style="display:none;">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold mb-0"><i class="fa-solid fa-shield-halved me-2 text-primary"></i>Piket Hari Ini — <span id="piketTanggal"></span></h5>
-            <a href="jadwal_piket.php" class="btn btn-sm btn-outline-primary"><i class="fa-solid fa-calendar-week me-1"></i>Jadwal Lengkap</a>
-          </div>
-          <div class="table-responsive">
-            <table class="table table-sm table-hover align-middle bg-white rounded shadow-sm">
-              <thead class="table-primary small">
-                <tr><th>Satuan</th><th>Nama</th><th>Pangkat</th><th>Shift</th><th>Jam</th><th>Status</th></tr>
-              </thead>
-              <tbody id="piketTodayBody">
-                <tr><td colspan="6" class="text-center text-muted">Memuat...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div id="piketEmptyMsg" class="alert alert-info" style="display:none;">
-          <i class="fa-solid fa-info-circle me-2"></i>Tidak ada jadwal piket terdaftar hari ini.
-          <a href="tim_piket.php" class="alert-link">Generate jadwal dari Tim Piket.</a>
-        </div>
+        <!-- RIGHT Sidebar -->
+        <div class="col-lg-4">
+            <!-- Quick Actions -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white"><h6 class="fw-bold mb-0"><i class="fas fa-bolt me-2 text-warning"></i>Aksi Cepat</h6></div>
+                <div class="list-group list-group-flush">
+                    <?php if (AuthHelper::canEdit()): ?>
+                    <a href="operasi.php?tambah=1" class="list-group-item list-group-item-action"><i class="fas fa-plus-circle text-success me-2"></i>Tambah Operasi Baru</a>
+                    <a href="ekspedisi.php" class="list-group-item list-group-item-action"><i class="fas fa-envelope text-info me-2"></i>Catat Surat Masuk/Keluar</a>
+                    <a href="lhpt.php" class="list-group-item list-group-item-action"><i class="fas fa-file-alt text-warning me-2"></i>Buat LHPT</a>
+                    <?php endif; ?>
+                    <a href="personil.php" class="list-group-item list-group-item-action"><i class="fas fa-users text-primary me-2"></i>Data Personil</a>
+                    <a href="calendar_dashboard.php" class="list-group-item list-group-item-action"><i class="fas fa-calendar text-danger me-2"></i>Kalender Jadwal</a>
+                    <a href="laporan_operasi.php" class="list-group-item list-group-item-action"><i class="fas fa-chart-bar text-dark me-2"></i>Laporan Operasi</a>
+                </div>
+            </div>
 
-        <div class="stats-section">
-            <div class="row">
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalPersonil">-</div>
-                        <div class="stat-label">Total Personil</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-card">
-                        <div class="stat-number" id="polriCount">-</div>
-                        <div class="stat-label">POLRI</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-card">
-                        <div class="stat-number" id="asnCount">-</div>
-                        <div class="stat-label">ASN/P3K</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-card">
-                        <div class="stat-number" id="schedulesToday">-</div>
-                        <div class="stat-label">Jadwal Hari Ini</div>
-                    </div>
+            <!-- Operational Recap -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white"><h6 class="fw-bold mb-0"><i class="fas fa-tasks me-2 text-primary"></i>Rekap Operasional</h6></div>
+                <div class="card-body p-0">
+                    <table class="table table-sm mb-0">
+                        <tr><td class="ps-3"><i class="fas fa-bullhorn text-danger me-2"></i>Operasi Aktif</td><td class="fw-bold text-end pe-3"><?= $_opsActive ?></td></tr>
+                        <tr><td class="ps-3"><i class="fas fa-clipboard text-primary me-2"></i>Operasi Rencana</td><td class="fw-bold text-end pe-3"><?= $_opsPlanned ?></td></tr>
+                        <tr><td class="ps-3"><i class="fas fa-tasks text-success me-2"></i>Total Operasi</td><td class="fw-bold text-end pe-3"><?= $_opsTotal ?></td></tr>
+                        <tr><td class="ps-3"><i class="fas fa-file-alt text-warning me-2"></i>LHPT (total)</td><td class="fw-bold text-end pe-3"><?= $_lhptTotal ?></td></tr>
+                        <tr><td class="ps-3"><i class="fas fa-inbox text-info me-2"></i>Surat Masuk (bln ini)</td><td class="fw-bold text-end pe-3"><?= $_suratMasuk ?></td></tr>
+                        <tr><td class="ps-3"><i class="fas fa-paper-plane text-success me-2"></i>Surat Keluar (bln ini)</td><td class="fw-bold text-end pe-3"><?= $_suratKeluar ?></td></tr>
+                    </table>
                 </div>
             </div>
-            
-            <!-- Additional Statistics Row -->
-            <div class="row mt-4">
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-card">
-                        <div class="stat-number" id="maleCount">-</div>
-                        <div class="stat-label">Laki-laki</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-card">
-                        <div class="stat-number" id="femaleCount">-</div>
-                        <div class="stat-label">Perempuan</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-card">
-                        <div class="stat-number" id="withGelarCount">-</div>
-                        <div class="stat-label">Dengan Gelar</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalBagian">-</div>
-                        <div class="stat-label">Total Bagian</div>
-                    </div>
+
+            <!-- System Info (admin only) -->
+            <?php if (AuthHelper::isAdmin()): ?>
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white"><h6 class="fw-bold mb-0"><i class="fas fa-server me-2 text-secondary"></i>Sistem</h6></div>
+                <div class="card-body small">
+                    <div class="d-flex justify-content-between mb-1"><span class="text-muted">PHP</span><span><?= PHP_VERSION ?></span></div>
+                    <div class="d-flex justify-content-between mb-1"><span class="text-muted">Server</span><span><?= php_uname('n') ?></span></div>
+                    <div class="d-flex justify-content-between"><span class="text-muted">Versi App</span><span class="fw-bold">v<?= APP_VERSION ?></span></div>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>

@@ -204,6 +204,61 @@ class AuthHelper {
     }
     
     /**
+     * Check if current user has one of the allowed roles
+     */
+    public static function hasRole(...$roles) {
+        if (!self::validateSession()) return false;
+        $userRole = $_SESSION['role'] ?? 'viewer';
+        return in_array($userRole, $roles);
+    }
+
+    /**
+     * Require specific role(s) — redirect or return JSON error if not authorized
+     */
+    public static function requireRole(...$roles) {
+        if (!self::hasRole(...$roles)) {
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) || 
+                (isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], 'json') !== false)) {
+                header('Content-Type: application/json');
+                http_response_code(403);
+                echo json_encode(['success' => false, 'message' => 'Akses ditolak. Role Anda tidak memiliki izin untuk aksi ini.']);
+                exit;
+            }
+            $_SESSION['flash_error'] = 'Akses ditolak. Anda tidak memiliki izin untuk halaman ini.';
+            header('Location: ' . url('pages/main.php'));
+            exit;
+        }
+    }
+
+    /**
+     * Shortcut: is admin?
+     */
+    public static function isAdmin() {
+        return self::hasRole('admin');
+    }
+
+    /**
+     * Shortcut: can edit? (admin + operator)
+     */
+    public static function canEdit() {
+        return self::hasRole('admin', 'operator');
+    }
+
+    /**
+     * Shortcut: can delete? (admin only)
+     */
+    public static function canDelete() {
+        return self::hasRole('admin');
+    }
+
+    /**
+     * Get current user role
+     */
+    public static function getRole() {
+        return $_SESSION['role'] ?? 'viewer';
+    }
+
+    /**
      * Require CSRF token validation
      */
     public static function requireCSRFToken() {
