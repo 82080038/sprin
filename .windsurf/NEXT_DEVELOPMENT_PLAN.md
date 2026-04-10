@@ -1,7 +1,12 @@
-# Rencana Pengembangan SPRIN v1.4.x
+# Rencana Pengembangan SPRIN v1.5.x → v2.0
 **Diperbarui**: 2026-04-10  
 **Branch**: kantor  
-**Status**: Aktif dikerjakan
+**Status**: v1.5.0 selesai — Lanjut ke Fase 5 (BAGOPS Lengkap)
+
+> ⭐ **KONTEKS PENTING**: Aplikasi ini dibuat untuk **BAGOPS Polres Samosir**.
+> BAGOPS = Bagian Operasional, tupoksi: perencanaan & pengendalian operasi kepolisian,
+> administrasi Sprint/ST, LHPT, piket/penugasan, ekspedisi surat.
+> Baca `.windsurf/BAGOPS_ANALYSIS.md` untuk analisis lengkap & saran fitur.
 
 ---
 
@@ -34,108 +39,99 @@
 
 ---
 
-## 🎯 PRIORITAS TINGGI — Kerjakan Selanjutnya
+## ✅ SELESAI — v1.4.1-dev
+- [x] `piket_absensi` DB + API absensi + widget piket hari ini
 
-### 1. Kalender — Pilih Tim & Recurrence di Modal Jadwal
-**File**: `pages/calendar_dashboard.php`
+## ✅ SELESAI — v1.4.2-dev
+- [x] Kalender: modal tim piket + recurrence + badge 🔁 + konflik deteksi
+- [x] Operasi: recurrence modal Tambah/Edit + Cetak ST
 
-- [ ] Tab **"Dari Tim Piket"**: dropdown tim → personil auto-fill
-- [ ] Section **Pengulangan**: type + interval + hari (weekly) + tanggal akhir
-- [ ] Kirim `tim_id`, `recurrence_type`, `recurrence_interval`, `recurrence_days`, `recurrence_end`
-
-### 2. Kalender — Badge Event Berulang
-**File**: `pages/calendar_dashboard.php`
-
-- [ ] Icon 🔁 pada event `recurrence_type != 'none'`
-- [ ] Warna beda: tim piket vs jadwal manual
-
-### 3. Recurrence di Modal Operasi
-**File**: `pages/operasi.php`
-
-- [ ] Section "Pengulangan" di modal Tambah & Edit
-- [ ] Kirim ke API operasi
+## ✅ SELESAI — v1.5.0-dev (Semua Fase)
+- [x] `laporan_piket.php` — rekap absensi per bulan + export CSV
+- [x] `laporan_operasi.php` — rekap operasi + grafik Chart.js + export CSV
+- [x] Cover Management — substitusi personil absen + log otomatis
+- [x] Rotasi fase piket per satuan (1 klik)
+- [x] Badge notifikasi navbar — count piket hari ini
+- [x] Laporan Operasi → Cetak ST template print-ready
 
 ---
 
-## 🔲 PRIORITAS SEDANG
+## 🔴 FASE 5 — Prioritas Berikutnya (v2.0)
 
-### 4. Cover Management — Substitusi Personil
-- [ ] Jika personil absen → tampilkan pengganti dari satuan yang sama
-- [ ] Log: siapa menggantikan siapa, tanggal
+> Berdasarkan analisis tupoksi BAGOPS. Detail: `.windsurf/BAGOPS_ANALYSIS.md`
 
-### 5. Rekap Absensi Piket
-**File baru**: `pages/laporan_piket.php`
-- [ ] Rekap per personil per bulan
-- [ ] Rekap per satuan: % kehadiran
-- [ ] Export Excel/PDF
+### 1. 🔴 Multi-Level User Role
+- Role: `admin` / `operator` / `viewer`
+- Guard middleware per halaman
+- Tabel: `users` (ada) + tambah kolom `role`
+- **Mengapa penting**: Data operasional Polri tidak boleh terbuka ke semua orang
+
+### 2. � LHPT — Laporan Hasil Pelaksanaan Tugas
+- Setiap operasi selesai WAJIB ada LHPT (pertanggungjawaban ke atasan)
+- Tabel baru: `lhpt` (operasi_id FK, nomor, isi, kendala, hasil, rekomendasi)
+- Print format standar Polri
+- File baru: `pages/lhpt.php`
+
+### 3. 🔴 Nomor Sprint Otomatis
+- Format: `Sprin / 001 / IV / 2026 / OPS`
+- Auto-increment per bulan, reset tiap tahun
+- Kolom baru: `nomor_sprint` di `operations`
+
+### 4. 🟠 Ekspedisi Surat Keluar/Masuk
+- Penomoran agenda surat operasional BAGOPS
+- File baru: `pages/ekspedisi.php`, tabel: `surat_ekspedisi`
+
+### 5. 🟠 Training Management
+- Jadwal pelatihan praoperasi per satuan
+- Rekap jam latihan per personil
+- File baru: `pages/pelatihan.php`
+
+### 6. 🟠 Dashboard Komandan
+- Widget role-based: Kapolres lihat ringkasan, operator lihat tugas harian
+- Alert LHPT pending, operasi jatuh tempo
+
+### 7. 🟡 WhatsApp Notification
+- Notif H-1 piket + Sprint diterbitkan via Fonnte/Wablas
 
 ---
 
-## 🔲 PRIORITAS RENDAH / FUTURE
-
-### 6. Laporan Operasi (`pages/laporan_operasi.php`)
-- [ ] Rekap per bulan/tahun + grafik + export
-
-### 7. Cetak Surat Perintah Tugas (ST)
-- [ ] Generate dokumen ST dari data tim + jadwal
-
-### 8. Rotasi Shift Otomatis
-- [ ] Tim `ROTASI` ganti fase siklus otomatis tiap X hari
-
-### 9. Notifikasi In-App
-- [ ] Badge navbar jadwal hari ini
-- [ ] Pengingat H-1 operasi
-
-### 10. Multi-Level User
-- [ ] Role: Admin / Operator / Viewer
-- [ ] Guard akses per role
-
----
-
-## 📁 Struktur File Saat Ini
+## 📁 Struktur File v1.5.0
 
 ```
 sprin/
-├── TODO.md                  ← ⭐ BARU — todo list lengkap semua fase
+├── TODO.md                      ← Roadmap lengkap
+├── .windsurf/BAGOPS_ANALYSIS.md ← Analisis tupoksi + saran fitur ⭐
 ├── pages/
-│   ├── main.php             ← Dashboard + widget Piket Hari Ini ⭐
-│   ├── tim_piket.php        ← Tim + Papan Siklus Piket
-│   ├── jadwal_piket.php     ← Jadwal per Tim + Absensi ⭐ BARU
-│   ├── calendar_dashboard.php
-│   ├── operasi.php
-│   └── ...
+│   ├── main.php                 ← Dashboard + piket hari ini
+│   ├── tim_piket.php            ← Papan Siklus + Rotasi Fase
+│   ├── jadwal_piket.php         ← Jadwal + Absensi + Cover
+│   ├── calendar_dashboard.php   ← Kalender recurrence + tim
+│   ├── operasi.php              ← Operasi + Cetak ST
+│   ├── laporan_piket.php        ← Rekap absensi ✅
+│   └── laporan_operasi.php      ← Laporan operasi ✅
 ├── api/
-│   ├── tim_piket_api.php    ← +get_piket_hari_ini, save_absensi, delete_jadwal_series ⭐
-│   └── calendar_api_public.php
+│   ├── tim_piket_api.php        ← get_all_tim, cover, rotasi
+│   └── calendar_api_public.php  ← schedules + recurrence
 └── cron/
-    └── migrate_tim_piket.php  ← +piket_absensi table ⭐
+    └── migrate_tim_piket.php    ← Migration DB (jalankan 1x)
 ```
 
 ---
 
-## 🗃️ Status Database
+## � Info Teknis untuk Developer Baru
 
-| Tabel | Status |
-|-------|--------|
-| `tim_piket` | ✅ fase_siklus_id, jam_mulai_aktif, durasi_jam |
-| `tim_piket_anggota` | ✅ |
-| `siklus_piket_fase` | ✅ |
-| `piket_absensi` | ✅ **BARU** — schedule_id, status, jam_hadir |
-| `schedules` | ✅ tim_id, recurrence_* |
-| `operations` | ✅ tingkat, jenis, recurrence_* |
-
----
-
-## 🔧 Catatan Teknis
-
-| Komponen | Detail |
-|----------|--------|
-| **Filter Piket** | Unsur id=3+4 + bagian id=20 (SPKT) |
-| **Satuan Piket** | 15 satuan: 9 SAT + 5 POLSEK + SPKT |
-| **FullCalendar** | v6.1.15 — locale id bundled |
-| **Auth** | Semua API: cek `$_SESSION['user_id']` |
-| **Migration** | `cron/migrate_tim_piket.php` (jalankan 1x) |
+| Item | Detail |
+|------|--------|
+| **Institusi** | BAGOPS Polres Samosir, Sumatera Utara |
+| **Stack** | PHP 8.0, MySQL, Bootstrap 5, FullCalendar 6, Chart.js |
+| **DB** | host=localhost, name=`bagops`, user=root, pass=root |
+| **Path** | `/opt/lampp/htdocs/sprin` |
+| **Branch** | `kantor` |
+| **Filter Piket** | Unsur id=3+4 + bagian id=20 (SPKT) → 15 satuan |
+| **Auth** | Semua API cek `$_SESSION['user_id']` |
+| **Migration** | Jalankan `cron/migrate_tim_piket.php` sekali di browser |
+| **Offline** | Tidak bergantung internet — XAMPP lokal |
 
 ---
 
-*Diupdate: 2026-04-10 — v1.4.1-dev*
+*Diupdate: 2026-04-10 — v1.5.0-dev*

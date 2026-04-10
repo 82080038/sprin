@@ -1,5 +1,10 @@
-# TODO — SPRIN v1.4.x Development
-**Diperbarui**: 2026-04-10 | **Branch**: kantor | **Versi**: 1.4.0-dev
+# TODO — SPRIN Development Roadmap
+**Diperbarui**: 2026-04-10 | **Branch**: kantor | **Versi**: 1.5.0-dev
+
+> **Konteks Aplikasi**: SPRIN adalah sistem informasi operasional untuk **BAGOPS Polres Samosir**.
+> BAGOPS (Bagian Operasional) bertugas merencanakan & mengendalikan operasi kepolisian,
+> administrasi surat perintah, laporan pelaksanaan tugas, manajemen penugasan, dan pengamanan markas.
+> Lihat analisis lengkap: `.windsurf/BAGOPS_ANALYSIS.md`
 
 ---
 
@@ -108,41 +113,100 @@
 - [x] **Notifikasi In-App**
   - Badge navbar jumlah piket hari ini
 
-- [ ] **Multi-Level User**
-  - Role: Admin / Operator (input+absensi) / Viewer
-  - Guard akses per role
+- [ ] **Multi-Level User Role** 🔴 PRIORITAS TINGGI
+  - Role: `admin` (Kabagops/IT) / `operator` (Staf input) / `viewer` (Kapolres/Waka)
+  - Middleware guard per halaman & per aksi
+  - Tabel: `user_roles`, kolom `role` di tabel `users`
+  - Estimasi: 3-4 hari
 
-- [ ] **Training Management**
-  - Jadwal pelatihan per satuan
-  - Rekap pelatihan per personil
+- [ ] **Training Management** — Pelatihan Praoperasi 🟠
+  - Jadwal pelatihan per satuan (menembak, bela diri, SAR, dsb.)
+  - Rekap jam latihan per personil per tahun
+  - Halaman: `pages/pelatihan.php`
+  - Estimasi: 2-3 hari
 
 ---
 
-## 📁 File Utama
+## � FASE 5 — Tupoksi BAGOPS yang Belum Ada (Berdasarkan Analisis)
 
-| File | Fungsi |
-|------|--------|
-| `pages/tim_piket.php` | Tim + Papan Siklus Piket |
-| `pages/calendar_dashboard.php` | Kalender FullCalendar 6.1.15 |
-| `pages/operasi.php` | Daftar & manajemen operasi |
-| `pages/jadwal_piket.php` | *(TODO)* Jadwal per tim |
-| `pages/laporan_piket.php` | Rekap absensi piket (DONE) |
-| `api/tim_piket_api.php` | API tim, siklus, generate jadwal |
-| `api/calendar_api_public.php` | API jadwal & operasi |
-| `cron/migrate_tim_piket.php` | Migration DB (sudah dijalankan) |
+> Lihat analisis lengkap: `.windsurf/BAGOPS_ANALYSIS.md`
+
+- [ ] **LHPT — Laporan Hasil Pelaksanaan Tugas** 🔴 KRITIS
+  - Setiap operasi `completed` wajib ada LHPT
+  - Form: tanggal, nomor LHPT, operasi_id (FK), isi laporan, kendala, hasil, rekomendasi
+  - Print format standar Polri
+  - Tabel baru: `lhpt`
+  - Halaman: tambah tab di `operasi.php` atau `pages/lhpt.php`
+  - Estimasi: 2-3 hari
+
+- [ ] **Nomor Sprint Otomatis** 🔴 KRITIS
+  - Format: `Sprin / [urut] / [bulan-romawi] / [tahun] / [jenis]`
+  - Urutan otomatis per bulan, reset tiap tahun
+  - Kolom baru: `nomor_sprint` di tabel `operations`
+  - Halaman: sudah ada di `operasi.php` (tinggal auto-generate)
+  - Estimasi: 1 hari
+
+- [ ] **Ekspedisi Surat Keluar/Masuk** 🟠
+  - Penomoran agenda surat masuk & keluar
+  - Field: nomor, tanggal, perihal, pengirim/tujuan, kategori, status
+  - Halaman: `pages/ekspedisi.php`
+  - Tabel baru: `surat_ekspedisi`
+  - Estimasi: 2 hari
+
+- [ ] **Dashboard Komandan (Real-time)** 🟠
+  - Ringkasan: operasi aktif, piket hari ini, personil bertugas, LHPT pending
+  - Target pengguna: Kapolres, Wakapolres, Kabagops
+  - Halaman: upgrade `pages/main.php` dengan role-based widgets
+  - Estimasi: 1-2 hari
+
+- [ ] **WhatsApp Notification** 🟡
+  - Notif H-1 jadwal piket via WA Gateway (Fonnte/Wablas API)
+  - Notif saat Sprint diterbitkan ke personil ybs
+  - Butuh: API key WA Gateway + konfigurasi nomor HP di data personil
+  - Estimasi: 2 hari
+
+- [ ] **Apel Nominal Digital** 🟡
+  - Absensi apel pagi/sore — berbeda dengan absensi piket
+  - Scope: semua personil (bukan hanya tim piket)
+  - Tabel baru: `apel_nominal`
+  - Estimasi: 2 hari
+
+---
+
+## 📁 File Utama (v1.5.0)
+
+| File | Fungsi | Status |
+|------|--------|--------|
+| `pages/main.php` | Dashboard + widget piket hari ini | ✅ |
+| `pages/tim_piket.php` | Papan Siklus + Rotasi Fase | ✅ |
+| `pages/jadwal_piket.php` | Jadwal tim + Absensi + Cover | ✅ |
+| `pages/calendar_dashboard.php` | Kalender + recurrence + tim picker | ✅ |
+| `pages/operasi.php` | Operasi + Cetak ST | ✅ |
+| `pages/laporan_piket.php` | Rekap absensi per bulan | ✅ |
+| `pages/laporan_operasi.php` | Laporan operasi + grafik + CSV | ✅ |
+| `pages/lhpt.php` | LHPT pasca operasi | ❌ TODO |
+| `pages/ekspedisi.php` | Surat keluar/masuk | ❌ TODO |
+| `pages/pelatihan.php` | Training Management | ❌ TODO |
+| `api/tim_piket_api.php` | get_all_tim, cover, rotasi | ✅ |
+| `api/calendar_api_public.php` | schedules + recurrence + konflik | ✅ |
 
 ---
 
 ## 🗃️ Status Database
 
-| Tabel | Status |
-|-------|--------|
-| `tim_piket` | ✅ Lengkap (15 kolom) |
-| `tim_piket_anggota` | ✅ Lengkap |
-| `siklus_piket_fase` | ✅ Lengkap |
-| `schedules` | ✅ + recurrence + tim_id |
-| `operations` | ✅ + tingkat/jenis + recurrence |
-| `piket_absensi` | ⏳ TODO — Fase 2 |
+| Tabel | Status | Keterangan |
+|-------|--------|------------|
+| `personil` | ✅ | 256 record aktif |
+| `tim_piket` | ✅ | 15 kolom (fase, jam, durasi) |
+| `tim_piket_anggota` | ✅ | |
+| `siklus_piket_fase` | ✅ | Definisi fase per bagian |
+| `piket_absensi` | ✅ | Absensi harian + cover |
+| `schedules` | ✅ | + recurrence + tim_id |
+| `operations` | ✅ | + tingkat/jenis + recurrence |
+| `lhpt` | ❌ | TODO — Laporan Hasil Pelaksanaan Tugas |
+| `surat_ekspedisi` | ❌ | TODO — Nomor agenda surat |
+| `pelatihan` | ❌ | TODO — Training Management |
+| `users` / `user_roles` | ⚠️ | Ada tapi belum role-based guard |
 
 ---
 
