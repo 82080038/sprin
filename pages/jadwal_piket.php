@@ -284,6 +284,7 @@ include __DIR__ . '/../includes/components/header.php';
                   <?php endif; ?>
                 </td>
                 <td class="no-print">
+                  <div class="d-flex gap-1">
                   <button class="btn btn-outline-success btn-sm py-0 px-2"
                     onclick="inputAbsensi(<?= $r['id'] ?>, '<?= htmlspecialchars($r['personil_id']) ?>',
                       '<?= htmlspecialchars(addslashes($r['personil_name'] ?? $r['personil_id'])) ?>',
@@ -291,6 +292,12 @@ include __DIR__ . '/../includes/components/header.php';
                     title="Input Absensi">
                     <i class="fa-solid fa-clipboard-check"></i>
                   </button>
+                  <button class="btn btn-outline-warning btn-sm py-0 px-2"
+                    onclick="openCover(<?= $r['id'] ?>, '<?= htmlspecialchars(addslashes($r['personil_name'] ?? $r['personil_id'])) ?>')"
+                    title="Ganti Personil (Cover)">
+                    <i class="fa-solid fa-user-gear"></i>
+                  </button>
+                  </div>
                 </td>
               </tr>
               <?php endforeach; ?>
@@ -313,6 +320,37 @@ include __DIR__ . '/../includes/components/header.php';
     <p class="mb-0">Pilih tim dan klik <strong>Tampilkan</strong> untuk melihat jadwal.</p>
   </div>
   <?php endif; ?>
+</div>
+
+<!-- Modal Cover / Substitusi Personil -->
+<div class="modal fade" id="modalCover" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fa-solid fa-user-gear me-2"></i>Ganti Personil (Cover)</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-warning py-2 small mb-3">
+          <i class="fa-solid fa-person-walking-arrow-right me-1"></i>
+          Personil <strong id="coverNamaAsli"></strong> akan dicatat <span class="badge bg-danger">Tidak Hadir</span> dan digantikan oleh personil pilihan.
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Personil Pengganti</label>
+          <select class="form-select" id="coverSelect"><option value="">-- Pilih Pengganti --</option></select>
+          <div class="text-muted small mt-1" id="coverLoading"></div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Catatan</label>
+          <input type="text" class="form-control" id="coverCatatan" placeholder="Alasan / keterangan">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-warning" onclick="simpanCover()"><i class="fa-solid fa-save me-1"></i>Simpan Cover</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Modal Absensi -->
@@ -418,6 +456,56 @@ async function saveAbsensi() {
         } else {
             alert('Gagal: ' + data.error);
         }
+    } catch(e) { alert('Network error'); }
+}
+
+let _coverSchedId = null;
+async function openCover(schedId, namaAsli) {
+    _coverSchedId = schedId;
+    document.getElementById('coverNamaAsli').textContent = namaAsli;
+    document.getElementById('coverCatatan').value = '';
+    const sel = document.getElementById('coverSelect');
+    sel.innerHTML = '<option value="">Memuat...</option>';
+    document.getElementById('coverLoading').textContent = '';
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('modalCover')).show();
+    try {
+        const r    = await fetch(API_URL + '?action=get_cover_candidates&schedule_id=' + schedId);
+        const data = await r.json();
+        sel.innerHTML = '<option value="">-- Pilih Pengganti --</option>';
+        if (data.success && data.data.length) {
+            data.data.forEach(p => {
+                const o = document.createElement('option');
+                o.value = p.nrp;
+                o.textContent = (p.nama_pangkat || '') + ' ' + p.nama;
+                o.dataset.nama = p.nama;
+                sel.appendChild(o);
+            });
+            document.getElementById('coverLoading').textContent = data.data.length + ' personil tersedia';
+        } else {
+            sel.innerHTML = '<option value="">Tidak ada personil tersedia</option>';
+        }
+    } catch(e) { sel.innerHTML = '<option value="">Error memuat data</option>'; }
+}
+
+async function simpanCover() {
+    const sel     = document.getElementById('coverSelect');
+    const newNrp  = sel.value;
+    const opt     = sel.options[sel.selectedIndex];
+    const newName = opt ? opt.dataset.nama || opt.textContent : '';
+    if (!newNrp) { alert('Pilih personil pengganti terlebih dahulu'); return; }
+    const fd = new FormData();
+    fd.append('action',           'save_cover');
+    fd.append('schedule_id',      _coverSchedId);
+    fd.append('new_personil_id',  newNrp);
+    fd.append('new_personil_name', newName);
+    fd.append('catatan',          document.getElementById('coverCatatan').value);
+    try {
+        const r    = await fetch(API_URL, { method:'POST', body:fd });
+        const data = await r.json();
+        if (data.success) {
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('modalCover')).hide();
+            location.reload();
+        } else { alert('Gagal: ' + (data.error || data.message)); }
     } catch(e) { alert('Network error'); }
 }
 

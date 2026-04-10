@@ -61,34 +61,33 @@
   - Rekap per bulan
   - Estimasi: 2-3 hari
 
-- [ ] **Cover Management — Substitusi Personil**
+- [x] **Cover Management — Substitusi Personil**
   - Jika personil absen → tampilkan pengganti dari satuan yang sama
   - Update schedule dengan personil pengganti
   - Log: siapa menggantikan siapa
   - Estimasi: 2 hari
 
-- [ ] **Recurrence di Modal Operasi** — `pages/operasi.php`
+- [x] **Recurrence di Modal Operasi** — `pages/operasi.php`
   - Section "Pengulangan" di modal Tambah & Edit
-  - Kirim ke API operasi
-  - Estimasi: 1 hari
+  - Preview badge dinamis + fill saat edit
 
 ---
 
 ## 🟡 FASE 3 — Laporan & Akuntabilitas
 
-- [ ] **Rekap Absensi Piket** — `pages/laporan_piket.php`
+- [x] **Rekap Absensi Piket** — `pages/laporan_piket.php`
   - Rekap per personil per bulan: hadir/absen/ijin/sakit
   - Rekap per satuan: persentase kehadiran
   - Export Excel/PDF
   - Estimasi: 2 hari
 
-- [ ] **Laporan Operasi** — `pages/laporan_operasi.php`
+- [x] **Laporan Operasi** — `pages/laporan_operasi.php`
   - Rekap per bulan/tahun + grafik
   - Total dukgra per jenis operasi
   - Export Excel/PDF
   - Estimasi: 2 hari
 
-- [ ] **Cetak Surat Perintah Tugas (ST)**
+- [x] **Cetak Surat Perintah Tugas (ST)**
   - Generate dokumen ST dari data tim + jadwal + operasi
   - Format standar Polri
   - Estimasi: 3 hari
@@ -97,18 +96,17 @@
 
 ## 🟢 FASE 4 — Sistem Cerdas (Jangka Panjang)
 
-- [ ] **Deteksi Konflik Jadwal**
+- [x] **Deteksi Konflik Jadwal**
   - Warning: personil dijadwalkan 2 tempat di hari sama
   - Warning: tim kekurangan anggota minimum
   - Warning: personil belum giliran terlalu lama (fairness)
 
-- [ ] **Rotasi Shift Otomatis**
+- [x] **Rotasi Shift Otomatis**
   - Tim ROTASI berganti fase siklus otomatis tiap X hari
   - Tampilkan shift aktif di papan siklus
 
-- [ ] **Notifikasi & Pengingat**
-  - Browser notification H-1 sebelum jadwal
-  - WhatsApp gateway (Fonnte/Wablas API)
+- [x] **Notifikasi In-App**
+  - Badge navbar jumlah piket hari ini
 
 - [ ] **Multi-Level User**
   - Role: Admin / Operator (input+absensi) / Viewer
@@ -128,7 +126,7 @@
 | `pages/calendar_dashboard.php` | Kalender FullCalendar 6.1.15 |
 | `pages/operasi.php` | Daftar & manajemen operasi |
 | `pages/jadwal_piket.php` | *(TODO)* Jadwal per tim |
-| `pages/laporan_piket.php` | *(TODO)* Rekap absensi piket |
+| `pages/laporan_piket.php` | Rekap absensi piket (DONE) |
 | `api/tim_piket_api.php` | API tim, siklus, generate jadwal |
 | `api/calendar_api_public.php` | API jadwal & operasi |
 | `cron/migrate_tim_piket.php` | Migration DB (sudah dijalankan) |

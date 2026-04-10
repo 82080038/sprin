@@ -63,6 +63,79 @@ try {
         echo json_encode(['success'=>true,'data'=>$stmt->fetchAll(PDO::FETCH_ASSOC)]); exit;
     }
 
+    // ── GET: kandidat cover (personil satuan sama, tidak bertugas hari itu) ─────
+    if ($action === 'get_cover_candidates') {
+        $schedId = (int)($_GET['schedule_id'] ?? 0);
+        if (!$schedId) throw new Exception('schedule_id wajib');
+        // Ambil info jadwal
+        $orig = $pdo->prepare("
+            SELECT s.*, t.id_bagian FROM schedules s
+            JOIN tim_piket t ON t.id = s.tim_id WHERE s.id = ?
+        ");
+        $orig->execute([$schedId]);
+        $sched = $orig->fetch(PDO::FETCH_ASSOC);
+        if (!$sched) throw new Exception('Jadwal tidak ditemukan');
+        // Personil satuan yang sama dan tidak ada jadwal di hari itu
+        $stmt = $pdo->prepare("
+            SELECT p.nrp, p.nama, pk.nama_pangkat
+            FROM personil p
+            LEFT JOIN pangkat pk ON pk.id = p.id_pangkat
+            WHERE p.id_bagian = ?
+              AND p.is_active = 1
+              AND p.nrp != ?
+              AND p.nrp NOT IN (
+                  SELECT personil_id FROM schedules
+                  WHERE shift_date = ? AND id != ?
+              )
+            ORDER BY p.nama
+        ");
+        $stmt->execute([$sched['id_bagian'], $sched['personil_id'], $sched['shift_date'], $schedId]);
+        echo json_encode(['success'=>true,'data'=>$stmt->fetchAll(PDO::FETCH_ASSOC),'sched'=>$sched]); exit;
+    }
+
+    // ── POST: simpan cover (ganti personil di jadwal + catat absensi tidak_hadir) ─
+    if ($action === 'save_cover') {
+        $schedId    = (int)($_POST['schedule_id'] ?? 0);
+        $newNrp     = trim($_POST['new_personil_id'] ?? '');
+        $newName    = trim($_POST['new_personil_name'] ?? '');
+        $catatan    = trim($_POST['catatan'] ?? '');
+        if (!$schedId || !$newNrp) throw new Exception('schedule_id & new_personil_id wajib');
+        $pdo->beginTransaction();
+        // Ambil data jadwal asli
+        $orig = $pdo->prepare("SELECT * FROM schedules WHERE id=?");
+        $orig->execute([$schedId]);
+        $sched = $orig->fetch(PDO::FETCH_ASSOC);
+        // Tandai absensi personil asli sebagai tidak_hadir
+        $pdo->prepare("
+            INSERT INTO piket_absensi (schedule_id,personil_id,tim_id,tanggal,status,catatan,input_oleh)
+            VALUES (?,?,?,?,'tidak_hadir',?,?)
+            ON DUPLICATE KEY UPDATE status='tidak_hadir',catatan=VALUES(catatan),updated_at=NOW()
+        ")->execute([$schedId,$sched['personil_id'],$sched['tim_id'],$sched['shift_date'],$catatan,$_SESSION['user_id']]);
+        // Buat jadwal baru untuk personil pengganti (clone)
+        $bagian = $pdo->prepare("SELECT b.nama_bagian FROM tim_piket t JOIN bagian b ON b.id=t.id_bagian WHERE t.id=?");
+        $bagian->execute([$sched['tim_id']]);
+        $bagianName = $bagian->fetchColumn() ?: '';
+        $pdo->prepare("
+            INSERT INTO schedules (personil_id,personil_name,bagian,shift_type,shift_date,
+                start_time,end_time,location,description,tim_id,recurrence_type)
+            VALUES (?,?,?,?,?,?,?,?,?,?,'none')
+        ")->execute([
+            $newNrp, $newName, $bagianName,
+            $sched['shift_type'], $sched['shift_date'],
+            $sched['start_time'], $sched['end_time'],
+            $sched['location'], 'Cover: '.$sched['personil_name'],
+            $sched['tim_id']
+        ]);
+        $newSchedId = $pdo->lastInsertId();
+        // Absensi personil cover = hadir
+        $pdo->prepare("
+            INSERT INTO piket_absensi (schedule_id,personil_id,tim_id,tanggal,status,catatan,input_oleh)
+            VALUES (?,?,?,?,'hadir','Cover pengganti',?)
+        ")->execute([$newSchedId,$newNrp,$sched['tim_id'],$sched['shift_date'],$_SESSION['user_id']]);
+        $pdo->commit();
+        echo json_encode(['success'=>true,'message'=>'Cover berhasil disimpan']); exit;
+    }
+
     // ── GET: semua personil aktif ─────────────────────────────────────────
     if ($action === 'get_personil_all') {
         $rows = $pdo->query("
@@ -152,6 +225,37 @@ try {
         if (!$timId) throw new Exception('tim_id tidak valid');
         $pdo->prepare("UPDATE tim_piket SET fase_siklus_id=? WHERE id=?")->execute([$faseId, $timId]);
         echo json_encode(['success'=>true,'message'=>'Posisi fase diupdate']); exit;
+    }
+
+    // ── POST: rotasi fase semua tim per bagian (geser ke fase berikutnya) ────────
+    if ($action === 'rotasi_fase_semua') {
+        $bagianId = (int)($_POST['id_bagian'] ?? 0);
+        if (!$bagianId) throw new Exception('id_bagian wajib');
+        // Ambil urutan fase untuk bagian ini
+        $faseList = $pdo->prepare("SELECT id, urutan FROM siklus_piket_fase WHERE id_bagian=? ORDER BY urutan");
+        $faseList->execute([$bagianId]);
+        $fases = $faseList->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($fases)) throw new Exception('Tidak ada fase terdaftar');
+        $faseMap = array_column($fases, 'urutan', 'id');
+        $maxUrutan = max(array_values($faseMap));
+        // Ambil semua tim di bagian ini
+        $timList = $pdo->prepare("SELECT id, fase_siklus_id FROM tim_piket WHERE id_bagian=? AND is_active=1");
+        $timList->execute([$bagianId]);
+        $tims = $timList->fetchAll(PDO::FETCH_ASSOC);
+        $pdo->beginTransaction();
+        $rotated = 0;
+        foreach ($tims as $tim) {
+            $curFaseId = $tim['fase_siklus_id'];
+            $curUrutan = $curFaseId && isset($faseMap[$curFaseId]) ? $faseMap[$curFaseId] : 0;
+            $nextUrutan = $curUrutan >= $maxUrutan ? 1 : $curUrutan + 1;
+            $nextFaseId = array_search($nextUrutan, $faseMap);
+            if ($nextFaseId !== false) {
+                $pdo->prepare("UPDATE tim_piket SET fase_siklus_id=? WHERE id=?")->execute([$nextFaseId, $tim['id']]);
+                $rotated++;
+            }
+        }
+        $pdo->commit();
+        echo json_encode(['success'=>true,'rotated'=>$rotated,'message'=>$rotated.' tim dirotasi ke fase berikutnya']); exit;
     }
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

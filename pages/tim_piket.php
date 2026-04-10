@@ -167,6 +167,9 @@ include __DIR__ . '/../includes/components/header.php';
                 <small class="text-muted fw-normal ms-1 d-none d-md-inline"><?php echo htmlspecialchars($bag['nama_unsur'] ?? ''); ?></small>
             </span>
             <div class="d-flex gap-1">
+                <button class="btn btn-sm btn-outline-info py-0" onclick="rotasiFase(<?php echo $bid; ?>,'<?php echo htmlspecialchars(addslashes($bag['nama_bagian'])); ?>')" title="Rotasi semua tim ke fase berikutnya">
+                    <i class="fa-solid fa-rotate"></i> Rotasi
+                </button>
                 <button class="btn btn-sm btn-outline-secondary py-0" onclick="openSiklusModal(<?php echo $bid; ?>,'<?php echo htmlspecialchars(addslashes($bag['nama_bagian'])); ?>')">
                     <i class="fas fa-cog"></i> Siklus
                 </button>
@@ -693,6 +696,21 @@ function dropTim(e, faseId) {
 
 // ── Siklus Modal ──────────────────────────────────────────────────────────────
 let faseRows = [], siklusBid = 0;
+async function rotasiFase(bagianId, namaBagian) {
+    if (!confirm('Rotasi semua tim ' + namaBagian + ' ke fase berikutnya?\nSemua tim akan bergerak satu langkah maju dalam siklus.')) return;
+    const fd = new FormData();
+    fd.append('action', 'rotasi_fase_semua');
+    fd.append('id_bagian', bagianId);
+    try {
+        const r    = await fetch(API, { method:'POST', body:fd });
+        const data = await r.json();
+        if (data.success) {
+            alert('✅ ' + data.message);
+            location.reload();
+        } else { alert('Gagal rotasi: ' + (data.error || data.message)); }
+    } catch(e) { alert('Network error'); }
+}
+
 function openSiklusModal(bid, nama) {
     siklusBid = bid || 0;
     document.getElementById('siklusNamaBagian').textContent = nama || '—';

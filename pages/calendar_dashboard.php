@@ -977,7 +977,13 @@ function safe_json_encode($data) {
                 if (data.success) {
                     bootstrap.Modal.getInstance(document.getElementById('scheduleModal')).hide();
                     calendar.refetchEvents(); refreshLiveStats();
-                    showAlert('success', scheduleId ? 'Jadwal berhasil diupdate!' : ((data.count||1)+' jadwal berhasil disimpan!'));
+                    let msg = scheduleId ? 'Jadwal berhasil diupdate!' : ((data.count||1)+' jadwal berhasil disimpan!');
+                    if (data.conflicts && data.conflicts.length) {
+                        msg += ' ⚠️ Konflik: personil sudah memiliki jadwal di ' + data.conflicts.join(', ');
+                        showAlert('warning', msg);
+                    } else {
+                        showAlert('success', msg);
+                    }
                 } else { showAlert('danger', 'Error: ' + (data.error || data.message)); }
             } catch(e) { showAlert('danger', 'Error: ' + e); }
         }

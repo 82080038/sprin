@@ -19,6 +19,20 @@ if ($current_file !== 'login.php' && (!isset($_SESSION['logged_in']) || $_SESSIO
 
 // Get current page for active state
 $current_page = basename($_SERVER['PHP_SELF']);
+
+// Badge: jumlah personil piket hari ini
+$_piketHariIni = 0;
+try {
+    if (!isset($pdo)) {
+        $_hPdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8mb4',
+            DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+    } else {
+        $_hPdo = $pdo;
+    }
+    $_piketHariIni = (int)$_hPdo->query(
+        "SELECT COUNT(*) FROM schedules WHERE shift_date='".date('Y-m-d')."' AND tim_id IS NOT NULL"
+    )->fetchColumn();
+} catch (Exception $_e) {}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -632,25 +646,32 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             </a></li>
                             <li><a class="dropdown-item <?php echo $current_page == 'jadwal_piket.php' ? 'active' : ''; ?>" href="<?php echo url('pages/jadwal_piket.php'); ?>">
                                 <i class="fa-solid fa-calendar-week"></i> Jadwal Piket
+                                <?php if ($_piketHariIni > 0): ?>
+                                <span class="badge bg-danger ms-1"><?= $_piketHariIni ?></span>
+                                <?php endif; ?>
+                            </a></li>
+                            <li><a class="dropdown-item <?php echo $current_page == 'laporan_piket.php' ? 'active' : ''; ?>" href="<?php echo url('pages/laporan_piket.php'); ?>">
+                                <i class="fa-solid fa-clipboard-list"></i> Rekap Absensi
                             </a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['export_personil.php', 'report_api.php']) ? 'active' : ''; ?>" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle <?php echo in_array($current_page, ['export_personil.php', 'report_api.php','laporan_piket.php','laporan_operasi.php']) ? 'active' : ''; ?>" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fa-solid fa-chart-bar me-1"></i> Laporan
                         </a>
                         <ul class="dropdown-menu">
+                            <li><a class="dropdown-item <?php echo $current_page=='laporan_piket.php'?'active':''; ?>" href="<?php echo url('pages/laporan_piket.php'); ?>">
+                                <i class="fa-solid fa-clipboard-list me-1"></i> Rekap Absensi Piket
+                            </a></li>
+                            <li><a class="dropdown-item <?php echo $current_page=='laporan_operasi.php'?'active':''; ?>" href="<?php echo url('pages/laporan_operasi.php'); ?>">
+                                <i class="fa-solid fa-chart-bar me-1"></i> Laporan Operasi
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#" onclick="generatePDF()">
-                                <i class="fa-solid fa-file-pdf"></i> Export PDF
+                                <i class="fa-solid fa-file-pdf"></i> Export PDF Personil
                             </a></li>
                             <li><a class="dropdown-item" href="#" onclick="generateExcel()">
-                                <i class="fa-solid fa-file-excel"></i> Export Excel
-                            </a></li>
-                            <li><a class="dropdown-item" href="#" onclick="printReport()">
-                                <i class="fa-solid fa-print"></i> Cetak Laporan
-                            </a></li>
-                            <li><a class="dropdown-item" href="#" onclick="showStatistics()">
-                                <i class="fa-solid fa-chart-pie"></i> Statistik
+                                <i class="fa-solid fa-file-excel"></i> Export Excel Personil
                             </a></li>
                         </ul>
                     </li>

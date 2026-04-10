@@ -1,4 +1,4 @@
-# 🚀 SPRIN v1.4.1-dev — Development README
+# 🚀 SPRIN v1.5.0-dev — Development README
 **Last Updated**: 2026-04-10 | **Branch**: kantor | **Status**: Active Development
 
 ---
@@ -7,7 +7,7 @@
 
 | Item | Detail |
 |------|--------|
-| Versi | **v1.4.1-dev** |
+| Versi | **v1.5.0-dev** |
 | Branch | `kantor` |
 | PHP | 8.0+ (XAMPP) |
 | DB | MySQL 5.7+ · Nama: `bagops` |
@@ -43,17 +43,41 @@
 - Kelola anggota tim (dual-list: tersedia ↔ anggota)
 - Generate jadwal berulang dari tim (harian/mingguan/bulanan/tahunan)
 
-### 📋 Jadwal Piket (`/pages/jadwal_piket.php`) — **BARU v1.4.1**
+### 📋 Jadwal Piket (`/pages/jadwal_piket.php`) — **v1.4.1**
 - View jadwal per tim per bulan/tahun
 - Tabel per tanggal: nama, pangkat, shift, jam, lokasi
 - Input absensi (hadir/tidak_hadir/sakit/ijin/terlambat) + jam hadir
-- Hapus jadwal series per bulan
-- Cetak (print CSS)
+- **Cover Management** — ganti personil absen, catat pengganti otomatis
+- Hapus jadwal series per bulan · Cetak (print CSS)
 
-### 🏠 Dashboard Piket Hari Ini (`/pages/main.php`) — **BARU v1.4.1**
-- Widget otomatis tampil jika ada jadwal dari tim piket hari ini
-- Tabel: Satuan | Nama | Pangkat | Shift | Jam | Tim
-- Link langsung ke Jadwal Lengkap
+### 🏠 Dashboard Piket Hari Ini — **v1.4.1**
+- Widget otomatis di `main.php` — tabel personil piket hari ini
+- Badge notifikasi di navbar (jumlah piket aktif hari ini)
+
+### 📅 Kalender Jadwal — **v1.4.2**
+- Modal sumber jadwal: Personil Manual vs Tim Piket
+- Section Pengulangan: type/interval/hari/tanggal akhir + preview badge
+- `dateClick` handler — klik tanggal langsung buka modal
+- Badge 🔁 di event berulang + warna biru tua untuk event tim
+- Detail modal tampilkan info Pengulangan & Tim
+- **Deteksi konflik** — warning jika personil double-booked
+
+### 📊 Rekap Absensi (`/pages/laporan_piket.php`) — **BARU v1.5.0**
+- Filter: bulan / tahun / satuan
+- Card persentase kehadiran per satuan
+- Tabel detail per personil: hadir/sakit/ijin/terlambat/tidak_hadir/%
+- Export CSV · Print
+
+### 📈 Laporan Operasi (`/pages/laporan_operasi.php`) — **BARU v1.5.0**
+- Rekap tahunan atau per bulan
+- 6 stat cards (total, aktif, selesai, rencana, personil, dukgra)
+- Grafik donut per jenis + bar trend bulanan (Chart.js)
+- Tabel daftar semua operasi + Export CSV
+- **Cetak ST** — Surat Perintah Tugas dari data operasi (1-klik print)
+
+### 🔄 Rotasi Fase Piket — **BARU v1.5.0**
+- Tombol **Rotasi** per satuan di papan siklus
+- Geser semua tim ke fase berikutnya dalam 1 klik
 
 ---
 
@@ -65,7 +89,7 @@
 | `tim_piket` | ✅ | 15 kolom (fase, jam, durasi) |
 | `tim_piket_anggota` | ✅ | |
 | `siklus_piket_fase` | ✅ | Definisi fase per bagian |
-| `piket_absensi` | ✅ | **BARU v1.4.1** — absensi harian |
+| `piket_absensi` | ✅ | absensi harian + cover |
 | `schedules` | ✅ | + recurrence + tim_id |
 | `operations` | ✅ | + tingkat/jenis + recurrence |
 
@@ -76,34 +100,27 @@
 ```
 pages/
 ├── main.php               # Dashboard + widget piket hari ini
-├── tim_piket.php          # Papan siklus + manajemen tim
-├── jadwal_piket.php       # Jadwal per tim + absensi   ← BARU
-├── calendar_dashboard.php # Kalender FullCalendar 6.1.15
-├── operasi.php            # Daftar & manajemen operasi
+├── tim_piket.php          # Papan siklus + Rotasi Fase
+├── jadwal_piket.php       # Jadwal per tim + absensi + Cover
+├── calendar_dashboard.php # Kalender + recurrence + tim picker
+├── operasi.php            # Daftar operasi + Cetak ST
+├── laporan_piket.php      # Rekap absensi per bulan  ← BARU
+├── laporan_operasi.php    # Laporan operasi + grafik  ← BARU
 api/
-├── tim_piket_api.php      # get_piket_hari_ini, save_absensi, delete_jadwal_series ← BARU
-├── calendar_api_public.php
-cron/
-└── migrate_tim_piket.php  # Migration DB (termasuk piket_absensi)
+├── tim_piket_api.php      # get_all_tim, get_cover_candidates, save_cover, rotasi_fase_semua
+├── calendar_api_public.php# create_schedule (recurrence series), get_schedules + tim_id
 ```
 
 ---
 
-## 🔄 Selanjutnya (Fase 1 sisa)
+## ✅ SEMUA FASE SELESAI
 
-- [ ] Recurrence di modal jadwal kalender (pilih tim + pengulangan)
-- [ ] Badge 🔁 di kalender untuk event berulang
-- [ ] Recurrence di modal Tambah/Edit Operasi
-
-## 🟠 Fase 2 — Sistem Piket Lengkap
-
-- [ ] Cover Management — substitusi personil absen
-- [ ] Rekap Absensi per bulan per satuan
-
-## 🟡 Fase 3 — Laporan & Cetak
-
-- [ ] Laporan Operasi (rekap bulanan + grafik)
-- [ ] Cetak Surat Perintah Tugas (ST)
+| Fase | Status | Fitur |
+|------|--------|-------|
+| Fase 1 | ✅ | Dashboard piket, Jadwal piket, Absensi, Kalender recurrence + tim |
+| Fase 2 | ✅ | Cover Management, Rekap Absensi |
+| Fase 3 | ✅ | Laporan Operasi + grafik + CSV, Cetak ST |
+| Fase 4 | ✅ | Deteksi konflik jadwal, Badge notifikasi navbar, Rotasi fase |
 
 ---
 

@@ -93,6 +93,14 @@ try {
                 throw new Exception('personil_id, shift_type, dan shift_date wajib diisi');
             }
 
+            // Deteksi konflik: personil sudah punya jadwal di tanggal tersebut
+            $conflicts = [];
+            if ($recType === 'none' || $recType === '') {
+                $chk = $pdo->prepare("SELECT COUNT(*) FROM schedules WHERE personil_id=? AND shift_date=?");
+                $chk->execute([$personil_id, $shift_date]);
+                if ($chk->fetchColumn() > 0) $conflicts[] = $shift_date;
+            }
+
             $times      = $shiftTimes[$shift_type] ?? ['00:00:00', '23:59:00'];
             $start_time = $_POST['start_time'] ?? $times[0];
             $end_time   = $_POST['end_time']   ?? $times[1];
@@ -148,9 +156,10 @@ try {
             }
 
             echo json_encode([
-                'success' => true,
-                'count'   => count($dates),
-                'message' => count($dates) . ' jadwal berhasil disimpan'
+                'success'   => true,
+                'count'     => count($dates),
+                'message'   => count($dates) . ' jadwal berhasil disimpan',
+                'conflicts' => $conflicts
             ]);
             break;
 
