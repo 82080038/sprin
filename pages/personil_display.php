@@ -522,7 +522,7 @@ document.addEventListener('keydown', function(e) {
 }
 
 .unsur-header {
-    background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+    background: var(--gradient-primary);
     color: white;
     padding: 20px 25px;
     cursor: pointer;
@@ -533,7 +533,7 @@ document.addEventListener('keydown', function(e) {
 }
 
 .unsur-header:hover {
-    background: linear-gradient(135deg, #283593 0%, #5e35b1 100%);
+    background: linear-gradient(135deg, var(--primary-dark) 0%, #5e35b1 100%);
 }
 
 .unsur-header h2 {
@@ -560,7 +560,7 @@ document.addEventListener('keydown', function(e) {
 }
 
 .bagian-header {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: linear-gradient(135deg, var(--bg-hover) 0%, var(--border-light) 100%);
     padding: 15px 25px;
     cursor: pointer;
     display: flex;
@@ -571,7 +571,7 @@ document.addEventListener('keydown', function(e) {
 }
 
 .bagian-header:hover {
-    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    background: linear-gradient(135deg, var(--border-light) 0%, var(--border-color) 100%);
 }
 
 .bagian-header h3 {
@@ -611,7 +611,7 @@ document.addEventListener('keydown', function(e) {
 }
 
 .btn-refresh {
-    background: linear-gradient(135deg, #1a237e, #3949ab);
+    background: var(--gradient-primary);
     color: white;
     border: none;
     padding: 15px 30px;
@@ -625,7 +625,7 @@ document.addEventListener('keydown', function(e) {
 }
 
 .btn-refresh:hover {
-    background: linear-gradient(135deg, #283593, #5e35b1);
+    background: linear-gradient(135deg, var(--primary-dark), #5e35b1);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }

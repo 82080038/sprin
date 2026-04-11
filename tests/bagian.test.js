@@ -12,6 +12,7 @@ describe('Bagian CRUD Operations', () => {
     beforeAll(async () => {
         browser = await puppeteer.launch({
             headless: 'new',
+            executablePath: '/usr/bin/google-chrome',
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
         page = await browser.newPage();

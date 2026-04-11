@@ -8,6 +8,8 @@ if (!AuthHelper::validateSession()) {
     exit;
 }
 
+AuthHelper::requireRole('admin', 'operator');
+
 $page_title = 'LHPT — Laporan Hasil Pelaksanaan Tugas';
 include __DIR__ . '/../includes/components/header.php';
 ?>

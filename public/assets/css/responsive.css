@@ -1,26 +1,19 @@
 /**
- * Mobile-First Responsive Design System for SPRIN
- * Comprehensive CSS for all screen sizes
+ * Mobile-First Responsive Design System for SPRIN (Development Mode)
+ * Focus on functionality, minimal styling
  */
 
 /* Mobile-First Base Styles */
 :root {
     --primary-color: #1a237e;
-    --secondary-color: #3949ab;
-    --accent-color: #ffd700;
     --text-color: #333;
     --bg-color: #f5f5f5;
     --card-bg: #ffffff;
     --border-color: #dee2e6;
-    --table-hover: #f8f9fa;
     --success-color: #28a745;
     --danger-color: #dc3545;
     --info-color: #007bff;
     --warning-color: #ffc107;
-    --border-radius: 12px;
-    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
-    --shadow-lg: 0 8px 24px rgba(0,0,0,0.2);
 }
 
 * {
@@ -75,19 +68,18 @@ h1 {
 /* Consistent Card and Table Styling */
 .card, .feature-card, .personil-table {
     background: var(--card-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
 }
 
 .table {
     background: var(--card-bg);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
 }
 
 .table th {
-    background: var(--table-hover);
+    background: #f8f9fa;
     color: var(--text-color);
     font-weight: 600;
     border-bottom: 2px solid var(--border-color);
@@ -97,17 +89,13 @@ h1 {
     border-bottom: 1px solid var(--border-color);
 }
 
-.table tr:hover {
-    background: var(--table-hover);
-}
-
 /* Consistent Section Styling */
 .section {
     background: var(--card-bg);
-    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     padding: 20px;
     margin: 20px 0;
-    box-shadow: var(--shadow-sm);
 }
 
 .section-header {
@@ -128,9 +116,9 @@ h1 {
     text-align: center;
     padding: 20px;
     background: var(--card-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
     border-left: 4px solid var(--primary-color);
+    border-radius: 8px;
 }
 
 .stat-card .number {
@@ -160,7 +148,7 @@ h2, h3, h4, h5, h6 {
 }
 
 .text-muted {
-    color: #6c757d !important;
+    color: #6c757d;
 }
 
 .btn-primary {
@@ -191,15 +179,15 @@ h2, h3, h4, h5, h6 {
 
 /* Form Styling */
 .form-control {
-    border: 2px solid var(--border-color);
-    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     background: var(--card-bg);
     color: var(--text-color);
 }
 
 .form-control:focus {
     border-color: var(--info-color);
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
 }
 
 .form-label {
@@ -209,8 +197,8 @@ h2, h3, h4, h5, h6 {
 
 /* Alert Styling */
 .alert {
-    border-radius: var(--border-radius);
-    border: none;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
 }
 
 .alert-success {
@@ -234,7 +222,6 @@ h2, h3, h4, h5, h6 {
 }
 
 /* Mobile Navigation */
-
 .navbar-toggler {
     padding: 6px 10px;
     font-size: 18px;
@@ -244,16 +231,15 @@ h2, h3, h4, h5, h6 {
 }
 
 .navbar-nav .nav-link {
-    padding: 10px 12px !important;
+    padding: 10px 12px;
     font-size: 14px;
 }
 
 .dropdown-menu {
-    position: static !important;
+    position: static;
     width: 100%;
     margin-top: 0;
     border: none;
-    box-shadow: none;
     background: rgba(255,255,255,0.1);
 }
 
@@ -264,9 +250,8 @@ h2, h3, h4, h5, h6 {
 
 /* Mobile Cards */
 .card, .feature-card, .stat-card {
-    border-radius: var(--border-radius);
+    border-radius: 8px;
     margin-bottom: 16px;
-    box-shadow: var(--shadow-sm);
 }
 
 .feature-card {
@@ -331,7 +316,7 @@ h2, h3, h4, h5, h6 {
 
 /* Mobile Forms */
 .form-control {
-    font-size: 16px; /* Prevent zoom on iOS */
+    font-size: 16px;
     padding: 12px;
     border-radius: 8px;
 }
@@ -351,50 +336,46 @@ h2, h3, h4, h5, h6 {
     padding: 12px 15px;
 }
 
-/* Mobile Modals - Override untuk konsistensi */
+/* Mobile Modals */
 .modal-dialog {
     margin: 10px;
     max-width: calc(100% - 20px);
 }
 
-/* Override untuk modal-sm */
 .modal-dialog.modal-sm {
-    max-width: 300px !important;
-    margin: 1.75rem auto !important;
+    max-width: 300px;
+    margin: 1.75rem auto;
 }
 
-/* Override untuk modal-md */
 .modal-dialog.modal-md {
-    max-width: 500px !important;
-    margin: 1.75rem auto !important;
+    max-width: 500px;
+    margin: 1.75rem auto;
 }
 
-/* Override untuk modal-lg */
 .modal-dialog.modal-lg {
-    max-width: 800px !important;
-    margin: 1.75rem auto !important;
+    max-width: 800px;
+    margin: 1.75rem auto;
 }
 
-/* Responsive untuk modal-sm */
 @media (max-width: 576px) {
     .modal-dialog.modal-sm {
-        max-width: 280px !important;
-        margin: 0.5rem auto !important;
+        max-width: 280px;
+        margin: 0.5rem auto;
     }
     
     .modal-dialog.modal-md {
-        max-width: 450px !important;
-        margin: 0.5rem auto !important;
+        max-width: 450px;
+        margin: 0.5rem auto;
     }
     
     .modal-dialog.modal-lg {
-        max-width: 95% !important;
-        margin: 0.5rem auto !important;
+        max-width: 95%;
+        margin: 0.5rem auto;
     }
 }
 
 .modal-content {
-    border-radius: var(--border-radius);
+    border-radius: 8px;
 }
 
 /* Mobile Hero Section */
@@ -437,25 +418,6 @@ h2, h3, h4, h5, h6 {
 .col, [class*="col-"] {
     padding-left: 6px;
     padding-right: 6px;
-}
-
-/* Mobile Touch Targets */
-.btn, .nav-link, .dropdown-item {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-}
-
-/* Mobile Loading States */
-.loading-skeleton {
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
 }
 
 /* Tablet (576px - 991px) */
@@ -511,10 +473,10 @@ h2, h3, h4, h5, h6 {
     }
     
     .dropdown-menu {
-        position: absolute !important;
+        position: absolute;
         width: auto;
         background: white;
-        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
     }
     
     .dropdown-item {
@@ -595,43 +557,7 @@ h2, h3, h4, h5, h6 {
     }
     
     .card, .feature-card {
-        box-shadow: none;
         border: 1px solid #ddd;
         break-inside: avoid;
-    }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-color: #1a1a1a;
-        --card-bg: #2d2d2d;
-        --text-color: #e0e0e0;
-    }
-    
-    body {
-        background: var(--bg-color);
-        color: var(--text-color);
-    }
-    
-    .card, .feature-card, .stat-card {
-        background: var(--card-bg);
-        color: var(--text-color);
-    }
-}
-
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* High Contrast Mode */
-@media (prefers-contrast: high) {
-    .btn, .nav-link, .dropdown-item {
-        border: 2px solid currentColor;
     }
 }

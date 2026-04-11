@@ -1,12 +1,22 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
 require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/CSRFHelper.php';
+require_once __DIR__ . '/../core/ActivityLog.php';
 header('Content-Type: application/json; charset=utf-8');
 
 // Auth check
 if (empty($_SESSION['user_id'])) {
     echo json_encode(['success'=>false,'error'=>'Unauthorized']); exit;
 }
+
+// CSRF protection for POST (skip read-only GET actions)
+$readOnlyActions = [
+    'get_all_tim','get_piket_hari_ini','get_personil_all','get_anggota',
+    'get_siklus','dashboard_hari_ini','statistik_personil','calendar_data',
+    'fatigue_check','get_rotasi_log','cetak_sprin_data','get_notifikasi_piket'
+];
+CSRFHelper::applyProtection($readOnlyActions);
 
 try {
     $pdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8mb4',
@@ -21,8 +31,9 @@ try {
         $uph = implode(',', array_fill(0, count($PIKET_UNSUR), '?'));
         $eph = implode(',', array_fill(0, count($PIKET_EXTRA), '?'));
         $stmt = $pdo->prepare("
-            SELECT t.id, t.nama_tim, t.shift_default, b.nama_bagian,
-                   COUNT(a.id) AS jml_anggota
+            SELECT t.id, t.nama_tim, t.jenis, t.shift_default, t.id_bagian, t.id_unsur,
+                   t.fase_siklus_id, t.jam_mulai_aktif, t.durasi_jam, t.keterangan, t.is_active,
+                   b.nama_bagian, COUNT(a.id) AS jml_anggota
             FROM tim_piket t
             LEFT JOIN bagian b ON b.id = t.id_bagian
             LEFT JOIN tim_piket_anggota a ON a.tim_id = t.id
@@ -56,11 +67,27 @@ try {
     }
 
     if ($action === 'get_siklus') {
-        $bagianId = (int)($_GET['id_bagian'] ?? 0);
-        if (!$bagianId) { echo json_encode(['success'=>true,'data'=>[]]); exit; }
-        $stmt = $pdo->prepare("SELECT * FROM siklus_piket_fase WHERE id_bagian=? ORDER BY urutan");
-        $stmt->execute([$bagianId]);
-        echo json_encode(['success'=>true,'data'=>$stmt->fetchAll(PDO::FETCH_ASSOC)]); exit;
+        $bagianId = $_GET['id_bagian'] ?? '';
+        $isUmum    = isset($_GET['is_umum']) && $_GET['is_umum'] === '1';
+        
+        if ($isUmum) {
+            // Ambil siklus umum
+            $stmt = $pdo->prepare("SELECT * FROM siklus_piket_fase WHERE id_bagian IS NULL ORDER BY urutan");
+            $stmt->execute();
+            echo json_encode(['success'=>true,'data'=>$stmt->fetchAll(PDO::FETCH_ASSOC)]); exit;
+        } elseif ($bagianId === 'umum') {
+            // Ambil siklus umum (via string 'umum')
+            $stmt = $pdo->prepare("SELECT * FROM siklus_piket_fase WHERE id_bagian IS NULL ORDER BY urutan");
+            $stmt->execute();
+            echo json_encode(['success'=>true,'data'=>$stmt->fetchAll(PDO::FETCH_ASSOC)]); exit;
+        } else {
+            // Ambil siklus khusus per bagian
+            $bagianId = (int)$bagianId;
+            if (!$bagianId) { echo json_encode(['success'=>true,'data'=>[]]); exit; }
+            $stmt = $pdo->prepare("SELECT * FROM siklus_piket_fase WHERE id_bagian=? ORDER BY urutan");
+            $stmt->execute([$bagianId]);
+            echo json_encode(['success'=>true,'data'=>$stmt->fetchAll(PDO::FETCH_ASSOC)]); exit;
+        }
     }
 
     // ── GET: kandidat cover (personil satuan sama, tidak bertugas hari itu) ─────
@@ -172,21 +199,42 @@ try {
 
     // ─── SAVE SIKLUS (upsert semua fase per bagian) ───────────────────────
     if ($action === 'save_siklus') {
-        $bagianId  = (int)($_POST['id_bagian'] ?? 0);
+        $bagianId  = $_POST['id_bagian'] ?? '';
+        $isUmum    = isset($_POST['is_umum']) && $_POST['is_umum'] === '1';
         $fasesJson = $_POST['fases'] ?? '[]';
-        if (!$bagianId) throw new Exception('id_bagian tidak valid');
+        
+        // Jika siklus umum, id_bagian = NULL
+        if ($isUmum) {
+            $bagianId = null;
+        } else {
+            $bagianId = (int)$bagianId;
+            if (!$bagianId) throw new Exception('id_bagian tidak valid untuk siklus khusus');
+        }
+        
         $fases = json_decode($fasesJson, true);
         if (!is_array($fases) || !count($fases)) throw new Exception('Minimal 1 fase harus ada');
 
         $pdo->beginTransaction();
         // Hapus fase lama yang tidak ada di list baru
         $existingIds = array_filter(array_column($fases, 'id'));
-        if ($existingIds) {
-            $ph = implode(',', array_fill(0, count($existingIds), '?'));
-            $pdo->prepare("DELETE FROM siklus_piket_fase WHERE id_bagian=? AND id NOT IN ($ph)")
-                ->execute(array_merge([$bagianId], $existingIds));
+        if ($bagianId === null) {
+            // Siklus umum
+            if ($existingIds) {
+                $ph = implode(',', array_fill(0, count($existingIds), '?'));
+                $pdo->prepare("DELETE FROM siklus_piket_fase WHERE id_bagian IS NULL AND id NOT IN ($ph)")
+                    ->execute($existingIds);
+            } else {
+                $pdo->prepare("DELETE FROM siklus_piket_fase WHERE id_bagian IS NULL")->execute();
+            }
         } else {
-            $pdo->prepare("DELETE FROM siklus_piket_fase WHERE id_bagian=?")->execute([$bagianId]);
+            // Siklus khusus per bagian
+            if ($existingIds) {
+                $ph = implode(',', array_fill(0, count($existingIds), '?'));
+                $pdo->prepare("DELETE FROM siklus_piket_fase WHERE id_bagian=? AND id NOT IN ($ph)")
+                    ->execute(array_merge([$bagianId], $existingIds));
+            } else {
+                $pdo->prepare("DELETE FROM siklus_piket_fase WHERE id_bagian=?")->execute([$bagianId]);
+            }
         }
 
         $upsert = $pdo->prepare("
@@ -215,7 +263,39 @@ try {
             ]);
         }
         $pdo->commit();
-        echo json_encode(['success'=>true,'message'=>count($fases).' fase disimpan']); exit;
+        $msg = $isUmum ? 'Siklus umum ('.count($fases).' fase) disimpan' : count($fases).' fase disimpan';
+        echo json_encode(['success'=>true,'message'=>$msg]); exit;
+    }
+
+    // ─── DELETE SIKLUS BAGIAN (hapus semua fase per bagian) ───────────────
+    if ($action === 'delete_siklus_bagian') {
+        $bagianId = (int)($_POST['id_bagian'] ?? 0);
+        if (!$bagianId) throw new Exception('id_bagian tidak valid');
+        
+        $pdo->beginTransaction();
+        // Reset fase_siklus_id pada tim di bagian ini
+        $pdo->prepare("UPDATE tim_piket SET fase_siklus_id=NULL WHERE id_bagian=?")->execute([$bagianId]);
+        // Hapus semua fase untuk bagian ini
+        $pdo->prepare("DELETE FROM siklus_piket_fase WHERE id_bagian=?")->execute([$bagianId]);
+        $pdo->commit();
+        echo json_encode(['success'=>true,'message'=>'Siklus berhasil dihapus']); exit;
+    }
+
+    // ─── DELETE FASES (hapus fase-fase tertentu) ─────────────────────────
+    if ($action === 'delete_fases') {
+        $faseIdsJson = $_POST['fase_ids'] ?? '[]';
+        $faseIds = json_decode($faseIdsJson, true);
+        if (!is_array($faseIds) || !count($faseIds)) throw new Exception('fase_ids tidak valid');
+        
+        $pdo->beginTransaction();
+        // Reset fase_siklus_id pada tim yang berada di fase yang dihapus
+        $ph = implode(',', array_fill(0, count($faseIds), '?'));
+        $pdo->prepare("UPDATE tim_piket SET fase_siklus_id=NULL WHERE fase_siklus_id IN ($ph)")
+            ->execute($faseIds);
+        // Hapus fase-fase yang dipilih
+        $pdo->prepare("DELETE FROM siklus_piket_fase WHERE id IN ($ph)")->execute($faseIds);
+        $pdo->commit();
+        echo json_encode(['success'=>true,'message'=>count($faseIds).' fase berhasil dihapus']); exit;
     }
 
     // ─── GESER FASE (pindahkan tim ke fase lain) ──────────────────────────
@@ -244,6 +324,8 @@ try {
         $tims = $timList->fetchAll(PDO::FETCH_ASSOC);
         $pdo->beginTransaction();
         $rotated = 0;
+        $timIds = [];
+        $dariFase = null; $keFase = null;
         foreach ($tims as $tim) {
             $curFaseId = $tim['fase_siklus_id'];
             $curUrutan = $curFaseId && isset($faseMap[$curFaseId]) ? $faseMap[$curFaseId] : 0;
@@ -252,10 +334,225 @@ try {
             if ($nextFaseId !== false) {
                 $pdo->prepare("UPDATE tim_piket SET fase_siklus_id=? WHERE id=?")->execute([$nextFaseId, $tim['id']]);
                 $rotated++;
+                $timIds[] = $tim['id'];
+                if ($dariFase === null) { $dariFase = $curFaseId; $keFase = $nextFaseId; }
             }
         }
+        // Log rotasi
+        $pdo->prepare("INSERT INTO rotasi_log (id_bagian, dari_fase_id, ke_fase_id, tim_ids, jumlah_tim, tipe, oleh) VALUES (?,?,?,?,?,?,?)")
+            ->execute([$bagianId, $dariFase, $keFase, json_encode($timIds), $rotated, 'manual', $_SESSION['user_id'] ?? null]);
+        // Notifikasi in-app
+        $pdo->prepare("INSERT INTO notifikasi_piket (tipe, judul, pesan) VALUES (?,?,?)")
+            ->execute(['rotasi', 'Rotasi Manual', $rotated.' tim dirotasi ke fase berikutnya']);
         $pdo->commit();
         echo json_encode(['success'=>true,'rotated'=>$rotated,'message'=>$rotated.' tim dirotasi ke fase berikutnya']); exit;
+    }
+
+    // ─── DASHBOARD PIKET HARI INI (ringkasan lengkap) ──────────────────
+    if ($action === 'dashboard_hari_ini') {
+        $today = date('Y-m-d');
+        $stmt = $pdo->prepare("
+            SELECT s.id, s.personil_id, s.personil_name, s.shift_type,
+                   s.start_time, s.end_time, s.location, s.status,
+                   t.nama_tim, t.id AS tim_id, b.nama_bagian,
+                   pk.nama_pangkat,
+                   pa.status AS absensi_status, pa.jam_hadir
+            FROM schedules s
+            JOIN tim_piket t ON t.id = s.tim_id
+            LEFT JOIN bagian b ON b.id = t.id_bagian
+            LEFT JOIN personil p ON p.nrp = s.personil_id
+            LEFT JOIN pangkat pk ON pk.id = p.id_pangkat
+            LEFT JOIN piket_absensi pa ON pa.schedule_id = s.id AND pa.personil_id = s.personil_id
+            WHERE s.shift_date = ? AND s.tim_id IS NOT NULL
+            ORDER BY b.urutan, s.start_time, s.personil_name
+        ");
+        $stmt->execute([$today]);
+        $jadwal = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $totalJadwal = count($jadwal);
+        $hadir = count(array_filter($jadwal, fn($j) => ($j['absensi_status'] ?? '') === 'hadir'));
+        $belumCheckin = $totalJadwal - $hadir;
+        $tidakHadir = count(array_filter($jadwal, fn($j) => in_array($j['absensi_status'] ?? '', ['tidak_hadir','sakit','ijin'])));
+        echo json_encode([
+            'success' => true,
+            'tanggal' => $today,
+            'jadwal'  => $jadwal,
+            'stats'   => [
+                'total_jadwal'  => $totalJadwal,
+                'hadir'         => $hadir,
+                'belum_checkin' => $belumCheckin - $tidakHadir,
+                'tidak_hadir'   => $tidakHadir,
+            ]
+        ]); exit;
+    }
+
+    // ─── STATISTIK PERSONIL (jam piket per orang) ────────────────────────
+    if ($action === 'statistik_personil') {
+        $bulan = (int)($_GET['bulan'] ?? date('m'));
+        $tahun = (int)($_GET['tahun'] ?? date('Y'));
+        $startDate = sprintf('%04d-%02d-01', $tahun, $bulan);
+        $endDate   = date('Y-m-t', strtotime($startDate));
+        $stmt = $pdo->prepare("
+            SELECT s.personil_id, s.personil_name, b.nama_bagian,
+                   COUNT(*) AS jumlah_jadwal,
+                   SUM(TIMESTAMPDIFF(HOUR, s.start_time, 
+                       CASE WHEN s.end_time < s.start_time 
+                            THEN ADDTIME(s.end_time, '24:00:00') 
+                            ELSE s.end_time END
+                   )) AS total_jam,
+                   SUM(CASE WHEN pa.status='hadir' THEN 1 ELSE 0 END) AS hadir,
+                   SUM(CASE WHEN pa.status IN ('tidak_hadir','sakit','ijin') THEN 1 ELSE 0 END) AS absen
+            FROM schedules s
+            LEFT JOIN tim_piket t ON t.id = s.tim_id
+            LEFT JOIN bagian b ON b.id = t.id_bagian
+            LEFT JOIN piket_absensi pa ON pa.schedule_id = s.id AND pa.personil_id = s.personil_id
+            WHERE s.shift_date BETWEEN ? AND ? AND s.tim_id IS NOT NULL
+            GROUP BY s.personil_id, s.personil_name, b.nama_bagian
+            ORDER BY total_jam DESC
+        ");
+        $stmt->execute([$startDate, $endDate]);
+        echo json_encode(['success'=>true,'data'=>$stmt->fetchAll(PDO::FETCH_ASSOC),'bulan'=>$bulan,'tahun'=>$tahun]); exit;
+    }
+
+    // ─── CALENDAR DATA (jadwal per bulan) ────────────────────────────────
+    if ($action === 'calendar_data') {
+        $bulan = (int)($_GET['bulan'] ?? date('m'));
+        $tahun = (int)($_GET['tahun'] ?? date('Y'));
+        $startDate = sprintf('%04d-%02d-01', $tahun, $bulan);
+        $endDate   = date('Y-m-t', strtotime($startDate));
+        $stmt = $pdo->prepare("
+            SELECT s.shift_date, s.shift_type, s.personil_name, s.start_time, s.end_time,
+                   t.nama_tim, b.nama_bagian
+            FROM schedules s
+            LEFT JOIN tim_piket t ON t.id = s.tim_id
+            LEFT JOIN bagian b ON b.id = t.id_bagian
+            WHERE s.shift_date BETWEEN ? AND ? AND s.tim_id IS NOT NULL
+            ORDER BY s.shift_date, s.start_time
+        ");
+        $stmt->execute([$startDate, $endDate]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $calendar = [];
+        foreach ($rows as $r) {
+            $calendar[$r['shift_date']][] = $r;
+        }
+        echo json_encode(['success'=>true,'data'=>$calendar,'bulan'=>$bulan,'tahun'=>$tahun]); exit;
+    }
+
+    // ─── FATIGUE CHECK (cek jeda istirahat personil) ─────────────────────
+    if ($action === 'fatigue_check') {
+        $personilId = trim($_GET['personil_id'] ?? '');
+        $tanggal    = trim($_GET['tanggal'] ?? date('Y-m-d'));
+        $minJeda    = (float)($_GET['min_jeda_jam'] ?? 12);
+        if (!$personilId) throw new Exception('personil_id wajib');
+        $stmt = $pdo->prepare("
+            SELECT shift_date, start_time, end_time, shift_type
+            FROM schedules 
+            WHERE personil_id=? AND shift_date BETWEEN DATE_SUB(?,INTERVAL 1 DAY) AND DATE_ADD(?,INTERVAL 1 DAY)
+            ORDER BY shift_date, start_time
+        ");
+        $stmt->execute([$personilId, $tanggal, $tanggal]);
+        $jadwals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $warnings = [];
+        for ($i = 1; $i < count($jadwals); $i++) {
+            $prev = $jadwals[$i-1];
+            $curr = $jadwals[$i];
+            $prevEnd   = new DateTime($prev['shift_date'].' '.$prev['end_time']);
+            $currStart = new DateTime($curr['shift_date'].' '.$curr['start_time']);
+            if ($prev['end_time'] < $prev['start_time']) $prevEnd->modify('+1 day');
+            $diffHours = ($currStart->getTimestamp() - $prevEnd->getTimestamp()) / 3600;
+            if ($diffHours < $minJeda && $diffHours >= 0) {
+                $warnings[] = [
+                    'tanggal'   => $curr['shift_date'],
+                    'jeda_jam'  => round($diffHours, 1),
+                    'min_jeda'  => $minJeda,
+                    'shift_1'   => $prev['shift_type'].' ('.$prev['shift_date'].')',
+                    'shift_2'   => $curr['shift_type'].' ('.$curr['shift_date'].')',
+                    'pesan'     => 'Jeda istirahat hanya '.round($diffHours,1).' jam (minimal '.$minJeda.' jam)'
+                ];
+            }
+        }
+        echo json_encode(['success'=>true,'warnings'=>$warnings,'total_jadwal'=>count($jadwals)]); exit;
+    }
+
+    // ─── GET ROTASI LOG ──────────────────────────────────────────────────
+    if ($action === 'get_rotasi_log') {
+        $bagianId = (int)($_GET['id_bagian'] ?? 0);
+        $limit    = min(50, max(1, (int)($_GET['limit'] ?? 20)));
+        $where = $bagianId ? "WHERE r.id_bagian=?" : "";
+        $params = $bagianId ? [$bagianId] : [];
+        $stmt = $pdo->prepare("
+            SELECT r.*, b.nama_bagian,
+                   f1.nama_fase AS dari_fase, f2.nama_fase AS ke_fase,
+                   u.username AS oleh_nama
+            FROM rotasi_log r
+            LEFT JOIN bagian b ON b.id = r.id_bagian
+            LEFT JOIN siklus_piket_fase f1 ON f1.id = r.dari_fase_id
+            LEFT JOIN siklus_piket_fase f2 ON f2.id = r.ke_fase_id
+            LEFT JOIN users u ON u.id = r.oleh
+            $where
+            ORDER BY r.created_at DESC LIMIT $limit
+        ");
+        $stmt->execute($params);
+        echo json_encode(['success'=>true,'data'=>$stmt->fetchAll(PDO::FETCH_ASSOC)]); exit;
+    }
+
+    // ─── CETAK SPRIN DATA ────────────────────────────────────────────────
+    if ($action === 'cetak_sprin_data') {
+        $bagianId = (int)($_GET['id_bagian'] ?? 0);
+        $tanggal  = trim($_GET['tanggal'] ?? date('Y-m-d'));
+        if (!$bagianId) throw new Exception('id_bagian wajib');
+        $bagian = $pdo->prepare("SELECT b.*, u.nama_unsur FROM bagian b LEFT JOIN unsur u ON u.id=b.id_unsur WHERE b.id=?");
+        $bagian->execute([$bagianId]); $bagianInfo = $bagian->fetch(PDO::FETCH_ASSOC);
+        $stmt = $pdo->prepare("
+            SELECT t.id, t.nama_tim, t.jenis, f.nama_fase, f.jam_mulai_default, f.durasi_jam,
+                   a.personil_id, a.peran, a.urutan,
+                   p.nama AS personil_nama, pk.nama_pangkat, j.nama_jabatan
+            FROM tim_piket t
+            LEFT JOIN siklus_piket_fase f ON f.id = t.fase_siklus_id
+            LEFT JOIN tim_piket_anggota a ON a.tim_id = t.id
+            LEFT JOIN personil p ON p.nrp = a.personil_id
+            LEFT JOIN pangkat pk ON pk.id = p.id_pangkat
+            LEFT JOIN jabatan j ON j.id = p.id_jabatan
+            WHERE t.id_bagian=? AND t.is_active=1
+            ORDER BY t.nama_tim, a.urutan
+        ");
+        $stmt->execute([$bagianId]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $tims = [];
+        foreach ($rows as $r) {
+            $tid = $r['id'];
+            if (!isset($tims[$tid])) {
+                $tims[$tid] = [
+                    'nama_tim'   => $r['nama_tim'],
+                    'jenis'      => $r['jenis'],
+                    'nama_fase'  => $r['nama_fase'],
+                    'jam_mulai'  => $r['jam_mulai_default'],
+                    'durasi_jam' => $r['durasi_jam'],
+                    'anggota'    => []
+                ];
+            }
+            if ($r['personil_id']) {
+                $tims[$tid]['anggota'][] = [
+                    'nrp'     => $r['personil_id'],
+                    'nama'    => $r['personil_nama'],
+                    'pangkat' => $r['nama_pangkat'],
+                    'jabatan' => $r['nama_jabatan'],
+                    'peran'   => $r['peran'],
+                ];
+            }
+        }
+        echo json_encode([
+            'success' => true,
+            'bagian'  => $bagianInfo,
+            'tanggal' => $tanggal,
+            'tims'    => array_values($tims)
+        ]); exit;
+    }
+
+    // ─── GET NOTIFIKASI PIKET (unread) ─────────────────────────────────
+    if ($action === 'get_notifikasi_piket') {
+        $stmt = $pdo->prepare("SELECT * FROM notifikasi_piket WHERE is_read=0 ORDER BY created_at DESC LIMIT 20");
+        $stmt->execute();
+        echo json_encode(['success'=>true,'data'=>$stmt->fetchAll(PDO::FETCH_ASSOC)]); exit;
     }
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -288,7 +585,9 @@ try {
         $durasi  = is_numeric($_POST['durasi_jam'] ?? '') ? (float)$_POST['durasi_jam'] : null;
         $stmt = $pdo->prepare("INSERT INTO tim_piket (nama_tim,id_bagian,id_unsur,jenis,shift_default,pola_rotasi,keterangan,is_active,fase_siklus_id,jam_mulai_aktif,durasi_jam) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
         $stmt->execute([$nama,$bagian,$unsur,$jenis,$shift,$rotasi,$ket,$aktif,$faseId,$jamMul,$durasi]);
-        echo json_encode(['success'=>true,'id'=>$pdo->lastInsertId(),'message'=>'Tim berhasil dibuat']); exit;
+        $newId = $pdo->lastInsertId();
+        ActivityLog::logCreate('tim_piket', $newId, "Created tim: $nama (jenis: $jenis)");
+        echo json_encode(['success'=>true,'id'=>$newId,'message'=>'Tim berhasil dibuat']); exit;
     }
 
     // ─── UPDATE TIM ───────────────────────────────────────────────────────
@@ -308,6 +607,7 @@ try {
         $durasi  = is_numeric($_POST['durasi_jam'] ?? '') ? (float)$_POST['durasi_jam'] : null;
         $stmt = $pdo->prepare("UPDATE tim_piket SET nama_tim=?,id_bagian=?,id_unsur=?,jenis=?,shift_default=?,pola_rotasi=?,keterangan=?,is_active=?,fase_siklus_id=?,jam_mulai_aktif=?,durasi_jam=? WHERE id=?");
         $stmt->execute([$nama,$bagian,$unsur,$jenis,$shift,$rotasi,$ket,$aktif,$faseId,$jamMul,$durasi,$id]);
+        ActivityLog::logUpdate('tim_piket', $id, "Updated tim: $nama (jenis: $jenis)");
         echo json_encode(['success'=>true,'message'=>'Tim berhasil diupdate']); exit;
     }
 
@@ -315,8 +615,14 @@ try {
     if ($action === 'delete_tim') {
         $id = (int)($_POST['id'] ?? 0);
         if (!$id) throw new Exception('ID tidak valid');
+        // Get tim name before deletion for logging
+        $stmt = $pdo->prepare("SELECT nama_tim FROM tim_piket WHERE id=?");
+        $stmt->execute([$id]);
+        $tim = $stmt->fetch(PDO::FETCH_ASSOC);
+        $timName = $tim ? $tim['nama_tim'] : 'Unknown';
         $pdo->prepare("DELETE FROM tim_piket_anggota WHERE tim_id=?")->execute([$id]);
         $pdo->prepare("DELETE FROM tim_piket WHERE id=?")->execute([$id]);
+        ActivityLog::logDelete('tim_piket', $id, "Deleted tim: $timName");
         echo json_encode(['success'=>true,'message'=>'Tim berhasil dihapus']); exit;
     }
 
@@ -492,6 +798,55 @@ try {
         $count = $stmt->rowCount();
         $pdo->commit();
         echo json_encode(['success'=>true,'count'=>$count,'message'=>$count.' jadwal dihapus']); exit;
+    }
+
+    // ─── SWAP SHIFT (ajukan tukar jadwal antar 2 personil) ───────────────
+    if ($action === 'swap_shift') {
+        $schedId1 = (int)($_POST['schedule_id_1'] ?? 0);
+        $schedId2 = (int)($_POST['schedule_id_2'] ?? 0);
+        if (!$schedId1 || !$schedId2) throw new Exception('Dua schedule_id diperlukan');
+
+        $pdo->beginTransaction();
+        // Ambil data kedua jadwal
+        $s1 = $pdo->prepare("SELECT * FROM schedules WHERE id=?"); $s1->execute([$schedId1]); $sched1 = $s1->fetch(PDO::FETCH_ASSOC);
+        $s2 = $pdo->prepare("SELECT * FROM schedules WHERE id=?"); $s2->execute([$schedId2]); $sched2 = $s2->fetch(PDO::FETCH_ASSOC);
+        if (!$sched1 || !$sched2) throw new Exception('Jadwal tidak ditemukan');
+
+        // Tukar personil
+        $pdo->prepare("UPDATE schedules SET personil_id=?, personil_name=?, swap_with_schedule_id=?, swap_status='approved' WHERE id=?")
+            ->execute([$sched2['personil_id'], $sched2['personil_name'], $schedId2, $schedId1]);
+        $pdo->prepare("UPDATE schedules SET personil_id=?, personil_name=?, swap_with_schedule_id=?, swap_status='approved' WHERE id=?")
+            ->execute([$sched1['personil_id'], $sched1['personil_name'], $schedId1, $schedId2]);
+        $pdo->commit();
+        echo json_encode(['success'=>true,'message'=>'Swap berhasil: '.$sched1['personil_name'].' ↔ '.$sched2['personil_name']]); exit;
+    }
+
+    // ─── SAVE ANGGOTA DENGAN PERAN ──────────────────────────────────────
+    if ($action === 'save_anggota_peran') {
+        $timId = (int)($_POST['tim_id'] ?? 0);
+        if (!$timId) throw new Exception('tim_id tidak valid');
+        $anggotaJson = $_POST['anggota'] ?? '[]';
+        $anggota = json_decode($anggotaJson, true);
+        if (!is_array($anggota)) throw new Exception('Format anggota tidak valid');
+
+        $pdo->beginTransaction();
+        $pdo->prepare("DELETE FROM tim_piket_anggota WHERE tim_id=?")->execute([$timId]);
+        $ins = $pdo->prepare("INSERT INTO tim_piket_anggota (tim_id,personil_id,peran,urutan) VALUES (?,?,?,?)");
+        foreach ($anggota as $i => $a) {
+            $peran = in_array($a['peran'] ?? '', ['ketua','wakil','anggota']) ? $a['peran'] : 'anggota';
+            $ins->execute([$timId, $a['personil_id'], $peran, $i+1]);
+        }
+        $pdo->commit();
+        echo json_encode(['success'=>true,'count'=>count($anggota),'message'=>count($anggota).' anggota disimpan']); exit;
+    }
+
+    // ─── MARK NOTIFIKASI AS READ ──────────────────────────────────────
+    if ($action === 'read_notifikasi') {
+        $id = (int)($_POST['id'] ?? 0);
+        if ($id) {
+            $pdo->prepare("UPDATE notifikasi_piket SET is_read=1 WHERE id=?")->execute([$id]);
+        }
+        echo json_encode(['success'=>true]); exit;
     }
 
     throw new Exception('Action tidak dikenal: '.$action);

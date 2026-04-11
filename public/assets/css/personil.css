@@ -1,4 +1,5 @@
-/* Enhanced Personil Page Styling */
+/* Personil Page Styling (Development Mode) */
+/* Focus on functionality, minimal styling */
 
 /* Main Container */
 .personil-container {
@@ -9,26 +10,23 @@
 
 /* Header Section */
 .personil-header {
-    background: linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #ffd700 100%);
+    background: #1a237e;
     color: white;
-    padding: 40px 30px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    padding: 30px;
+    border-radius: 8px;
+    margin-bottom: 20px;
     text-align: center;
 }
 
 .personil-header h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: bold;
     margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .personil-header .subtitle {
-    font-size: 1.1rem;
-    opacity: 0.9;
-    margin-bottom: 20px;
+    font-size: 1rem;
+    margin-bottom: 15px;
 }
 
 /* Statistics Cards */
@@ -41,61 +39,40 @@
 
 .stat-card {
     background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 20px;
+    border: 1px solid #dee2e6;
     border-left: 4px solid #1a237e;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    text-align: center;
 }
 
 .stat-card .number {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: bold;
     color: #1a237e;
     margin-bottom: 5px;
 }
 
 .stat-card .label {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #666;
-    text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 /* Pimpinan Section */
 .pimpinan-section {
     background: white;
-    border-radius: 15px;
-    padding: 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
 .pimpinan-section h2 {
     color: #1a237e;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: bold;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     text-align: center;
-    position: relative;
-}
-
-.pimpinan-section h2::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 3px;
-    background: linear-gradient(90deg, #1a237e, #ffd700);
-    border-radius: 2px;
 }
 
 .pimpinan-cards {
@@ -105,30 +82,11 @@
 }
 
 .pimpinan-card {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: #f8f9fa;
     border: 1px solid #dee2e6;
-    border-radius: 12px;
+    border-radius: 8px;
     padding: 20px;
     text-align: center;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.pimpinan-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #1a237e, #3949ab, #ffd700);
-}
-
-.pimpinan-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    border-color: #1a237e;
 }
 
 .pimpinan-card .nama {
@@ -136,21 +94,18 @@
     font-weight: bold;
     color: #1a237e;
     margin-bottom: 8px;
-    line-height: 1.3;
 }
 
 .pimpinan-card .pangkat {
     font-size: 0.9rem;
     color: #666;
     margin-bottom: 5px;
-    font-weight: 500;
 }
 
 .pimpinan-card .jabatan {
     font-size: 0.85rem;
     color: #888;
     margin-bottom: 15px;
-    font-style: italic;
 }
 
 .pimpinan-card .ket {
@@ -161,66 +116,42 @@
 .btn-ket {
     padding: 6px 12px;
     border: none;
-    border-radius: 20px;
+    border-radius: 4px;
     font-size: 0.75rem;
     font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
     cursor: pointer;
-    transition: all 0.3s ease;
 }
 
 .btn-aktif {
-    background: linear-gradient(135deg, #28a745, #20c997);
+    background: #28a745;
     color: white;
 }
 
-.btn-aktif:hover {
-    background: linear-gradient(135deg, #218838, #1ea085);
-    transform: scale(1.05);
-}
-
 .btn-other {
-    background: linear-gradient(135deg, #ffc107, #fd7e14);
+    background: #ffc107;
     color: #212529;
-}
-
-.btn-other:hover {
-    background: linear-gradient(135deg, #e0a800, #e55a00);
-    transform: scale(1.05);
 }
 
 /* Bagian Sections */
 .bagian-section {
     background: white;
-    border-radius: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
     margin-bottom: 20px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.bagian-section:hover {
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
 .bagian-header {
-    background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+    background: #1a237e;
     color: white;
-    padding: 20px 25px;
+    padding: 15px 20px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: all 0.3s ease;
-}
-
-.bagian-header:hover {
-    background: linear-gradient(135deg, #283593 0%, #5e35b1 100%);
 }
 
 .bagian-header h2 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: bold;
     margin: 0;
 }
@@ -234,14 +165,12 @@
 .bagian-count {
     background: rgba(255,255,255,0.2);
     padding: 5px 12px;
-    border-radius: 20px;
+    border-radius: 4px;
     font-size: 0.85rem;
-    font-weight: 500;
 }
 
 .toggle-icon {
     font-size: 1.2rem;
-    transition: transform 0.3s ease;
 }
 
 .bagian-section.collapsed .toggle-icon {
@@ -250,42 +179,31 @@
 
 /* Personil Tables */
 .personil-content {
-    padding: 25px;
+    padding: 20px;
 }
 
 .personil-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 0;
 }
 
 .personil-table thead {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: #f8f9fa;
 }
 
 .personil-table th {
-    padding: 15px 12px;
+    padding: 12px;
     text-align: left;
     font-weight: 600;
     color: #1a237e;
     border-bottom: 2px solid #1a237e;
     font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .personil-table td {
-    padding: 12px;
+    padding: 10px;
     border-bottom: 1px solid #dee2e6;
     font-size: 0.9rem;
-}
-
-.personil-table tbody tr {
-    transition: background-color 0.3s ease;
-}
-
-.personil-table tbody tr:hover {
-    background-color: #f8f9fa;
 }
 
 .personil-table .nama-col {
@@ -317,11 +235,11 @@
     }
     
     .personil-header {
-        padding: 25px 20px;
+        padding: 20px;
     }
     
     .personil-header h1 {
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
     
     .stats-container {
@@ -334,18 +252,18 @@
     }
     
     .pimpinan-section {
-        padding: 20px;
+        padding: 15px;
     }
     
     .bagian-header {
-        padding: 15px 20px;
+        padding: 15px;
         flex-direction: column;
         gap: 10px;
         text-align: center;
     }
     
     .bagian-header h2 {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
     
     .personil-content {
@@ -365,7 +283,7 @@
 
 @media (max-width: 480px) {
     .stat-card .number {
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
     
     .pimpinan-card .nama {
@@ -411,50 +329,36 @@
 }
 
 .btn-refresh {
-    background: linear-gradient(135deg, #1a237e, #3949ab);
+    background: #1a237e;
     color: white;
     border: none;
     padding: 12px 25px;
-    border-radius: 25px;
+    border-radius: 8px;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-.btn-refresh:hover {
-    background: linear-gradient(135deg, #283593, #5e35b1);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-
-.btn-refresh:active {
-    transform: translateY(0);
 }
 
 /* Search and Filter Section */
 .search-section {
     background: white;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    padding: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 20px;
 }
 
 .search-input {
     width: 100%;
-    padding: 12px 20px;
-    border: 2px solid #e9ecef;
-    border-radius: 25px;
+    padding: 12px 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
     font-size: 1rem;
-    transition: all 0.3s ease;
 }
 
 .search-input:focus {
     outline: none;
     border-color: #1a237e;
-    box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
 }
 
 /* Print Styles */
@@ -462,7 +366,6 @@
     .personil-header {
         background: none !important;
         color: black !important;
-        box-shadow: none !important;
     }
     
     .btn-refresh,
@@ -473,7 +376,6 @@
     .pimpinan-section,
     .bagian-section {
         break-inside: avoid;
-        box-shadow: none !important;
         border: 1px solid #ddd !important;
     }
 }

@@ -1,5 +1,5 @@
 # TODO — SPRIN Development Roadmap
-**Diperbarui**: 2026-04-10 | **Branch**: kantor | **Versi**: 1.7.0-dev
+**Diperbarui**: 2026-04-11 | **Branch**: kantor | **Versi**: 1.8.0-dev
 
 > **Konteks Aplikasi**: SPRIN adalah sistem informasi operasional untuk **BAGOPS Polres Samosir**.
 > BAGOPS (Bagian Operasional) bertugas merencanakan & mengendalikan operasi kepolisian,
@@ -157,11 +157,34 @@
   - Sidebar: quick actions, rekap operasional, info sistem (admin)
   - Target pengguna: semua role dengan widget yang sesuai
 
-- [ ] **WhatsApp Notification** 🟡
+- [x] **WhatsApp Notification** 🟡
   - Notif H-1 jadwal piket via WA Gateway (Fonnte/Wablas API)
   - Notif saat Sprint diterbitkan ke personil ybs
-  - Butuh: API key WA Gateway + konfigurasi nomor HP di data personil
-  - Estimasi: 2 hari
+  - API: `core/WANotification.php` + cron `cron/wa_piket_reminder.php`
+  - Kolom `no_hp` di tabel `personil`
+
+---
+
+### v1.8.0-dev (sesi ini)
+- [x] **Security Hardening**
+  - CSRF protection: `core/CSRFHelper.php` diterapkan ke semua API
+  - Role guards: `AuthHelper::requireRole()` diterapkan ke halaman kritis
+  - DEBUG_MODE tetap ON (sesuai request development)
+- [x] **DB Indexes** — index tambahan untuk tabel baru (lhpt, surat_ekspedisi, pelatihan, apel_nominal, rotasi_log, schedules)
+- [x] **Audit Trail** — `core/ActivityLog.php` untuk logging semua operasi
+- [x] **Renops (Rencana Operasi)** — CRUD + convert ke operasi
+  - Halaman: `pages/renops.php`
+  - API: `api/renops_api.php`
+  - Tabel: `renops`
+- [x] **Export PDF** — `core/PDFExport.php` dengan browser print CSS
+- [x] **Backup Otomatis** — cron job `cron/auto_backup.php`
+- [x] **PWA (Progressive Web App)**
+  - Manifest: `public/manifest.json`
+  - Service Worker: `public/sw.js`
+- [x] **Dark Mode** — CSS variables + toggle di footer
+- [x] **Dashboard Analytics** — `api/analytics_api.php` (trend piket, fairness index, workload)
+- [x] **Bulk Import Personil** — `api/import_personil_api.php` untuk import CSV/Excel
+- [x] **CRUD Tests** — `tests/renops_crud.test.js`
 
 - [x] **Apel Nominal Digital** 🟡
   - CRUD: `pages/apel_nominal.php` + `api/apel_api.php`
@@ -172,7 +195,7 @@
 
 ---
 
-## 📁 File Utama (v1.5.0)
+## 📁 File Utama (v1.8.0)
 
 | File | Fungsi | Status |
 |------|--------|--------|
@@ -187,8 +210,21 @@
 | `pages/ekspedisi.php` | Surat keluar/masuk | ✅ |
 | `pages/pelatihan.php` | Training Management | ✅ |
 | `pages/apel_nominal.php` | Apel Nominal Digital | ✅ |
+| `pages/renops.php` | Rencana Operasi | ✅ |
 | `api/tim_piket_api.php` | get_all_tim, cover, rotasi | ✅ |
 | `api/calendar_api_public.php` | schedules + recurrence + konflik | ✅ |
+| `api/renops_api.php` | Renops CRUD + convert to operation | ✅ |
+| `api/analytics_api.php` | Dashboard analytics (trend, fairness, workload) | ✅ |
+| `api/import_personil_api.php` | Bulk import personil CSV/Excel | ✅ |
+| `core/CSRFHelper.php` | CSRF protection helper | ✅ |
+| `core/ActivityLog.php` | Audit trail middleware | ✅ |
+| `core/WANotification.php` | WhatsApp notification gateway | ✅ |
+| `core/PDFExport.php` | PDF export helper (browser print) | ✅ |
+| `cron/wa_piket_reminder.php` | Cron: WA piket reminder H-1 | ✅ |
+| `cron/auto_backup.php` | Cron: automatic daily backup | ✅ |
+| `public/manifest.json` | PWA manifest | ✅ |
+| `public/sw.js` | PWA service worker | ✅ |
+| `tests/renops_crud.test.js` | Renops CRUD tests | ✅ |
 
 ---
 
@@ -196,17 +232,20 @@
 
 | Tabel | Status | Keterangan |
 |-------|--------|------------|
-| `personil` | ✅ | 256 record aktif |
+| `personil` | ✅ | 256 record aktif + kolom `no_hp` |
 | `tim_piket` | ✅ | 15 kolom (fase, jam, durasi) |
 | `tim_piket_anggota` | ✅ | |
 | `siklus_piket_fase` | ✅ | Definisi fase per bagian |
 | `piket_absensi` | ✅ | Absensi harian + cover |
-| `schedules` | ✅ | + recurrence + tim_id |
+| `schedules` | ✅ | + recurrence + tim_id + index |
 | `operations` | ✅ | + tingkat/jenis + recurrence |
-| `lhpt` | ✅ | LHPT — FK ke operations |
-| `surat_ekspedisi` | ✅ | Surat masuk/keluar + agenda otomatis |
-| `pelatihan` | ✅ | 6 jenis + stats |
-| `apel_nominal` | ✅ | Absensi apel pagi/sore |
+| `lhpt` | ✅ | LHPT — FK ke operations + index |
+| `surat_ekspedisi` | ✅ | Surat masuk/keluar + agenda otomatis + index |
+| `pelatihan` | ✅ | 6 jenis + stats + index |
+| `apel_nominal` | ✅ | Absensi apel pagi/sore + index |
+| `renops` | ✅ | Rencana Operasi + FK ke operations |
+| `notifikasi_piket` | ✅ | In-app notifications |
+| `user_activity_log` | ✅ | Audit trail log |
 | `users` / `user_roles` | ✅ | 3 role: admin/operator/viewer + guard middleware |
 
 ---

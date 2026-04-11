@@ -176,7 +176,7 @@ foreach ($bagianData as $b) {
 <style>
 .pimpinan-card {
     border-radius: 15px;
-    background: linear-gradient(135deg, #f8f9ff 0%, #eef0ff 100%);
+    background: linear-gradient(135deg, var(--bg-hover) 0%, #eef0ff 100%);
     border: 2px solid var(--primary-color) !important;
 }
 .pimpinan-avatar {

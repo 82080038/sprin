@@ -136,122 +136,86 @@ if (window.top !== window.self) {
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
 <style>
-/* Card-based Jabatan Management Styles */
+/* Jabatan Management Styles (Development Mode) */
 .jabatan-card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    height: 100%;
-    width: 100%;
-    max-width: 100%;
-    margin: 0;
-    overflow: hidden; /* Prevent overflow */
-}
-
-.jabatan-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 1rem;
 }
 
 .unsur-header {
-    background: linear-gradient(135deg, var(--primary-color, #1a237e), var(--secondary-color, #3949ab));
-    color: #ffffff;
-    padding: 0.5rem 0.75rem;
-    border-radius: 12px 12px 0 0;
+    background: var(--primary-color);
+    color: var(--text-light);
+    padding: 1rem;
+    border-radius: 8px 8px 0 0;
 }
 
-.unsur-header h5 {
-    margin: 0;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
+.unsur-header h5,
 .unsur-header h6 {
     margin: 0;
     font-weight: 600;
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    font-size: 1rem;
+    color: var(--text-light);
 }
 
 .unsur-header small {
-    opacity: 1;
-    font-size: 0.8rem;
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    font-size: 0.85rem;
+    color: var(--text-light);
 }
 
 .bagian-container {
-    background: #f8f9fa;
+    background: var(--bg-hover);
     min-height: 200px;
-    padding: 1rem;
-    border-radius: 0 0 12px 12px;
+    padding: 0.75rem;
+    border-radius: 0 0 8px 8px;
 }
 
 .bagian-item {
-    background: white;
-    border: 1px solid #e9ecef;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
-    padding: 0.25rem 0.35rem;
-    margin-bottom: 0.15rem;
+    padding: 0.5rem;
+    margin-bottom: 0.25rem;
     cursor: grab;
-    transition: all 0.2s ease;
     position: relative;
-    font-size: 0.8rem;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
+    font-size: 0.85rem;
 }
 
 .bagian-item strong {
     display: block;
-    font-size: 0.8rem;
-    line-height: 1.2;
+    font-size: 0.85rem;
+    line-height: 1.25;
 }
 
 .bagian-item::before {
     content: '---';
     position: absolute;
     left: -1rem;
-    font-size: 0.8rem;
-}
-
-.bagian-item:hover {
-    background: #e3f2fd;
-    border-color: #007bff;
+    font-size: 0.75rem;
 }
 
 .bagian-item.dragging {
     opacity: 0.5;
-    transform: rotate(2deg);
 }
 
 .bagian-item.drag-over {
     background: #fff3cd;
-    border-color: #ffc107;
+    border-color: var(--bs-warning);
 }
 
 .sortable-ghost {
     opacity: 0.4;
-    background: #f8f9fa;
-}
-
-.sortable-chosen {
-    transform: scale(1.02);
-    box-shadow: 0 5px 15px rgba(0,123,255,0.3);
-}
-
-.sortable-dragging {
-    transform: rotate(5deg);
-    box-shadow: 0 10px 30px rgba(0,123,255,0.4);
+    background: var(--bg-hover);
 }
 
 .bagian-actions {
     display: flex;
-    gap: 0.15rem;
+    gap: 0.25rem;
 }
 
 .bagian-actions .btn-sm {
-    padding: 0.15rem 0.3rem;
+    padding: 0.25rem 0.5rem;
     font-size: 0.75rem;
 }
 
@@ -259,126 +223,94 @@ if (window.top !== window.self) {
     display: inline-flex;
     align-items: center;
     cursor: grab;
-    opacity: 0.4;
-    transition: opacity 0.2s, color 0.2s;
-    color: #6c757d;
+    color: var(--text-muted);
     font-size: 0.9rem;
     margin-right: 0.5rem;
-    padding: 0.15rem;
-    border-radius: 3px;
+    padding: 0.25rem;
+    border-radius: 4px;
 }
 
 .drag-handle:hover {
-    opacity: 1;
-    color: #007bff;
-    background: rgba(0,123,255,0.1);
+    color: var(--bs-info);
 }
 
 .drag-handle:active {
     cursor: grabbing;
 }
 
-.bagian-item:hover .drag-handle {
-    opacity: 0.7;
-}
-
 .jabatan-count {
-    background: var(--primary-color, #1a237e);
-    color: white;
-    padding: 0.15rem 0.5rem;
-    border-radius: 12px;
+    background: var(--primary-color);
+    color: var(--text-light);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
     font-size: 0.75rem;
     font-weight: 600;
 }
 
-.save-indicator {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1050;
-}
-
 .btn-save {
-    background: linear-gradient(135deg, #28a745, #20c997);
+    background: var(--bs-success);
     border: none;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 25px;
+    color: var(--text-light);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
     font-weight: 600;
-    transition: all 0.3s;
-}
-
-.btn-save:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
 }
 
 .btn-cancel {
-    background: linear-gradient(135deg, #6c757d, #5a6268);
+    background: var(--text-muted);
     border: none;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 25px;
+    color: var(--text-light);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
     font-weight: 600;
-    transition: all 0.3s;
     margin-left: 0.5rem;
-}
-
-.btn-cancel:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
 }
 
 .stats-card {
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    border: none;
-}
-
-.stats-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
 }
 
 .stats-card .number {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: bold;
     color: var(--primary-color);
 }
 
-/* Styles moved above - see first unsur-header definition */
-
 .unsur-container {
     background: #f8f9fa;
     min-height: 100px;
-    max-height: 400px; /* Limit height */
-    overflow-y: auto; /* Scroll if too many items */
-    padding: 0.35rem;
-    border-radius: 0 0 10px 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0.5rem;
+    border-radius: 0 0 8px 8px;
 }
 
 .bagian-section {
     background: white;
-    border-radius: 6px;
+    border-radius: 4px;
     padding: 0.25rem;
     margin-bottom: 0.25rem;
     border: 1px solid #e9ecef;
 }
 
 .bagian-header {
-    background: linear-gradient(135deg, #6c757d, #5a6268);
+    background: #6c757d;
     color: white;
-    padding: 0.35rem 0.5rem;
+    padding: 1rem;
     border-radius: 4px;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
 }
 
 .bagian-header h6 {
     margin: 0;
     font-weight: 600;
-    font-size: 0.8rem;
+    font-size: 1rem;
+}
+
+.bagian-header small {
+    font-size: 0.85rem;
 }
 
 .jabatan-list {
@@ -388,8 +320,7 @@ if (window.top !== window.self) {
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .bagian-item {
-        padding: 0.35rem;
-        flex-direction: column;
+        padding: 0.5rem;
     }
     
     .bagian-item::before {
@@ -398,8 +329,7 @@ if (window.top !== window.self) {
     }
     
     .bagian-actions {
-        align-self: flex-end;
-        margin-top: 0.15rem;
+        margin-top: 0.25rem;
     }
     
     .bagian-container {
@@ -409,23 +339,22 @@ if (window.top !== window.self) {
     .drag-handle {
         font-size: 1rem;
         padding: 0.25rem;
-        opacity: 0.8;
     }
 }
 
-/* FORCE 2 CARDS PER ROW - Grid layout */
+/* Grid layout */
 #jabatanContainer > .row {
     display: flex;
     flex-wrap: wrap;
-    margin: 0 -6px;
+    margin: 0 -0.5rem;
 }
 
 #jabatanContainer > .row > .col-lg-6,
 #jabatanContainer > .row > .col-md-6 {
-    flex: 0 0 50% !important;
-    max-width: 50% !important;
-    width: 50% !important;
-    padding: 6px;
+    flex: 0 0 50%;
+    max-width: 50%;
+    width: 50%;
+    padding: 0.5rem;
     box-sizing: border-box;
 }
 
@@ -433,20 +362,20 @@ if (window.top !== window.self) {
 @media (max-width: 767px) {
     #jabatanContainer > .row > .col-lg-6,
     #jabatanContainer > .row > .col-md-6 {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
-        width: 100% !important;
-        padding: 5px;
+        flex: 0 0 100%;
+        max-width: 100%;
+        width: 100%;
+        padding: 0.5rem;
     }
 }
 </style>
 
 <div class="page-header">
-    <h1><i class="fas fa-user-tie me-2"></i>Manajemen Jabatan</h1>
-    <p class="text-muted text-center">Kelola dan atur jabatan dalam setiap unsur organisasi POLRES Samosir</p>
+    <h1>Manajemen Jabatan</h1>
+    <p class="text-muted">Kelola dan atur jabatan dalam setiap unsur organisasi POLRES Samosir</p>
 </div>
 
-<!-- Statistics Cards -->
+<!-- Statistics -->
 <div class="row mb-4">
     <div class="col-md-4">
         <div class="card stats-card">
@@ -476,21 +405,11 @@ if (window.top !== window.self) {
 
 <!-- Action Buttons -->
 <div class="d-flex flex-wrap gap-2 align-items-center mb-4">
-    <button class="btn btn-primary" onclick="openAddModal()">
-        <i class="fas fa-plus me-2"></i>Tambah Jabatan
-    </button>
-    <button class="btn btn-success" id="saveOrderBtn" onclick="saveOrder()" style="display: none;">
-        <i class="fas fa-save me-2"></i>Simpan Urutan
-    </button>
-    <button class="btn btn-warning" id="cancelOrderBtn" onclick="cancelOrder()" style="display: none;">
-        <i class="fas fa-times me-2"></i>Batal
-    </button>
-    <button class="btn btn-info" onclick="refreshData()">
-        <i class="fas fa-sync-alt me-2"></i>Refresh
-    </button>
-    <button class="btn btn-success" onclick="exportData()">
-        <i class="fas fa-download me-2"></i>Export
-    </button>
+    <button class="btn btn-primary" onclick="openAddModal()">Tambah Jabatan</button>
+    <button class="btn btn-success" id="saveOrderBtn" onclick="saveOrder()" style="display: none;">Simpan Urutan</button>
+    <button class="btn btn-warning" id="cancelOrderBtn" onclick="cancelOrder()" style="display: none;">Batal</button>
+    <button class="btn btn-info" onclick="refreshData()">Refresh</button>
+    <button class="btn btn-success" onclick="exportData()">Export</button>
     <select class="form-select" id="unsurFilter" onchange="filterByUnsur()" style="width: auto;">
         <option value="">Semua Unsur</option>
         <?php foreach ($unsurData as $unsur): ?>
@@ -623,35 +542,28 @@ function initializeSortable() {
     document.querySelectorAll('.sortable-container').forEach(container => {
         const sortable = new Sortable(container, {
             group: {
-                name: 'jabatan', // Allow dragging between all containers
+                name: 'jabatan',
                 pull: true,
                 put: true
             },
             animation: 150,
             ghostClass: 'sortable-ghost',
-            chosenClass: 'sortable-chosen',
-            dragClass: 'sortable-dragging',
-            handle: '.drag-handle', // Only drag via handle
+            handle: '.drag-handle',
             delay: 0,
-            touchStartThreshold: 5, // Better touch support
+            touchStartThreshold: 5,
             
             onStart: function(evt) {
-                // Visual feedback when dragging starts
                 evt.item.classList.add('dragging');
                 document.body.style.cursor = 'grabbing';
             },
             
             onEnd: function(evt) {
-                // Remove visual feedback
                 evt.item.classList.remove('dragging');
                 document.body.style.cursor = '';
-                
-                // Handle the move
                 handleJabatanMove(evt);
             },
             
             onAdd: function(evt) {
-                // When item is added to a new container (different bagian)
                 console.log('Jabatan moved to new bagian:', evt.to.dataset.bagianId);
             }
         });
@@ -881,7 +793,7 @@ function updateJabatanCounts() {
             <div class="col-lg-6 col-md-6">
                 <div class="jabatan-card">
                     <div class="unsur-header">
-                        <h5><i class="fas fa-sitemap me-2"></i>${unsur.nama_unsur}</h5>
+                        <h5>${unsur.nama_unsur}</h5>
                         <small>${totalJabatan} jabatan</small>
                         <span class="jabatan-count float-end">${totalPersonil} personil</span>
                     </div>
@@ -893,12 +805,10 @@ function updateJabatanCounts() {
             const bagianA = unsur.bagians[a];
             const bagianB = unsur.bagians[b];
             
-            // First sort by urutan
             if (bagianA.urutan !== bagianB.urutan) {
                 return bagianA.urutan - bagianB.urutan;
             }
             
-            // Then sort by name
             return bagianA.nama_bagian.localeCompare(bagianB.nama_bagian);
         });
         
@@ -909,7 +819,7 @@ function updateJabatanCounts() {
             html += `
                 <div class="bagian-section">
                     <div class="bagian-header">
-                        <h6><i class="fas fa-building me-2"></i>${bagian.nama_bagian}</h6>
+                        <h6>${bagian.nama_bagian}</h6>
                         <small>${bagian.jabatans.length} jabatan</small>
                         <span class="badge bg-info float-end">${bagianPersonil} personil</span>
                     </div>
@@ -918,24 +828,16 @@ function updateJabatanCounts() {
                             <div class="bagian-item" data-id="${jabatan.id}" data-unsur-id="${unsurId}" data-bagian-id="${bagianId}" data-urutan="${jabatan.urutan || 0}">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center">
-                                        <div class="drag-handle">
-                                            <i class="fas fa-grip-vertical"></i>
-                                        </div>
+                                        <div class="drag-handle">:::</div>
                                         <div>
                                             <strong>${jabatan.nama_jabatan}</strong>
                                             <small class="text-muted d-block">${jabatan.personil_count} personil</small>
                                         </div>
                                     </div>
                                     <div class="bagian-actions">
-                                        <button class="btn btn-sm btn-outline-primary" onclick="viewJabatan(${jabatan.id})">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-warning" onclick="editJabatan(${jabatan.id})">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteJabatan(${jabatan.id})">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary" onclick="viewJabatan(${jabatan.id})">Lihat</button>
+                                        <button class="btn btn-sm btn-outline-warning" onclick="editJabatan(${jabatan.id})">Edit</button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteJabatan(${jabatan.id})">Hapus</button>
                                     </div>
                                 </div>
                             </div>
@@ -992,15 +894,9 @@ function displayFilteredJabatan(filteredJabatan) {
                                             <small class="text-muted d-block">${jabatan.personil_count} personil</small>
                                         </div>
                                         <div class="bagian-actions">
-                                            <button class="btn btn-sm btn-outline-primary" onclick="viewJabatan(${jabatan.id})">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-warning" onclick="editJabatan(${jabatan.id})">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteJabatan(${jabatan.id})">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
+                                            <button class="btn btn-sm btn-outline-primary" onclick="viewJabatan(${jabatan.id})">Lihat</button>
+                                            <button class="btn btn-sm btn-outline-warning" onclick="editJabatan(${jabatan.id})">Edit</button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteJabatan(${jabatan.id})">Hapus</button>
                                         </div>
                                     </div>
                                 </div>

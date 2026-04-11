@@ -10,6 +10,8 @@ if (!AuthHelper::validateSession()) {
     exit;
 }
 
+AuthHelper::requireRole('admin', 'operator', 'viewer');
+
 $page_title = 'Daftar Operasi - BAGOPS POLRES Samosir';
 include __DIR__ . '/../includes/components/header.php';
 

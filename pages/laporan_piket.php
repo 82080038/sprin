@@ -1,7 +1,13 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
-if (empty($_SESSION['user_id'])) { header('Location: ../login.php'); exit; }
 require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/auth_helper.php';
+
+// Check authentication using AuthHelper
+if (!AuthHelper::validateSession()) {
+    header('Location: ' . url('login.php'));
+    exit;
+}
 
 try {
     $pdo = new PDO('mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset=utf8mb4',

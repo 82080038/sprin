@@ -3,6 +3,7 @@
  * LHPT API — Laporan Hasil Pelaksanaan Tugas
  */
 require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/CSRFHelper.php';
 error_reporting(E_ALL);
 ini_set('display_errors', defined('DEBUG_MODE') && DEBUG_MODE ? 1 : 0);
 ini_set('log_errors', 1);
@@ -13,6 +14,9 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { exit(0); }
+
+// CSRF protection for POST (skip read-only actions)
+CSRFHelper::applyProtection(['get_lhpt_by_id','get_lhpt_by_operation','get_all_lhpt']);
 
 try {
     $dsn = "mysql:host=localhost;dbname=bagops;unix_socket=/opt/lampp/var/mysql/mysql.sock";

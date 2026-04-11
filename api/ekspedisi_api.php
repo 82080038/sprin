@@ -3,6 +3,7 @@
  * Ekspedisi Surat API — Penomoran agenda surat masuk & keluar
  */
 require_once __DIR__ . '/../core/config.php';
+require_once __DIR__ . '/../core/CSRFHelper.php';
 error_reporting(E_ALL);
 ini_set('display_errors', defined('DEBUG_MODE') && DEBUG_MODE ? 1 : 0);
 ini_set('log_errors', 1);
@@ -13,6 +14,9 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { exit(0); }
+
+// CSRF protection for POST (skip read-only actions)
+CSRFHelper::applyProtection(['get_surat_by_id','get_all_surat','get_nomor_agenda']);
 
 try {
     $dsn = "mysql:host=localhost;dbname=bagops;unix_socket=/opt/lampp/var/mysql/mysql.sock";

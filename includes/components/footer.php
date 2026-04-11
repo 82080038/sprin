@@ -49,7 +49,40 @@
 
 .footer a:hover {
     color: white;
+    text-decoration: underline;
 }
+</style>
+
+<!-- Dark Mode Toggle Button -->
+<button id="darkModeToggle" class="btn btn-secondary" onclick="toggleDarkMode()">
+    <i class="fas fa-moon"></i>
+</button>
+
+<script>
+// Dark mode toggle with localStorage persistence
+function toggleDarkMode() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    const icon = document.querySelector('#darkModeToggle i');
+    icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+// Load saved theme on page load
+(function() {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    
+    const icon = document.querySelector('#darkModeToggle i');
+    if (icon) {
+        icon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+})();
+</script>
 
 @media (max-width: 768px) {
     .footer {

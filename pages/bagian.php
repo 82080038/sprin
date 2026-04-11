@@ -164,7 +164,7 @@ try {
 }
 
 .unsur-header {
-    background: linear-gradient(135deg, var(--primary-color, #1a237e), var(--secondary-color, #3949ab));
+    background: var(--gradient-primary);
     color: white;
     padding: 1rem 1.25rem;
     border-bottom: 3px solid rgba(255,255,255,0.1);
@@ -320,7 +320,7 @@ try {
 
 /* Modal styles */
 .modal-header {
-    background: linear-gradient(135deg, var(--primary-color, #1a237e), var(--secondary-color, #3949ab));
+    background: var(--gradient-primary);
     color: white;
 }
 

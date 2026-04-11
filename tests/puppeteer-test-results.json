@@ -1,0 +1,115 @@
+{
+  "timestamp": "2026-04-11T09:26:22.601Z",
+  "totalTests": 15,
+  "passed": 15,
+  "failed": 0,
+  "skipped": 0,
+  "successRate": "100.00",
+  "results": [
+    {
+      "test": "Home Page Load",
+      "status": "PASS",
+      "message": "Title: Login - Sistem Manajemen POLRES Samosir",
+      "duration": 1722,
+      "timestamp": "2026-04-11T09:25:35.054Z"
+    },
+    {
+      "test": "Login Page Load",
+      "status": "PASS",
+      "message": "Login form elements found",
+      "duration": 2624,
+      "timestamp": "2026-04-11T09:25:37.678Z"
+    },
+    {
+      "test": "Login",
+      "status": "PASS",
+      "message": "Successfully logged in and redirected",
+      "duration": 2692,
+      "timestamp": "2026-04-11T09:25:40.373Z"
+    },
+    {
+      "test": "Dashboard Load",
+      "status": "PASS",
+      "message": "Found 10 cards",
+      "duration": 2763,
+      "timestamp": "2026-04-11T09:25:43.136Z"
+    },
+    {
+      "test": "Personil Management",
+      "status": "PASS",
+      "message": "Found 19 stat boxes",
+      "duration": 6058,
+      "timestamp": "2026-04-11T09:25:49.194Z"
+    },
+    {
+      "test": "Tim Piket Management",
+      "status": "PASS",
+      "message": "Found 7 filter elements",
+      "duration": 4164,
+      "timestamp": "2026-04-11T09:25:53.358Z"
+    },
+    {
+      "test": "Calendar Dashboard",
+      "status": "PASS",
+      "message": "Calendar loaded successfully",
+      "duration": 3452,
+      "timestamp": "2026-04-11T09:25:56.810Z"
+    },
+    {
+      "test": "Operations Management",
+      "status": "PASS",
+      "message": "Found 3 table(s)",
+      "duration": 3916,
+      "timestamp": "2026-04-11T09:26:00.726Z"
+    },
+    {
+      "test": "Laporan Piket",
+      "status": "PASS",
+      "message": "Found 3 filter elements",
+      "duration": 3837,
+      "timestamp": "2026-04-11T09:26:04.563Z"
+    },
+    {
+      "test": "Laporan Operasi",
+      "status": "PASS",
+      "message": "Found 13 chart/card elements",
+      "duration": 3873,
+      "timestamp": "2026-04-11T09:26:08.437Z"
+    },
+    {
+      "test": "LHPT",
+      "status": "PASS",
+      "message": "LHPT page loaded successfully",
+      "duration": 3069,
+      "timestamp": "2026-04-11T09:26:11.507Z"
+    },
+    {
+      "test": "Ekspedisi Surat",
+      "status": "PASS",
+      "message": "Ekspedisi page loaded successfully",
+      "duration": 3023,
+      "timestamp": "2026-04-11T09:26:14.530Z"
+    },
+    {
+      "test": "Apel Nominal",
+      "status": "PASS",
+      "message": "Apel Nominal page loaded successfully",
+      "duration": 2961,
+      "timestamp": "2026-04-11T09:26:17.491Z"
+    },
+    {
+      "test": "Pelatihan",
+      "status": "PASS",
+      "message": "Pelatihan page loaded successfully",
+      "duration": 3038,
+      "timestamp": "2026-04-11T09:26:20.529Z"
+    },
+    {
+      "test": "Logout",
+      "status": "PASS",
+      "message": "Successfully logged out",
+      "duration": 2070,
+      "timestamp": "2026-04-11T09:26:22.600Z"
+    }
+  ]
+}

@@ -7,7 +7,7 @@ require_once __DIR__ . '/../core/config.php';
 
 try {
     $pdo = new PDO(
-        'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4',
+        'mysql:host=127.0.0.1;dbname=' . DB_NAME . ';charset=utf8mb4',
         DB_USER, DB_PASS,
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
     );
@@ -18,7 +18,7 @@ try {
     // ── 0. Tabel siklus_piket_fase ──────────────────────────────────────────
     $pdo->exec("CREATE TABLE IF NOT EXISTS `siklus_piket_fase` (
         `id`                INT(11) NOT NULL AUTO_INCREMENT,
-        `id_bagian`         INT(11) NOT NULL,
+        `id_bagian`         INT(11) DEFAULT NULL COMMENT 'NULL = siklus umum (berlaku untuk semua bagian)',
         `nama_fase`         VARCHAR(100) NOT NULL COMMENT 'Piket Fungsi, Lepas Piket, Piket Cadangan',
         `urutan`            INT(11) NOT NULL DEFAULT 1,
         `durasi_jam`        DECIMAL(4,1) NOT NULL DEFAULT 8.0,
@@ -29,7 +29,8 @@ try {
         `created_at`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `updated_at`        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         PRIMARY KEY (`id`),
-        KEY `idx_bagian_urutan` (`id_bagian`, `urutan`)
+        KEY `idx_bagian_urutan` (`id_bagian`, `urutan`),
+        KEY `idx_is_umum` (`id_bagian`) -- NULL = umum
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Definisi fase siklus piket per bagian'");
     $steps[] = ['✔', 'Tabel siklus_piket_fase dibuat / sudah ada'];
 
@@ -72,6 +73,15 @@ try {
         $r = $pdo->query("SHOW COLUMNS FROM `$table` LIKE '$col'")->fetchAll();
         return count($r) > 0;
     };
+
+    // ── 0b. Ubah id_bagian menjadi nullable untuk siklus umum ─────────────────
+    $checkNull = $pdo->query("SHOW COLUMNS FROM siklus_piket_fase LIKE 'id_bagian'")->fetch();
+    if ($checkNull && $checkNull['Null'] === 'NO') {
+        $pdo->exec("ALTER TABLE siklus_piket_fase MODIFY COLUMN id_bagian INT(11) DEFAULT NULL COMMENT 'NULL = siklus umum (berlaku untuk semua bagian)'");
+        $steps[] = ['✔', 'id_bagian diubah menjadi nullable untuk mendukung siklus umum'];
+    } elseif ($checkNull && $checkNull['Null'] === 'YES') {
+        $steps[] = ['–', 'id_bagian sudah nullable'];
+    }
 
     // ── 2b. Tambah kolom fase ke tim_piket ─────────────────────────────────
     $timPiketCols = [
@@ -144,6 +154,53 @@ try {
         KEY `idx_tim`       (`tim_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Absensi/konfirmasi kehadiran piket'");
     $steps[] = ['✔', 'Tabel piket_absensi dibuat / sudah ada'];
+
+    // ── 6. Tabel rotasi_log ─────────────────────────────────────────────────
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `rotasi_log` (
+        `id`            INT(11) NOT NULL AUTO_INCREMENT,
+        `id_bagian`     INT(11) NOT NULL,
+        `dari_fase_id`  INT(11) DEFAULT NULL,
+        `ke_fase_id`    INT(11) DEFAULT NULL,
+        `tim_ids`       TEXT DEFAULT NULL COMMENT 'JSON array of tim IDs rotated',
+        `jumlah_tim`    INT(11) NOT NULL DEFAULT 0,
+        `tipe`          ENUM('manual','otomatis') NOT NULL DEFAULT 'manual',
+        `oleh`          INT(11) DEFAULT NULL COMMENT 'FK users.id, NULL=cron',
+        `created_at`    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`),
+        KEY `idx_bagian` (`id_bagian`),
+        KEY `idx_created` (`created_at`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Log setiap rotasi fase piket'");
+    $steps[] = ['✔', 'Tabel rotasi_log dibuat / sudah ada'];
+
+    // ── 7. Tambah kolom min_anggota ke siklus_piket_fase ─────────────────
+    if (!$colExists('siklus_piket_fase', 'min_anggota')) {
+        $pdo->exec("ALTER TABLE `siklus_piket_fase` ADD COLUMN `min_anggota` INT(11) NOT NULL DEFAULT 1 COMMENT 'Minimum staffing per fase'");
+        $steps[] = ['✔', 'siklus_piket_fase.min_anggota ditambahkan'];
+    } else {
+        $steps[] = ['–', 'siklus_piket_fase.min_anggota sudah ada'];
+    }
+
+    // ── 8. Tambah kolom auto_rotasi ke siklus_piket_fase ─────────────────
+    if (!$colExists('siklus_piket_fase', 'auto_rotasi')) {
+        $pdo->exec("ALTER TABLE `siklus_piket_fase` ADD COLUMN `auto_rotasi` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1=otomatis rotasi per hari'");
+        $steps[] = ['✔', 'siklus_piket_fase.auto_rotasi ditambahkan'];
+    } else {
+        $steps[] = ['–', 'siklus_piket_fase.auto_rotasi sudah ada'];
+    }
+
+    // ── 9. Tambah kolom swap di schedules ─────────────────────────────────
+    $swapCols = [
+        'swap_with_schedule_id' => "INT(11) DEFAULT NULL COMMENT 'FK schedules.id — pasangan swap'",
+        'swap_status'           => "ENUM('none','pending','approved','rejected') NOT NULL DEFAULT 'none'",
+    ];
+    foreach ($swapCols as $col => $def) {
+        if (!$colExists('schedules', $col)) {
+            $pdo->exec("ALTER TABLE `schedules` ADD COLUMN `$col` $def");
+            $steps[] = ['✔', "schedules.$col ditambahkan"];
+        } else {
+            $steps[] = ['–', "schedules.$col sudah ada"];
+        }
+    }
 
     $pdo->exec("SET FOREIGN_KEY_CHECKS=1");
     $success = true;

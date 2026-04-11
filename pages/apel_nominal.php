@@ -8,6 +8,8 @@ if (!AuthHelper::validateSession()) {
     exit;
 }
 
+AuthHelper::requireRole('admin', 'operator');
+
 $page_title = 'Apel Nominal Digital';
 include __DIR__ . '/../includes/components/header.php';
 ?>

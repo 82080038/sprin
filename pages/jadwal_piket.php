@@ -84,27 +84,27 @@ $bulanNama = ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agust
 include __DIR__ . '/../includes/components/header.php';
 ?>
 <style>
-.jadwal-header { background: linear-gradient(135deg,#1a237e,#283593); color:#fff; border-radius:12px; padding:24px; margin-bottom:24px; }
-.stat-card { background:#fff; border-radius:10px; padding:16px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.08); }
-.stat-card .num { font-size:2rem; font-weight:700; color:#1a237e; }
-.stat-card .lbl { font-size:.8rem; color:#666; text-transform:uppercase; letter-spacing:.5px; }
-.shift-badge { font-size:.75rem; padding:2px 8px; border-radius:20px; font-weight:600; }
-.shift-PAGI     { background:#fff3cd; color:#856404; }
-.shift-SIANG    { background:#cfe2ff; color:#0a58ca; }
-.shift-MALAM    { background:#d1ecf1; color:#0c5460; }
-.shift-FULL_DAY { background:#d4edda; color:#155724; }
-.shift-ROTASI   { background:#f8d7da; color:#721c24; }
-.absensi-hadir        { color:#198754; font-weight:600; }
-.absensi-tidak_hadir  { color:#dc3545; font-weight:600; }
-.absensi-sakit        { color:#fd7e14; font-weight:600; }
-.absensi-ijin         { color:#6c757d; font-weight:600; }
-.absensi-terlambat    { color:#ffc107; font-weight:600; }
-.date-header { background:#e8eaf6; padding:8px 16px; border-radius:6px; font-weight:700; color:#1a237e; margin:16px 0 8px; }
+.jadwal-header { background: var(--gradient-primary-dark); color: var(--text-light); border-radius: var(--border-radius-xl); padding: var(--spacing-xl); margin-bottom: var(--spacing-xl); }
+.stat-card { background: var(--bg-card); border-radius: var(--border-radius-lg); padding: var(--spacing-lg); text-align: center; box-shadow: var(--shadow-sm); }
+.stat-card .num { font-size: var(--font-size-3xl); font-weight: var(--font-weight-bold); color: var(--primary-color); }
+.stat-card .lbl { font-size: var(--font-size-xs); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.shift-badge { font-size: var(--font-size-xs); padding: var(--spacing-xs) var(--spacing-sm); border-radius: var(--border-radius-full); font-weight: var(--font-weight-semibold); }
+.shift-PAGI     { background: #fff3cd; color: #856404; }
+.shift-SIANG    { background: #cfe2ff; color: #0a58ca; }
+.shift-MALAM    { background: #d1ecf1; color: #0c5460; }
+.shift-FULL_DAY { background: #d4edda; color: #155724; }
+.shift-ROTASI   { background: #f8d7da; color: #721c24; }
+.absensi-hadir        { color: var(--bs-success); font-weight: var(--font-weight-semibold); }
+.absensi-tidak_hadir  { color: var(--bs-danger); font-weight: var(--font-weight-semibold); }
+.absensi-sakit        { color: var(--bs-warning); font-weight: var(--font-weight-semibold); }
+.absensi-ijin         { color: var(--text-muted); font-weight: var(--font-weight-semibold); }
+.absensi-terlambat    { color: #ffc107; font-weight: var(--font-weight-semibold); }
+.date-header { background: var(--bg-hover); padding: var(--spacing-sm) var(--spacing-lg); border-radius: var(--border-radius-md); font-weight: var(--font-weight-bold); color: var(--primary-color); margin: var(--spacing-lg) 0 var(--spacing-sm); }
 .print-area { display:none; }
 @media print {
     .no-print   { display:none !important; }
     .print-area { display:block; }
-    body        { background:#fff; }
+    body        { background: var(--bg-card); }
 }
 </style>
 

@@ -52,19 +52,51 @@ Contoh SAT SAMAPTA:
 2. Pilih shift, tanggal mulai-selesai, pola pengulangan
 3. Klik **Generate Jadwal** → redirect ke kalender
 
+## 8. Fatigue Check
+1. Buka tab **Dashboard Hari Ini**
+2. Klik **Fatigue Check** → modal terbuka
+3. Pilih personil, tanggal, dan minimum jeda istirahat (jam)
+4. Klik **Cek Sekarang** → warning jika jeda kurang dari minimum
+
+## 9. Swap Shift (Tukar Jadwal)
+1. Buka tab **Dashboard Hari Ini**
+2. Klik **Swap Shift** → modal terbuka dengan daftar jadwal hari ini
+3. Pilih 2 jadwal yang akan ditukar (klik tombol "1" dan "2")
+4. Klik **Tukar Jadwal** → personil saling ditukar
+
+## 10. Export Statistik CSV
+1. Buka tab **Statistik**
+2. Pilih bulan dan tahun
+3. Klik tombol **Export** → file CSV ter-download
+
+## 11. Notifikasi Rotasi
+- Saat rotasi otomatis/manual dijalankan, notifikasi muncul di tab Dashboard
+- Klik X untuk menandai sudah dibaca
+- Cron auto_rotasi otomatis buat notifikasi
+
 ## API Endpoints
 | Action | Method | Fungsi |
 |--------|--------|--------|
 | get_siklus | GET | Fase siklus per bagian |
 | get_personil_all | GET | Semua personil aktif |
 | get_anggota | GET | Anggota tim |
+| dashboard_hari_ini | GET | Dashboard piket hari ini |
+| statistik_personil | GET | Statistik jam piket per personil |
+| calendar_data | GET | Data kalender per bulan |
+| get_rotasi_log | GET | Riwayat rotasi |
+| fatigue_check | GET | Cek jeda istirahat personil |
+| cetak_sprin_data | GET | Data untuk cetak SPRIN |
+| get_notifikasi_piket | GET | Notifikasi rotasi (unread) |
 | create_tim | POST | Buat tim |
 | update_tim | POST | Edit tim |
 | delete_tim | POST | Hapus tim |
 | save_siklus | POST | Simpan fase siklus |
 | geser_fase | POST | Pindah tim ke fase lain |
-| save_anggota | POST | Simpan anggota |
+| save_anggota_peran | POST | Simpan anggota + peran |
 | generate_jadwal_tim | POST | Generate jadwal berulang |
+| swap_shift | POST | Tukar jadwal 2 personil |
+| rotasi_bagian | POST | Rotasi manual per bagian |
+| read_notifikasi | POST | Tandai notifikasi sudah dibaca |
 
 ## Troubleshooting
 | Masalah | Solusi |

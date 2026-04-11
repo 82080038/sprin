@@ -12,9 +12,13 @@ require_once __DIR__ . '/../core/config.php';
 require_once __DIR__ . '/../core/Database.php';
 require_once __DIR__ . '/../core/BackupManager.php';
 require_once __DIR__ . '/../core/auth_helper.php';
+require_once __DIR__ . '/../core/CSRFHelper.php';
 
 require_once __DIR__ . '/../core/SessionManager.php';
 SessionManager::start();
+
+// CSRF protection for POST (skip read-only actions)
+CSRFHelper::applyProtection(['get_backup_list','get_backup_info']);
 
 // Check authentication
 if (!AuthHelper::validateSession()) {

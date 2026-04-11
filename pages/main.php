@@ -42,7 +42,7 @@ $_suratProses  = (int)$_db->query("SELECT COUNT(*) FROM surat_ekspedisi WHERE st
 
 <div class="container-fluid py-4">
     <!-- Hero / Greeting -->
-    <div class="card border-0 shadow-sm mb-4" style="background:linear-gradient(135deg,#1a237e 0%,#283593 100%);color:#fff;">
+    <div class="card border-0 shadow-sm mb-4 hero-section">
         <div class="card-body py-4 px-4">
             <div class="d-flex justify-content-between align-items-center">
                 <div>

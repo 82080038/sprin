@@ -7,6 +7,7 @@ require_once __DIR__ . '/../core/config.php';
 require_once __DIR__ . '/../core/Database.php';
 require_once __DIR__ . '/../core/SessionManager.php';
 require_once __DIR__ . '/../core/auth_helper.php';
+require_once __DIR__ . '/../core/CSRFHelper.php';
 
 // Initialize session
 SessionManager::start();
@@ -18,6 +19,9 @@ header("Access-Control-Allow-Origin: *");
 // Error reporting controlled by config
 require_once __DIR__ . '/../core/config.php';
 error_reporting(E_ALL);
+
+// CSRF protection for POST (skip read-only actions)
+CSRFHelper::applyProtection(['get_schedule_stats','get_schedules_by_date']);
 ini_set('display_errors', defined('DEBUG_MODE') && DEBUG_MODE ? 1 : 0);
 ini_set('log_errors', 1);
 
