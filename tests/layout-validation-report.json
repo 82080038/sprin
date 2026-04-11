@@ -1,0 +1,319 @@
+{
+  "timestamp": "2026-04-11T14:36:03.436Z",
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "successRate": 100
+  },
+  "tests": [
+    {
+      "name": "Login Page Layout",
+      "timestamp": "2026-04-11T14:35:50.703Z",
+      "passed": true,
+      "details": {
+        "bootstrapContainer": true,
+        "formControls": true,
+        "buttons": true,
+        "gridSystem": false,
+        "responsiveDesign": true,
+        "hasLoginContainer": true,
+        "hasSidebar": true,
+        "hasForm": true,
+        "pageTitle": "Login - Sistem Manajemen POLRES Samosir",
+        "bodyClasses": ""
+      }
+    },
+    {
+      "name": "Dashboard Layout",
+      "timestamp": "2026-04-11T14:35:55.283Z",
+      "passed": true,
+      "details": {
+        "sidebar": true,
+        "mainContent": true,
+        "statsCards": true,
+        "navigation": true,
+        "breadcrumb": true,
+        "responsiveNav": true,
+        "statCount": 4,
+        "pageTitle": "Sistem Manajemen POLRES Samosir",
+        "hasPageHeader": true,
+        "bodyClasses": ""
+      }
+    },
+    {
+      "name": "Personil Page Layout",
+      "timestamp": "2026-04-11T14:35:57.170Z",
+      "passed": true,
+      "details": {
+        "personilStats": true,
+        "searchSection": true,
+        "unsurCards": false,
+        "modals": true,
+        "tables": false,
+        "buttons": true,
+        "unsurCardCount": 0,
+        "modalCount": 2,
+        "tableCount": 0,
+        "buttonCount": 7,
+        "pageTitle": "Sistem Manajemen POLRES Samosir",
+        "hasLoadingIndicator": true
+      }
+    },
+    {
+      "name": "Operasi Page Layout",
+      "timestamp": "2026-04-11T14:35:58.831Z",
+      "passed": true,
+      "details": {
+        "operationsHeader": true,
+        "statsGrid": true,
+        "operationsTable": true,
+        "modals": true,
+        "badges": true,
+        "buttons": true,
+        "modalCount": 1,
+        "badgeCount": 4,
+        "buttonCount": 7,
+        "pageTitle": "Sistem Manajemen POLRES Samosir",
+        "hasEmptyState": false
+      }
+    },
+    {
+      "name": "Calendar Page Layout",
+      "timestamp": "2026-04-11T14:36:00.241Z",
+      "passed": true,
+      "details": {
+        "calendarHeader": false,
+        "calendarControls": false,
+        "calendarContainer": false,
+        "piketSchedule": false,
+        "modals": false,
+        "eventLegend": false,
+        "modalCount": 0,
+        "pageTitle": "Sistem Manajemen POLRES Samosir",
+        "hasCalendar": false,
+        "hasFullCalendar": false
+      }
+    },
+    {
+      "name": "Responsive Design",
+      "timestamp": "2026-04-11T14:36:03.257Z",
+      "passed": true,
+      "details": {
+        "passed": true,
+        "tests": [
+          {
+            "device": "Tablet (768x1024)",
+            "sidebarVisible": true,
+            "mainContentWidth": "564.75px",
+            "hasMobileToggle": true
+          },
+          {
+            "device": "Mobile (375x667)",
+            "sidebarVisible": true,
+            "mainContentWidth": "360px",
+            "hasMobileToggle": true
+          }
+        ]
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "filename": "01_home_page_2026-04-11T14-14-04-080Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/01_home_page_2026-04-11T14-14-04-080Z.png",
+      "size": 787845
+    },
+    {
+      "filename": "01_login_page_2026-04-11T14-27-58-579Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/01_login_page_2026-04-11T14-27-58-579Z.png",
+      "size": 604395
+    },
+    {
+      "filename": "01_login_page_2026-04-11T14-31-36-714Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/01_login_page_2026-04-11T14-31-36-714Z.png",
+      "size": 632740
+    },
+    {
+      "filename": "01_login_page_2026-04-11T14-35-49-087Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/01_login_page_2026-04-11T14-35-49-087Z.png",
+      "size": 632740
+    },
+    {
+      "filename": "01-login-page.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/01-login-page.png",
+      "size": 361579
+    },
+    {
+      "filename": "02_dashboard_2026-04-11T14-28-03-426Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/02_dashboard_2026-04-11T14-28-03-426Z.png",
+      "size": 314064
+    },
+    {
+      "filename": "02_dashboard_2026-04-11T14-31-44-419Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/02_dashboard_2026-04-11T14-31-44-419Z.png",
+      "size": 313751
+    },
+    {
+      "filename": "02_dashboard_2026-04-11T14-35-54-143Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/02_dashboard_2026-04-11T14-35-54-143Z.png",
+      "size": 315528
+    },
+    {
+      "filename": "02_login_page_2026-04-11T14-14-07-558Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/02_login_page_2026-04-11T14-14-07-558Z.png",
+      "size": 794081
+    },
+    {
+      "filename": "03_after_login_2026-04-11T14-14-10-394Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/03_after_login_2026-04-11T14-14-10-394Z.png",
+      "size": 121818
+    },
+    {
+      "filename": "03_personil_page_2026-04-11T14-28-05-585Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/03_personil_page_2026-04-11T14-28-05-585Z.png",
+      "size": 234209
+    },
+    {
+      "filename": "03_personil_page_2026-04-11T14-31-46-551Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/03_personil_page_2026-04-11T14-31-46-551Z.png",
+      "size": 234209
+    },
+    {
+      "filename": "03_personil_page_2026-04-11T14-35-56-510Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/03_personil_page_2026-04-11T14-35-56-510Z.png",
+      "size": 218596
+    },
+    {
+      "filename": "04_dashboard_2026-04-11T14-14-13-101Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/04_dashboard_2026-04-11T14-14-13-101Z.png",
+      "size": 171053
+    },
+    {
+      "filename": "04_operasi_page_2026-04-11T14-28-07-315Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/04_operasi_page_2026-04-11T14-28-07-315Z.png",
+      "size": 268973
+    },
+    {
+      "filename": "04_operasi_page_2026-04-11T14-31-48-337Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/04_operasi_page_2026-04-11T14-31-48-337Z.png",
+      "size": 268973
+    },
+    {
+      "filename": "04_operasi_page_2026-04-11T14-35-58-060Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/04_operasi_page_2026-04-11T14-35-58-060Z.png",
+      "size": 257932
+    },
+    {
+      "filename": "05_calendar_page_2026-04-11T14-28-09-025Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/05_calendar_page_2026-04-11T14-28-09-025Z.png",
+      "size": 148665
+    },
+    {
+      "filename": "05_calendar_page_2026-04-11T14-31-49-832Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/05_calendar_page_2026-04-11T14-31-49-832Z.png",
+      "size": 147998
+    },
+    {
+      "filename": "05_calendar_page_2026-04-11T14-35-59-672Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/05_calendar_page_2026-04-11T14-35-59-672Z.png",
+      "size": 147998
+    },
+    {
+      "filename": "05_personil_2026-04-11T14-14-17-364Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/05_personil_2026-04-11T14-14-17-364Z.png",
+      "size": 3473880
+    },
+    {
+      "filename": "06_tablet_view_2026-04-11T14-28-10-703Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/06_tablet_view_2026-04-11T14-28-10-703Z.png",
+      "size": 173577
+    },
+    {
+      "filename": "06_tablet_view_2026-04-11T14-31-51-421Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/06_tablet_view_2026-04-11T14-31-51-421Z.png",
+      "size": 172519
+    },
+    {
+      "filename": "06_tablet_view_2026-04-11T14-36-01-252Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/06_tablet_view_2026-04-11T14-36-01-252Z.png",
+      "size": 175601
+    },
+    {
+      "filename": "06_tim_piket_2026-04-11T14-14-28-486Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/06_tim_piket_2026-04-11T14-14-28-486Z.png",
+      "size": 360921
+    },
+    {
+      "filename": "06-calendar.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/06-calendar.png",
+      "size": 362729
+    },
+    {
+      "filename": "07_calendar_2026-04-11T14-14-34-149Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/07_calendar_2026-04-11T14-14-34-149Z.png",
+      "size": 329762
+    },
+    {
+      "filename": "07_mobile_view_2026-04-11T14-28-12-533Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/07_mobile_view_2026-04-11T14-28-12-533Z.png",
+      "size": 153610
+    },
+    {
+      "filename": "07_mobile_view_2026-04-11T14-31-52-972Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/07_mobile_view_2026-04-11T14-31-52-972Z.png",
+      "size": 158013
+    },
+    {
+      "filename": "07_mobile_view_2026-04-11T14-36-02-748Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/07_mobile_view_2026-04-11T14-36-02-748Z.png",
+      "size": 156608
+    },
+    {
+      "filename": "08_operasi_2026-04-11T14-14-37-922Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/08_operasi_2026-04-11T14-14-37-922Z.png",
+      "size": 138871
+    },
+    {
+      "filename": "08-operasi.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/08-operasi.png",
+      "size": 362729
+    },
+    {
+      "filename": "09_laporan_piket_2026-04-11T14-14-40-757Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/09_laporan_piket_2026-04-11T14-14-40-757Z.png",
+      "size": 89119
+    },
+    {
+      "filename": "10_laporan_operasi_2026-04-11T14-14-43-754Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/10_laporan_operasi_2026-04-11T14-14-43-754Z.png",
+      "size": 124622
+    },
+    {
+      "filename": "11_lhpt_2026-04-11T14-14-46-670Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/11_lhpt_2026-04-11T14-14-46-670Z.png",
+      "size": 116705
+    },
+    {
+      "filename": "12_ekspedisi_2026-04-11T14-14-49-572Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/12_ekspedisi_2026-04-11T14-14-49-572Z.png",
+      "size": 114688
+    },
+    {
+      "filename": "13_apel_nominal_2026-04-11T14-14-52-194Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/13_apel_nominal_2026-04-11T14-14-52-194Z.png",
+      "size": 116269
+    },
+    {
+      "filename": "14_pelatihan_2026-04-11T14-14-55-186Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/14_pelatihan_2026-04-11T14-14-55-186Z.png",
+      "size": 106819
+    },
+    {
+      "filename": "15_after_logout_2026-04-11T14-14-57-665Z.png",
+      "path": "/opt/lampp/htdocs/sprin/tests/screenshots/15_after_logout_2026-04-11T14-14-57-665Z.png",
+      "size": 794667
+    }
+  ]
+}

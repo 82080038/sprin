@@ -36,10 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistem Manajemen POLRES Samosir</title>
-    
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
@@ -57,8 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0;
-            padding: 20px;
         }
         
         .login-container {
@@ -141,38 +136,196 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 padding: 2rem;
             }
         }
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 50%, #ffd700 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            min-height: 500px;
+        }
+        
+        .login-left {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .login-right {
+            padding: 40px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+        
+        .login-left h2 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .login-left p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+        
+        .login-right h3 {
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+        }
+        
+        .form-floating {
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.25);
+        }
+        
+        .btn-login {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+            color: white;
+        }
+        
+        .btn-quick-login {
+            background: linear-gradient(135deg, var(--accent-color), #ff6f00);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        
+        .btn-quick-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+            color: white;
+        }
+        
+        .btn-quick-login:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .features {
+            margin-top: 30px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        
+        .feature-item i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        
+        .footer-info {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 400px;
+            }
+            
+            .login-left {
+                padding: 30px;
+            }
+            
+            .login-right {
+                padding: 30px;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .login-left h2 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center align-items-center min-vh-100">
-            <div class="col-lg-10 col-xl-8">
-                <div class="login-container">
-                    <div class="row g-0">
-                        <!-- Sidebar -->
-                        <div class="col-md-5">
-                            <div class="login-sidebar">
-                                <div class="text-center">
-                                    <i class="fas fa-shield-alt fa-4x mb-4"></i>
-                                    <h2 class="fw-bold mb-3">SPRIN</h2>
-                                    <p class="mb-4">Sistem Personil POLRES Samosir</p>
-                                    <div class="text-start">
-                                        <h5 class="mb-3">Fitur Utama:</h5>
-                                        <ul class="list-unstyled">
-                                            <li class="mb-2"><i class="fas fa-check-circle me-2"></i>Manajemen Personil</li>
-                                            <li class="mb-2"><i class="fas fa-check-circle me-2"></i>Penjadwalan Piket</li>
-                                            <li class="mb-2"><i class="fas fa-check-circle me-2"></i>Tracking Operasi</li>
-                                            <li class="mb-2"><i class="fas fa-check-circle me-2"></i>Laporan & Analitik</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Login Form -->
-                        <div class="col-md-7">
-                            <div class="login-form">
-                                <h3 class="fw-bold mb-4">Login System</h3>
+    <div class="login-container">
+        <div class="login-left">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                </div>
+            </div>
+            
+            <!-- Login Form -->
+            <div class="col-md-7">
+                <div class="login-form">
+                    <h3 class="fw-bold mb-4">Login System</h3>
                     
                     <form method="POST" action="">
                         <?php if (isset($error)): ?>
@@ -209,8 +362,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </button>
                         </div>
                     </form>
-                            </div>
-                        </div>
+                    
+                    <div class="footer-info">
+                        <p><strong>Default Login:</strong></p>
+                        <p>Username: <code>bagops</code></p>
+                        <p>Password: <code>admin123</code></p>
                     </div>
                 </div>
             </div>
@@ -242,8 +398,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             input.addEventListener('blur', function() {
                 this.parentElement.querySelector('.input-group-text').classList.remove('text-primary');
-            });
-        });
         
         // Allow Enter key to submit form
         document.addEventListener('DOMContentLoaded', function() {

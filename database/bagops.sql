@@ -16,6 +16,38 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `analytics_cache`
+--
+
+DROP TABLE IF EXISTS `analytics_cache`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `analytics_cache` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cache_key` varchar(100) NOT NULL,
+  `cache_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`cache_data`)),
+  `cache_type` enum('personnel_stats','scheduling_patterns','fatigue_trends','compliance_metrics') NOT NULL,
+  `valid_until` datetime NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cache_key` (`cache_key`),
+  KEY `idx_cache_key` (`cache_key`),
+  KEY `idx_cache_type` (`cache_type`),
+  KEY `idx_valid_until` (`valid_until`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `analytics_cache`
+--
+
+LOCK TABLES `analytics_cache` WRITE;
+/*!40000 ALTER TABLE `analytics_cache` DISABLE KEYS */;
+/*!40000 ALTER TABLE `analytics_cache` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `apel_nominal`
 --
 
@@ -249,6 +281,326 @@ LOCK TABLES `calendar_tokens` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `certifications`
+--
+
+DROP TABLE IF EXISTS `certifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `certifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `personil_id` varchar(20) NOT NULL,
+  `certification_type` varchar(100) NOT NULL,
+  `certification_name` varchar(200) NOT NULL,
+  `issuing_authority` varchar(200) DEFAULT NULL,
+  `certificate_number` varchar(100) DEFAULT NULL,
+  `issue_date` date DEFAULT NULL,
+  `expiry_date` date DEFAULT NULL,
+  `status` enum('valid','expired','expiring','suspended') DEFAULT 'valid',
+  `reminder_sent` tinyint(1) DEFAULT 0,
+  `attachment_path` varchar(500) DEFAULT NULL COMMENT 'Path to certificate file',
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_personil_cert` (`personil_id`),
+  KEY `idx_expiry_date` (`expiry_date`),
+  KEY `idx_cert_status` (`status`),
+  KEY `idx_cert_type` (`certification_type`),
+  KEY `idx_expiry_status` (`expiry_date`,`status`),
+  CONSTRAINT `certifications_ibfk_1` FOREIGN KEY (`personil_id`) REFERENCES `personil` (`nrp`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `certifications`
+--
+
+LOCK TABLES `certifications` WRITE;
+/*!40000 ALTER TABLE `certifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `certifications` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `daily_attendance_summary`
+--
+
+DROP TABLE IF EXISTS `daily_attendance_summary`;
+/*!50001 DROP VIEW IF EXISTS `daily_attendance_summary`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `daily_attendance_summary` AS SELECT
+ 1 AS `attendance_date`,
+  1 AS `total_scheduled`,
+  1 AS `present`,
+  1 AS `sick`,
+  1 AS `permitted`,
+  1 AS `absent`,
+  1 AS `attendance_rate` */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `emergency_task_performance`
+--
+
+DROP TABLE IF EXISTS `emergency_task_performance`;
+/*!50001 DROP VIEW IF EXISTS `emergency_task_performance`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `emergency_task_performance` AS SELECT
+ 1 AS `task_date`,
+  1 AS `total_tasks`,
+  1 AS `completed`,
+  1 AS `cancelled`,
+  1 AS `avg_duration_minutes`,
+  1 AS `critical_tasks`,
+  1 AS `high_tasks` */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `emergency_task_responses`
+--
+
+DROP TABLE IF EXISTS `emergency_task_responses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `emergency_task_responses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `task_id` int(11) NOT NULL,
+  `personil_id` varchar(20) NOT NULL,
+  `response` enum('acknowledged','confirmed','declined','unable') NOT NULL,
+  `notes` text DEFAULT NULL,
+  `eta` varchar(100) DEFAULT NULL,
+  `response_time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `location` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_task_personil` (`task_id`,`personil_id`),
+  KEY `idx_response_time` (`response_time`),
+  CONSTRAINT `emergency_task_responses_ibfk_1` FOREIGN KEY (`task_id`) REFERENCES `emergency_tasks` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `emergency_task_responses`
+--
+
+LOCK TABLES `emergency_task_responses` WRITE;
+/*!40000 ALTER TABLE `emergency_task_responses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `emergency_task_responses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `emergency_tasks`
+--
+
+DROP TABLE IF EXISTS `emergency_tasks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `emergency_tasks` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `task_code` varchar(50) NOT NULL COMMENT 'Kode unik task darurat',
+  `task_name` varchar(200) NOT NULL,
+  `task_type` enum('urgent','critical','emergency','recall') NOT NULL,
+  `description` text DEFAULT NULL,
+  `priority_level` enum('low','medium','high','critical') DEFAULT 'high',
+  `location` varchar(255) DEFAULT NULL,
+  `required_personnel` int(11) DEFAULT 1,
+  `estimated_duration` decimal(4,2) DEFAULT NULL COMMENT 'Durasi dalam jam',
+  `start_time` datetime NOT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `status` enum('pending','assigned','in_progress','completed','cancelled') DEFAULT 'pending',
+  `created_by` varchar(50) NOT NULL,
+  `assigned_to` varchar(20) DEFAULT NULL COMMENT 'NRP personil yang ditugaskan',
+  `original_schedule_id` int(11) DEFAULT NULL COMMENT 'Jadwal asli yang diganti',
+  `replacement_reason` text DEFAULT NULL COMMENT 'Alasan penggantian',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `task_code` (`task_code`),
+  KEY `original_schedule_id` (`original_schedule_id`),
+  KEY `idx_task_status` (`status`),
+  KEY `idx_task_priority` (`priority_level`),
+  KEY `idx_start_time` (`start_time`),
+  KEY `idx_assigned_to` (`assigned_to`),
+  KEY `idx_assigned_to_status` (`assigned_to`,`status`),
+  KEY `idx_start_status` (`start_time`,`status`),
+  FULLTEXT KEY `task_name` (`task_name`,`description`),
+  CONSTRAINT `emergency_tasks_ibfk_1` FOREIGN KEY (`assigned_to`) REFERENCES `personil` (`nrp`) ON DELETE SET NULL,
+  CONSTRAINT `emergency_tasks_ibfk_2` FOREIGN KEY (`original_schedule_id`) REFERENCES `schedules` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `emergency_tasks`
+--
+
+LOCK TABLES `emergency_tasks` WRITE;
+/*!40000 ALTER TABLE `emergency_tasks` DISABLE KEYS */;
+/*!40000 ALTER TABLE `emergency_tasks` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `equipment`
+--
+
+DROP TABLE IF EXISTS `equipment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `equipment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `equipment_code` varchar(50) NOT NULL,
+  `equipment_name` varchar(200) NOT NULL,
+  `equipment_type` enum('weapon','vehicle','radio','protective','tools','other') NOT NULL,
+  `serial_number` varchar(100) DEFAULT NULL,
+  `model` varchar(100) DEFAULT NULL,
+  `manufacturer` varchar(100) DEFAULT NULL,
+  `purchase_date` date DEFAULT NULL,
+  `purchase_cost` decimal(10,2) DEFAULT NULL,
+  `current_status` enum('available','assigned','maintenance','retired','lost') DEFAULT 'available',
+  `current_assignment` varchar(20) DEFAULT NULL COMMENT 'Assigned to personil NRP',
+  `location` varchar(255) DEFAULT NULL,
+  `maintenance_schedule` varchar(100) DEFAULT NULL,
+  `last_maintenance` date DEFAULT NULL,
+  `next_maintenance` date DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `equipment_code` (`equipment_code`),
+  KEY `idx_equipment_type` (`equipment_type`),
+  KEY `idx_equipment_status` (`current_status`),
+  KEY `idx_current_assignment` (`current_assignment`),
+  KEY `idx_next_maintenance` (`next_maintenance`),
+  KEY `idx_maintenance_status` (`next_maintenance`,`current_status`),
+  CONSTRAINT `equipment_ibfk_1` FOREIGN KEY (`current_assignment`) REFERENCES `personil` (`nrp`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `equipment`
+--
+
+LOCK TABLES `equipment` WRITE;
+/*!40000 ALTER TABLE `equipment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `equipment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `equipment_assignments`
+--
+
+DROP TABLE IF EXISTS `equipment_assignments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `equipment_assignments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `equipment_id` int(11) NOT NULL,
+  `personil_id` varchar(20) NOT NULL,
+  `assignment_date` datetime NOT NULL,
+  `return_date` datetime DEFAULT NULL,
+  `assignment_purpose` varchar(255) DEFAULT NULL,
+  `condition_assigned` varchar(100) DEFAULT NULL,
+  `condition_returned` varchar(100) DEFAULT NULL,
+  `status` enum('active','returned','overdue','lost') DEFAULT 'active',
+  `notes` text DEFAULT NULL,
+  `assigned_by` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `personil_id` (`personil_id`),
+  KEY `idx_equipment_personil` (`equipment_id`,`personil_id`),
+  KEY `idx_assignment_status` (`status`),
+  KEY `idx_assignment_date` (`assignment_date`),
+  CONSTRAINT `equipment_assignments_ibfk_1` FOREIGN KEY (`equipment_id`) REFERENCES `equipment` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `equipment_assignments_ibfk_2` FOREIGN KEY (`personil_id`) REFERENCES `personil` (`nrp`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `equipment_assignments`
+--
+
+LOCK TABLES `equipment_assignments` WRITE;
+/*!40000 ALTER TABLE `equipment_assignments` DISABLE KEYS */;
+/*!40000 ALTER TABLE `equipment_assignments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fatigue_tracking`
+--
+
+DROP TABLE IF EXISTS `fatigue_tracking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fatigue_tracking` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `personil_id` varchar(20) NOT NULL,
+  `tracking_date` date NOT NULL,
+  `hours_worked` decimal(5,2) NOT NULL DEFAULT 0.00,
+  `rest_hours` decimal(5,2) NOT NULL DEFAULT 0.00,
+  `fatigue_score` int(11) DEFAULT 100,
+  `fatigue_level` enum('low','medium','high','critical') DEFAULT 'low',
+  `violations` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'List of fatigue violations' CHECK (json_valid(`violations`)),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_personil_fatigue` (`personil_id`,`tracking_date`),
+  KEY `idx_fatigue_level` (`fatigue_level`),
+  KEY `idx_tracking_date` (`tracking_date`),
+  KEY `idx_personnel_date_score` (`personil_id`,`tracking_date`,`fatigue_score`),
+  KEY `idx_date_level` (`tracking_date`,`fatigue_level`),
+  CONSTRAINT `fatigue_tracking_ibfk_1` FOREIGN KEY (`personil_id`) REFERENCES `personil` (`nrp`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fatigue_tracking`
+--
+
+LOCK TABLES `fatigue_tracking` WRITE;
+/*!40000 ALTER TABLE `fatigue_tracking` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fatigue_tracking` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `generated_reports`
+--
+
+DROP TABLE IF EXISTS `generated_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `generated_reports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `report_type` varchar(50) NOT NULL,
+  `report_name` varchar(200) NOT NULL,
+  `filename` varchar(255) NOT NULL,
+  `filepath` varchar(500) NOT NULL,
+  `format` enum('pdf','excel','csv') NOT NULL,
+  `file_size` bigint(20) DEFAULT 0,
+  `parameters` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`parameters`)),
+  `generated_by` int(11) NOT NULL,
+  `generated_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `expires_at` timestamp NULL DEFAULT NULL COMMENT 'Auto-delete after this date',
+  `download_count` int(11) DEFAULT 0,
+  `last_downloaded` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_report_type` (`report_type`),
+  KEY `idx_generated_at` (`generated_at`),
+  KEY `idx_generated_by` (`generated_by`),
+  KEY `idx_expires_at` (`expires_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `generated_reports`
+--
+
+LOCK TABLES `generated_reports` WRITE;
+/*!40000 ALTER TABLE `generated_reports` DISABLE KEYS */;
+/*!40000 ALTER TABLE `generated_reports` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `jabatan`
 --
 
@@ -272,6 +624,8 @@ CREATE TABLE `jabatan` (
   `is_active` tinyint(1) DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `required_certifications` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'List of required certifications' CHECK (json_valid(`required_certifications`)),
+  `certification_check` tinyint(1) DEFAULT 0 COMMENT 'Check certifications before assignment',
   PRIMARY KEY (`id`),
   UNIQUE KEY `kode_jabatan` (`kode_jabatan`),
   KEY `id_unsur` (`id_unsur`),
@@ -285,7 +639,7 @@ CREATE TABLE `jabatan` (
 
 LOCK TABLES `jabatan` WRITE;
 /*!40000 ALTER TABLE `jabatan` DISABLE KEYS */;
-INSERT INTO `jabatan` VALUES (1,'KAPOLRES_SAMOSIR','KAPOLRES SAMOSIR',1,1,NULL,'PIMPINAN',NULL,NULL,1,0,0,'Jabatan KAPOLRES SAMOSIR di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:09:51'),(2,'WAKAPOLRES','WAKAPOLRES',1,1,NULL,'PIMPINAN',NULL,NULL,1,0,0,'Jabatan WAKAPOLRES di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:09:39'),(3,'KABAGOPS','KABAG OPS',2,1,3,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KABAG OPS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-10 04:34:57'),(4,'PS._PAUR_SUBBAGBINOPS','PS. PAUR SUBBAGBINOPS',2,2,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PS. PAUR SUBBAGBINOPS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:32'),(5,'BA_MIN_BAG_OPS','BA MIN BAG OPS',2,3,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BA MIN BAG OPS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:32'),(6,'ASN_BAG_OPS','ASN BAG OPS',2,4,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan ASN BAG OPS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:32'),(7,'KA_SPKT','KA SPKT',5,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KA SPKT di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(8,'PAMAPTA_1','PAMAPTA 1',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PAMAPTA 1 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(9,'PAMAPTA_2','PAMAPTA 2',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PAMAPTA 2 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(10,'PAMAPTA_3','PAMAPTA 3',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PAMAPTA 3 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(11,'BAMIN_PAMAPTA_2','BAMIN PAMAPTA 2',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BAMIN PAMAPTA 2 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(12,'BAMIN_PAMAPTA_3','BAMIN PAMAPTA 3',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BAMIN PAMAPTA 3 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(13,'BAMIN_PAMAPTA_1','BAMIN PAMAPTA 1',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BAMIN PAMAPTA 1 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(14,'PAURSUBBAGPROGAR','PAURSUBBAGPROGAR',2,5,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PAURSUBBAGPROGAR di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:32'),(15,'BA_MIN_BAG_REN','BA MIN BAG REN',2,6,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BA MIN BAG REN di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:32'),(16,'PS._KABAG_SDM','PS. KABAG SDM',2,7,4,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan PS. KABAG SDM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 18:00:41'),(17,'PAURSUBBAGBINKAR','PAURSUBBAGBINKAR',2,8,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PAURSUBBAGBINKAR di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:32'),(18,'BA_MIN_BAG_SDM','BA MIN BAG SDM',2,9,4,'STAF',NULL,NULL,0,0,0,'Jabatan BA MIN BAG SDM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 18:00:41'),(19,'BA_POLRES_SAMOSIR','BA POLRES SAMOSIR',2,10,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BA POLRES SAMOSIR di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40'),(20,'ADC_KAPOLRES','ADC KAPOLRES',2,11,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan ADC KAPOLRES di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40'),(21,'BINTARA_SATLANTAS','BINTARA SATLANTAS',3,12,9,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SATLANTAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40'),(22,'PLT._KASUBBAGBEKPAL','Plt. KASUBBAGBEKPAL',2,13,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan Plt. KASUBBAGBEKPAL di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40'),(23,'BA_MIN_BAG_LOG','BA MIN BAG LOG',2,14,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BA MIN BAG LOG di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40'),(24,'PS._KASIUM','PS. KASIUM',5,15,NULL,'STAF',NULL,NULL,0,0,1,'Jabatan PS. KASIUM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40'),(25,'BINTARA_SIUM','BINTARA SIUM',5,16,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SIUM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40'),(26,'PS._KASIKEU','PS. KASIKEU',5,17,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PS. KASIKEU di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40'),(27,'BINTARA_SIKEU','BINTARA SIKEU',5,18,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SIKEU di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:41'),(28,'KASIDOKKES','KASIDOKKES',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan KASIDOKKES di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(29,'BA_SIDOKKES','BA SIDOKKES',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BA SIDOKKES di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(30,'PLT._KASIWAS','Plt. KASIWAS',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan Plt. KASIWAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(31,'BINTARA_SIWAS','BINTARA SIWAS',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SIWAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(32,'BINTARA_SITIK','BINTARA SITIK',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SITIK di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(33,'KASUBSIBANKUM','KASUBSIBANKUM',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan KASUBSIBANKUM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(34,'BINTARA_SIKUM','BINTARA SIKUM',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SIKUM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(35,'PS._KASIPROPAM','PS. KASIPROPAM',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PS. KASIPROPAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(36,'PS._KANIT_PROPOS','PS. KANIT PROPOS',5,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT PROPOS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(37,'PS._KANIT_PAMINAL','PS. KANIT PAMINAL',5,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT PAMINAL di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(38,'BINTARA_SIPROPAM','BINTARA SIPROPAM',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SIPROPAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(39,'BINTARA_SIHUMAS','BINTARA SIHUMAS',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SIHUMAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(40,'KAURBINOPS','KAURBINOPS',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan KAURBINOPS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(41,'BINTARA_SAT_BINMAS','BINTARA SAT BINMAS',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT BINMAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(42,'PS._KASAT_INTELKAM','PS. KASAT INTELKAM',3,0,6,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan PS. KASAT INTELKAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:59:48'),(43,'PS._KAURMINTU','PS. KAURMINTU',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PS. KAURMINTU di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(44,'PS._KANIT_3','PS. KANIT 3',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT 3 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(45,'PS._KANIT_1','PS. KANIT 1',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT 1 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(46,'PS._KANIT_2','PS. KANIT 2',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT 2 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(47,'BINTARA_SAT_INTELKAM','BINTARA SAT INTELKAM',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT INTELKAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(48,'BINTARA_SATINTELKAM','BINTARA SATINTELKAM',3,0,6,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SATINTELKAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:32'),(49,'KASAT_RESKRIM','KASAT RESKRIM',3,0,7,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KASAT RESKRIM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:59:38'),(50,'KANITIDIK_3','KANIT IDIK 3',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KANITIDIK 3 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-09 18:01:28'),(51,'KANITIDIK_4','KANIT IDIK 4',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KANITIDIK 4 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-09 18:01:28'),(52,'KANITIDIK_1','KANIT IDIK 1',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KANITIDIK 1 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-09 18:01:28'),(53,'KANITIDIK_5','KANIT IDIK 5',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KANITIDIK 5 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-09 18:01:28'),(54,'PS._KANITIDIK_2','PS. KANITIDIK 2',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITIDIK 2 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(55,'PS._KANIT_IDENTIFIKASI','PS. KANIT IDENTIFIKASI',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT IDENTIFIKASI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(56,'BINTARA_SAT_RESKRIM','BINTARA SAT RESKRIM',3,0,7,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT RESKRIM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:21'),(57,'KASATRESNARKOBA','KASATRESNARKOBA',3,0,8,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KASATRESNARKOBA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:03'),(58,'PS.KANIT_IDIK_1','PS.KANIT IDIK 1',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS.KANIT IDIK 1 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(59,'BINTARA_SATRESNARKOBA','BINTARA SATRESNARKOBA',3,0,8,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SATRESNARKOBA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:49'),(60,'KASAT_SAMAPTA','KASAT SAMAPTA',3,0,10,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KASAT SAMAPTA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:59:58'),(61,'PS._KAURBINOPS','PS. KAURBINOPS',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PS. KAURBINOPS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(62,'PS._KANIT_DALMAS_2','PS. KANIT DALMAS 2',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT DALMAS 2 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(63,'PS._KANIT_TURJAWALI','PS. KANIT TURJAWALI',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT TURJAWALI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(64,'BINTARA_SAT_SAMAPTA','BINTARA SAT SAMAPTA',3,0,10,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT SAMAPTA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:44'),(65,'KASAT_PAMOBVIT','KASAT PAMOBVIT',3,0,11,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KASAT PAMOBVIT di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:59:53'),(66,'PS._KANITPAMWASTER','PS. KANITPAMWASTER',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITPAMWASTER di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(67,'PS._KANITPAMWISATA','PS. KANITPAMWISATA',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITPAMWISATA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(68,'PS._PANIT_PAMWASTER','PS. PANIT PAMWASTER',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PS. PANIT PAMWASTER di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(69,'BINTARA_SAT_PAMOBVIT','BINTARA SAT PAMOBVIT',3,0,11,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT PAMOBVIT di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:38'),(70,'KASAT_LANTAS','KASAT LANTAS',3,0,9,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KASAT LANTAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:59:43'),(71,'KANITREGIDENT_LANTAS','KANIT REGIDENT LANTAS',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KANITREGIDENT LANTAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-09 18:01:28'),(72,'PS._KANITGAKKUM','PS. KANITGAKKUM',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITGAKKUM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(73,'PS._KANITTURJAWALI','PS. KANITTURJAWALI',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITTURJAWALI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(74,'PS._KANITKAMSEL','PS. KANITKAMSEL',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITKAMSEL di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(75,'BINTARA_SAT_LANTAS','BINTARA SAT LANTAS',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT LANTAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(76,'KASAT_POLAIRUD','KASAT POLAIRUD',3,0,12,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KASAT POLAIRUD di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:13'),(77,'PS._KANITPATROLI','PS. KANITPATROLI',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITPATROLI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(78,'BINTARA_SATPOLAIRUD','BINTARA SATPOLAIRUD',3,0,12,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SATPOLAIRUD di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:55'),(79,'PS._KASAT_TAHTI','PS. KASAT TAHTI',3,0,NULL,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan PS. KASAT TAHTI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(80,'BINTARA_SAT_TAHTI','BINTARA SAT TAHTI',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT TAHTI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(81,'PS._KAPOLSEK_HARIAN_BOHO','PS. KAPOLSEK HARIAN BOHO',4,0,NULL,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan PS. KAPOLSEK HARIAN BOHO di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(82,'PS._KANIT_INTELKAM','PS. KANIT INTELKAM',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT INTELKAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(83,'PS._KANIT_BINMAS','PS. KANIT BINMAS',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT BINMAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(84,'PS._KANIT_RESKRIM','PS. KANIT RESKRIM',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT RESKRIM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(85,'PS.KANIT_SAMAPTA','PS.KANIT SAMAPTA',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS.KANIT SAMAPTA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(86,'BINTARA_POLSEK','BINTARA POLSEK',4,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA POLSEK di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(87,'KAPOLSEK_PALIPI','KAPOLSEK PALIPI',4,0,16,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KAPOLSEK PALIPI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:56:26'),(88,'PS._KA_SPKT_1','PS. KA SPKT 1',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KA SPKT 1 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(89,'PS._KANIT_SAMAPTA','PS. KANIT SAMAPTA',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT SAMAPTA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(90,'PS._KA_SPKT_2','PS. KA SPKT 2',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KA SPKT 2 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(91,'BINTARA__POLSEK','BINTARA  POLSEK',4,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA  POLSEK di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(92,'PS._KAPOLSEK_SIMANINDO','PS. KAPOLSEK SIMANINDO',4,0,17,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan PS. KAPOLSEK SIMANINDO di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:56:36'),(93,'KANIT_RESKRIM','KANIT RESKRIM',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KANIT RESKRIM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(94,'PS._KANITPROPAM','PS. KANIT PROPAM',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITPROPAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-09 18:01:28'),(95,'PS._KA_SPKT_3','PS. KA SPKT 3',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KA SPKT 3 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(96,'KASIHUMAS','KASIHUMAS',4,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan KASIHUMAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11'),(97,'KAPOLSEK_PANGURURAN','KAPOLSEK PANGURURAN',4,0,19,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KAPOLSEK PANGURURAN di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:56:31'),(98,'BINTARA_POLSEK_PALIPI','BINTARA POLSEK PALIPI',4,0,16,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:04','2026-04-06 08:04:04'),(99,'BINTARA_POLSEK_PANGURURAN','BINTARA POLSEK PANGURURAN',4,0,19,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:04','2026-04-06 08:04:04'),(100,'BINTARA_POLSEK_SIMANINDO','BINTARA POLSEK SIMANINDO',4,0,17,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:04','2026-04-06 08:04:04'),(101,'BINTARA_POLSEK_NAINGGOLAN','BINTARA POLSEK NAINGGOLAN',4,0,18,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:04','2026-04-06 08:05:17'),(102,'BINTARA_POLSEK_HARIANBOHO','BINTARA POLSEK HARIAN BOHO',4,1,15,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:04','2026-04-06 09:21:19'),(103,'KANIT_RESKRIM_PALIPI','KANIT RESKRIM PALIPI',4,0,16,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:10','2026-04-06 08:04:10'),(104,'KANIT_RESKRIM_PANGURURAN','KANIT RESKRIM PANGURURAN',4,0,19,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:10','2026-04-06 08:04:10'),(105,'KANIT_RESKRIM_SIMANINDO','KANIT RESKRIM SIMANINDO',4,0,17,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:10','2026-04-06 08:04:10'),(106,'KANIT_RESKRIM_NAINGGOLAN','KANIT RESKRIM NAINGGOLAN',4,0,18,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:10','2026-04-06 08:05:17'),(107,'KANIT_RESKRIM_HARIANBOHO','KANIT RESKRIM HARIAN BOHO',4,2,15,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:10','2026-04-06 09:21:19'),(108,'BINTARA_POLSEK_ONANRUNGGU','BINTARA POLSEK ONAN RUNGGU',4,0,18,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:06:09','2026-04-06 08:06:09'),(109,'KAPOLSEK_NAINGGOLAN','KAPOLSEK NAINGGOLAN',4,0,18,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:07:00','2026-04-06 08:07:00'),(110,'PS._KANIT_PATROLI_SAT_POLAIRUD','PS. KANIT PATROLI SAT POLAIRUD',NULL,0,12,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:38:41','2026-04-09 17:38:41'),(111,'PS._KAURMINTU_SAT_POLAIRUD','PS. KAURMINTU SAT POLAIRUD',NULL,0,12,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:38:41','2026-04-09 17:38:41'),(112,'BINTARA_SAT_POLAIRUD','BINTARA SAT POLAIRUD',NULL,0,12,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:38:41','2026-04-09 17:38:41'),(113,'KAURBINOPS_SAT_BINMAS','KAURBINOPS SAT BINMAS',NULL,0,14,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:43:42','2026-04-09 17:43:42'),(114,'PS._KA_SPKT_1_POLSEK_PALIPI','PS. KA SPKT 1 POLSEK PALIPI',NULL,0,16,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:50:03','2026-04-09 17:50:03'),(115,'PS._KASIUM_POLSEK_PALIPI','PS. KASIUM POLSEK PALIPI',NULL,0,16,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:50:03','2026-04-09 17:50:03'),(116,'PS._KA_SPKT_2_POLSEK_PALIPI','PS. KA SPKT 2 POLSEK PALIPI',NULL,0,16,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:50:03','2026-04-09 17:50:03'),(117,'PS._KANIT_SAMAPTA_POLSEK_PALIPI','PS. KANIT SAMAPTA POLSEK PALIPI',NULL,0,16,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:50:03','2026-04-09 17:50:03'),(118,'PS._KANIT_BINMAS_POLSEK_PALIPI','PS. KANIT BINMAS POLSEK PALIPI',NULL,0,16,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:50:03','2026-04-09 17:50:03'),(119,'PS._KANIT_INTELKAM_POLSEK_PALIPI','PS. KANIT INTELKAM POLSEK PALIPI',NULL,0,16,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:50:03','2026-04-09 17:50:03'),(120,'PS._KA_SPKT_1_POLSEK_SIMANINDO','PS. KA SPKT 1 POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10'),(121,'PS._KA_SPKT_3_POLSEK_SIMANINDO','PS. KA SPKT 3 POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10'),(122,'PS._KASIUM_POLSEK_SIMANINDO','PS. KASIUM POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10'),(123,'PS._KANITPROPAM_POLSEK_SIMANINDO','PS. KANIT PROPAM POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 18:01:28'),(124,'PS._KANIT_BINMAS_POLSEK_SIMANINDO','PS. KANIT BINMAS POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10'),(125,'PS._KANIT_INTELKAM_POLSEK_SIMANINDO','PS. KANIT INTELKAM POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10'),(126,'PS._KANIT_SAMAPTA_POLSEK_SIMANINDO','PS. KANIT SAMAPTA POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10'),(127,'PS._KANIT_BINMAS_POLSEK_NAINGGOLAN','PS. KANIT BINMAS POLSEK NAINGGOLAN',NULL,0,18,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10'),(128,'PS._KANIT_SAMAPTA_POLSEK_NAINGGOLAN','PS. KANIT SAMAPTA POLSEK NAINGGOLAN',NULL,0,18,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10'),(129,'PS._KANIT_INTELKAM_POLSEK_NAINGGOLAN','PS. KANIT INTELKAM POLSEK NAINGGOLAN',NULL,0,18,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10'),(130,'PS._KANIT_INTELKAM_POLSEK_PANGURURAN','PS. KANIT INTELKAM POLSEK PANGURURAN',NULL,0,19,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10'),(131,'PS._KANIT_BINMAS_POLSEK_PANGURURAN','PS. KANIT BINMAS POLSEK PANGURURAN',NULL,0,19,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10'),(132,'PS._KANIT_SAMAPTA_POLSEK_PANGURURAN','PS. KANIT SAMAPTA POLSEK PANGURURAN',NULL,0,19,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10');
+INSERT INTO `jabatan` VALUES (1,'KAPOLRES_SAMOSIR','KAPOLRES SAMOSIR',1,1,NULL,'PIMPINAN',NULL,NULL,1,0,0,'Jabatan KAPOLRES SAMOSIR di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:09:51',NULL,0),(2,'WAKAPOLRES','WAKAPOLRES',1,1,NULL,'PIMPINAN',NULL,NULL,1,0,0,'Jabatan WAKAPOLRES di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:09:39',NULL,0),(3,'KABAGOPS','KABAG OPS',2,1,3,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KABAG OPS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-10 04:34:57',NULL,0),(4,'PS._PAUR_SUBBAGBINOPS','PS. PAUR SUBBAGBINOPS',2,2,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PS. PAUR SUBBAGBINOPS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:32',NULL,0),(5,'BA_MIN_BAG_OPS','BA MIN BAG OPS',2,3,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BA MIN BAG OPS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:32',NULL,0),(6,'ASN_BAG_OPS','ASN BAG OPS',2,4,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan ASN BAG OPS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:32',NULL,0),(7,'KA_SPKT','KA SPKT',5,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KA SPKT di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(8,'PAMAPTA_1','PAMAPTA 1',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PAMAPTA 1 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(9,'PAMAPTA_2','PAMAPTA 2',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PAMAPTA 2 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(10,'PAMAPTA_3','PAMAPTA 3',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PAMAPTA 3 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(11,'BAMIN_PAMAPTA_2','BAMIN PAMAPTA 2',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BAMIN PAMAPTA 2 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(12,'BAMIN_PAMAPTA_3','BAMIN PAMAPTA 3',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BAMIN PAMAPTA 3 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(13,'BAMIN_PAMAPTA_1','BAMIN PAMAPTA 1',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BAMIN PAMAPTA 1 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(14,'PAURSUBBAGPROGAR','PAURSUBBAGPROGAR',2,5,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PAURSUBBAGPROGAR di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:32',NULL,0),(15,'BA_MIN_BAG_REN','BA MIN BAG REN',2,6,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BA MIN BAG REN di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:32',NULL,0),(16,'PS._KABAG_SDM','PS. KABAG SDM',2,7,4,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan PS. KABAG SDM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 18:00:41',NULL,0),(17,'PAURSUBBAGBINKAR','PAURSUBBAGBINKAR',2,8,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PAURSUBBAGBINKAR di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:32',NULL,0),(18,'BA_MIN_BAG_SDM','BA MIN BAG SDM',2,9,4,'STAF',NULL,NULL,0,0,0,'Jabatan BA MIN BAG SDM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 18:00:41',NULL,0),(19,'BA_POLRES_SAMOSIR','BA POLRES SAMOSIR',2,10,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BA POLRES SAMOSIR di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40',NULL,0),(20,'ADC_KAPOLRES','ADC KAPOLRES',2,11,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan ADC KAPOLRES di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40',NULL,0),(21,'BINTARA_SATLANTAS','BINTARA SATLANTAS',3,12,9,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SATLANTAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40',NULL,0),(22,'PLT._KASUBBAGBEKPAL','Plt. KASUBBAGBEKPAL',2,13,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan Plt. KASUBBAGBEKPAL di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40',NULL,0),(23,'BA_MIN_BAG_LOG','BA MIN BAG LOG',2,14,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BA MIN BAG LOG di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40',NULL,0),(24,'PS._KASIUM','PS. KASIUM',5,15,NULL,'STAF',NULL,NULL,0,0,1,'Jabatan PS. KASIUM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40',NULL,0),(25,'BINTARA_SIUM','BINTARA SIUM',5,16,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SIUM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40',NULL,0),(26,'PS._KASIKEU','PS. KASIKEU',5,17,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PS. KASIKEU di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:40',NULL,0),(27,'BINTARA_SIKEU','BINTARA SIKEU',5,18,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SIKEU di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 09:03:41',NULL,0),(28,'KASIDOKKES','KASIDOKKES',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan KASIDOKKES di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(29,'BA_SIDOKKES','BA SIDOKKES',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BA SIDOKKES di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(30,'PLT._KASIWAS','Plt. KASIWAS',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan Plt. KASIWAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(31,'BINTARA_SIWAS','BINTARA SIWAS',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SIWAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(32,'BINTARA_SITIK','BINTARA SITIK',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SITIK di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(33,'KASUBSIBANKUM','KASUBSIBANKUM',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan KASUBSIBANKUM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(34,'BINTARA_SIKUM','BINTARA SIKUM',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SIKUM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(35,'PS._KASIPROPAM','PS. KASIPROPAM',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PS. KASIPROPAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(36,'PS._KANIT_PROPOS','PS. KANIT PROPOS',5,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT PROPOS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(37,'PS._KANIT_PAMINAL','PS. KANIT PAMINAL',5,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT PAMINAL di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(38,'BINTARA_SIPROPAM','BINTARA SIPROPAM',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SIPROPAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(39,'BINTARA_SIHUMAS','BINTARA SIHUMAS',5,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SIHUMAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(40,'KAURBINOPS','KAURBINOPS',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan KAURBINOPS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(41,'BINTARA_SAT_BINMAS','BINTARA SAT BINMAS',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT BINMAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(42,'PS._KASAT_INTELKAM','PS. KASAT INTELKAM',3,0,6,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan PS. KASAT INTELKAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:59:48',NULL,0),(43,'PS._KAURMINTU','PS. KAURMINTU',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PS. KAURMINTU di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(44,'PS._KANIT_3','PS. KANIT 3',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT 3 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(45,'PS._KANIT_1','PS. KANIT 1',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT 1 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(46,'PS._KANIT_2','PS. KANIT 2',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT 2 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(47,'BINTARA_SAT_INTELKAM','BINTARA SAT INTELKAM',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT INTELKAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(48,'BINTARA_SATINTELKAM','BINTARA SATINTELKAM',3,0,6,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SATINTELKAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:32',NULL,0),(49,'KASAT_RESKRIM','KASAT RESKRIM',3,0,7,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KASAT RESKRIM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:59:38',NULL,0),(50,'KANITIDIK_3','KANIT IDIK 3',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KANITIDIK 3 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-09 18:01:28',NULL,0),(51,'KANITIDIK_4','KANIT IDIK 4',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KANITIDIK 4 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-09 18:01:28',NULL,0),(52,'KANITIDIK_1','KANIT IDIK 1',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KANITIDIK 1 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-09 18:01:28',NULL,0),(53,'KANITIDIK_5','KANIT IDIK 5',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KANITIDIK 5 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-09 18:01:28',NULL,0),(54,'PS._KANITIDIK_2','PS. KANITIDIK 2',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITIDIK 2 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(55,'PS._KANIT_IDENTIFIKASI','PS. KANIT IDENTIFIKASI',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT IDENTIFIKASI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(56,'BINTARA_SAT_RESKRIM','BINTARA SAT RESKRIM',3,0,7,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT RESKRIM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:21',NULL,0),(57,'KASATRESNARKOBA','KASATRESNARKOBA',3,0,8,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KASATRESNARKOBA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:03',NULL,0),(58,'PS.KANIT_IDIK_1','PS.KANIT IDIK 1',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS.KANIT IDIK 1 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(59,'BINTARA_SATRESNARKOBA','BINTARA SATRESNARKOBA',3,0,8,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SATRESNARKOBA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:49',NULL,0),(60,'KASAT_SAMAPTA','KASAT SAMAPTA',3,0,10,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KASAT SAMAPTA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:59:58',NULL,0),(61,'PS._KAURBINOPS','PS. KAURBINOPS',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PS. KAURBINOPS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(62,'PS._KANIT_DALMAS_2','PS. KANIT DALMAS 2',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT DALMAS 2 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(63,'PS._KANIT_TURJAWALI','PS. KANIT TURJAWALI',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT TURJAWALI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(64,'BINTARA_SAT_SAMAPTA','BINTARA SAT SAMAPTA',3,0,10,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT SAMAPTA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:44',NULL,0),(65,'KASAT_PAMOBVIT','KASAT PAMOBVIT',3,0,11,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KASAT PAMOBVIT di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:59:53',NULL,0),(66,'PS._KANITPAMWASTER','PS. KANITPAMWASTER',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITPAMWASTER di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(67,'PS._KANITPAMWISATA','PS. KANITPAMWISATA',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITPAMWISATA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(68,'PS._PANIT_PAMWASTER','PS. PANIT PAMWASTER',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan PS. PANIT PAMWASTER di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(69,'BINTARA_SAT_PAMOBVIT','BINTARA SAT PAMOBVIT',3,0,11,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT PAMOBVIT di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:38',NULL,0),(70,'KASAT_LANTAS','KASAT LANTAS',3,0,9,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KASAT LANTAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:59:43',NULL,0),(71,'KANITREGIDENT_LANTAS','KANIT REGIDENT LANTAS',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KANITREGIDENT LANTAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-09 18:01:28',NULL,0),(72,'PS._KANITGAKKUM','PS. KANITGAKKUM',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITGAKKUM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(73,'PS._KANITTURJAWALI','PS. KANITTURJAWALI',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITTURJAWALI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(74,'PS._KANITKAMSEL','PS. KANITKAMSEL',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITKAMSEL di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(75,'BINTARA_SAT_LANTAS','BINTARA SAT LANTAS',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT LANTAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(76,'KASAT_POLAIRUD','KASAT POLAIRUD',3,0,12,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KASAT POLAIRUD di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:13',NULL,0),(77,'PS._KANITPATROLI','PS. KANITPATROLI',3,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITPATROLI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(78,'BINTARA_SATPOLAIRUD','BINTARA SATPOLAIRUD',3,0,12,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SATPOLAIRUD di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 08:00:55',NULL,0),(79,'PS._KASAT_TAHTI','PS. KASAT TAHTI',3,0,NULL,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan PS. KASAT TAHTI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(80,'BINTARA_SAT_TAHTI','BINTARA SAT TAHTI',3,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA SAT TAHTI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(81,'PS._KAPOLSEK_HARIAN_BOHO','PS. KAPOLSEK HARIAN BOHO',4,0,NULL,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan PS. KAPOLSEK HARIAN BOHO di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(82,'PS._KANIT_INTELKAM','PS. KANIT INTELKAM',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT INTELKAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(83,'PS._KANIT_BINMAS','PS. KANIT BINMAS',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT BINMAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(84,'PS._KANIT_RESKRIM','PS. KANIT RESKRIM',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT RESKRIM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(85,'PS.KANIT_SAMAPTA','PS.KANIT SAMAPTA',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS.KANIT SAMAPTA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(86,'BINTARA_POLSEK','BINTARA POLSEK',4,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA POLSEK di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(87,'KAPOLSEK_PALIPI','KAPOLSEK PALIPI',4,0,16,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KAPOLSEK PALIPI di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:56:26',NULL,0),(88,'PS._KA_SPKT_1','PS. KA SPKT 1',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KA SPKT 1 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(89,'PS._KANIT_SAMAPTA','PS. KANIT SAMAPTA',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANIT SAMAPTA di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(90,'PS._KA_SPKT_2','PS. KA SPKT 2',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KA SPKT 2 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(91,'BINTARA__POLSEK','BINTARA  POLSEK',4,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan BINTARA  POLSEK di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(92,'PS._KAPOLSEK_SIMANINDO','PS. KAPOLSEK SIMANINDO',4,0,17,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan PS. KAPOLSEK SIMANINDO di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:56:36',NULL,0),(93,'KANIT_RESKRIM','KANIT RESKRIM',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan KANIT RESKRIM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(94,'PS._KANITPROPAM','PS. KANIT PROPAM',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KANITPROPAM di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-09 18:01:28',NULL,0),(95,'PS._KA_SPKT_3','PS. KA SPKT 3',4,0,NULL,'KEPALA SEKSI',NULL,NULL,0,0,1,'Jabatan PS. KA SPKT 3 di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(96,'KASIHUMAS','KASIHUMAS',4,0,NULL,'STAF',NULL,NULL,0,0,0,'Jabatan KASIHUMAS di POLRES Samosir',1,'2026-03-28 18:19:11','2026-03-28 18:19:11',NULL,0),(97,'KAPOLSEK_PANGURURAN','KAPOLSEK PANGURURAN',4,0,19,'PEMBANTU PIMPINAN',NULL,NULL,0,1,1,'Jabatan KAPOLSEK PANGURURAN di POLRES Samosir',1,'2026-03-28 18:19:11','2026-04-06 07:56:31',NULL,0),(98,'BINTARA_POLSEK_PALIPI','BINTARA POLSEK PALIPI',4,0,16,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:04','2026-04-06 08:04:04',NULL,0),(99,'BINTARA_POLSEK_PANGURURAN','BINTARA POLSEK PANGURURAN',4,0,19,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:04','2026-04-06 08:04:04',NULL,0),(100,'BINTARA_POLSEK_SIMANINDO','BINTARA POLSEK SIMANINDO',4,0,17,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:04','2026-04-06 08:04:04',NULL,0),(101,'BINTARA_POLSEK_NAINGGOLAN','BINTARA POLSEK NAINGGOLAN',4,0,18,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:04','2026-04-06 08:05:17',NULL,0),(102,'BINTARA_POLSEK_HARIANBOHO','BINTARA POLSEK HARIAN BOHO',4,1,15,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:04','2026-04-06 09:21:19',NULL,0),(103,'KANIT_RESKRIM_PALIPI','KANIT RESKRIM PALIPI',4,0,16,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:10','2026-04-06 08:04:10',NULL,0),(104,'KANIT_RESKRIM_PANGURURAN','KANIT RESKRIM PANGURURAN',4,0,19,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:10','2026-04-06 08:04:10',NULL,0),(105,'KANIT_RESKRIM_SIMANINDO','KANIT RESKRIM SIMANINDO',4,0,17,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:10','2026-04-06 08:04:10',NULL,0),(106,'KANIT_RESKRIM_NAINGGOLAN','KANIT RESKRIM NAINGGOLAN',4,0,18,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:10','2026-04-06 08:05:17',NULL,0),(107,'KANIT_RESKRIM_HARIANBOHO','KANIT RESKRIM HARIAN BOHO',4,2,15,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:04:10','2026-04-06 09:21:19',NULL,0),(108,'BINTARA_POLSEK_ONANRUNGGU','BINTARA POLSEK ONAN RUNGGU',4,0,18,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:06:09','2026-04-06 08:06:09',NULL,0),(109,'KAPOLSEK_NAINGGOLAN','KAPOLSEK NAINGGOLAN',4,0,18,NULL,NULL,NULL,0,0,0,NULL,1,'2026-04-06 08:07:00','2026-04-06 08:07:00',NULL,0),(110,'PS._KANIT_PATROLI_SAT_POLAIRUD','PS. KANIT PATROLI SAT POLAIRUD',NULL,0,12,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:38:41','2026-04-09 17:38:41',NULL,0),(111,'PS._KAURMINTU_SAT_POLAIRUD','PS. KAURMINTU SAT POLAIRUD',NULL,0,12,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:38:41','2026-04-09 17:38:41',NULL,0),(112,'BINTARA_SAT_POLAIRUD','BINTARA SAT POLAIRUD',NULL,0,12,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:38:41','2026-04-09 17:38:41',NULL,0),(113,'KAURBINOPS_SAT_BINMAS','KAURBINOPS SAT BINMAS',NULL,0,14,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:43:42','2026-04-09 17:43:42',NULL,0),(114,'PS._KA_SPKT_1_POLSEK_PALIPI','PS. KA SPKT 1 POLSEK PALIPI',NULL,0,16,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:50:03','2026-04-09 17:50:03',NULL,0),(115,'PS._KASIUM_POLSEK_PALIPI','PS. KASIUM POLSEK PALIPI',NULL,0,16,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:50:03','2026-04-09 17:50:03',NULL,0),(116,'PS._KA_SPKT_2_POLSEK_PALIPI','PS. KA SPKT 2 POLSEK PALIPI',NULL,0,16,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:50:03','2026-04-09 17:50:03',NULL,0),(117,'PS._KANIT_SAMAPTA_POLSEK_PALIPI','PS. KANIT SAMAPTA POLSEK PALIPI',NULL,0,16,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:50:03','2026-04-09 17:50:03',NULL,0),(118,'PS._KANIT_BINMAS_POLSEK_PALIPI','PS. KANIT BINMAS POLSEK PALIPI',NULL,0,16,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:50:03','2026-04-09 17:50:03',NULL,0),(119,'PS._KANIT_INTELKAM_POLSEK_PALIPI','PS. KANIT INTELKAM POLSEK PALIPI',NULL,0,16,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:50:03','2026-04-09 17:50:03',NULL,0),(120,'PS._KA_SPKT_1_POLSEK_SIMANINDO','PS. KA SPKT 1 POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10',NULL,0),(121,'PS._KA_SPKT_3_POLSEK_SIMANINDO','PS. KA SPKT 3 POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10',NULL,0),(122,'PS._KASIUM_POLSEK_SIMANINDO','PS. KASIUM POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10',NULL,0),(123,'PS._KANITPROPAM_POLSEK_SIMANINDO','PS. KANIT PROPAM POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 18:01:28',NULL,0),(124,'PS._KANIT_BINMAS_POLSEK_SIMANINDO','PS. KANIT BINMAS POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10',NULL,0),(125,'PS._KANIT_INTELKAM_POLSEK_SIMANINDO','PS. KANIT INTELKAM POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10',NULL,0),(126,'PS._KANIT_SAMAPTA_POLSEK_SIMANINDO','PS. KANIT SAMAPTA POLSEK SIMANINDO',NULL,0,17,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10',NULL,0),(127,'PS._KANIT_BINMAS_POLSEK_NAINGGOLAN','PS. KANIT BINMAS POLSEK NAINGGOLAN',NULL,0,18,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10',NULL,0),(128,'PS._KANIT_SAMAPTA_POLSEK_NAINGGOLAN','PS. KANIT SAMAPTA POLSEK NAINGGOLAN',NULL,0,18,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10',NULL,0),(129,'PS._KANIT_INTELKAM_POLSEK_NAINGGOLAN','PS. KANIT INTELKAM POLSEK NAINGGOLAN',NULL,0,18,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10',NULL,0),(130,'PS._KANIT_INTELKAM_POLSEK_PANGURURAN','PS. KANIT INTELKAM POLSEK PANGURURAN',NULL,0,19,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10',NULL,0),(131,'PS._KANIT_BINMAS_POLSEK_PANGURURAN','PS. KANIT BINMAS POLSEK PANGURURAN',NULL,0,19,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10',NULL,0),(132,'PS._KANIT_SAMAPTA_POLSEK_PANGURURAN','PS. KANIT SAMAPTA POLSEK PANGURURAN',NULL,0,19,'BINTARA',NULL,NULL,0,0,0,NULL,1,'2026-04-09 17:58:10','2026-04-09 17:58:10',NULL,0);
 /*!40000 ALTER TABLE `jabatan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -396,6 +750,447 @@ INSERT INTO `master_pendidikan` VALUES (1,'SD','Sekolah Dasar','SD',NULL,1,1,'20
 UNLOCK TABLES;
 
 --
+-- Table structure for table `mobile_app_analytics`
+--
+
+DROP TABLE IF EXISTS `mobile_app_analytics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mobile_app_analytics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `event_type` enum('login','logout','view_schedule','update_attendance','view_tasks','respond_task','view_notifications','mark_read') NOT NULL,
+  `event_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`event_data`)),
+  `app_version` varchar(50) DEFAULT '1.0.0',
+  `platform` enum('android','ios','web') NOT NULL,
+  `device_info` text DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_user_event` (`user_id`,`event_type`),
+  KEY `idx_event_type` (`event_type`),
+  KEY `idx_created_at` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mobile_app_analytics`
+--
+
+LOCK TABLES `mobile_app_analytics` WRITE;
+/*!40000 ALTER TABLE `mobile_app_analytics` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mobile_app_analytics` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mobile_notification_logs`
+--
+
+DROP TABLE IF EXISTS `mobile_notification_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mobile_notification_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `notification_id` int(11) NOT NULL,
+  `personil_id` varchar(20) NOT NULL,
+  `device_token` varchar(255) NOT NULL,
+  `platform` enum('android','ios') NOT NULL,
+  `status` enum('sent','delivered','read','failed','bounced') DEFAULT 'sent',
+  `error_message` text DEFAULT NULL,
+  `sent_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `delivered_at` timestamp NULL DEFAULT NULL,
+  `read_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_notification_personil` (`notification_id`,`personil_id`),
+  KEY `idx_device_token` (`device_token`),
+  KEY `idx_status` (`status`),
+  CONSTRAINT `mobile_notification_logs_ibfk_1` FOREIGN KEY (`notification_id`) REFERENCES `notifications` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mobile_notification_logs`
+--
+
+LOCK TABLES `mobile_notification_logs` WRITE;
+/*!40000 ALTER TABLE `mobile_notification_logs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mobile_notification_logs` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mobile_sessions`
+--
+
+DROP TABLE IF EXISTS `mobile_sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mobile_sessions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `session_token` varchar(255) NOT NULL,
+  `device_token` varchar(255) DEFAULT NULL,
+  `device_info` text DEFAULT NULL,
+  `app_version` varchar(50) DEFAULT '1.0.0',
+  `platform` enum('android','ios','web') NOT NULL,
+  `last_active` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `session_token` (`session_token`),
+  KEY `idx_session_token` (`session_token`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_device_token` (`device_token`),
+  KEY `idx_last_active` (`last_active`),
+  KEY `idx_expires_at` (`expires_at`),
+  KEY `idx_user_active` (`user_id`,`is_active`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mobile_sessions`
+--
+
+LOCK TABLES `mobile_sessions` WRITE;
+/*!40000 ALTER TABLE `mobile_sessions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mobile_sessions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `mobile_settings`
+--
+
+DROP TABLE IF EXISTS `mobile_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mobile_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `push_notifications_enabled` tinyint(1) DEFAULT 1,
+  `notification_sound` tinyint(1) DEFAULT 1,
+  `notification_vibration` tinyint(1) DEFAULT 1,
+  `auto_sync_enabled` tinyint(1) DEFAULT 1,
+  `sync_interval_minutes` int(11) DEFAULT 30,
+  `theme` enum('light','dark','auto') DEFAULT 'auto',
+  `language` varchar(10) DEFAULT 'id',
+  `timezone` varchar(50) DEFAULT 'Asia/Jakarta',
+  `biometric_enabled` tinyint(1) DEFAULT 0,
+  `last_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id` (`user_id`),
+  KEY `idx_user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `mobile_settings`
+--
+
+LOCK TABLES `mobile_settings` WRITE;
+/*!40000 ALTER TABLE `mobile_settings` DISABLE KEYS */;
+INSERT INTO `mobile_settings` VALUES (1,1,1,1,1,1,30,'auto','id','Asia/Jakarta',0,'2026-04-11 15:06:49'),(2,2,1,1,1,1,30,'auto','id','Asia/Jakarta',0,'2026-04-11 15:06:49'),(3,3,1,1,1,1,30,'auto','id','Asia/Jakarta',0,'2026-04-11 15:06:49');
+/*!40000 ALTER TABLE `mobile_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `monthly_certification_summary`
+--
+
+DROP TABLE IF EXISTS `monthly_certification_summary`;
+/*!50001 DROP VIEW IF EXISTS `monthly_certification_summary`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `monthly_certification_summary` AS SELECT
+ 1 AS `expiry_month`,
+  1 AS `total_certifications`,
+  1 AS `valid`,
+  1 AS `expired`,
+  1 AS `expiring_soon` */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Temporary table structure for view `notification_dashboard`
+--
+
+DROP TABLE IF EXISTS `notification_dashboard`;
+/*!50001 DROP VIEW IF EXISTS `notification_dashboard`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `notification_dashboard` AS SELECT
+ 1 AS `notification_date`,
+  1 AS `notification_type`,
+  1 AS `total_notifications`,
+  1 AS `sent_notifications`,
+  1 AS `delivered_notifications`,
+  1 AS `read_notifications`,
+  1 AS `failed_notifications` */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `notification_delivery_analytics`
+--
+
+DROP TABLE IF EXISTS `notification_delivery_analytics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification_delivery_analytics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `notification_id` int(11) NOT NULL,
+  `personil_id` varchar(20) NOT NULL,
+  `delivery_method` enum('in_app','push','email','sms') NOT NULL,
+  `sent_at` timestamp NULL DEFAULT NULL,
+  `delivered_at` timestamp NULL DEFAULT NULL,
+  `read_at` timestamp NULL DEFAULT NULL,
+  `delivery_time_ms` int(11) DEFAULT NULL COMMENT 'Delivery time in milliseconds',
+  `device_type` enum('mobile','desktop','tablet') DEFAULT NULL,
+  `platform` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_notification_personil` (`notification_id`,`personil_id`),
+  KEY `idx_delivery_method` (`delivery_method`),
+  KEY `idx_sent_at` (`sent_at`),
+  CONSTRAINT `notification_delivery_analytics_ibfk_1` FOREIGN KEY (`notification_id`) REFERENCES `notifications` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification_delivery_analytics`
+--
+
+LOCK TABLES `notification_delivery_analytics` WRITE;
+/*!40000 ALTER TABLE `notification_delivery_analytics` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notification_delivery_analytics` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification_delivery_log`
+--
+
+DROP TABLE IF EXISTS `notification_delivery_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification_delivery_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `notification_id` int(11) NOT NULL,
+  `delivery_method` enum('in_app','email','sms','push') NOT NULL,
+  `recipient` varchar(100) NOT NULL,
+  `delivery_status` enum('pending','sent','delivered','failed','bounced') DEFAULT 'pending',
+  `error_message` text DEFAULT NULL,
+  `sent_at` timestamp NULL DEFAULT NULL,
+  `delivered_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_delivery_status` (`delivery_status`),
+  KEY `idx_notification_method` (`notification_id`,`delivery_method`),
+  KEY `idx_notification_status` (`notification_id`,`delivery_status`),
+  KEY `idx_created_status` (`created_at`,`delivery_status`),
+  CONSTRAINT `notification_delivery_log_ibfk_1` FOREIGN KEY (`notification_id`) REFERENCES `notifications` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification_delivery_log`
+--
+
+LOCK TABLES `notification_delivery_log` WRITE;
+/*!40000 ALTER TABLE `notification_delivery_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notification_delivery_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification_preferences`
+--
+
+DROP TABLE IF EXISTS `notification_preferences`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification_preferences` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `notification_type` varchar(50) NOT NULL,
+  `in_app_enabled` tinyint(1) DEFAULT 1,
+  `push_enabled` tinyint(1) DEFAULT 1,
+  `email_enabled` tinyint(1) DEFAULT 0,
+  `sms_enabled` tinyint(1) DEFAULT 0,
+  `quiet_hours_start` time DEFAULT '22:00:00',
+  `quiet_hours_end` time DEFAULT '06:00:00',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_user_type` (`user_id`,`notification_type`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_notification_type` (`notification_type`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification_preferences`
+--
+
+LOCK TABLES `notification_preferences` WRITE;
+/*!40000 ALTER TABLE `notification_preferences` DISABLE KEYS */;
+INSERT INTO `notification_preferences` VALUES (1,1,'certification_expiry',1,0,1,0,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(2,2,'certification_expiry',1,0,1,0,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(3,3,'certification_expiry',1,0,1,0,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(4,1,'emergency_task',1,1,0,1,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(5,2,'emergency_task',1,1,0,1,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(6,3,'emergency_task',1,1,0,1,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(7,1,'equipment_due',1,0,0,0,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(8,2,'equipment_due',1,0,0,0,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(9,3,'equipment_due',1,0,0,0,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(10,1,'fatigue_warning',1,1,0,0,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(11,2,'fatigue_warning',1,1,0,0,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(12,3,'fatigue_warning',1,1,0,0,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(13,1,'overtime_approval',1,0,1,0,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(14,2,'overtime_approval',1,0,1,0,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(15,3,'overtime_approval',1,0,1,0,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(16,1,'recall_alert',1,1,0,1,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(17,2,'recall_alert',1,1,0,1,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58'),(18,3,'recall_alert',1,1,0,1,'22:00:00','06:00:00','2026-04-11 15:07:58','2026-04-11 15:07:58');
+/*!40000 ALTER TABLE `notification_preferences` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification_queue`
+--
+
+DROP TABLE IF EXISTS `notification_queue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification_queue` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `notification_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`notification_data`)),
+  `priority` enum('low','medium','high','critical') NOT NULL,
+  `scheduled_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `attempts` int(11) DEFAULT 0,
+  `max_attempts` int(11) DEFAULT 3,
+  `next_attempt_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` enum('pending','processing','sent','failed','cancelled') DEFAULT 'pending',
+  `error_message` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_status_priority` (`status`,`priority`),
+  KEY `idx_next_attempt` (`next_attempt_at`),
+  KEY `idx_scheduled_at` (`scheduled_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification_queue`
+--
+
+LOCK TABLES `notification_queue` WRITE;
+/*!40000 ALTER TABLE `notification_queue` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notification_queue` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification_stats`
+--
+
+DROP TABLE IF EXISTS `notification_stats`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification_stats` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `total_sent` int(11) DEFAULT 0,
+  `total_delivered` int(11) DEFAULT 0,
+  `total_read` int(11) DEFAULT 0,
+  `total_failed` int(11) DEFAULT 0,
+  `avg_delivery_time` decimal(5,2) DEFAULT 0.00 COMMENT 'Average delivery time in seconds',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_date` (`date`),
+  KEY `idx_date` (`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification_stats`
+--
+
+LOCK TABLES `notification_stats` WRITE;
+/*!40000 ALTER TABLE `notification_stats` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notification_stats` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notification_templates`
+--
+
+DROP TABLE IF EXISTS `notification_templates`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification_templates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `template_name` varchar(100) NOT NULL,
+  `notification_type` varchar(50) NOT NULL,
+  `title_template` text NOT NULL,
+  `message_template` text NOT NULL,
+  `default_priority` enum('low','medium','high','critical') DEFAULT 'medium',
+  `default_delivery_methods` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '["in_app"]' CHECK (json_valid(`default_delivery_methods`)),
+  `action_required` tinyint(1) DEFAULT 0,
+  `action_url_template` text DEFAULT NULL,
+  `variables` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Template variables description' CHECK (json_valid(`variables`)),
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `template_name` (`template_name`),
+  KEY `idx_template_type` (`notification_type`),
+  KEY `idx_active` (`is_active`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notification_templates`
+--
+
+LOCK TABLES `notification_templates` WRITE;
+/*!40000 ALTER TABLE `notification_templates` DISABLE KEYS */;
+INSERT INTO `notification_templates` VALUES (1,'fatigue_warning','fatigue_warning','Fatigue Warning','Your wellness score is {wellness_score} and fatigue level is {fatigue_level}. Please consider taking rest.','high','[\"in_app\",\"push\"]',1,NULL,'{\"wellness_score\": \"Current wellness score\", \"fatigue_level\": \"Current fatigue level\"}',1,'2026-04-11 15:07:57','2026-04-11 15:07:57'),(2,'certification_expiry','certification_expiry','Certification Expiry Warning','Your certification \'{certification_name}\' expires in {days_to_expiry} days on {expiry_date}','medium','[\"in_app\",\"push\",\"email\"]',1,NULL,'{\"certification_name\": \"Name of certification\", \"days_to_expiry\": \"Days until expiry\", \"expiry_date\": \"Expiry date\"}',1,'2026-04-11 15:07:57','2026-04-11 15:07:57'),(3,'emergency_task','emergency_task','Emergency Task Assignment','You have been assigned to emergency task: {task_name}. Priority: {priority_level}','high','[\"in_app\",\"push\",\"sms\"]',1,NULL,'{\"task_name\": \"Name of emergency task\", \"priority_level\": \"Task priority\"}',1,'2026-04-11 15:07:57','2026-04-11 15:07:57'),(4,'recall_alert','recall_alert','Recall Campaign: {campaign_name}','{message}','high','[\"in_app\",\"push\",\"sms\"]',1,NULL,'{\"campaign_name\": \"Name of recall campaign\", \"message\": \"Recall message\"}',1,'2026-04-11 15:07:57','2026-04-11 15:07:57'),(5,'equipment_due','equipment_due','Equipment Maintenance Due','Equipment \'{equipment_name}\' is due for maintenance in {days_to_maintenance} days','medium','[\"in_app\",\"push\"]',1,NULL,'{\"equipment_name\": \"Equipment name\", \"days_to_maintenance\": \"Days until maintenance\"}',1,'2026-04-11 15:07:57','2026-04-11 15:07:57'),(6,'overtime_approval','overtime_approval','Overtime Approval Required','Overtime request for {hours} hours on {date} requires your approval','medium','[\"in_app\",\"push\",\"email\"]',1,NULL,'{\"hours\": \"Overtime hours\", \"date\": \"Overtime date\"}',1,'2026-04-11 15:07:57','2026-04-11 15:07:57');
+/*!40000 ALTER TABLE `notification_templates` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `notifications`
+--
+
+DROP TABLE IF EXISTS `notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `notification_type` enum('fatigue_warning','certification_expiry','emergency_task','recall_alert','equipment_due','overtime_approval') NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `message` text NOT NULL,
+  `target_personil` varchar(20) DEFAULT NULL COMMENT 'Specific personil target',
+  `target_group` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Target groups (bagian, unsur, etc)' CHECK (json_valid(`target_group`)),
+  `priority_level` enum('low','medium','high','critical') DEFAULT 'medium',
+  `delivery_methods` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Delivery methods: in_app, email, sms, push' CHECK (json_valid(`delivery_methods`)),
+  `status` enum('pending','sent','delivered','read','failed') DEFAULT 'pending',
+  `scheduled_time` datetime DEFAULT NULL,
+  `sent_time` timestamp NULL DEFAULT NULL,
+  `read_time` timestamp NULL DEFAULT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  `action_required` tinyint(1) DEFAULT 0,
+  `action_url` varchar(500) DEFAULT NULL,
+  `action_deadline` datetime DEFAULT NULL,
+  `created_by` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `mobile_sent` tinyint(1) DEFAULT 0,
+  `mobile_read_time` timestamp NULL DEFAULT NULL,
+  `push_notification_id` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_notification_type` (`notification_type`),
+  KEY `idx_target_personil` (`target_personil`),
+  KEY `idx_status_priority` (`status`,`priority_level`),
+  KEY `idx_scheduled_time` (`scheduled_time`),
+  KEY `idx_target_personil_status` (`target_personil`,`status`),
+  KEY `idx_type_priority_created` (`notification_type`,`priority_level`,`created_at`),
+  KEY `idx_status_created` (`status`,`created_at`),
+  KEY `idx_created_at_type` (`created_at`,`notification_type`),
+  CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`target_personil`) REFERENCES `personil` (`nrp`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notifications`
+--
+
+LOCK TABLES `notifications` WRITE;
+/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `operations`
 --
 
@@ -427,9 +1222,13 @@ CREATE TABLE `operations` (
   `recurrence_days` varchar(20) DEFAULT NULL,
   `recurrence_end` date DEFAULT NULL,
   `recurrence_parent_id` int(11) DEFAULT NULL,
+  `required_equipment` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'List of required equipment' CHECK (json_valid(`required_equipment`)),
+  `equipment_assigned` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `idx_date` (`operation_date`),
-  KEY `idx_status` (`status`)
+  KEY `idx_status` (`status`),
+  KEY `idx_status_dates` (`status`,`operation_date`,`operation_date_end`),
+  FULLTEXT KEY `operation_name` (`operation_name`,`location`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -439,8 +1238,52 @@ CREATE TABLE `operations` (
 
 LOCK TABLES `operations` WRITE;
 /*!40000 ALTER TABLE `operations` DISABLE KEYS */;
-INSERT INTO `operations` VALUES (1,'Sprin / 1 / IV / 2026 / OPS','OPS BINA KESUMA TOBA','kewilayahan_polda','pemeliharaan_keamanan','2026-03',NULL,NULL,NULL,NULL,'POLRES SAMOSIR','OPERASI KEPOLISIAN KEWILAYAHAN, DALAM RANGKA PENCEGAHAN TERJADINYA GANGGUAN KAMTIBMAS TERKAIT KENAKALAN REMAJA, PELECEHAN SEKS TERHADAP ANAK, KEKERASAN TERHADAP PEREMPUAN DAN ANAK, SERTA MASALAH TKI',0,25,23750000.00,'planned',NULL,'2026-04-10 05:50:12','2026-04-10 14:37:35','none',1,NULL,NULL,NULL);
+INSERT INTO `operations` VALUES (1,'Sprin / 1 / IV / 2026 / OPS','OPS BINA KESUMA TOBA','kewilayahan_polda','pemeliharaan_keamanan','2026-03',NULL,NULL,NULL,NULL,'POLRES SAMOSIR','OPERASI KEPOLISIAN KEWILAYAHAN, DALAM RANGKA PENCEGAHAN TERJADINYA GANGGUAN KAMTIBMAS TERKAIT KENAKALAN REMAJA, PELECEHAN SEKS TERHADAP ANAK, KEKERASAN TERHADAP PEREMPUAN DAN ANAK, SERTA MASALAH TKI',0,25,23750000.00,'planned',NULL,'2026-04-10 05:50:12','2026-04-10 14:37:35','none',1,NULL,NULL,NULL,NULL,0);
 /*!40000 ALTER TABLE `operations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `overtime_records`
+--
+
+DROP TABLE IF EXISTS `overtime_records`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `overtime_records` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `personil_id` varchar(20) NOT NULL,
+  `schedule_id` int(11) NOT NULL,
+  `overtime_date` date NOT NULL,
+  `regular_hours` decimal(4,2) DEFAULT 8.00,
+  `overtime_hours` decimal(4,2) NOT NULL,
+  `overtime_rate` enum('regular','holiday','weekend','emergency') DEFAULT 'regular',
+  `rate_multiplier` decimal(3,2) DEFAULT 1.50,
+  `total_compensation` decimal(10,2) DEFAULT NULL,
+  `approval_status` enum('pending','approved','rejected','processed') DEFAULT 'pending',
+  `approved_by` varchar(50) DEFAULT NULL,
+  `approved_at` timestamp NULL DEFAULT NULL,
+  `processed_date` date DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `schedule_id` (`schedule_id`),
+  KEY `idx_personil_overtime` (`personil_id`,`overtime_date`),
+  KEY `idx_approval_status` (`approval_status`),
+  KEY `idx_overtime_date` (`overtime_date`),
+  KEY `idx_date_status` (`overtime_date`,`approval_status`),
+  CONSTRAINT `overtime_records_ibfk_1` FOREIGN KEY (`personil_id`) REFERENCES `personil` (`nrp`) ON DELETE CASCADE,
+  CONSTRAINT `overtime_records_ibfk_2` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `overtime_records`
+--
+
+LOCK TABLES `overtime_records` WRITE;
+/*!40000 ALTER TABLE `overtime_records` DISABLE KEYS */;
+/*!40000 ALTER TABLE `overtime_records` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -577,8 +1420,15 @@ CREATE TABLE `personil` (
   `updated_by` varchar(100) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=339 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `wellness_score` int(11) DEFAULT 100 COMMENT 'Skor kesehatan 0-100',
+  `max_weekly_hours` decimal(5,2) DEFAULT 40.00 COMMENT 'Maksimal jam kerja per minggu',
+  `fatigue_level` enum('low','medium','high','critical') DEFAULT 'low',
+  `last_fatigue_check` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_nrp` (`nrp`),
+  KEY `idx_wellness_score` (`wellness_score`),
+  FULLTEXT KEY `nama` (`nama`,`nrp`)
+) ENGINE=InnoDB AUTO_INCREMENT=342 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -587,7 +1437,7 @@ CREATE TABLE `personil` (
 
 LOCK TABLES `personil` WRITE;
 /*!40000 ALTER TABLE `personil` DISABLE KEYS */;
-INSERT INTO `personil` VALUES (1,'84031648',NULL,'RINA SRY NIRWANA TARIGAN, S.I.K., M.H.',NULL,20,1,1,1,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(2,'83081648',NULL,'BRISTON AGUS MUNTECARLO, S.T., S.I.K.',NULL,21,2,1,1,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(3,'68100259',NULL,'EDUAR, S.H.',NULL,21,3,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(4,'82080038',NULL,'PATRI SIHALOHO',NULL,26,4,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(5,'02120141',NULL,'AGUNG NUGRAHA NADAP-DAP',NULL,30,5,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:27:54'),(6,'03010386',NULL,'ALDI PRANATA GINTING',NULL,30,5,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(7,'02040489',NULL,'HENDRIKSON SILALAHI',NULL,30,5,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(8,'02071119',NULL,'TOHONAN SITOHANG',NULL,30,5,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(9,'03101364',NULL,'GILANG SUTOYO',NULL,30,5,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(10,'198112262024211002',NULL,'FERNANDO SILALAHI, A.Md.',NULL,NULL,6,2,2,'P3K/ BKO POLDA',NULL,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(11,'76030248',NULL,'HENDRI SIAGIAN, S.H.',NULL,24,7,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(12,'87070134',NULL,'DENI MUSTIKA SUKMANA, S.E.',NULL,24,8,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(13,'85081770',NULL,'JAMIL MUNTHE, S.H., M.H.',NULL,24,9,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(14,'87030020',NULL,'BULET MARS SWANTO LBN. BATU, S.H.',NULL,24,10,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(15,'96010872',NULL,'RAMADHAN PUTRA, S.H.',NULL,29,11,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(16,'98090415',NULL,'ABEDNEGO TARIGAN',NULL,29,12,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(17,'00010166',NULL,'EDY SUSANTO PARDEDE',NULL,29,13,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(18,'98010470',NULL,'BOBBY ANGGARA PUTRA SIREGAR',NULL,30,13,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(19,'01070820',NULL,'GABRIEL PAULIMA NADEAK',NULL,30,13,20,5,'OP CALL CENTRE',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(20,'02091526',NULL,'ANDRE OWEN PURBA',NULL,30,11,20,5,'OP CALL CENTRE',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(21,'04070159',NULL,'EDWARD FERDINAND SIDABUTAR',NULL,30,11,20,5,'OP CALL CENTRE',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(22,'03060873',NULL,'BIMA SANTO HUTAGAOL',NULL,30,12,20,5,'OP CALL CENTRE',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(23,'03121291',NULL,'KRISTIAN M. H. NABABAN',NULL,30,12,20,5,'OP CALL CENTRE',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(24,'72100484',NULL,'SURUNG SAGALA',NULL,24,14,3,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(25,'96090857',NULL,'ZAKHARIA S. I. SIMANJUNTAK, S.H.',NULL,29,15,3,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(26,'03080202',NULL,'GRENIEL WIARTO SIHITE',NULL,30,15,3,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(27,'73010107',NULL,'TARMIZI LUBIS, S.H.',NULL,22,16,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(28,'198111252014122004',NULL,'REYMESTA AMBARITA, S.Kom.',NULL,42,17,4,2,'',NULL,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:30:49'),(29,'97090248',NULL,'LAMTIO SINAGA, S.H.',NULL,28,18,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(30,'97120490',NULL,'DODI KURNIADI',NULL,29,18,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54'),(31,'05070285',NULL,'EFRANTA SAPUTRA SITEPU',NULL,30,18,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(32,'86070985',NULL,'RADOS. S. TOGATOROP,S.H.',NULL,26,19,4,2,'DIK SIP',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(33,'00080579',NULL,'REYSON YOHANNES SIMBOLON',NULL,30,20,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(34,'02090891',NULL,'ANDRE TARUNA SIMBOLON',NULL,30,21,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(35,'03081525',NULL,'YOLANDA NAULIVIA ARITONANG',NULL,30,20,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(36,'95080918',NULL,'SYAUQI LUTFI LUBIS, S.H., M.H.',NULL,28,19,29,6,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(37,'97050575',NULL,'DANIEL BRANDO SIDABUKKE',NULL,28,19,29,6,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(38,'98010119',NULL,'SUTRISNO BUTAR-BUTAR, S.H.',NULL,29,19,29,6,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(39,'76040221',NULL,'AWALUDDIN',NULL,24,22,5,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 18:07:55'),(40,'97050588',NULL,'EFRON SARWEDY SINAGA, S.H.',NULL,29,23,5,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(41,'00010095',NULL,'PRIADI MAROJAHAN HUTABARAT',NULL,29,23,5,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(42,'03070263',NULL,'CHRIST JERICHO SAPUTRA TAMPUBOLON',NULL,30,23,5,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(43,'86100287',NULL,'EFRI PANDI',NULL,26,24,21,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 18:03:38'),(44,'04010804',NULL,'YOGI ADE PRATAMA SITOHANG',NULL,30,25,21,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(45,'93100676',NULL,'PENGEJAPEN, S.H.',NULL,28,26,22,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(46,'97050876',NULL,'MUHARRAM SYAHRI, S.H.',NULL,29,27,22,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(47,'97100685',NULL,'M.FATHUR RAHMAN, S.H.',NULL,29,27,22,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(48,'03070010',NULL,'HESKIEL WANDANA MELIALA',NULL,30,27,22,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(49,'03040138',NULL,'DANIEL RICARDO SARAGIH',NULL,30,27,22,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(50,'197008291993032002',NULL,'NENENG GUSNIARTI',NULL,43,28,23,5,'',NULL,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(51,'84040532',NULL,'EDDY SURANTA SARAGIH',NULL,27,29,23,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(52,'75060617',NULL,'BILMAR SITUMORANG',NULL,25,30,24,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(53,'94080815',NULL,'YOHANES EDI SUPRIATNO, S.H., M.H.',NULL,28,31,24,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(54,'94080892',NULL,'AGUSTIAWAN SINAGA',NULL,28,31,24,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(55,'93060444',NULL,'LISTER BROUN SITORUS',NULL,28,32,25,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(56,'00070791',NULL,'ANDREAS D. S. SITANGGANG',NULL,30,32,25,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(57,'01101139',NULL,'JACKSON SIDABUTAR',NULL,30,32,25,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(58,'73050261',NULL,'PARIMPUNAN SIREGAR',NULL,24,33,26,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(59,'95030599',NULL,'DANIEL E. LUMBANTORUAN, S.H.',NULL,28,34,26,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(60,'76120670',NULL,'DENNI BOYKE H. SIREGAR, S.H.',NULL,24,35,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(61,'81010202',NULL,'BENNI ARDINAL, S.H., M.H.',NULL,26,36,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(62,'85081088',NULL,'AGUSTINUS SINAGA',NULL,26,37,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(63,'86081359',NULL,'RAMBO CISLER NADEAK',NULL,27,38,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(64,'95030796',NULL,'PERY RAPEN YONES PARDOSI, S.H.',NULL,28,38,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(65,'97070014',NULL,'DWI HETRIANDY, S.H.',NULL,28,38,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(66,'97120554',NULL,'TRY WIBOWO',NULL,29,38,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(67,'00080343',NULL,'SIMON TIGRIS SIAGIAN',NULL,29,38,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(68,'01080575',NULL,'FIRIAN JOSUA SITORUS',NULL,30,38,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(69,'93030551',NULL,'GUNAWAN SITUMORANG',NULL,28,39,28,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(70,'98091488',NULL,'DANIEL BAHTERA SINAGA',NULL,29,39,28,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(71,'75120560',NULL,'HORAS LARIUS SITUMORANG',NULL,24,113,14,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:47:38'),(72,'95090650',NULL,'JEFTA OCTAVIANUS NICO SIANTURI',NULL,28,41,14,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(73,'94091146',NULL,'SAHAT MARULI TUA SINAGA, S.H.',NULL,28,41,14,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(74,'04020118',NULL,'RONAL PARTOGI SITUMORANG',NULL,30,41,14,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(75,'82070670',NULL,'DONAL P. SITANGGANG, S.H., M.H.',NULL,23,42,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(76,'85050489',NULL,'MUHAMMAD YUNUS LUBIS, S.H.',NULL,24,40,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(77,'80070348',NULL,'MARBETA S. SIANIPAR, S.H.',NULL,26,43,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(78,'87080112',NULL,'SITARDA AKABRI SIBUEA',NULL,26,44,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(79,'87051430',NULL,'CINTER ROKHY SINAGA',NULL,27,45,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(80,'90080088',NULL,'VANDU P. MARPAUNG',NULL,27,46,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(81,'93080556',NULL,'ALFONSIUS GULTOM, S.H.',NULL,28,47,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(82,'97040848',NULL,'TRIFIKO P. NAINGGOLAN, S.H.',NULL,29,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(83,'98110618',NULL,'ANDRI AFRIJAL SIMARMATA',NULL,29,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(84,'02030032',NULL,'DIEN VAROSCY I. SITUMORANG',NULL,30,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(85,'02120339',NULL,'ARDY TRIANO MALAU',NULL,30,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(86,'02040459',NULL,'JUNEDI SAGALA',NULL,30,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(87,'02101010',NULL,'GABRIEL SEBASTIAN SIREGAR',NULL,30,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(88,'04020209',NULL,'RIO F. T ERENST PANJAITAN',NULL,30,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(89,'04080118',NULL,'AGHEO HARMANA JOUSTRA SINURAYA',NULL,30,47,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(90,'04010932',NULL,'SAMUEL RINALDI PAKPAHAN',NULL,30,47,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(91,'04040520',NULL,'RAYMONTIUS HAROMUNTE',NULL,30,47,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(92,'79120994',NULL,'EDWARD SIDAURUK, S.E., M.M.',NULL,22,49,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(93,'76020196',NULL,'DARMONO SAMOSIR, S.H.',NULL,24,50,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(94,'83010825',NULL,'ROYANTO PURBA, S.H.',NULL,24,51,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(95,'83120602',NULL,'SUHADIYANTO, S.H.',NULL,24,52,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(96,'88060535',NULL,'KUICAN SIMANJUNTAK',NULL,27,53,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(97,'79030434',NULL,'MARTIN HABENSONY ARITONANG',NULL,25,54,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(98,'83060084',NULL,'HENRY SIPAKKAR',NULL,25,55,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(99,'87011165',NULL,'CHANDRA HUTAPEA',NULL,27,43,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(100,'89030401',NULL,'CHANDRA BARIMBING',NULL,27,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(101,'87041596',NULL,'DEDY SAOLOAN SIGALINGGING',NULL,27,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(102,'82050798',NULL,'ISWAN LUKITO',NULL,27,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(103,'95030238',NULL,'RONI HANSVERI BANJARNAHOR',NULL,28,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(104,'94020506',NULL,'RODEN SUANDI TURNIP',NULL,28,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(105,'94121145',NULL,'SAPUTRA, S.H.',NULL,28,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(106,'95100554',NULL,'DIAN LESTARI GULTOM, S.H.',NULL,28,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(107,'95110886',NULL,'ARGIO SIMBOLON',NULL,28,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(108,'97070616',NULL,'EKO DAHANA PARDEDE, S.H.',NULL,28,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(109,'97040728',NULL,'GIDEON AFRIADI LUMBAN RAJA',NULL,29,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(110,'98090397',NULL,'FACHRUL REZA SILALAHI',NULL,29,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(111,'00030346',NULL,'RIDHOTUA F. SITANGGANG',NULL,29,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(112,'00110362',NULL,'NICHO FERNANDO SARAGIH',NULL,29,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(113,'00090499',NULL,'ADI P.S. MARBUN',NULL,29,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(114,'01120358',NULL,'PRIYATAMA ABDILLAH HARAHAP',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(115,'01070839',NULL,'RIZKI AFRIZAL SIMANJUNTAK',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(116,'01060553',NULL,'MIDUK YUDIANTO SINAGA',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(117,'02110342',NULL,'FRAN\'S ALEXANDER SIANIPAR',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(118,'01110817',NULL,'RAFFLES SIJABAT',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(119,'01091201',NULL,'HERIANTA TARIGAN',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(120,'03030809',NULL,'RICKY AGATHA GINTING',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(121,'03020368',NULL,'CHRISTIAN PROSPEROUS SIMANUNGKALIT',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(122,'04020196',NULL,'PINIEL RAJAGUKGUK',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(123,'03090568',NULL,'REZA SIREGAR',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(124,'04031206',NULL,'RAYMOND VAN HEZEKIEL SIAHAAN',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(125,'05080602',NULL,'M. ALAMSYAH PRAYOGA TAMBUNAN',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(126,'04090567',NULL,'IRVAN SYAPUTRA MALAU',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(127,'79060034',NULL,'FERRY ARIANDY, S.H., M.H',NULL,22,57,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(128,'88100591',NULL,'ALVIUS KRISTIAN GINTING, S.H.',NULL,24,40,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(129,'89010155',NULL,'BENNY SITUMORANG, S.H.',NULL,27,58,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(130,'93050797',NULL,'EKO PUTRA DAMANIK, S.H.',NULL,28,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(131,'91050361',NULL,'MAY FRANSISCO SIAGIAN, S.H.',NULL,28,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(132,'94090839',NULL,'ROBERTO MANALU',NULL,29,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(133,'98110378',NULL,'M. RONALD FAHROZI HARAHAP, S.H.',NULL,29,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(134,'97020694',NULL,'HERIANTO EFENDI, S.H.',NULL,29,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(135,'02120224',NULL,'TEDDI PARNASIPAN TOGATOROP',NULL,30,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(136,'02090838',NULL,'ONDIHON SIMBOLON',NULL,30,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(137,'05080131',NULL,'IVAN SIGOP SIHOMBING',NULL,30,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(138,'80080676',NULL,'NANDI BUTAR-BUTAR, S.H.',NULL,22,60,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(139,'80050867',NULL,'BARTO ANTONIUS SIMALANGO',NULL,25,61,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(140,'73040390',NULL,'HASUDUNGAN SILITONGA',NULL,26,62,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(141,'85090954',NULL,'JHONNY LEONARDO SILALAHI',NULL,27,63,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(142,'83081051',NULL,'ASRIL',NULL,27,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(143,'94110350',NULL,'INDIRWAN FRIDERICK, S.H.',NULL,28,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(144,'93100793',NULL,'EGIDIUM BRAUN SILITONGA',NULL,28,64,10,3,'A',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(145,'97100701',NULL,'DINAMIKA JAYA NEGARA SITANGGANG',NULL,30,64,10,3,'B',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(146,'05051087',NULL,'WIRA HARZITA',NULL,30,64,10,3,'C',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(147,'06100189',NULL,'RAHMAT ANDRIAN TAMBUNAN',NULL,30,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(148,'07080045',NULL,'JONATAN DWI SAPUTRA PARAPAT',NULL,30,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(149,'04051595',NULL,'PERDANA NIKOLA SEMBIRING',NULL,30,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(150,'04081205',NULL,'PETRUS SURIA HUGALUNG',NULL,30,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(151,'06010414',NULL,'RAFAEL ARSANLILO SINULINGGA',NULL,30,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(152,'06090021',NULL,'RAJASPER SIRINGORINGO',NULL,30,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(153,'79120800',NULL,'NATANAIL SURBAKTI, S.H',NULL,22,70,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(154,'75080942',NULL,'JUSUP KETAREN',NULL,24,71,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(155,'80070492',NULL,'ARON PERANGIN-ANGIN',NULL,25,72,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(156,'79060704',NULL,'HERON GINTING',NULL,27,73,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(157,'86030733',NULL,'JEFRI KHADAFI SIREGAR, S.H.',NULL,27,74,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(158,'89070031',NULL,'HERIANTO TURNIP',NULL,27,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(159,'87030647',NULL,'DION MAR\'YANSEN SILITONGA',NULL,28,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(160,'93020749',NULL,'ROY GRIMSLAY, S.H.',NULL,28,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(161,'93090673',NULL,'BAGUS DWI PRAKOSO, S.H.',NULL,28,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(162,'97040353',NULL,'ICASANDRI MONANZA BR GINTING',NULL,28,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(163,'95021078',NULL,'DIKI FEBRIAN SITORUS',NULL,29,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(164,'96031061',NULL,'MARCHLANDA SITOHANG',NULL,29,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(165,'01080438',NULL,'JULIVER SIDABUTAR',NULL,29,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(166,'01120281',NULL,'FATHURROZI TINDAON',NULL,30,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(167,'02111012',NULL,'BENY BOY CHRISTIAN SIAHAAN',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(168,'02111051',NULL,'RADOT NOVALDO PANDAPOTAN PURBA',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(169,'05030251',NULL,'MUHAMMAD ZIDHAN RIFALDI',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(170,'04050615',NULL,'DANI INDRA PERMANA SINAGA',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(171,'05010048',NULL,'HEZKIEL CAPRI SITINDAON',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(172,'04030824',NULL,'BONARIS TSUYOKO DITASANI SINAGA',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(173,'05010014',NULL,'ARY ANJAS SARAGIH',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00'),(174,'04030805',NULL,'GABRIEL VERY JUNIOR SITOHANG',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:01'),(175,'02121477',NULL,'FIRMAN BAHTERA',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:01'),(176,'82051018',NULL,'SAUT H. SIAHAAN',NULL,26,79,13,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(177,'98050496',NULL,'FERNANDO SIMBOLON',NULL,29,80,13,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(178,'98030531',NULL,'KURNIA PERMANA',NULL,29,80,13,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(179,'05090232',NULL,'STEVEN IMANUEL SITUMEANG',NULL,30,80,13,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:01'),(180,'70050412',NULL,'MAXON NAINGGOLAN',NULL,22,87,16,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:57'),(181,'78040213',NULL,'H. SWANDI SINAGA',NULL,25,114,16,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:57'),(182,'77030463',NULL,'HARATUA GULTOM',NULL,25,115,16,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(183,'85071450',NULL,'TEGUH SYAHPUTRA',NULL,27,116,16,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(184,'85041500',NULL,'RUDYANTO LUMBANRAJA',NULL,27,98,16,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(185,'96031075',NULL,'ZULPAN SYAHPUTRA DAMANIK',NULL,29,98,16,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(186,'83061022',NULL,'RAMADAN SIREGAR, S.H.',NULL,23,92,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(187,'75120864',NULL,'GUNTAR TAMBUNAN',NULL,25,120,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:58:25'),(188,'83080042',NULL,'YOPPHY RHODEAR MUNTHE',NULL,26,121,17,4,'A',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:58:25'),(189,'84110202',NULL,'DONI SURIANTO PURBA, S.H.',NULL,27,122,17,4,'C',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:58:25'),(190,'94090490',NULL,'KURNIAWAN, S.H.',NULL,28,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(191,'95060432',NULL,'ASHARI BUTAR-BUTAR, S.H.',NULL,28,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(192,'96061331',NULL,'DIDI HOT BAGAS SITORUS',NULL,30,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(193,'01060884',NULL,'HORAS J.M. ARITONANG',NULL,30,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(194,'04060050',NULL,'ANDRE YEHEZKIEL HUTABARAT',NULL,30,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(195,'89080105',NULL,'CLAUDIUS HARIS PARDEDE',NULL,28,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(196,'02051553',NULL,'ZULKIFLI NASUTION',NULL,30,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(197,'70010290',NULL,'RADIAMAN SIMARMATA',NULL,22,109,18,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(198,'83031377',NULL,'LUHUT SIRINGO-RINGO',NULL,28,101,18,4,'C',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(199,'03100001',NULL,'ANRIAN SIGALINGGING',NULL,30,101,18,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(200,'99110755',NULL,'BONATUA LUMBANTUNGKUP',NULL,30,101,18,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58'),(201,'03050116',NULL,'ANDRE SUGIARTO MARPAUNG',NULL,30,101,18,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:01'),(202,'04030125',NULL,'ERWIN KEVIN GULTOM',NULL,30,101,18,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:01'),(203,'70020298',NULL,'BANGUN TUA DALIMUNTHE',NULL,22,97,19,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(204,'79020443',NULL,'HERBINTUPA SITANGGANG',NULL,28,99,19,4,'C',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(205,'85121751',NULL,'IBRAHIM TARIGAN',NULL,28,99,19,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(206,'98090406',NULL,'AGUNG NUGRAHA HARIANJA, S.H.',NULL,29,99,19,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(207,'98091274',NULL,'DANI PUTRA RUMAHORBO',NULL,29,99,19,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55'),(208,'01060198',NULL,'KRISMAN JULU GULTOM',NULL,30,99,19,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:01'),(225,'81110363',NULL,'LEONARDO SINAGA',NULL,26,19,30,6,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 18:09:13'),(273,'72100604',NULL,'TANGIO HAOJAHAN SITANGGANG, S.H.',NULL,23,65,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(274,'80100836',NULL,'MARUBA NAINGGOLAN',NULL,25,66,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(275,'85030645',NULL,'ROY HARIS ST. SIMAREMARE',NULL,26,67,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(276,'80050898',NULL,'M. DENY WAHYU',NULL,26,68,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(277,'83050202',NULL,'HENRI F. SIANIPAR',NULL,25,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(278,'85121325',NULL,'BUYUNG ANDRYANTO',NULL,27,43,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(279,'91110130',NULL,'RIANTO SITANGGANG',NULL,28,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(280,'94090948',NULL,'ROY NANDA SEMBIRING KEMBAREN',NULL,28,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(281,'96031057',NULL,'CANDRA SILALAHI, S.H.',NULL,28,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(282,'02100599',NULL,'YUNUS SAMDIO SIDABUTAR',NULL,30,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(283,'03010565',NULL,'RAINHEART SITANGGANG',NULL,30,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(284,'02011312',NULL,'BONIFASIUS NAINGGOLAN',NULL,30,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(285,'00080816',NULL,'RAY YONDO SIAHAAN',NULL,30,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(286,'03040947',NULL,'REDY EZRA JONATHAN',NULL,30,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(287,'04100485',NULL,'CHARLY H. ARITONANG',NULL,30,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(299,'68120522',NULL,'SULAIMAN PANGARIBUAN, S.H',NULL,22,76,12,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(300,'83080822',NULL,'EFENDI M.  SIREGAR',NULL,26,110,12,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:38:47'),(301,'73120275',NULL,'ROMEL LINDUNG SIAHAAN',NULL,26,111,12,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:38:47'),(302,'90060273',NULL,'FRANS HOTMAN MANURUNG, S.H.',NULL,27,112,12,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:38:47'),(303,'77070919',NULL,'ANTONIUS SIPAYUNG',NULL,28,112,12,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:38:47'),(305,'69090552',NULL,'RAHMAT KURNIAWAN',NULL,23,81,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(306,'79090296',NULL,'MARUKKIL J.M. PASARIBU',NULL,25,82,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(307,'82070930',NULL,'LANTRO LANDELINUS SAGALA',NULL,26,83,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(308,'87120701',NULL,'ANDY DEDY SIHOMBING, S.H.',NULL,27,107,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(309,'86021428',NULL,'RANGGA HATTA',NULL,27,85,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(310,'80120573',NULL,'ARDIANSYAH BUTAR-BUTAR',NULL,27,102,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(311,'96120123',NULL,'ADRYANTO SINAGA, S.H.',NULL,28,102,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(312,'94040538',NULL,'BROLIN ADFRIALDI HALOHO',NULL,28,102,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(313,'95110806',NULL,'SUGIANTO ERIK SIBORO',NULL,28,102,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(314,'01020739',NULL,'RISKO SIMBOLON',NULL,30,102,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(315,'76120606',NULL,'ASA MELKI HUTABARAT',NULL,26,117,16,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:54:58'),(316,'78100741',NULL,'JARIAHMAN SARAGIH',NULL,26,118,16,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:54:58'),(317,'87041134',NULL,'MUHAMMAD SYAFEI RAMADHAN',NULL,26,103,16,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:54:58'),(318,'86121371',NULL,'RIJALUL FIKRI SINAGA',NULL,27,119,16,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:54:58'),(319,'86071792',NULL,'WIDODO KABAN, S.H.',NULL,24,126,17,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:59:12'),(320,'82040124',NULL,'JEFRI RICARDO SAMOSIR',NULL,25,123,17,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:58:25'),(321,'84020306',NULL,'JUITO SUPANOTO PERANGIN-ANGIN',NULL,26,123,17,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 18:00:01'),(322,'86010311',NULL,'TUMBUR SITOHANG',NULL,26,124,17,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:59:12'),(323,'89020409',NULL,'PATAR F. ANRI SIAHAAN',NULL,27,125,17,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:59:12'),(327,'82050839',NULL,'HERMAWADI',NULL,26,106,18,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(328,'84091124',NULL,'BISSAR LUMBANTUNGKUP',NULL,26,129,18,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:59:12'),(329,'70090340',NULL,'BONAR JUBEL SIBARANI',NULL,27,127,18,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:59:12'),(330,'77020642',NULL,'RAMLES SITANGGANG',NULL,27,128,18,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:59:12'),(334,'81050713',NULL,'LANCASTER ARIANTO CANDY PASARIBU, S.H.',NULL,25,104,19,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55'),(335,'80090905',NULL,'RUDY SETYAWAN',NULL,25,130,19,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:58:25'),(336,'80080892',NULL,'MANGATUR TUA TINDAON',NULL,26,131,19,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:58:25'),(337,'87110154',NULL,'RENO HOTMARULI TUA MANIK, S.H.',NULL,27,132,19,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:58:25');
+INSERT INTO `personil` VALUES (1,'84031648',NULL,'RINA SRY NIRWANA TARIGAN, S.I.K., M.H.',NULL,20,1,1,1,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(2,'83081648',NULL,'BRISTON AGUS MUNTECARLO, S.T., S.I.K.',NULL,21,2,1,1,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(3,'68100259',NULL,'EDUAR, S.H.',NULL,21,3,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(4,'82080038',NULL,'PATRI SIHALOHO',NULL,26,4,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(5,'02120141',NULL,'AGUNG NUGRAHA NADAP-DAP',NULL,30,5,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:27:54',100,40.00,'low',NULL),(6,'03010386',NULL,'ALDI PRANATA GINTING',NULL,30,5,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(7,'02040489',NULL,'HENDRIKSON SILALAHI',NULL,30,5,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(8,'02071119',NULL,'TOHONAN SITOHANG',NULL,30,5,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(9,'03101364',NULL,'GILANG SUTOYO',NULL,30,5,2,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(10,'198112262024211002',NULL,'FERNANDO SILALAHI, A.Md.',NULL,NULL,6,2,2,'P3K/ BKO POLDA',NULL,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(11,'76030248',NULL,'HENDRI SIAGIAN, S.H.',NULL,24,7,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(12,'87070134',NULL,'DENI MUSTIKA SUKMANA, S.E.',NULL,24,8,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(13,'85081770',NULL,'JAMIL MUNTHE, S.H., M.H.',NULL,24,9,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(14,'87030020',NULL,'BULET MARS SWANTO LBN. BATU, S.H.',NULL,24,10,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(15,'96010872',NULL,'RAMADHAN PUTRA, S.H.',NULL,29,11,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(16,'98090415',NULL,'ABEDNEGO TARIGAN',NULL,29,12,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(17,'00010166',NULL,'EDY SUSANTO PARDEDE',NULL,29,13,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(18,'98010470',NULL,'BOBBY ANGGARA PUTRA SIREGAR',NULL,30,13,20,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(19,'01070820',NULL,'GABRIEL PAULIMA NADEAK',NULL,30,13,20,5,'OP CALL CENTRE',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(20,'02091526',NULL,'ANDRE OWEN PURBA',NULL,30,11,20,5,'OP CALL CENTRE',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(21,'04070159',NULL,'EDWARD FERDINAND SIDABUTAR',NULL,30,11,20,5,'OP CALL CENTRE',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(22,'03060873',NULL,'BIMA SANTO HUTAGAOL',NULL,30,12,20,5,'OP CALL CENTRE',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(23,'03121291',NULL,'KRISTIAN M. H. NABABAN',NULL,30,12,20,5,'OP CALL CENTRE',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(24,'72100484',NULL,'SURUNG SAGALA',NULL,24,14,3,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(25,'96090857',NULL,'ZAKHARIA S. I. SIMANJUNTAK, S.H.',NULL,29,15,3,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(26,'03080202',NULL,'GRENIEL WIARTO SIHITE',NULL,30,15,3,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(27,'73010107',NULL,'TARMIZI LUBIS, S.H.',NULL,22,16,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(28,'198111252014122004',NULL,'REYMESTA AMBARITA, S.Kom.',NULL,42,17,4,2,'',NULL,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:30:49',100,40.00,'low',NULL),(29,'97090248',NULL,'LAMTIO SINAGA, S.H.',NULL,28,18,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(30,'97120490',NULL,'DODI KURNIADI',NULL,29,18,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:54',100,40.00,'low',NULL),(31,'05070285',NULL,'EFRANTA SAPUTRA SITEPU',NULL,30,18,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(32,'86070985',NULL,'RADOS. S. TOGATOROP,S.H.',NULL,26,19,4,2,'DIK SIP',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(33,'00080579',NULL,'REYSON YOHANNES SIMBOLON',NULL,30,20,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(34,'02090891',NULL,'ANDRE TARUNA SIMBOLON',NULL,30,21,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(35,'03081525',NULL,'YOLANDA NAULIVIA ARITONANG',NULL,30,20,4,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(36,'95080918',NULL,'SYAUQI LUTFI LUBIS, S.H., M.H.',NULL,28,19,29,6,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(37,'97050575',NULL,'DANIEL BRANDO SIDABUKKE',NULL,28,19,29,6,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(38,'98010119',NULL,'SUTRISNO BUTAR-BUTAR, S.H.',NULL,29,19,29,6,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(39,'76040221',NULL,'AWALUDDIN',NULL,24,22,5,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 18:07:55',100,40.00,'low',NULL),(40,'97050588',NULL,'EFRON SARWEDY SINAGA, S.H.',NULL,29,23,5,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(41,'00010095',NULL,'PRIADI MAROJAHAN HUTABARAT',NULL,29,23,5,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(42,'03070263',NULL,'CHRIST JERICHO SAPUTRA TAMPUBOLON',NULL,30,23,5,2,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(43,'86100287',NULL,'EFRI PANDI',NULL,26,24,21,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 18:03:38',100,40.00,'low',NULL),(44,'04010804',NULL,'YOGI ADE PRATAMA SITOHANG',NULL,30,25,21,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(45,'93100676',NULL,'PENGEJAPEN, S.H.',NULL,28,26,22,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(46,'97050876',NULL,'MUHARRAM SYAHRI, S.H.',NULL,29,27,22,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(47,'97100685',NULL,'M.FATHUR RAHMAN, S.H.',NULL,29,27,22,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(48,'03070010',NULL,'HESKIEL WANDANA MELIALA',NULL,30,27,22,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(49,'03040138',NULL,'DANIEL RICARDO SARAGIH',NULL,30,27,22,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(50,'197008291993032002',NULL,'NENENG GUSNIARTI',NULL,43,28,23,5,'',NULL,4,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(51,'84040532',NULL,'EDDY SURANTA SARAGIH',NULL,27,29,23,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(52,'75060617',NULL,'BILMAR SITUMORANG',NULL,25,30,24,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(53,'94080815',NULL,'YOHANES EDI SUPRIATNO, S.H., M.H.',NULL,28,31,24,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(54,'94080892',NULL,'AGUSTIAWAN SINAGA',NULL,28,31,24,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(55,'93060444',NULL,'LISTER BROUN SITORUS',NULL,28,32,25,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(56,'00070791',NULL,'ANDREAS D. S. SITANGGANG',NULL,30,32,25,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(57,'01101139',NULL,'JACKSON SIDABUTAR',NULL,30,32,25,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(58,'73050261',NULL,'PARIMPUNAN SIREGAR',NULL,24,33,26,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(59,'95030599',NULL,'DANIEL E. LUMBANTORUAN, S.H.',NULL,28,34,26,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(60,'76120670',NULL,'DENNI BOYKE H. SIREGAR, S.H.',NULL,24,35,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(61,'81010202',NULL,'BENNI ARDINAL, S.H., M.H.',NULL,26,36,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(62,'85081088',NULL,'AGUSTINUS SINAGA',NULL,26,37,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(63,'86081359',NULL,'RAMBO CISLER NADEAK',NULL,27,38,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(64,'95030796',NULL,'PERY RAPEN YONES PARDOSI, S.H.',NULL,28,38,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(65,'97070014',NULL,'DWI HETRIANDY, S.H.',NULL,28,38,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(66,'97120554',NULL,'TRY WIBOWO',NULL,29,38,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(67,'00080343',NULL,'SIMON TIGRIS SIAGIAN',NULL,29,38,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(68,'01080575',NULL,'FIRIAN JOSUA SITORUS',NULL,30,38,27,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(69,'93030551',NULL,'GUNAWAN SITUMORANG',NULL,28,39,28,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(70,'98091488',NULL,'DANIEL BAHTERA SINAGA',NULL,29,39,28,5,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(71,'75120560',NULL,'HORAS LARIUS SITUMORANG',NULL,24,113,14,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:47:38',100,40.00,'low',NULL),(72,'95090650',NULL,'JEFTA OCTAVIANUS NICO SIANTURI',NULL,28,41,14,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(73,'94091146',NULL,'SAHAT MARULI TUA SINAGA, S.H.',NULL,28,41,14,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(74,'04020118',NULL,'RONAL PARTOGI SITUMORANG',NULL,30,41,14,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(75,'82070670',NULL,'DONAL P. SITANGGANG, S.H., M.H.',NULL,23,42,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(76,'85050489',NULL,'MUHAMMAD YUNUS LUBIS, S.H.',NULL,24,40,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(77,'80070348',NULL,'MARBETA S. SIANIPAR, S.H.',NULL,26,43,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(78,'87080112',NULL,'SITARDA AKABRI SIBUEA',NULL,26,44,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(79,'87051430',NULL,'CINTER ROKHY SINAGA',NULL,27,45,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(80,'90080088',NULL,'VANDU P. MARPAUNG',NULL,27,46,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(81,'93080556',NULL,'ALFONSIUS GULTOM, S.H.',NULL,28,47,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(82,'97040848',NULL,'TRIFIKO P. NAINGGOLAN, S.H.',NULL,29,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(83,'98110618',NULL,'ANDRI AFRIJAL SIMARMATA',NULL,29,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(84,'02030032',NULL,'DIEN VAROSCY I. SITUMORANG',NULL,30,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(85,'02120339',NULL,'ARDY TRIANO MALAU',NULL,30,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(86,'02040459',NULL,'JUNEDI SAGALA',NULL,30,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(87,'02101010',NULL,'GABRIEL SEBASTIAN SIREGAR',NULL,30,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(88,'04020209',NULL,'RIO F. T ERENST PANJAITAN',NULL,30,48,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(89,'04080118',NULL,'AGHEO HARMANA JOUSTRA SINURAYA',NULL,30,47,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(90,'04010932',NULL,'SAMUEL RINALDI PAKPAHAN',NULL,30,47,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(91,'04040520',NULL,'RAYMONTIUS HAROMUNTE',NULL,30,47,6,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(92,'79120994',NULL,'EDWARD SIDAURUK, S.E., M.M.',NULL,22,49,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(93,'76020196',NULL,'DARMONO SAMOSIR, S.H.',NULL,24,50,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(94,'83010825',NULL,'ROYANTO PURBA, S.H.',NULL,24,51,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(95,'83120602',NULL,'SUHADIYANTO, S.H.',NULL,24,52,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(96,'88060535',NULL,'KUICAN SIMANJUNTAK',NULL,27,53,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(97,'79030434',NULL,'MARTIN HABENSONY ARITONANG',NULL,25,54,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(98,'83060084',NULL,'HENRY SIPAKKAR',NULL,25,55,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(99,'87011165',NULL,'CHANDRA HUTAPEA',NULL,27,43,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(100,'89030401',NULL,'CHANDRA BARIMBING',NULL,27,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(101,'87041596',NULL,'DEDY SAOLOAN SIGALINGGING',NULL,27,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(102,'82050798',NULL,'ISWAN LUKITO',NULL,27,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(103,'95030238',NULL,'RONI HANSVERI BANJARNAHOR',NULL,28,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(104,'94020506',NULL,'RODEN SUANDI TURNIP',NULL,28,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(105,'94121145',NULL,'SAPUTRA, S.H.',NULL,28,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(106,'95100554',NULL,'DIAN LESTARI GULTOM, S.H.',NULL,28,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(107,'95110886',NULL,'ARGIO SIMBOLON',NULL,28,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(108,'97070616',NULL,'EKO DAHANA PARDEDE, S.H.',NULL,28,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(109,'97040728',NULL,'GIDEON AFRIADI LUMBAN RAJA',NULL,29,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(110,'98090397',NULL,'FACHRUL REZA SILALAHI',NULL,29,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(111,'00030346',NULL,'RIDHOTUA F. SITANGGANG',NULL,29,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(112,'00110362',NULL,'NICHO FERNANDO SARAGIH',NULL,29,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(113,'00090499',NULL,'ADI P.S. MARBUN',NULL,29,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(114,'01120358',NULL,'PRIYATAMA ABDILLAH HARAHAP',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(115,'01070839',NULL,'RIZKI AFRIZAL SIMANJUNTAK',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(116,'01060553',NULL,'MIDUK YUDIANTO SINAGA',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(117,'02110342',NULL,'FRAN\'S ALEXANDER SIANIPAR',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(118,'01110817',NULL,'RAFFLES SIJABAT',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(119,'01091201',NULL,'HERIANTA TARIGAN',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(120,'03030809',NULL,'RICKY AGATHA GINTING',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(121,'03020368',NULL,'CHRISTIAN PROSPEROUS SIMANUNGKALIT',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(122,'04020196',NULL,'PINIEL RAJAGUKGUK',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(123,'03090568',NULL,'REZA SIREGAR',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(124,'04031206',NULL,'RAYMOND VAN HEZEKIEL SIAHAAN',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(125,'05080602',NULL,'M. ALAMSYAH PRAYOGA TAMBUNAN',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(126,'04090567',NULL,'IRVAN SYAPUTRA MALAU',NULL,30,56,7,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(127,'79060034',NULL,'FERRY ARIANDY, S.H., M.H',NULL,22,57,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(128,'88100591',NULL,'ALVIUS KRISTIAN GINTING, S.H.',NULL,24,40,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(129,'89010155',NULL,'BENNY SITUMORANG, S.H.',NULL,27,58,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(130,'93050797',NULL,'EKO PUTRA DAMANIK, S.H.',NULL,28,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(131,'91050361',NULL,'MAY FRANSISCO SIAGIAN, S.H.',NULL,28,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(132,'94090839',NULL,'ROBERTO MANALU',NULL,29,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(133,'98110378',NULL,'M. RONALD FAHROZI HARAHAP, S.H.',NULL,29,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(134,'97020694',NULL,'HERIANTO EFENDI, S.H.',NULL,29,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(135,'02120224',NULL,'TEDDI PARNASIPAN TOGATOROP',NULL,30,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(136,'02090838',NULL,'ONDIHON SIMBOLON',NULL,30,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(137,'05080131',NULL,'IVAN SIGOP SIHOMBING',NULL,30,59,8,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(138,'80080676',NULL,'NANDI BUTAR-BUTAR, S.H.',NULL,22,60,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(139,'80050867',NULL,'BARTO ANTONIUS SIMALANGO',NULL,25,61,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(140,'73040390',NULL,'HASUDUNGAN SILITONGA',NULL,26,62,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(141,'85090954',NULL,'JHONNY LEONARDO SILALAHI',NULL,27,63,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(142,'83081051',NULL,'ASRIL',NULL,27,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(143,'94110350',NULL,'INDIRWAN FRIDERICK, S.H.',NULL,28,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(144,'93100793',NULL,'EGIDIUM BRAUN SILITONGA',NULL,28,64,10,3,'A',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(145,'97100701',NULL,'DINAMIKA JAYA NEGARA SITANGGANG',NULL,30,64,10,3,'B',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(146,'05051087',NULL,'WIRA HARZITA',NULL,30,64,10,3,'C',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(147,'06100189',NULL,'RAHMAT ANDRIAN TAMBUNAN',NULL,30,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(148,'07080045',NULL,'JONATAN DWI SAPUTRA PARAPAT',NULL,30,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(149,'04051595',NULL,'PERDANA NIKOLA SEMBIRING',NULL,30,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(150,'04081205',NULL,'PETRUS SURIA HUGALUNG',NULL,30,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(151,'06010414',NULL,'RAFAEL ARSANLILO SINULINGGA',NULL,30,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(152,'06090021',NULL,'RAJASPER SIRINGORINGO',NULL,30,64,10,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(153,'79120800',NULL,'NATANAIL SURBAKTI, S.H',NULL,22,70,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(154,'75080942',NULL,'JUSUP KETAREN',NULL,24,71,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(155,'80070492',NULL,'ARON PERANGIN-ANGIN',NULL,25,72,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(156,'79060704',NULL,'HERON GINTING',NULL,27,73,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(157,'86030733',NULL,'JEFRI KHADAFI SIREGAR, S.H.',NULL,27,74,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(158,'89070031',NULL,'HERIANTO TURNIP',NULL,27,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(159,'87030647',NULL,'DION MAR\'YANSEN SILITONGA',NULL,28,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(160,'93020749',NULL,'ROY GRIMSLAY, S.H.',NULL,28,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(161,'93090673',NULL,'BAGUS DWI PRAKOSO, S.H.',NULL,28,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(162,'97040353',NULL,'ICASANDRI MONANZA BR GINTING',NULL,28,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(163,'95021078',NULL,'DIKI FEBRIAN SITORUS',NULL,29,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(164,'96031061',NULL,'MARCHLANDA SITOHANG',NULL,29,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(165,'01080438',NULL,'JULIVER SIDABUTAR',NULL,29,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(166,'01120281',NULL,'FATHURROZI TINDAON',NULL,30,75,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(167,'02111012',NULL,'BENY BOY CHRISTIAN SIAHAAN',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(168,'02111051',NULL,'RADOT NOVALDO PANDAPOTAN PURBA',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(169,'05030251',NULL,'MUHAMMAD ZIDHAN RIFALDI',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(170,'04050615',NULL,'DANI INDRA PERMANA SINAGA',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(171,'05010048',NULL,'HEZKIEL CAPRI SITINDAON',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(172,'04030824',NULL,'BONARIS TSUYOKO DITASANI SINAGA',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(173,'05010014',NULL,'ARY ANJAS SARAGIH',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:00',100,40.00,'low',NULL),(174,'04030805',NULL,'GABRIEL VERY JUNIOR SITOHANG',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:01',100,40.00,'low',NULL),(175,'02121477',NULL,'FIRMAN BAHTERA',NULL,30,21,9,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:01',100,40.00,'low',NULL),(176,'82051018',NULL,'SAUT H. SIAHAAN',NULL,26,79,13,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(177,'98050496',NULL,'FERNANDO SIMBOLON',NULL,29,80,13,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(178,'98030531',NULL,'KURNIA PERMANA',NULL,29,80,13,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(179,'05090232',NULL,'STEVEN IMANUEL SITUMEANG',NULL,30,80,13,3,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:01',100,40.00,'low',NULL),(180,'70050412',NULL,'MAXON NAINGGOLAN',NULL,22,87,16,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:57',100,40.00,'low',NULL),(181,'78040213',NULL,'H. SWANDI SINAGA',NULL,25,114,16,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:57',100,40.00,'low',NULL),(182,'77030463',NULL,'HARATUA GULTOM',NULL,25,115,16,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(183,'85071450',NULL,'TEGUH SYAHPUTRA',NULL,27,116,16,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(184,'85041500',NULL,'RUDYANTO LUMBANRAJA',NULL,27,98,16,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(185,'96031075',NULL,'ZULPAN SYAHPUTRA DAMANIK',NULL,29,98,16,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(186,'83061022',NULL,'RAMADAN SIREGAR, S.H.',NULL,23,92,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(187,'75120864',NULL,'GUNTAR TAMBUNAN',NULL,25,120,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:58:25',100,40.00,'low',NULL),(188,'83080042',NULL,'YOPPHY RHODEAR MUNTHE',NULL,26,121,17,4,'A',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:58:25',100,40.00,'low',NULL),(189,'84110202',NULL,'DONI SURIANTO PURBA, S.H.',NULL,27,122,17,4,'C',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:58:25',100,40.00,'low',NULL),(190,'94090490',NULL,'KURNIAWAN, S.H.',NULL,28,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(191,'95060432',NULL,'ASHARI BUTAR-BUTAR, S.H.',NULL,28,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(192,'96061331',NULL,'DIDI HOT BAGAS SITORUS',NULL,30,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(193,'01060884',NULL,'HORAS J.M. ARITONANG',NULL,30,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(194,'04060050',NULL,'ANDRE YEHEZKIEL HUTABARAT',NULL,30,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(195,'89080105',NULL,'CLAUDIUS HARIS PARDEDE',NULL,28,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(196,'02051553',NULL,'ZULKIFLI NASUTION',NULL,30,100,17,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(197,'70010290',NULL,'RADIAMAN SIMARMATA',NULL,22,109,18,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(198,'83031377',NULL,'LUHUT SIRINGO-RINGO',NULL,28,101,18,4,'C',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(199,'03100001',NULL,'ANRIAN SIGALINGGING',NULL,30,101,18,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(200,'99110755',NULL,'BONATUA LUMBANTUNGKUP',NULL,30,101,18,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:54:58',100,40.00,'low',NULL),(201,'03050116',NULL,'ANDRE SUGIARTO MARPAUNG',NULL,30,101,18,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:01',100,40.00,'low',NULL),(202,'04030125',NULL,'ERWIN KEVIN GULTOM',NULL,30,101,18,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:01',100,40.00,'low',NULL),(203,'70020298',NULL,'BANGUN TUA DALIMUNTHE',NULL,22,97,19,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(204,'79020443',NULL,'HERBINTUPA SITANGGANG',NULL,28,99,19,4,'C',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(205,'85121751',NULL,'IBRAHIM TARIGAN',NULL,28,99,19,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(206,'98090406',NULL,'AGUNG NUGRAHA HARIANJA, S.H.',NULL,29,99,19,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(207,'98091274',NULL,'DANI PUTRA RUMAHORBO',NULL,29,99,19,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:18:55',100,40.00,'low',NULL),(208,'01060198',NULL,'KRISMAN JULU GULTOM',NULL,30,99,19,4,'',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,'system','system','2026-04-06 18:24:10','2026-04-09 17:28:01',100,40.00,'low',NULL),(225,'81110363',NULL,'LEONARDO SINAGA',NULL,26,19,30,6,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 18:09:13',100,40.00,'low',NULL),(273,'72100604',NULL,'TANGIO HAOJAHAN SITANGGANG, S.H.',NULL,23,65,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(274,'80100836',NULL,'MARUBA NAINGGOLAN',NULL,25,66,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(275,'85030645',NULL,'ROY HARIS ST. SIMAREMARE',NULL,26,67,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(276,'80050898',NULL,'M. DENY WAHYU',NULL,26,68,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(277,'83050202',NULL,'HENRI F. SIANIPAR',NULL,25,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(278,'85121325',NULL,'BUYUNG ANDRYANTO',NULL,27,43,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(279,'91110130',NULL,'RIANTO SITANGGANG',NULL,28,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(280,'94090948',NULL,'ROY NANDA SEMBIRING KEMBAREN',NULL,28,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(281,'96031057',NULL,'CANDRA SILALAHI, S.H.',NULL,28,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(282,'02100599',NULL,'YUNUS SAMDIO SIDABUTAR',NULL,30,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(283,'03010565',NULL,'RAINHEART SITANGGANG',NULL,30,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(284,'02011312',NULL,'BONIFASIUS NAINGGOLAN',NULL,30,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(285,'00080816',NULL,'RAY YONDO SIAHAAN',NULL,30,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(286,'03040947',NULL,'REDY EZRA JONATHAN',NULL,30,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(287,'04100485',NULL,'CHARLY H. ARITONANG',NULL,30,69,11,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(299,'68120522',NULL,'SULAIMAN PANGARIBUAN, S.H',NULL,22,76,12,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(300,'83080822',NULL,'EFENDI M.  SIREGAR',NULL,26,110,12,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:38:47',100,40.00,'low',NULL),(301,'73120275',NULL,'ROMEL LINDUNG SIAHAAN',NULL,26,111,12,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:38:47',100,40.00,'low',NULL),(302,'90060273',NULL,'FRANS HOTMAN MANURUNG, S.H.',NULL,27,112,12,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:38:47',100,40.00,'low',NULL),(303,'77070919',NULL,'ANTONIUS SIPAYUNG',NULL,28,112,12,3,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:38:47',100,40.00,'low',NULL),(305,'69090552',NULL,'RAHMAT KURNIAWAN',NULL,23,81,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(306,'79090296',NULL,'MARUKKIL J.M. PASARIBU',NULL,25,82,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(307,'82070930',NULL,'LANTRO LANDELINUS SAGALA',NULL,26,83,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(308,'87120701',NULL,'ANDY DEDY SIHOMBING, S.H.',NULL,27,107,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(309,'86021428',NULL,'RANGGA HATTA',NULL,27,85,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(310,'80120573',NULL,'ARDIANSYAH BUTAR-BUTAR',NULL,27,102,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(311,'96120123',NULL,'ADRYANTO SINAGA, S.H.',NULL,28,102,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(312,'94040538',NULL,'BROLIN ADFRIALDI HALOHO',NULL,28,102,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(313,'95110806',NULL,'SUGIANTO ERIK SIBORO',NULL,28,102,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(314,'01020739',NULL,'RISKO SIMBOLON',NULL,30,102,15,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(315,'76120606',NULL,'ASA MELKI HUTABARAT',NULL,26,117,16,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:54:58',100,40.00,'low',NULL),(316,'78100741',NULL,'JARIAHMAN SARAGIH',NULL,26,118,16,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:54:58',100,40.00,'low',NULL),(317,'87041134',NULL,'MUHAMMAD SYAFEI RAMADHAN',NULL,26,103,16,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:54:58',100,40.00,'low',NULL),(318,'86121371',NULL,'RIJALUL FIKRI SINAGA',NULL,27,119,16,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:54:58',100,40.00,'low',NULL),(319,'86071792',NULL,'WIDODO KABAN, S.H.',NULL,24,126,17,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:59:12',100,40.00,'low',NULL),(320,'82040124',NULL,'JEFRI RICARDO SAMOSIR',NULL,25,123,17,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:58:25',100,40.00,'low',NULL),(321,'84020306',NULL,'JUITO SUPANOTO PERANGIN-ANGIN',NULL,26,123,17,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 18:00:01',100,40.00,'low',NULL),(322,'86010311',NULL,'TUMBUR SITOHANG',NULL,26,124,17,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:59:12',100,40.00,'low',NULL),(323,'89020409',NULL,'PATAR F. ANRI SIAHAAN',NULL,27,125,17,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:59:12',100,40.00,'low',NULL),(327,'82050839',NULL,'HERMAWADI',NULL,26,106,18,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(328,'84091124',NULL,'BISSAR LUMBANTUNGKUP',NULL,26,129,18,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:59:12',100,40.00,'low',NULL),(329,'70090340',NULL,'BONAR JUBEL SIBARANI',NULL,27,127,18,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:59:12',100,40.00,'low',NULL),(330,'77020642',NULL,'RAMLES SITANGGANG',NULL,27,128,18,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:59:12',100,40.00,'low',NULL),(334,'81050713',NULL,'LANCASTER ARIANTO CANDY PASARIBU, S.H.',NULL,25,104,19,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:18:55',100,40.00,'low',NULL),(335,'80090905',NULL,'RUDY SETYAWAN',NULL,25,130,19,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:58:25',100,40.00,'low',NULL),(336,'80080892',NULL,'MANGATUR TUA TINDAON',NULL,26,131,19,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:58:25',100,40.00,'low',NULL),(337,'87110154',NULL,'RENO HOTMARULI TUA MANIK, S.H.',NULL,27,132,19,4,'aktif',NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-07 18:15:26','2026-04-09 17:58:25',100,40.00,'low',NULL),(339,'123456',NULL,'Test User',NULL,1,1,1,1,'aktif',NULL,NULL,NULL,NULL,'L',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,0,NULL,NULL,'2026-04-11 14:15:34','2026-04-11 14:15:34',100,40.00,'low',NULL);
 /*!40000 ALTER TABLE `personil` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1058,6 +1908,287 @@ LOCK TABLES `piket_absensi` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `predictive_models`
+--
+
+DROP TABLE IF EXISTS `predictive_models`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `predictive_models` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `model_name` varchar(100) NOT NULL,
+  `model_type` enum('staffing_forecast','fatigue_prediction','absence_prediction') NOT NULL,
+  `model_version` varchar(20) DEFAULT '1.0',
+  `model_parameters` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`model_parameters`)),
+  `accuracy_score` decimal(5,4) DEFAULT NULL,
+  `training_data_period_start` date DEFAULT NULL,
+  `training_data_period_end` date DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_model_type` (`model_type`),
+  KEY `idx_model_active` (`is_active`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `predictive_models`
+--
+
+LOCK TABLES `predictive_models` WRITE;
+/*!40000 ALTER TABLE `predictive_models` DISABLE KEYS */;
+/*!40000 ALTER TABLE `predictive_models` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `recall_campaigns`
+--
+
+DROP TABLE IF EXISTS `recall_campaigns`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recall_campaigns` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `campaign_code` varchar(50) NOT NULL,
+  `campaign_name` varchar(200) NOT NULL,
+  `campaign_type` enum('emergency','recall','standby','alert') NOT NULL,
+  `description` text DEFAULT NULL,
+  `priority_level` enum('low','medium','high','critical') DEFAULT 'high',
+  `target_groups` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Target personil groups' CHECK (json_valid(`target_groups`)),
+  `message_template` text DEFAULT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `status` enum('draft','active','completed','cancelled') DEFAULT 'draft',
+  `created_by` varchar(50) NOT NULL,
+  `total_sent` int(11) DEFAULT 0,
+  `total_responded` int(11) DEFAULT 0,
+  `total_confirmed` int(11) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `campaign_code` (`campaign_code`),
+  KEY `idx_campaign_status` (`status`),
+  KEY `idx_start_time` (`start_time`),
+  KEY `idx_campaign_type` (`campaign_type`),
+  KEY `idx_status_created` (`status`,`start_time`),
+  KEY `idx_start_status` (`start_time`,`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recall_campaigns`
+--
+
+LOCK TABLES `recall_campaigns` WRITE;
+/*!40000 ALTER TABLE `recall_campaigns` DISABLE KEYS */;
+/*!40000 ALTER TABLE `recall_campaigns` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `recall_responses`
+--
+
+DROP TABLE IF EXISTS `recall_responses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recall_responses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `campaign_id` int(11) NOT NULL,
+  `personil_id` varchar(20) NOT NULL,
+  `response_status` enum('pending','acknowledged','confirmed','declined','unable') DEFAULT 'pending',
+  `response_time` timestamp NULL DEFAULT NULL,
+  `response_note` text DEFAULT NULL,
+  `eta_time` datetime DEFAULT NULL COMMENT 'Estimated time of arrival',
+  `location` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `personil_id` (`personil_id`),
+  KEY `idx_campaign_personil` (`campaign_id`,`personil_id`),
+  KEY `idx_response_status` (`response_status`),
+  KEY `idx_response_time` (`response_time`),
+  CONSTRAINT `recall_responses_ibfk_1` FOREIGN KEY (`campaign_id`) REFERENCES `recall_campaigns` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `recall_responses_ibfk_2` FOREIGN KEY (`personil_id`) REFERENCES `personil` (`nrp`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recall_responses`
+--
+
+LOCK TABLES `recall_responses` WRITE;
+/*!40000 ALTER TABLE `recall_responses` DISABLE KEYS */;
+/*!40000 ALTER TABLE `recall_responses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `report_access_log`
+--
+
+DROP TABLE IF EXISTS `report_access_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `report_access_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `report_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `action` enum('generated','downloaded','viewed','deleted') NOT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_report_id` (`report_id`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_action` (`action`),
+  KEY `idx_created_at` (`created_at`),
+  CONSTRAINT `report_access_log_ibfk_1` FOREIGN KEY (`report_id`) REFERENCES `generated_reports` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `report_access_log`
+--
+
+LOCK TABLES `report_access_log` WRITE;
+/*!40000 ALTER TABLE `report_access_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `report_access_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `report_email_log`
+--
+
+DROP TABLE IF EXISTS `report_email_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `report_email_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `report_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `sent_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` enum('sent','failed','bounced') DEFAULT 'sent',
+  `error_message` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_report_id` (`report_id`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_sent_at` (`sent_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `report_email_log`
+--
+
+LOCK TABLES `report_email_log` WRITE;
+/*!40000 ALTER TABLE `report_email_log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `report_email_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `report_stats`
+--
+
+DROP TABLE IF EXISTS `report_stats`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `report_stats` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `reports_generated` int(11) DEFAULT 0,
+  `total_size_mb` decimal(10,2) DEFAULT 0.00,
+  `unique_users` int(11) DEFAULT 0,
+  `downloads_count` int(11) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `date` (`date`),
+  KEY `idx_date` (`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `report_stats`
+--
+
+LOCK TABLES `report_stats` WRITE;
+/*!40000 ALTER TABLE `report_stats` DISABLE KEYS */;
+/*!40000 ALTER TABLE `report_stats` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `report_subscriptions`
+--
+
+DROP TABLE IF EXISTS `report_subscriptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `report_subscriptions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `report_type` varchar(50) NOT NULL,
+  `frequency` enum('daily','weekly','monthly') NOT NULL,
+  `format` enum('pdf','excel','csv') NOT NULL,
+  `parameters` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`parameters`)),
+  `delivery_method` enum('email','download','both') DEFAULT 'email',
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_user_report` (`user_id`,`report_type`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_report_type` (`report_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `report_subscriptions`
+--
+
+LOCK TABLES `report_subscriptions` WRITE;
+/*!40000 ALTER TABLE `report_subscriptions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `report_subscriptions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `scheduled_reports`
+--
+
+DROP TABLE IF EXISTS `scheduled_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `scheduled_reports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `report_type` varchar(50) NOT NULL,
+  `report_name` varchar(200) NOT NULL,
+  `frequency` enum('daily','weekly','monthly','quarterly','yearly') NOT NULL,
+  `format` enum('pdf','excel','csv') NOT NULL,
+  `parameters` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`parameters`)),
+  `recipients` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT 'List of user IDs to receive report' CHECK (json_valid(`recipients`)),
+  `is_active` tinyint(1) DEFAULT 1,
+  `last_run` timestamp NULL DEFAULT NULL,
+  `next_run` timestamp NULL DEFAULT NULL,
+  `created_by` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_frequency` (`frequency`),
+  KEY `idx_next_run` (`next_run`),
+  KEY `idx_active` (`is_active`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `scheduled_reports`
+--
+
+LOCK TABLES `scheduled_reports` WRITE;
+/*!40000 ALTER TABLE `scheduled_reports` DISABLE KEYS */;
+/*!40000 ALTER TABLE `scheduled_reports` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `schedules`
 --
 
@@ -1085,10 +2216,19 @@ CREATE TABLE `schedules` (
   `recurrence_days` varchar(20) DEFAULT NULL COMMENT 'weekly: 1,3,5 = Sen,Rab,Jum',
   `recurrence_end` date DEFAULT NULL,
   `recurrence_parent_id` int(11) DEFAULT NULL COMMENT 'NULL = induk series',
+  `fatigue_risk` enum('low','medium','high') DEFAULT 'low',
+  `consecutive_days` int(11) DEFAULT 1 COMMENT 'Hari kerja berturut-turut',
+  `weekly_hours` decimal(5,2) DEFAULT 0.00 COMMENT 'Total jam kerja minggu ini',
+  `overtime_hours` decimal(4,2) DEFAULT 0.00,
+  `overtime_rate` enum('regular','holiday','weekend','emergency') DEFAULT 'regular',
+  `overtime_approved` tinyint(1) DEFAULT 0,
+  `overtime_approved_by` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_personil` (`personil_id`),
   KEY `idx_date` (`shift_date`),
-  KEY `idx_bagian` (`bagian`)
+  KEY `idx_bagian` (`bagian`),
+  KEY `idx_fatigue_risk` (`fatigue_risk`,`shift_date`),
+  KEY `idx_personil_date` (`personil_id`,`shift_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1099,6 +2239,46 @@ CREATE TABLE `schedules` (
 LOCK TABLES `schedules` WRITE;
 /*!40000 ALTER TABLE `schedules` DISABLE KEYS */;
 /*!40000 ALTER TABLE `schedules` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `scheduling_patterns`
+--
+
+DROP TABLE IF EXISTS `scheduling_patterns`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `scheduling_patterns` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pattern_type` enum('seasonal','weekly','daily','emergency') NOT NULL,
+  `bagian_id` int(11) DEFAULT NULL,
+  `unsur_id` int(11) DEFAULT NULL,
+  `day_of_week` tinyint(4) DEFAULT NULL COMMENT '0-6 (Sunday-Saturday)',
+  `week_of_year` tinyint(4) DEFAULT NULL COMMENT '1-52',
+  `month` tinyint(4) DEFAULT NULL COMMENT '1-12',
+  `hour_of_day` tinyint(4) DEFAULT NULL COMMENT '0-23',
+  `personnel_demand` int(11) DEFAULT 0,
+  `historical_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT 'Historical demand data' CHECK (json_valid(`historical_data`)),
+  `confidence_score` decimal(5,4) DEFAULT 0.5000,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `unsur_id` (`unsur_id`),
+  KEY `idx_pattern_type` (`pattern_type`),
+  KEY `idx_demand_period` (`day_of_week`,`week_of_year`,`month`),
+  KEY `idx_bagian_unsur` (`bagian_id`,`unsur_id`),
+  CONSTRAINT `scheduling_patterns_ibfk_1` FOREIGN KEY (`bagian_id`) REFERENCES `bagian` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `scheduling_patterns_ibfk_2` FOREIGN KEY (`unsur_id`) REFERENCES `unsur` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `scheduling_patterns`
+--
+
+LOCK TABLES `scheduling_patterns` WRITE;
+/*!40000 ALTER TABLE `scheduling_patterns` DISABLE KEYS */;
+/*!40000 ALTER TABLE `scheduling_patterns` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1173,6 +2353,75 @@ LOCK TABLES `surat_ekspedisi` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `system_settings`
+--
+
+DROP TABLE IF EXISTS `system_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `system_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `setting_key` varchar(100) NOT NULL,
+  `setting_value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`setting_value`)),
+  `setting_type` enum('boolean','integer','decimal','string','json') NOT NULL,
+  `description` text DEFAULT NULL,
+  `category` varchar(50) DEFAULT 'general',
+  `is_editable` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `setting_key` (`setting_key`),
+  KEY `idx_setting_key` (`setting_key`),
+  KEY `idx_category` (`category`)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `system_settings`
+--
+
+LOCK TABLES `system_settings` WRITE;
+/*!40000 ALTER TABLE `system_settings` DISABLE KEYS */;
+INSERT INTO `system_settings` VALUES (1,'fatigue_max_weekly_hours','40','integer','Maximum weekly working hours','fatigue',1,'2026-04-11 14:59:35','2026-04-11 14:59:35'),(2,'fatigue_min_rest_hours','12','integer','Minimum rest hours between shifts','fatigue',1,'2026-04-11 14:59:35','2026-04-11 14:59:35'),(3,'fatigue_consecutive_days_limit','7','integer','Maximum consecutive working days','fatigue',1,'2026-04-11 14:59:35','2026-04-11 14:59:35'),(4,'certification_expiry_warning_days','30','integer','Days before expiry to send warning','certification',1,'2026-04-11 14:59:35','2026-04-11 14:59:35'),(5,'overtime_auto_approval_limit','2','decimal','Auto-approve overtime under this limit','overtime',1,'2026-04-11 14:59:35','2026-04-11 14:59:35'),(6,'emergency_task_auto_assign','false','boolean','Auto-assign emergency tasks','emergency',1,'2026-04-11 14:59:35','2026-04-11 14:59:35'),(7,'recall_response_timeout_minutes','30','integer','Timeout for recall response in minutes','recall',1,'2026-04-11 14:59:35','2026-04-11 14:59:35'),(8,'equipment_maintenance_warning_days','7','integer','Days before maintenance to send warning','equipment',1,'2026-04-11 14:59:35','2026-04-11 14:59:35'),(25,'mobile_session_timeout_hours','24','integer','Mobile session timeout in hours','mobile',1,'2026-04-11 15:06:49','2026-04-11 15:06:49'),(26,'mobile_rate_limit_per_minute','100','integer','Mobile API rate limit per minute','mobile',1,'2026-04-11 15:06:49','2026-04-11 15:06:49'),(27,'push_notification_enabled','true','boolean','Enable push notifications','mobile',1,'2026-04-11 15:06:49','2026-04-11 15:06:49'),(30,'notification_service_enabled','true','boolean','Enable notification service','notifications',1,'2026-04-11 15:08:15','2026-04-11 15:08:15'),(31,'notification_queue_enabled','true','boolean','Enable notification queue processing','notifications',1,'2026-04-11 15:08:15','2026-04-11 15:08:15'),(32,'notification_cleanup_days','90','integer','Days to keep notification history','notifications',1,'2026-04-11 15:08:15','2026-04-11 15:08:15'),(33,'notification_max_attempts','3','integer','Maximum delivery attempts per notification','notifications',1,'2026-04-11 15:08:15','2026-04-11 15:08:15'),(34,'notification_batch_size','100','integer','Batch size for notification processing','notifications',1,'2026-04-11 15:08:15','2026-04-11 15:08:15'),(35,'email_notifications_enabled','true','boolean','Enable email notifications','notifications',1,'2026-04-11 15:08:15','2026-04-11 15:08:15'),(36,'sms_notifications_enabled','false','boolean','Enable SMS notifications','notifications',1,'2026-04-11 15:08:15','2026-04-11 15:08:15'),(37,'notification_quiet_hours_enabled','true','boolean','Enable quiet hours for notifications','notifications',1,'2026-04-11 15:08:15','2026-04-11 15:08:15'),(39,'reporting_enabled','true','boolean','Enable automated reporting system','reporting',1,'2026-04-11 15:09:28','2026-04-11 15:09:28'),(40,'report_retention_days','90','integer','Days to keep generated reports','reporting',1,'2026-04-11 15:09:28','2026-04-11 15:09:28'),(41,'max_report_size_mb','50','integer','Maximum report file size in MB','reporting',1,'2026-04-11 15:09:28','2026-04-11 15:09:28'),(42,'auto_cleanup_reports','true','boolean','Automatically cleanup old reports','reporting',1,'2026-04-11 15:09:28','2026-04-11 15:09:28'),(43,'email_reports_enabled','true','boolean','Enable email delivery of reports','reporting',1,'2026-04-11 15:09:28','2026-04-11 15:09:28'),(44,'report_generation_timeout','300','integer','Report generation timeout in seconds','reporting',1,'2026-04-11 15:09:28','2026-04-11 15:09:28'),(45,'concurrent_reports_limit','5','integer','Maximum concurrent report generation','reporting',1,'2026-04-11 15:09:28','2026-04-11 15:09:28');
+/*!40000 ALTER TABLE `system_settings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `task_conflicts`
+--
+
+DROP TABLE IF EXISTS `task_conflicts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `task_conflicts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `schedule_id` int(11) NOT NULL,
+  `emergency_task_id` int(11) NOT NULL,
+  `conflict_type` enum('overlap','resource','fatigue') NOT NULL,
+  `resolution_status` enum('pending','resolved','escalated') DEFAULT 'pending',
+  `resolution_action` text DEFAULT NULL,
+  `resolved_by` varchar(50) DEFAULT NULL,
+  `resolved_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `emergency_task_id` (`emergency_task_id`),
+  KEY `idx_conflict_status` (`resolution_status`),
+  KEY `idx_schedule_id` (`schedule_id`),
+  CONSTRAINT `task_conflicts_ibfk_1` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `task_conflicts_ibfk_2` FOREIGN KEY (`emergency_task_id`) REFERENCES `emergency_tasks` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `task_conflicts`
+--
+
+LOCK TABLES `task_conflicts` WRITE;
+/*!40000 ALTER TABLE `task_conflicts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `task_conflicts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tim_piket`
 --
 
@@ -1237,6 +2486,46 @@ CREATE TABLE `tim_piket_anggota` (
 LOCK TABLES `tim_piket_anggota` WRITE;
 /*!40000 ALTER TABLE `tim_piket_anggota` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tim_piket_anggota` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `training_compliance`
+--
+
+DROP TABLE IF EXISTS `training_compliance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `training_compliance` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `personil_id` varchar(20) NOT NULL,
+  `training_type` varchar(100) NOT NULL,
+  `training_name` varchar(200) NOT NULL,
+  `provider` varchar(200) DEFAULT NULL,
+  `training_date` date DEFAULT NULL,
+  `completion_date` date DEFAULT NULL,
+  `status` enum('required','in_progress','completed','expired','failed') DEFAULT 'required',
+  `hours_completed` decimal(4,2) DEFAULT 0.00,
+  `required_hours` decimal(4,2) DEFAULT 0.00,
+  `next_due` date DEFAULT NULL COMMENT 'Tanggal harus training ulang',
+  `certificate_required` tinyint(1) DEFAULT 1,
+  `completion_certificate_path` varchar(500) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_personil_training` (`personil_id`),
+  KEY `idx_training_status` (`status`),
+  KEY `idx_next_due` (`next_due`),
+  CONSTRAINT `training_compliance_ibfk_1` FOREIGN KEY (`personil_id`) REFERENCES `personil` (`nrp`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `training_compliance`
+--
+
+LOCK TABLES `training_compliance` WRITE;
+/*!40000 ALTER TABLE `training_compliance` DISABLE KEYS */;
+/*!40000 ALTER TABLE `training_compliance` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1371,9 +2660,119 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'bagops','$2y$10$evPCY3JbFpDMBIgpv8sB/eO/tKnlYYCZrWaozH2Nl3dod/AQmJTWW','admin@polressamosir.id','Administrator BAGOPS','admin',1,'2026-04-10 21:54:50',0,NULL,'2026-03-30 19:40:54','2026-04-10 14:54:50',NULL),(2,'operator','$2y$10$FZiaJAqG8l.1RqpH3PRnjuIsL/tOOzMqnHfk3nEbk9Azp1kTxRvT.',NULL,'Staf Operator Bagops','operator',1,NULL,0,NULL,'2026-04-10 14:43:57','2026-04-10 14:43:57',NULL),(3,'viewer','$2y$10$Rjy2pebO3qzDyPGJHl7C8.O2Mo29KB4llHnYRTMmUrDj8IybJ.2s.',NULL,'Kapolres Samosir','viewer',1,NULL,0,NULL,'2026-04-10 14:43:57','2026-04-10 14:43:57',NULL);
+INSERT INTO `users` VALUES (1,'bagops','$2y$10$evPCY3JbFpDMBIgpv8sB/eO/tKnlYYCZrWaozH2Nl3dod/AQmJTWW','admin@polressamosir.id','Administrator BAGOPS','admin',1,'2026-04-11 21:43:07',0,NULL,'2026-03-30 19:40:54','2026-04-11 14:43:07',NULL),(2,'operator','$2y$10$FZiaJAqG8l.1RqpH3PRnjuIsL/tOOzMqnHfk3nEbk9Azp1kTxRvT.',NULL,'Staf Operator Bagops','operator',1,NULL,0,NULL,'2026-04-10 14:43:57','2026-04-10 14:43:57',NULL),(3,'viewer','$2y$10$Rjy2pebO3qzDyPGJHl7C8.O2Mo29KB4llHnYRTMmUrDj8IybJ.2s.',NULL,'Kapolres Samosir','viewer',1,NULL,0,NULL,'2026-04-10 14:43:57','2026-04-10 14:43:57',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `weekly_fatigue_summary`
+--
+
+DROP TABLE IF EXISTS `weekly_fatigue_summary`;
+/*!50001 DROP VIEW IF EXISTS `weekly_fatigue_summary`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE VIEW `weekly_fatigue_summary` AS SELECT
+ 1 AS `week_year`,
+  1 AS `week_start`,
+  1 AS `week_end`,
+  1 AS `total_records`,
+  1 AS `avg_fatigue_score`,
+  1 AS `critical_cases`,
+  1 AS `high_cases`,
+  1 AS `avg_hours_worked`,
+  1 AS `avg_rest_hours` */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Final view structure for view `daily_attendance_summary`
+--
+
+/*!50001 DROP VIEW IF EXISTS `daily_attendance_summary`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `daily_attendance_summary` AS select cast(`s`.`shift_date` as date) AS `attendance_date`,count(0) AS `total_scheduled`,count(case when `pa`.`status` = 'hadir' then 1 end) AS `present`,count(case when `pa`.`status` = 'sakit' then 1 end) AS `sick`,count(case when `pa`.`status` = 'ijin' then 1 end) AS `permitted`,count(case when `pa`.`status` = 'tidak_hadir' then 1 end) AS `absent`,round(count(case when `pa`.`status` = 'hadir' then 1 end) * 100.0 / count(0),2) AS `attendance_rate` from (`schedules` `s` left join `piket_absensi` `pa` on(`pa`.`schedule_id` = `s`.`id`)) where `s`.`shift_date` >= curdate() - interval 90 day group by cast(`s`.`shift_date` as date) order by cast(`s`.`shift_date` as date) desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `emergency_task_performance`
+--
+
+/*!50001 DROP VIEW IF EXISTS `emergency_task_performance`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `emergency_task_performance` AS select cast(`et`.`start_time` as date) AS `task_date`,count(0) AS `total_tasks`,count(case when `et`.`status` = 'completed' then 1 end) AS `completed`,count(case when `et`.`status` = 'cancelled' then 1 end) AS `cancelled`,avg(timestampdiff(MINUTE,`et`.`start_time`,coalesce(`et`.`end_time`,current_timestamp()))) AS `avg_duration_minutes`,count(case when `et`.`priority_level` = 'critical' then 1 end) AS `critical_tasks`,count(case when `et`.`priority_level` = 'high' then 1 end) AS `high_tasks` from `emergency_tasks` `et` where `et`.`start_time` >= curdate() - interval 90 day group by cast(`et`.`start_time` as date) order by cast(`et`.`start_time` as date) desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `monthly_certification_summary`
+--
+
+/*!50001 DROP VIEW IF EXISTS `monthly_certification_summary`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `monthly_certification_summary` AS select date_format(`c`.`expiry_date`,'%Y-%m') AS `expiry_month`,count(0) AS `total_certifications`,count(case when `c`.`status` = 'valid' then 1 end) AS `valid`,count(case when `c`.`status` = 'expired' then 1 end) AS `expired`,count(case when `c`.`expiry_date` between curdate() and curdate() + interval 30 day and `c`.`status` = 'valid' then 1 end) AS `expiring_soon` from `certifications` `c` where `c`.`expiry_date` >= curdate() - interval 24 month group by date_format(`c`.`expiry_date`,'%Y-%m') order by date_format(`c`.`expiry_date`,'%Y-%m') desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `notification_dashboard`
+--
+
+/*!50001 DROP VIEW IF EXISTS `notification_dashboard`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `notification_dashboard` AS select cast(`n`.`created_at` as date) AS `notification_date`,`n`.`notification_type` AS `notification_type`,count(0) AS `total_notifications`,count(case when `n`.`status` = 'sent' then 1 end) AS `sent_notifications`,count(case when `n`.`status` = 'delivered' then 1 end) AS `delivered_notifications`,count(case when `n`.`status` = 'read' then 1 end) AS `read_notifications`,count(case when `n`.`status` = 'failed' then 1 end) AS `failed_notifications` from (`notifications` `n` left join `notification_delivery_analytics` `ndl` on(`ndl`.`notification_id` = `n`.`id`)) where `n`.`created_at` >= curdate() - interval 30 day group by cast(`n`.`created_at` as date),`n`.`notification_type` order by cast(`n`.`created_at` as date) desc,`n`.`notification_type` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+
+--
+-- Final view structure for view `weekly_fatigue_summary`
+--
+
+/*!50001 DROP VIEW IF EXISTS `weekly_fatigue_summary`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `weekly_fatigue_summary` AS select yearweek(`ft`.`tracking_date`,0) AS `week_year`,min(`ft`.`tracking_date`) AS `week_start`,max(`ft`.`tracking_date`) AS `week_end`,count(0) AS `total_records`,avg(`ft`.`fatigue_score`) AS `avg_fatigue_score`,count(case when `ft`.`fatigue_level` = 'critical' then 1 end) AS `critical_cases`,count(case when `ft`.`fatigue_level` = 'high' then 1 end) AS `high_cases`,avg(`ft`.`hours_worked`) AS `avg_hours_worked`,avg(`ft`.`rest_hours`) AS `avg_rest_hours` from `fatigue_tracking` `ft` where `ft`.`tracking_date` >= curdate() - interval 52 week group by yearweek(`ft`.`tracking_date`,0) order by yearweek(`ft`.`tracking_date`,0) desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1384,4 +2783,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-10 21:56:18
+-- Dump completed on 2026-04-11 22:19:44

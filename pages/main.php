@@ -17,8 +17,16 @@ if (!AuthHelper::validateSession()) {
     exit;
 }
 
-$page_title = 'Dashboard - Sistem Manajemen POLRES Samosir';
-include __DIR__ . '/../includes/components/header.php';
+// Setup page header
+$page_header = [
+    'title' => 'Dashboard',
+    'breadcrumb' => [
+        ['text' => 'Dashboard', 'active' => true]
+    ]
+];
+
+// Include Bootstrap layout
+include __DIR__ . '/../includes/components/bootstrap_layout.php';
 ?>
 <?php
 $user = AuthHelper::getCurrentUser();
@@ -40,18 +48,20 @@ $_suratKeluar  = (int)$_db->query("SELECT COUNT(*) FROM surat_ekspedisi WHERE je
 $_suratProses  = (int)$_db->query("SELECT COUNT(*) FROM surat_ekspedisi WHERE status='diproses'")->fetchColumn();
 ?>
 
-<div class="container-fluid py-4">
-    <!-- Hero / Greeting -->
-    <div class="card border-0 shadow-sm mb-4 hero-section">
-        <div class="card-body py-4 px-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h4 class="fw-bold mb-1"><?= $greeting ?>, <?= htmlspecialchars($user['username'] ?? 'User') ?></h4>
-                    <p class="mb-0 opacity-75"><?= $roleLabels[$role] ?? $role ?> — BAGOPS Polres Samosir | <?= date('l, d F Y') ?></p>
-                </div>
-                <div class="text-end d-none d-md-block">
-                    <div class="fs-1 fw-bold"><?= date('H:i') ?></div>
-                    <small class="opacity-75">SPRIN v<?= APP_VERSION ?></small>
+<!-- Hero / Greeting -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body py-4">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8 col-md-7">
+                            <h4 class="fw-bold mb-1"><?= $greeting ?>, <?= htmlspecialchars($user['username'] ?? 'User') ?></h4>
+                            <p class="mb-0 text-muted"><?= $roleLabels[$role] ?? $role ?> — BAGOPS Polres Samosir | <?= date('l, d F Y') ?></p>
+                        </div>
+                        <div class="col-lg-4 col-md-5 text-end">
+                            <div class="badge bg-primary fs-6"><?= date('H:i') ?></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -61,28 +71,32 @@ $_suratProses  = (int)$_db->query("SELECT COUNT(*) FROM surat_ekspedisi WHERE st
     <div class="alert alert-danger alert-dismissible fade show"><?= $_SESSION['flash_error'] ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
     <?php unset($_SESSION['flash_error']); endif; ?>
 
-    <!-- Operational Summary — 8 cards -->
+    <!-- Operational Summary -->
     <div class="row g-3 mb-4">
-        <div class="col-6 col-lg-3"><div class="card border-0 shadow-sm h-100"><div class="card-body text-center py-3">
-            <i class="fas fa-bullhorn text-danger fs-4 mb-1"></i>
-            <div class="fs-2 fw-bold text-danger"><?= $_opsActive ?></div>
-            <div class="text-muted small">Operasi Aktif</div>
-        </div></div></div>
-        <div class="col-6 col-lg-3"><div class="card border-0 shadow-sm h-100"><div class="card-body text-center py-3">
-            <i class="fas fa-clipboard-list text-primary fs-4 mb-1"></i>
-            <div class="fs-2 fw-bold text-primary"><?= $_opsPlanned ?></div>
-            <div class="text-muted small">Operasi Rencana</div>
-        </div></div></div>
-        <div class="col-6 col-lg-3"><div class="card border-0 shadow-sm h-100"><div class="card-body text-center py-3">
-            <i class="fas fa-file-alt text-warning fs-4 mb-1"></i>
-            <div class="fs-2 fw-bold text-warning"><?= $_lhptDraft ?></div>
-            <div class="text-muted small">LHPT Draft</div>
-        </div></div></div>
-        <div class="col-6 col-lg-3"><div class="card border-0 shadow-sm h-100"><div class="card-body text-center py-3">
-            <i class="fas fa-envelope text-info fs-4 mb-1"></i>
-            <div class="fs-2 fw-bold text-info"><?= $_suratProses ?></div>
-            <div class="text-muted small">Surat Diproses</div>
-        </div></div></div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stats-card">
+                <div class="stats-number">256</div>
+                <div class="stats-label">Total Personil</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stats-card" style="background: linear-gradient(135deg, #198754, #146c43);">
+                <div class="stats-number"><?php echo $_opsActive; ?></div>
+                <div class="stats-label">Operasi Aktif</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stats-card" style="background: linear-gradient(135deg, #ffc107, #e0a800);">
+                <div class="stats-number"><?php echo $_piketHariIni; ?></div>
+                <div class="stats-label">Piket Hari Ini</div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stats-card" style="background: linear-gradient(135deg, #0dcaf0, #0aa2c0);">
+                <div class="stats-number"><?php echo $_lhptDraft; ?></div>
+                <div class="stats-label">LHPT Draft</div>
+            </div>
+        </div>
     </div>
 
     <div class="row g-4">
@@ -174,10 +188,9 @@ $_suratProses  = (int)$_db->query("SELECT COUNT(*) FROM surat_ekspedisi WHERE st
             </div>
             <?php endif; ?>
         </div>
-    </div>
 </div>
 
-<?php include '../includes/components/footer.php'; ?>
+<?php include __DIR__ . '/../includes/components/bootstrap_layout_footer.php'; ?>
 
 <script>
     // Load statistics

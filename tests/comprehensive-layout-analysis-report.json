@@ -1,0 +1,247 @@
+{
+  "pages": {
+    "login": {
+      "screenshot": "/opt/lampp/htdocs/sprin/tests/layout_screenshots/01_login_page_2026-04-11T14-43-04-228Z.png",
+      "analysis": {
+        "page_info": {
+          "title": "Login - Sistem Manajemen POLRES Samosir",
+          "url": "http://localhost/sprin/login.php"
+        },
+        "bootstrap_elements": {
+          "containers": 1,
+          "rows": 2,
+          "columns": 3,
+          "forms": 1,
+          "form_controls": 2,
+          "buttons": 2,
+          "cards": 0,
+          "alerts": 0
+        },
+        "layout_structure": {
+          "has_login_container": true,
+          "has_sidebar": true,
+          "has_form": true,
+          "has_input_groups": 2,
+          "has_badges": 0
+        },
+        "content_analysis": {
+          "form_fields": 2,
+          "labels": 2,
+          "required_fields": 2,
+          "placeholders": 2,
+          "icons": 9
+        },
+        "responsive_design": {
+          "has_viewport_meta": true,
+          "has_responsive_classes": true,
+          "has_flex_elements": 0,
+          "has_responsive_utilities": 4
+        },
+        "css_analysis": {
+          "custom_styles": true,
+          "external_css": 2,
+          "bootstrap_css": true,
+          "font_awesome": true
+        },
+        "form_structure": {
+          "method": "post",
+          "action": "http://localhost/sprin/login.php",
+          "field_count": 2,
+          "has_validation": true,
+          "has_submit_button": true
+        }
+      },
+      "timestamp": "2026-04-11T14:43:05.676Z"
+    },
+    "dashboard": {
+      "screenshot": "/opt/lampp/htdocs/sprin/tests/layout_screenshots/02_dashboard_2026-04-11T14-43-09-683Z.png",
+      "analysis": {
+        "page_info": {
+          "title": "Sistem Manajemen POLRES Samosir",
+          "url": "http://localhost/sprin/pages/main.php"
+        },
+        "bootstrap_elements": {
+          "containers": 3,
+          "rows": 6,
+          "columns": 19,
+          "cards": 6,
+          "badges": 2,
+          "buttons": 2
+        },
+        "layout_structure": {
+          "has_sidebar": true,
+          "has_main_content": true,
+          "has_navigation": true,
+          "has_breadcrumb": true,
+          "has_page_header": true
+        },
+        "content_analysis": {
+          "stats_cards": 4,
+          "stats_numbers": 4,
+          "stats_labels": 4,
+          "sections": 5,
+          "data_points": 19
+        },
+        "navigation_analysis": {
+          "nav_links": 12,
+          "active_links": 1,
+          "dropdown_menus": 1,
+          "mobile_toggle": true
+        },
+        "responsive_design": {
+          "responsive_columns": 18,
+          "flex_utilities": 35,
+          "responsive_spacing": 40
+        },
+        "sidebar_content": {
+          "menu_items": 11,
+          "badges": 0,
+          "icons": 11,
+          "sections": 2
+        }
+      },
+      "timestamp": "2026-04-11T14:43:10.627Z"
+    },
+    "personil": {
+      "screenshot": "/opt/lampp/htdocs/sprin/tests/layout_screenshots/03_personil_page_2026-04-11T14-43-11-855Z.png",
+      "analysis": {
+        "page_info": {
+          "title": "Sistem Manajemen POLRES Samosir",
+          "url": "http://localhost/sprin/pages/personil.php"
+        },
+        "bootstrap_elements": {
+          "containers": 4,
+          "rows": 10,
+          "columns": 20,
+          "cards": 0,
+          "modals": 2,
+          "buttons": 17,
+          "tables": 1,
+          "forms": 2
+        },
+        "layout_structure": {
+          "has_personil_stats": true,
+          "has_search_section": true,
+          "has_loading_indicator": true,
+          "has_personil_data": true
+        },
+        "content_analysis": {
+          "search_inputs": 1,
+          "modal_count": 2,
+          "table_count": 1,
+          "unsur_cards": 0,
+          "action_buttons": 10
+        },
+        "functionality_analysis": {
+          "has_search_functionality": true,
+          "has_add_modal": true,
+          "has_edit_modal": true,
+          "has_clear_search": true,
+          "has_loading_state": true
+        },
+        "data_display": {
+          "personil_count_element": true,
+          "has_pagination": true,
+          "has_sorting": false,
+          "has_filtering": false
+        }
+      },
+      "timestamp": "2026-04-11T14:43:12.559Z"
+    },
+    "operasi": {
+      "screenshot": "/opt/lampp/htdocs/sprin/tests/layout_screenshots/04_operasi_page_2026-04-11T14-43-13-610Z.png",
+      "analysis": {
+        "page_info": {
+          "title": "Sistem Manajemen POLRES Samosir",
+          "url": "http://localhost/sprin/pages/operasi.php"
+        },
+        "bootstrap_elements": {
+          "containers": 4,
+          "rows": 5,
+          "columns": 10,
+          "cards": 0,
+          "modals": 1,
+          "buttons": 7,
+          "tables": 1,
+          "badges": 4
+        },
+        "layout_structure": {
+          "has_operations_header": true,
+          "has_stats_grid": true,
+          "has_operations_table": true,
+          "has_empty_state": false
+        },
+        "content_analysis": {
+          "stat_cards": 4,
+          "table_rows": 1,
+          "badges_count": 4,
+          "action_buttons": 3
+        },
+        "data_analysis": {
+          "total_operations": 1,
+          "has_add_button": true,
+          "has_filter_options": 2,
+          "has_pagination": false
+        },
+        "functionality_analysis": {
+          "has_add_modal": true,
+          "has_view_buttons": 1,
+          "has_edit_buttons": 1,
+          "has_delete_buttons": 1,
+          "has_badge_system": true
+        }
+      },
+      "timestamp": "2026-04-11T14:43:14.430Z"
+    },
+    "calendar": {
+      "screenshot": "/opt/lampp/htdocs/sprin/tests/layout_screenshots/05_calendar_page_2026-04-11T14-43-15-185Z.png",
+      "analysis": {
+        "page_info": {
+          "title": "Sistem Manajemen POLRES Samosir",
+          "url": "http://localhost/sprin/pages/calendar_dashboard.php"
+        },
+        "bootstrap_elements": {
+          "containers": 3,
+          "rows": 1,
+          "columns": 2,
+          "cards": 0,
+          "modals": 0,
+          "buttons": 1
+        },
+        "layout_structure": {
+          "has_calendar_header": false,
+          "has_calendar_controls": false,
+          "has_calendar_container": false,
+          "has_piket_schedule": false,
+          "has_event_legend": false
+        },
+        "content_analysis": {
+          "calendar_element": false,
+          "fullcalendar_loaded": false,
+          "piket_teams": 0,
+          "event_legend_items": 0,
+          "control_buttons": 0
+        },
+        "functionality_analysis": {
+          "has_month_navigation": false,
+          "has_add_event_modal": false,
+          "has_refresh_button": false,
+          "has_current_month_button": false
+        },
+        "calendar_integration": {
+          "has_fullcalendar_css": false,
+          "has_fullcalendar_js": false,
+          "calendar_initialized": false
+        }
+      },
+      "timestamp": "2026-04-11T14:43:15.808Z"
+    }
+  },
+  "summary": {
+    "total_pages": 5,
+    "bootstrap_compliance": 96,
+    "layout_consistency": 71,
+    "overall_score": 71,
+    "content_quality": 47
+  }
+}
