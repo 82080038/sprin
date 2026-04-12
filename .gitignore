@@ -23,6 +23,9 @@ temp/
 # Backups
 backups/
 *.sql
+
+# Allow SQL files in database directory
+!database/*.sql
 *.backup
 
 # Node.js
